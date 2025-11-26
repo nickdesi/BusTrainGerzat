@@ -18,15 +18,15 @@ interface TrainUpdate {
 export async function GET() {
     try {
         // 1. Load Static Schedule
-        const today = new Date();
-        const dateKey = today.toISOString().split('T')[0];
-        const staticFilePath = path.join(process.cwd(), 'static_train_schedule.json');
+        const now = Math.floor(Date.now() / 1000);
+        const staticFilePath = path.join(process.cwd(), 'public', 'static_train_schedule.json');
         let staticSchedule: any[] = [];
 
         if (fs.existsSync(staticFilePath)) {
             const fileContent = fs.readFileSync(staticFilePath, 'utf-8');
             const allSchedules = JSON.parse(fileContent);
-            staticSchedule = allSchedules[dateKey] || [];
+            // The new format is a flat array, so we just need to filter by time
+            staticSchedule = allSchedules.filter((item: any) => item.arrival > now - 600);
         }
 
         // 2. Fetch Real-time Data
@@ -77,42 +77,25 @@ export async function GET() {
 
         // 3. Merge Data
         const mergedUpdates: TrainUpdate[] = [];
-        const now = Math.floor(Date.now() / 1000);
 
-        // Map real-time updates by tripId (or trainNumber if tripId varies slightly)
+        // Map real-time updates by tripId
         const realtimeMap = new Map();
         realtimeUpdates.forEach(u => realtimeMap.set(u.tripId, u));
 
         // Process static trips
         staticSchedule.forEach(staticTrip => {
-            // Try to find matching real-time update
-            // SNCF GTFS-RT tripIds usually match static tripIds
-            let rtUpdate = realtimeMap.get(staticTrip.tripId);
+            const rtUpdate = realtimeMap.get(staticTrip.tripId);
 
-            // If not found by exact ID, try by train number (heuristic)
-            if (!rtUpdate) {
-                rtUpdate = realtimeUpdates.find(u => u.trainNumber === staticTrip.trainNumber);
-            }
-
-            let arrivalTime = 0;
-            let departureTime = 0;
+            let arrivalTime = staticTrip.arrival;
+            let departureTime = staticTrip.departure;
             let delay = 0;
             let isRealtime = false;
 
-            // Parse static time (HH:MM:SS) to timestamp
-            const [h, m, s] = staticTrip.arrivalTime.split(':').map(Number);
-            const tripDate = new Date(today);
-            tripDate.setHours(h, m, s, 0);
-            const staticTimestamp = Math.floor(tripDate.getTime() / 1000);
-
             if (rtUpdate) {
                 isRealtime = true;
-                arrivalTime = rtUpdate.arrival?.time ? Number(rtUpdate.arrival.time) : staticTimestamp;
-                departureTime = rtUpdate.departure?.time ? Number(rtUpdate.departure.time) : staticTimestamp;
+                arrivalTime = rtUpdate.arrival?.time ? Number(rtUpdate.arrival.time) : arrivalTime;
+                departureTime = rtUpdate.departure?.time ? Number(rtUpdate.departure.time) : departureTime;
                 delay = rtUpdate.delay;
-            } else {
-                arrivalTime = staticTimestamp;
-                departureTime = staticTimestamp; // Approximation
             }
 
             // Only add if in future (or recent past)
