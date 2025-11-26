@@ -39,3 +39,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Data files
+gtfs_data/
+sncf_gtfs_data/
+*.zip
+*.pb
+oura_gtfs_data/
