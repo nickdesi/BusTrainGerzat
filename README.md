@@ -24,9 +24,9 @@ Application Next.js pour suivre en temps réel la ligne 20 à l'arrêt Gerzat Ch
 
 ## Mise à jour des horaires théoriques
 
-Le fichier `src/app/api/realtime/static_schedule.json` contient les horaires théoriques pour la semaine.
-Pour le régénérer (nécessite Python 3) :
+Les fichiers `src/app/api/realtime/static_schedule.json` (bus T2C) et `static_train_schedule.json` (trains SNCF) contiennent les horaires théoriques pour la semaine.
+Pour les régénérer (nécessite Python 3) :
 
 ```bash
-python3 generate_static_json.py
+python3 generate_schedules.py
 ```

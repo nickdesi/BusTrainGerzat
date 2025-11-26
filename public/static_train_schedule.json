@@ -1,0 +1,1226 @@
+[
+  {
+    "tripId": "OCESN873123F6753122:2025-11-24T01:34:44Z",
+    "arrival": 1764207937,
+    "departure": 1764207997,
+    "headsign": "873123",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "873123"
+  },
+  {
+    "tripId": "OCESN874110F6775891:2025-11-26T01:36:24Z",
+    "arrival": 1764208837,
+    "departure": 1764208897,
+    "headsign": "874110",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "874110"
+  },
+  {
+    "tripId": "OCESN873100F6776076:2025-11-26T01:36:24Z",
+    "arrival": 1764208897,
+    "departure": 1764208957,
+    "headsign": "873100",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873100"
+  },
+  {
+    "tripId": "OCESN874123F6775886:2025-11-26T01:36:24Z",
+    "arrival": 1764210337,
+    "departure": 1764210397,
+    "headsign": "874123",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "874123"
+  },
+  {
+    "tripId": "OCESN873402F6776014:2025-11-26T01:36:24Z",
+    "arrival": 1764211177,
+    "departure": 1764211237,
+    "headsign": "873402",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873402"
+  },
+  {
+    "tripId": "OCESN874111F6775890:2025-11-26T01:36:24Z",
+    "arrival": 1764212737,
+    "departure": 1764212797,
+    "headsign": "874111",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "874111"
+  },
+  {
+    "tripId": "OCESN874125F6724184:2025-11-22T01:58:40Z",
+    "arrival": 1764225577,
+    "departure": 1764225637,
+    "headsign": "874125",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "874125"
+  },
+  {
+    "tripId": "OCESN873056F6776081:2025-11-26T01:36:24Z",
+    "arrival": 1764226177,
+    "departure": 1764226237,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764231577,
+    "departure": 1764231637,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764232957,
+    "departure": 1764233017,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN873420F6776013:2025-11-26T01:36:24Z",
+    "arrival": 1764240217,
+    "departure": 1764240277,
+    "headsign": "873420",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873420"
+  },
+  {
+    "tripId": "OCESN874131F6775882:2025-11-26T01:36:24Z",
+    "arrival": 1764242077,
+    "departure": 1764242137,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6753148:2025-11-24T01:34:44Z",
+    "arrival": 1764242437,
+    "departure": 1764242497,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN874113F6775889:2025-11-26T01:36:24Z",
+    "arrival": 1764243397,
+    "departure": 1764243457,
+    "headsign": "874113",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "874113"
+  },
+  {
+    "tripId": "OCESN874210F6775873:2025-11-26T01:36:24Z",
+    "arrival": 1764244177,
+    "departure": 1764244237,
+    "headsign": "874210",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "874210"
+  },
+  {
+    "tripId": "OCESN873060F6776079:2025-11-26T01:36:24Z",
+    "arrival": 1764245797,
+    "departure": 1764245857,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873128F6776069:2025-11-26T01:36:24Z",
+    "arrival": 1764247957,
+    "departure": 1764248017,
+    "headsign": "873128",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873128"
+  },
+  {
+    "tripId": "OCESN873131F6776068:2025-11-26T01:36:24Z",
+    "arrival": 1764250777,
+    "departure": 1764250837,
+    "headsign": "873131",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "873131"
+  },
+  {
+    "tripId": "OCESN873062F6776078:2025-11-26T01:36:24Z",
+    "arrival": 1764251197,
+    "departure": 1764251257,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251126",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873133F6776067:2025-11-26T01:36:24Z",
+    "arrival": 1764251917,
+    "departure": 1764251977,
+    "headsign": "873133",
+    "direction": "To Clermont",
+    "date": "20251126",
+    "trainNumber": "873133"
+  },
+  {
+    "tripId": "OCESN873123F6753122:2025-11-24T01:34:44Z",
+    "arrival": 1764294337,
+    "departure": 1764294397,
+    "headsign": "873123",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "873123"
+  },
+  {
+    "tripId": "OCESN874110F6775891:2025-11-26T01:36:24Z",
+    "arrival": 1764295237,
+    "departure": 1764295297,
+    "headsign": "874110",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "874110"
+  },
+  {
+    "tripId": "OCESN873100F6776076:2025-11-26T01:36:24Z",
+    "arrival": 1764295297,
+    "departure": 1764295357,
+    "headsign": "873100",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873100"
+  },
+  {
+    "tripId": "OCESN874123F6775886:2025-11-26T01:36:24Z",
+    "arrival": 1764296737,
+    "departure": 1764296797,
+    "headsign": "874123",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "874123"
+  },
+  {
+    "tripId": "OCESN873402F6776014:2025-11-26T01:36:24Z",
+    "arrival": 1764297577,
+    "departure": 1764297637,
+    "headsign": "873402",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873402"
+  },
+  {
+    "tripId": "OCESN874111F6775890:2025-11-26T01:36:24Z",
+    "arrival": 1764299137,
+    "departure": 1764299197,
+    "headsign": "874111",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "874111"
+  },
+  {
+    "tripId": "OCESN874125F6724184:2025-11-22T01:58:40Z",
+    "arrival": 1764311977,
+    "departure": 1764312037,
+    "headsign": "874125",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "874125"
+  },
+  {
+    "tripId": "OCESN873056F6776081:2025-11-26T01:36:24Z",
+    "arrival": 1764312577,
+    "departure": 1764312637,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764317977,
+    "departure": 1764318037,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764319357,
+    "departure": 1764319417,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN873420F6776013:2025-11-26T01:36:24Z",
+    "arrival": 1764326617,
+    "departure": 1764326677,
+    "headsign": "873420",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873420"
+  },
+  {
+    "tripId": "OCESN874131F6775882:2025-11-26T01:36:24Z",
+    "arrival": 1764328477,
+    "departure": 1764328537,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6753148:2025-11-24T01:34:44Z",
+    "arrival": 1764328837,
+    "departure": 1764328897,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN874113F6775889:2025-11-26T01:36:24Z",
+    "arrival": 1764329797,
+    "departure": 1764329857,
+    "headsign": "874113",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "874113"
+  },
+  {
+    "tripId": "OCESN874210F6775873:2025-11-26T01:36:24Z",
+    "arrival": 1764330577,
+    "departure": 1764330637,
+    "headsign": "874210",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "874210"
+  },
+  {
+    "tripId": "OCESN873060F6776079:2025-11-26T01:36:24Z",
+    "arrival": 1764332197,
+    "departure": 1764332257,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873128F6776069:2025-11-26T01:36:24Z",
+    "arrival": 1764334357,
+    "departure": 1764334417,
+    "headsign": "873128",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873128"
+  },
+  {
+    "tripId": "OCESN873131F6776068:2025-11-26T01:36:24Z",
+    "arrival": 1764337177,
+    "departure": 1764337237,
+    "headsign": "873131",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "873131"
+  },
+  {
+    "tripId": "OCESN873062F6776078:2025-11-26T01:36:24Z",
+    "arrival": 1764337597,
+    "departure": 1764337657,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251127",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873133F6776067:2025-11-26T01:36:24Z",
+    "arrival": 1764338317,
+    "departure": 1764338377,
+    "headsign": "873133",
+    "direction": "To Clermont",
+    "date": "20251127",
+    "trainNumber": "873133"
+  },
+  {
+    "tripId": "OCESN873123F6753122:2025-11-24T01:34:44Z",
+    "arrival": 1764380737,
+    "departure": 1764380797,
+    "headsign": "873123",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "873123"
+  },
+  {
+    "tripId": "OCESN874110F6775891:2025-11-26T01:36:24Z",
+    "arrival": 1764381637,
+    "departure": 1764381697,
+    "headsign": "874110",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "874110"
+  },
+  {
+    "tripId": "OCESN873100F6776076:2025-11-26T01:36:24Z",
+    "arrival": 1764381697,
+    "departure": 1764381757,
+    "headsign": "873100",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873100"
+  },
+  {
+    "tripId": "OCESN874123F6775886:2025-11-26T01:36:24Z",
+    "arrival": 1764383137,
+    "departure": 1764383197,
+    "headsign": "874123",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "874123"
+  },
+  {
+    "tripId": "OCESN873402F6776014:2025-11-26T01:36:24Z",
+    "arrival": 1764383977,
+    "departure": 1764384037,
+    "headsign": "873402",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873402"
+  },
+  {
+    "tripId": "OCESN874111F6775890:2025-11-26T01:36:24Z",
+    "arrival": 1764385537,
+    "departure": 1764385597,
+    "headsign": "874111",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "874111"
+  },
+  {
+    "tripId": "OCESN874125F6724184:2025-11-22T01:58:40Z",
+    "arrival": 1764398377,
+    "departure": 1764398437,
+    "headsign": "874125",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "874125"
+  },
+  {
+    "tripId": "OCESN873056F6753151:2025-11-24T01:34:44Z",
+    "arrival": 1764398977,
+    "departure": 1764399037,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764404377,
+    "departure": 1764404437,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764405757,
+    "departure": 1764405817,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN873420F6776013:2025-11-26T01:36:24Z",
+    "arrival": 1764413017,
+    "departure": 1764413077,
+    "headsign": "873420",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873420"
+  },
+  {
+    "tripId": "OCESN874131F6775882:2025-11-26T01:36:24Z",
+    "arrival": 1764414877,
+    "departure": 1764414937,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6776080:2025-11-26T01:36:24Z",
+    "arrival": 1764415237,
+    "departure": 1764415297,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN874113F6775889:2025-11-26T01:36:24Z",
+    "arrival": 1764416197,
+    "departure": 1764416257,
+    "headsign": "874113",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "874113"
+  },
+  {
+    "tripId": "OCESN874210F6775873:2025-11-26T01:36:24Z",
+    "arrival": 1764416977,
+    "departure": 1764417037,
+    "headsign": "874210",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "874210"
+  },
+  {
+    "tripId": "OCESN873060F6776079:2025-11-26T01:36:24Z",
+    "arrival": 1764418597,
+    "departure": 1764418657,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873128F6753120:2025-11-24T01:34:44Z",
+    "arrival": 1764420757,
+    "departure": 1764420817,
+    "headsign": "873128",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873128"
+  },
+  {
+    "tripId": "OCESN873131F6776068:2025-11-26T01:36:24Z",
+    "arrival": 1764423577,
+    "departure": 1764423637,
+    "headsign": "873131",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "873131"
+  },
+  {
+    "tripId": "OCESN873062F6753145:2025-11-24T01:34:44Z",
+    "arrival": 1764423997,
+    "departure": 1764424057,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251128",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873133F6753117:2025-11-24T01:34:44Z",
+    "arrival": 1764424717,
+    "departure": 1764424777,
+    "headsign": "873133",
+    "direction": "To Clermont",
+    "date": "20251128",
+    "trainNumber": "873133"
+  },
+  {
+    "tripId": "OCESN873125F6753121:2025-11-24T01:34:44Z",
+    "arrival": 1764468037,
+    "departure": 1764468097,
+    "headsign": "873125",
+    "direction": "To Clermont",
+    "date": "20251129",
+    "trainNumber": "873125"
+  },
+  {
+    "tripId": "OCESN873054F6753153:2025-11-24T01:34:44Z",
+    "arrival": 1764468337,
+    "departure": 1764468397,
+    "headsign": "873054",
+    "direction": "From Clermont",
+    "date": "20251129",
+    "trainNumber": "873054"
+  },
+  {
+    "tripId": "OCESN874127F6752928:2025-11-24T01:34:44Z",
+    "arrival": 1764484237,
+    "departure": 1764484297,
+    "headsign": "874127",
+    "direction": "To Clermont",
+    "date": "20251129",
+    "trainNumber": "874127"
+  },
+  {
+    "tripId": "OCESN873056F6753151:2025-11-24T01:34:44Z",
+    "arrival": 1764485377,
+    "departure": 1764485437,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251129",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764490777,
+    "departure": 1764490837,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251129",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764492157,
+    "departure": 1764492217,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251129",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN874131F6752925:2025-11-24T01:34:44Z",
+    "arrival": 1764501277,
+    "departure": 1764501337,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251129",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873060F6764221:2025-11-25T01:40:07Z",
+    "arrival": 1764504997,
+    "departure": 1764505057,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251129",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873054F6753152:2025-11-24T01:34:44Z",
+    "arrival": 1764554737,
+    "departure": 1764554797,
+    "headsign": "873054",
+    "direction": "From Clermont",
+    "date": "20251130",
+    "trainNumber": "873054"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764577177,
+    "departure": 1764577237,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251130",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN874131F6752925:2025-11-24T01:34:44Z",
+    "arrival": 1764587677,
+    "departure": 1764587737,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251130",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6753148:2025-11-24T01:34:44Z",
+    "arrival": 1764588037,
+    "departure": 1764588097,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251130",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN873062F6753143:2025-11-24T01:34:44Z",
+    "arrival": 1764596737,
+    "departure": 1764596797,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251130",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873123F6776070:2025-11-26T01:36:24Z",
+    "arrival": 1764639937,
+    "departure": 1764639997,
+    "headsign": "873123",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "873123"
+  },
+  {
+    "tripId": "OCESN874110F6775891:2025-11-26T01:36:24Z",
+    "arrival": 1764640837,
+    "departure": 1764640897,
+    "headsign": "874110",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "874110"
+  },
+  {
+    "tripId": "OCESN873100F6776076:2025-11-26T01:36:24Z",
+    "arrival": 1764640897,
+    "departure": 1764640957,
+    "headsign": "873100",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873100"
+  },
+  {
+    "tripId": "OCESN873054F6753152:2025-11-24T01:34:44Z",
+    "arrival": 1764641137,
+    "departure": 1764641197,
+    "headsign": "873054",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873054"
+  },
+  {
+    "tripId": "OCESN874123F6775886:2025-11-26T01:36:24Z",
+    "arrival": 1764642337,
+    "departure": 1764642397,
+    "headsign": "874123",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "874123"
+  },
+  {
+    "tripId": "OCESN873402F6776015:2025-11-26T01:36:24Z",
+    "arrival": 1764643177,
+    "departure": 1764643237,
+    "headsign": "873402",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873402"
+  },
+  {
+    "tripId": "OCESN874111F6775890:2025-11-26T01:36:24Z",
+    "arrival": 1764644737,
+    "departure": 1764644797,
+    "headsign": "874111",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "874111"
+  },
+  {
+    "tripId": "OCESN874125F6775885:2025-11-26T01:36:24Z",
+    "arrival": 1764657577,
+    "departure": 1764657637,
+    "headsign": "874125",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "874125"
+  },
+  {
+    "tripId": "OCESN873056F6776081:2025-11-26T01:36:24Z",
+    "arrival": 1764658177,
+    "departure": 1764658237,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764663577,
+    "departure": 1764663637,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764664957,
+    "departure": 1764665017,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN873420F6776013:2025-11-26T01:36:24Z",
+    "arrival": 1764672217,
+    "departure": 1764672277,
+    "headsign": "873420",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873420"
+  },
+  {
+    "tripId": "OCESN874131F6775882:2025-11-26T01:36:24Z",
+    "arrival": 1764674077,
+    "departure": 1764674137,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6776080:2025-11-26T01:36:24Z",
+    "arrival": 1764674437,
+    "departure": 1764674497,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN874113F6775889:2025-11-26T01:36:24Z",
+    "arrival": 1764675397,
+    "departure": 1764675457,
+    "headsign": "874113",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "874113"
+  },
+  {
+    "tripId": "OCESN874210F6775873:2025-11-26T01:36:24Z",
+    "arrival": 1764676177,
+    "departure": 1764676237,
+    "headsign": "874210",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "874210"
+  },
+  {
+    "tripId": "OCESN873060F6776079:2025-11-26T01:36:24Z",
+    "arrival": 1764677797,
+    "departure": 1764677857,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873128F6776069:2025-11-26T01:36:24Z",
+    "arrival": 1764679957,
+    "departure": 1764680017,
+    "headsign": "873128",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873128"
+  },
+  {
+    "tripId": "OCESN873131F6776068:2025-11-26T01:36:24Z",
+    "arrival": 1764682777,
+    "departure": 1764682837,
+    "headsign": "873131",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "873131"
+  },
+  {
+    "tripId": "OCESN873062F6776078:2025-11-26T01:36:24Z",
+    "arrival": 1764683197,
+    "departure": 1764683257,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251201",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873133F6776067:2025-11-26T01:36:24Z",
+    "arrival": 1764683917,
+    "departure": 1764683977,
+    "headsign": "873133",
+    "direction": "To Clermont",
+    "date": "20251201",
+    "trainNumber": "873133"
+  },
+  {
+    "tripId": "OCESN873123F6753122:2025-11-24T01:34:44Z",
+    "arrival": 1764726337,
+    "departure": 1764726397,
+    "headsign": "873123",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "873123"
+  },
+  {
+    "tripId": "OCESN874110F6775891:2025-11-26T01:36:24Z",
+    "arrival": 1764727237,
+    "departure": 1764727297,
+    "headsign": "874110",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "874110"
+  },
+  {
+    "tripId": "OCESN873100F6776076:2025-11-26T01:36:24Z",
+    "arrival": 1764727297,
+    "departure": 1764727357,
+    "headsign": "873100",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873100"
+  },
+  {
+    "tripId": "OCESN873054F6753153:2025-11-24T01:34:44Z",
+    "arrival": 1764727537,
+    "departure": 1764727597,
+    "headsign": "873054",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873054"
+  },
+  {
+    "tripId": "OCESN874123F6775886:2025-11-26T01:36:24Z",
+    "arrival": 1764728737,
+    "departure": 1764728797,
+    "headsign": "874123",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "874123"
+  },
+  {
+    "tripId": "OCESN873402F6776014:2025-11-26T01:36:24Z",
+    "arrival": 1764729577,
+    "departure": 1764729637,
+    "headsign": "873402",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873402"
+  },
+  {
+    "tripId": "OCESN874111F6775890:2025-11-26T01:36:24Z",
+    "arrival": 1764731137,
+    "departure": 1764731197,
+    "headsign": "874111",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "874111"
+  },
+  {
+    "tripId": "OCESN874125F6724184:2025-11-22T01:58:40Z",
+    "arrival": 1764743977,
+    "departure": 1764744037,
+    "headsign": "874125",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "874125"
+  },
+  {
+    "tripId": "OCESN873056F6776081:2025-11-26T01:36:24Z",
+    "arrival": 1764744577,
+    "departure": 1764744637,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764749977,
+    "departure": 1764750037,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764751357,
+    "departure": 1764751417,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN873420F6776013:2025-11-26T01:36:24Z",
+    "arrival": 1764758617,
+    "departure": 1764758677,
+    "headsign": "873420",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873420"
+  },
+  {
+    "tripId": "OCESN874131F6775882:2025-11-26T01:36:24Z",
+    "arrival": 1764760477,
+    "departure": 1764760537,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6753148:2025-11-24T01:34:44Z",
+    "arrival": 1764760837,
+    "departure": 1764760897,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN874113F6775889:2025-11-26T01:36:24Z",
+    "arrival": 1764761797,
+    "departure": 1764761857,
+    "headsign": "874113",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "874113"
+  },
+  {
+    "tripId": "OCESN874210F6775873:2025-11-26T01:36:24Z",
+    "arrival": 1764762577,
+    "departure": 1764762637,
+    "headsign": "874210",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "874210"
+  },
+  {
+    "tripId": "OCESN873060F6776079:2025-11-26T01:36:24Z",
+    "arrival": 1764764197,
+    "departure": 1764764257,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873128F6776069:2025-11-26T01:36:24Z",
+    "arrival": 1764766357,
+    "departure": 1764766417,
+    "headsign": "873128",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873128"
+  },
+  {
+    "tripId": "OCESN873131F6776068:2025-11-26T01:36:24Z",
+    "arrival": 1764769177,
+    "departure": 1764769237,
+    "headsign": "873131",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "873131"
+  },
+  {
+    "tripId": "OCESN873062F6776078:2025-11-26T01:36:24Z",
+    "arrival": 1764769597,
+    "departure": 1764769657,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251202",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873133F6776067:2025-11-26T01:36:24Z",
+    "arrival": 1764770317,
+    "departure": 1764770377,
+    "headsign": "873133",
+    "direction": "To Clermont",
+    "date": "20251202",
+    "trainNumber": "873133"
+  },
+  {
+    "tripId": "OCESN873123F6753122:2025-11-24T01:34:44Z",
+    "arrival": 1764812737,
+    "departure": 1764812797,
+    "headsign": "873123",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "873123"
+  },
+  {
+    "tripId": "OCESN874110F6775891:2025-11-26T01:36:24Z",
+    "arrival": 1764813637,
+    "departure": 1764813697,
+    "headsign": "874110",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "874110"
+  },
+  {
+    "tripId": "OCESN873100F6776076:2025-11-26T01:36:24Z",
+    "arrival": 1764813697,
+    "departure": 1764813757,
+    "headsign": "873100",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873100"
+  },
+  {
+    "tripId": "OCESN873054F6753153:2025-11-24T01:34:44Z",
+    "arrival": 1764813937,
+    "departure": 1764813997,
+    "headsign": "873054",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873054"
+  },
+  {
+    "tripId": "OCESN874123F6775886:2025-11-26T01:36:24Z",
+    "arrival": 1764815137,
+    "departure": 1764815197,
+    "headsign": "874123",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "874123"
+  },
+  {
+    "tripId": "OCESN873402F6776014:2025-11-26T01:36:24Z",
+    "arrival": 1764815977,
+    "departure": 1764816037,
+    "headsign": "873402",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873402"
+  },
+  {
+    "tripId": "OCESN874111F6775890:2025-11-26T01:36:24Z",
+    "arrival": 1764817537,
+    "departure": 1764817597,
+    "headsign": "874111",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "874111"
+  },
+  {
+    "tripId": "OCESN874125F6724184:2025-11-22T01:58:40Z",
+    "arrival": 1764830377,
+    "departure": 1764830437,
+    "headsign": "874125",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "874125"
+  },
+  {
+    "tripId": "OCESN873056F6776081:2025-11-26T01:36:24Z",
+    "arrival": 1764830977,
+    "departure": 1764831037,
+    "headsign": "873056",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873056"
+  },
+  {
+    "tripId": "OCESN874130F6775883:2025-11-26T01:36:24Z",
+    "arrival": 1764836377,
+    "departure": 1764836437,
+    "headsign": "874130",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "874130"
+  },
+  {
+    "tripId": "OCESN875504F6787145:2025-11-26T01:36:24Z",
+    "arrival": 1764837757,
+    "departure": 1764837817,
+    "headsign": "875504",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "875504"
+  },
+  {
+    "tripId": "OCESN873420F6776013:2025-11-26T01:36:24Z",
+    "arrival": 1764845017,
+    "departure": 1764845077,
+    "headsign": "873420",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873420"
+  },
+  {
+    "tripId": "OCESN874131F6775882:2025-11-26T01:36:24Z",
+    "arrival": 1764846877,
+    "departure": 1764846937,
+    "headsign": "874131",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "874131"
+  },
+  {
+    "tripId": "OCESN873058F6753148:2025-11-24T01:34:44Z",
+    "arrival": 1764847237,
+    "departure": 1764847297,
+    "headsign": "873058",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873058"
+  },
+  {
+    "tripId": "OCESN874113F6775889:2025-11-26T01:36:24Z",
+    "arrival": 1764848197,
+    "departure": 1764848257,
+    "headsign": "874113",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "874113"
+  },
+  {
+    "tripId": "OCESN874210F6775873:2025-11-26T01:36:24Z",
+    "arrival": 1764848977,
+    "departure": 1764849037,
+    "headsign": "874210",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "874210"
+  },
+  {
+    "tripId": "OCESN873060F6776079:2025-11-26T01:36:24Z",
+    "arrival": 1764850597,
+    "departure": 1764850657,
+    "headsign": "873060",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873060"
+  },
+  {
+    "tripId": "OCESN873128F6776069:2025-11-26T01:36:24Z",
+    "arrival": 1764852757,
+    "departure": 1764852817,
+    "headsign": "873128",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873128"
+  },
+  {
+    "tripId": "OCESN873131F6776068:2025-11-26T01:36:24Z",
+    "arrival": 1764855577,
+    "departure": 1764855637,
+    "headsign": "873131",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "873131"
+  },
+  {
+    "tripId": "OCESN873062F6776078:2025-11-26T01:36:24Z",
+    "arrival": 1764855997,
+    "departure": 1764856057,
+    "headsign": "873062",
+    "direction": "From Clermont",
+    "date": "20251203",
+    "trainNumber": "873062"
+  },
+  {
+    "tripId": "OCESN873133F6776067:2025-11-26T01:36:24Z",
+    "arrival": 1764856717,
+    "departure": 1764856777,
+    "headsign": "873133",
+    "direction": "To Clermont",
+    "date": "20251203",
+    "trainNumber": "873133"
+  }
+]
