@@ -46,3 +46,9 @@ sncf_gtfs_data/
 *.zip
 *.pb
 oura_gtfs_data/
+
+# PWA files
+public/sw.js
+public/sw.js.map
+public/workbox-*.js
+public/workbox-*.js.map

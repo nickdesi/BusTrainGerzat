@@ -25,7 +25,7 @@ export async function GET() {
                     if (entity.tripUpdate) {
                         const tripUpdate = entity.tripUpdate;
                         if (tripUpdate.trip.routeId === targetRouteId) {
-                            tripUpdate.stopTimeUpdate.forEach((stopTimeUpdate) => {
+                            tripUpdate.stopTimeUpdate?.forEach((stopTimeUpdate) => {
                                 if (stopTimeUpdate.stopId === targetStopId) {
                                     realtimeUpdates[tripUpdate.trip.tripId as string] = {
                                         arrival: stopTimeUpdate.arrival,
