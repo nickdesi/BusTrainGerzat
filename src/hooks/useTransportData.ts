@@ -10,8 +10,6 @@ export function useTransportData(refreshInterval = 30000) {
         error: null,
     });
 
-    const [refreshProgress, setRefreshProgress] = useState(0);
-
     const fetchData = useCallback(async () => {
         try {
             setData(prev => ({ ...prev, loading: true, error: null }));
@@ -51,9 +49,6 @@ export function useTransportData(refreshInterval = 30000) {
                 error: null,
             });
 
-            // Reset progress on successful fetch
-            setRefreshProgress(0);
-
         } catch (err) {
             console.error(err);
             setData(prev => ({
@@ -66,22 +61,9 @@ export function useTransportData(refreshInterval = 30000) {
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
-
-    useEffect(() => {
-        const startTime = Date.now();
-        const interval = setInterval(() => {
-            const elapsed = Date.now() - startTime;
-            const progress = Math.min((elapsed / refreshInterval) * 100, 100);
-            setRefreshProgress(progress);
-
-            if (elapsed >= refreshInterval) {
-                fetchData();
-            }
-        }, 100); // Update progress every 100ms
-
+        const interval = setInterval(fetchData, refreshInterval);
         return () => clearInterval(interval);
-    }, [fetchData, refreshInterval, data.lastUpdated]); // Reset timer when data updates
+    }, [fetchData, refreshInterval]);
 
-    return { ...data, refreshProgress, refresh: fetchData };
+    return { ...data, refresh: fetchData };
 }

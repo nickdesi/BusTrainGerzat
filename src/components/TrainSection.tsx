@@ -20,10 +20,21 @@ export function TrainSection({ updates, loading }: TrainSectionProps) {
 
     const TrainCard = ({ train, type }: { train: TrainUpdate; type: 'to' | 'from' }) => (
         <div className={`group bg-white/5 hover:bg-white/10 p-4 rounded-2xl border border-transparent transition-all duration-300 ${type === 'to' ? 'hover:border-blue-500/30' : 'hover:border-indigo-500/30'}`}>
-            <div className="flex justify-between items-center mb-2">
-                <span className={`text-2xl font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-100 group-hover:text-blue-400' : 'text-indigo-100 group-hover:text-indigo-400'}`}>
-                    {formatTime(train.arrival.time)}
-                </span>
+            <div className="flex justify-between items-start mb-3">
+                <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Arrivée</span>
+                        <span className={`text-xl font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-100 group-hover:text-blue-400' : 'text-indigo-100 group-hover:text-indigo-400'}`}>
+                            {formatTime(train.arrival.time)}
+                        </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Départ</span>
+                        <span className={`text-lg font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-200 group-hover:text-blue-300' : 'text-indigo-200 group-hover:text-indigo-300'}`}>
+                            {formatTime(train.departure.time)}
+                        </span>
+                    </div>
+                </div>
                 <StatusBadge delay={train.delay} isRealtime={train.isRealtime} />
             </div>
             <div className="flex justify-between items-end">
@@ -61,7 +72,7 @@ export function TrainSection({ updates, loading }: TrainSectionProps) {
                 <div>
                     <h2 className="text-2xl font-bold text-white tracking-tight">Trains TER</h2>
                     <div className="flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-blue-500 animate-pulse" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-blue-500" />
                         <p className="text-xs text-blue-400 font-bold uppercase tracking-widest">Gare de Gerzat</p>
                     </div>
                 </div>

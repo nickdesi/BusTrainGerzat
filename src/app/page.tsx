@@ -7,7 +7,7 @@ import { BusSection } from '@/components/BusSection';
 import { TrainSection } from '@/components/TrainSection';
 
 export default function Home() {
-  const { bus, train, lastUpdated, loading, error, refreshProgress, refresh } = useTransportData();
+  const { bus, train, lastUpdated, loading, error, refresh } = useTransportData();
 
   return (
     <main className="min-h-screen p-4 md:p-8 lg:p-12">
@@ -17,7 +17,6 @@ export default function Home() {
           lastUpdated={lastUpdated}
           loading={loading}
           onRefresh={refresh}
-          refreshProgress={refreshProgress}
         />
 
         {error && (

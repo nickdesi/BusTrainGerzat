@@ -19,7 +19,7 @@ export function BusSection({ updates, loading }: BusSectionProps) {
     const arrivals = updates.filter(u => u.headsign === 'GERZAT Champfleuri');
 
     const BusCard = ({ update, type }: { update: BusUpdate; type: 'departure' | 'arrival' }) => (
-        <div className={`flex justify-between items-center bg-gray-800/40 hover:bg-gray-800/80 p-3 rounded-xl border border-transparent transition-all duration-200 ${type === 'departure' ? 'hover:border-rose-500/20' : 'hover:border-orange-500/20'}`}>
+        <div className={`flex justify-between items-center bg-gray-800/30 hover:bg-gray-800/50 p-3 rounded-xl border border-transparent transition-all duration-300 ${type === 'departure' ? 'hover:border-rose-500/20' : 'hover:border-orange-500/20'}`}>
             <div className="flex items-center gap-4">
                 <div className={`text-xl font-bold font-mono ${type === 'departure' ? 'text-rose-100' : 'text-orange-100'}`}>
                     {formatTime(update.arrival)}
@@ -38,12 +38,6 @@ export function BusSection({ updates, loading }: BusSectionProps) {
             </div>
             <div className="flex flex-col items-end gap-1">
                 <StatusBadge delay={update.delay} isRealtime={update.isRealtime} />
-                {update.isRealtime && (
-                    <span className="flex h-1.5 w-1.5">
-                        <span className="animate-ping absolute inline-flex h-1.5 w-1.5 rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-green-500"></span>
-                    </span>
-                )}
             </div>
         </div>
     );
@@ -70,7 +64,7 @@ export function BusSection({ updates, loading }: BusSectionProps) {
                 <div>
                     <h2 className="text-2xl font-bold text-white tracking-tight">Bus T2C</h2>
                     <div className="flex items-center gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500 animate-pulse" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
                         <p className="text-xs text-rose-400 font-bold uppercase tracking-widest">Ligne 20</p>
                     </div>
                 </div>

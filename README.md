@@ -7,20 +7,21 @@ Application Next.js ultra-moderne pour suivre en temps réel les bus T2C et les 
 ## 🚀 Fonctionnalités
 
 ### 🚌 Bus T2C (Ligne 20)
-- **Temps réel & Théorique** : Affichage précis des prochains passages avec distinction claire (Temps réel = vert/pulsation, Théorique = gris).
+- **Temps réel & Théorique** : Affichage précis des prochains passages avec distinction claire par badges de couleur.
 - **Indicateurs de Retard** : Visualisation immédiate de l'état du trafic (À l'heure, En avance, Retard).
 - **Directions Claires** : Séparation distincte entre les départs (Vers Clermont/Aéroport) et les arrivées (Terminus Gerzat).
 
 ### 🚆 Trains TER (Gare de Gerzat)
 - **Suivi en Direct** : Horaires des trains en temps réel via l'API SNCF.
 - **Double Sens** : Affichage séparé des trains vers Clermont-Ferrand et vers Riom/Moulins.
-- **Détails du Train** : Affichage du numéro de train et du quai (si disponible).
+- **Horaires Détaillés** : Affichage de l'heure d'arrivée ET de départ pour chaque train à Gerzat.
+- **Détails du Train** : Numéro de train et statut du retard en temps réel.
 
 ### ✨ Expérience Utilisateur (UX/UI)
 - **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
-- **Animations Fluides** : Transitions douces, squelettes de chargement (skeletons) et indicateurs de vie.
+- **Animations Optimisées** : Transitions douces et squelettes de chargement sans animations agressives.
 - **Progressive Web App (PWA)** : Installable sur mobile comme une application native, fonctionne hors ligne.
-- **Auto-Refresh** : Mise à jour automatique des données toutes les 30 secondes avec barre de progression visuelle.
+- **Auto-Refresh** : Mise à jour automatique des données toutes les 30 secondes sans clignotement.
 
 ## 🛠 Architecture Technique
 

@@ -4,19 +4,13 @@ interface HeaderProps {
     lastUpdated: number | null;
     loading: boolean;
     onRefresh: () => void;
-    refreshProgress: number;
 }
 
-export function Header({ lastUpdated, loading, onRefresh, refreshProgress }: HeaderProps) {
+export function Header({ lastUpdated, loading, onRefresh }: HeaderProps) {
     return (
-        <header className="glass-panel rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 animate-fade-in relative overflow-hidden">
-            {/* Progress Bar */}
-            <div
-                className="absolute bottom-0 left-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-rose-500 transition-all duration-100 ease-linear opacity-50"
-                style={{ width: `${refreshProgress}%` }}
-            />
+        <header className="glass-panel rounded-3xl p-6 md:p-8 flex flex-col md:flex-row justify-between items-center gap-6 animate-fade-in">
 
-            <div className="space-y-2 text-center md:text-left z-10">
+            <div className="space-y-2 text-center md:text-left">
                 <h1 className="text-4xl md:text-6xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-purple-400 to-rose-400 drop-shadow-lg">
                     Gerzat Live
                 </h1>
@@ -26,7 +20,7 @@ export function Header({ lastUpdated, loading, onRefresh, refreshProgress }: Hea
                 </p>
             </div>
 
-            <div className="flex items-center gap-4 z-10">
+            <div className="flex items-center gap-4">
                 <div className="text-right hidden md:block">
                     <div className="text-[10px] text-gray-500 uppercase tracking-widest font-bold mb-1">Dernière actualisation</div>
                     <div className="text-xl font-mono text-white font-bold tracking-wider">
