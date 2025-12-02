@@ -1,18 +1,11 @@
-# Scripts de développement
-inspect_sncf.ts
-check_schedule.py
-generate_static_json.py
-generate_train_static.py
-
-# Fichiers statiques générés
-static_train_schedule.json
-
-# Données locales
-*.json
-!package.json
-!package-lock.json
-!tsconfig.json
+# Scripts de développement (à la racine parent)
+../inspect_sncf.ts
+../check_schedule.py
+../generate_static_json.py
+../generate_train_static.py
+../static_train_schedule.json
 
 # Build
 .next
 node_modules
+.env*.local
