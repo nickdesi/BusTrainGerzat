@@ -58,7 +58,7 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.02);
 }
 
 .glass-card {
@@ -87,8 +87,27 @@ body {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
 .animate-fade-in {
   animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-pulse {
+  animation: shimmer 2s infinite linear;
+  background: linear-gradient(90deg,
+      rgba(55, 65, 81, 0.3) 0%,
+      rgba(75, 85, 99, 0.5) 50%,
+      rgba(55, 65, 81, 0.3) 100%);
+  background-size: 200% 100%;
 }
 
 .delay-100 {

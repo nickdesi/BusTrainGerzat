@@ -21,16 +21,16 @@ export function TrainSection({ updates, loading }: TrainSectionProps) {
     const TrainCard = ({ train, type }: { train: TrainUpdate; type: 'to' | 'from' }) => (
         <div className={`group bg-white/5 hover:bg-white/10 p-4 rounded-2xl border border-transparent transition-all duration-300 ${type === 'to' ? 'hover:border-blue-500/30' : 'hover:border-indigo-500/30'}`}>
             <div className="flex justify-between items-start mb-3">
-                <div className="flex flex-col gap-1">
-                    <div className="flex items-center gap-2">
-                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Arrivée</span>
-                        <span className={`text-xl font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-100 group-hover:text-blue-400' : 'text-indigo-100 group-hover:text-indigo-400'}`}>
+                <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2.5">
+                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Arrivée</span>
+                        <span className={`text-2xl font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-100 group-hover:text-blue-400' : 'text-indigo-100 group-hover:text-indigo-400'}`}>
                             {formatTime(train.arrival.time)}
                         </span>
                     </div>
-                    <div className="flex items-center gap-2">
-                        <span className="text-[9px] text-gray-500 font-bold uppercase tracking-wider">Départ</span>
-                        <span className={`text-lg font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-200 group-hover:text-blue-300' : 'text-indigo-200 group-hover:text-indigo-300'}`}>
+                    <div className="flex items-center gap-2.5">
+                        <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider">Départ</span>
+                        <span className={`text-lg font-bold font-mono transition-colors ${type === 'to' ? 'text-blue-200/90 group-hover:text-blue-300' : 'text-indigo-200/90 group-hover:text-indigo-300'}`}>
                             {formatTime(train.departure.time)}
                         </span>
                     </div>
@@ -38,7 +38,7 @@ export function TrainSection({ updates, loading }: TrainSectionProps) {
                 <StatusBadge delay={train.delay} isRealtime={train.isRealtime} />
             </div>
             <div className="flex justify-between items-end">
-                <div className="flex flex-col">
+                <div className="flex flex-col gap-0.5">
                     <span className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">Numéro</span>
                     <span className="text-sm text-gray-300 font-mono">TER {train.trainNumber}</span>
                 </div>
@@ -95,9 +95,9 @@ export function TrainSection({ updates, loading }: TrainSectionProps) {
                                 <SkeletonCard />
                             </>
                         ) : trainsToClermont.length === 0 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-gray-600 space-y-2 py-8">
-                                <Clock className="w-8 h-8 opacity-20" />
-                                <p className="text-sm italic">Aucun départ imminent</p>
+                            <div className="h-full flex flex-col items-center justify-center text-gray-600 space-y-3 py-12">
+                                <Clock className="w-12 h-12 text-gray-700 opacity-30" />
+                                <p className="text-sm font-medium text-gray-500">Aucun départ imminent</p>
                             </div>
                         ) : (
                             trainsToClermont.map((train) => (
@@ -123,9 +123,9 @@ export function TrainSection({ updates, loading }: TrainSectionProps) {
                                 <SkeletonCard />
                             </>
                         ) : trainsFromClermont.length === 0 ? (
-                            <div className="h-full flex flex-col items-center justify-center text-gray-600 space-y-2 py-8">
-                                <Clock className="w-8 h-8 opacity-20" />
-                                <p className="text-sm italic">Aucun départ imminent</p>
+                            <div className="h-full flex flex-col items-center justify-center text-gray-600 space-y-3 py-12">
+                                <Clock className="w-12 h-12 text-gray-700 opacity-30" />
+                                <p className="text-sm font-medium text-gray-500">Aucun départ imminent</p>
                             </div>
                         ) : (
                             trainsFromClermont.map((train) => (
