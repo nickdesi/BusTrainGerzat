@@ -1,32 +1,68 @@
-# T2C Real-time Tracker
+# Gerzat Live - Hub Multimodal
 
-Application Next.js pour suivre en temps réel la ligne 20 à l'arrêt Gerzat Champfleuri.
+Application Next.js ultra-moderne pour suivre en temps réel les bus T2C et les trains TER au Hub Multimodal de Gerzat.
 
-## Fonctionnalités
+![Gerzat Live Banner](public/manifest-icon-512.png)
 
-- **Temps réel** : Affiche les prochains passages avec les données GTFS-RT de T2C.
-- **Mode Hybride** : Utilise les horaires théoriques (GTFS) si les données temps réel sont indisponibles.
-- **Interface Moderne** : Design sombre, indicateurs de retard, et mise à jour automatique.
+## 🚀 Fonctionnalités
 
-## Installation
+### 🚌 Bus T2C (Ligne 20)
+- **Temps réel & Théorique** : Affichage précis des prochains passages avec distinction claire (Temps réel = vert/pulsation, Théorique = gris).
+- **Indicateurs de Retard** : Visualisation immédiate de l'état du trafic (À l'heure, En avance, Retard).
+- **Directions Claires** : Séparation distincte entre les départs (Vers Clermont/Aéroport) et les arrivées (Terminus Gerzat).
 
-1.  Installer les dépendances :
+### 🚆 Trains TER (Gare de Gerzat)
+- **Suivi en Direct** : Horaires des trains en temps réel via l'API SNCF.
+- **Double Sens** : Affichage séparé des trains vers Clermont-Ferrand et vers Riom/Moulins.
+- **Détails du Train** : Affichage du numéro de train et du quai (si disponible).
+
+### ✨ Expérience Utilisateur (UX/UI)
+- **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
+- **Animations Fluides** : Transitions douces, squelettes de chargement (skeletons) et indicateurs de vie.
+- **Progressive Web App (PWA)** : Installable sur mobile comme une application native, fonctionne hors ligne.
+- **Auto-Refresh** : Mise à jour automatique des données toutes les 30 secondes avec barre de progression visuelle.
+
+## 🛠 Architecture Technique
+
+Le projet a été refactorisé pour une meilleure maintenabilité et performance :
+
+- **Framework** : Next.js 16 (App Router).
+- **Styling** : TailwindCSS v4 avec variables CSS natives.
+- **Structure Modulaire** :
+  - `src/components` : Composants UI réutilisables (`BusSection`, `TrainSection`, `Header`, etc.).
+  - `src/hooks` : Logique métier extraite (ex: `useTransportData` pour le fetching parallèle).
+  - `src/types` : Définitions TypeScript strictes.
+- **Performance** : Chargement parallèle des données Bus et Train pour une réactivité maximale.
+
+## 📦 Installation
+
+1.  **Installer les dépendances** :
     ```bash
     npm install
     ```
 
-2.  Lancer le serveur de développement :
+2.  **Lancer le serveur de développement** :
     ```bash
     npm run dev
     ```
 
-3.  Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
+3.  **Accéder à l'application** :
+    Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-## Mise à jour des horaires théoriques
+## 🔧 Scripts Utiles
 
-Le fichier `src/app/api/realtime/static_schedule.json` contient les horaires théoriques pour la semaine.
-Pour le régénérer (nécessite Python 3) :
+- **Build** : `npm run build` (Utilise Webpack pour la compatibilité PWA).
+- **Mise à jour Bus (Théorique)** :
+  ```bash
+  python3 generate_static_json.py
+  ```
+- **Mise à jour Train (Théorique)** :
+  ```bash
+  python3 generate_train_static.py
+  ```
 
-```bash
-python3 generate_static_json.py
-```
+## 📱 PWA
+
+L'application est configurée pour être installée sur iOS et Android.
+- **iOS** : Ouvrir dans Safari -> "Sur l'écran d'accueil".
+- **Android** : Ouvrir dans Chrome -> "Installer l'application".
