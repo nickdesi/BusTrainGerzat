@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1] - 2025-12-05
+
+### 🔒 Sécurité
+- **Mise à jour critique** : Upgrade de Next.js (16.0.7) et React (19.2.1) pour corriger les vulnérabilités CVE-2025-55182 et CVE-2025-66478.
+
+### 🐛 Correctifs
+- **Bus T2C** : Correction de l'affichage des bus qui disparaissaient à cause d'horaires statiques périmés. Ajout d'un ajustement dynamique des dates pour garantir la continuité du service.
+
 ## [1.0.0] - 2025-12-02
 
 ### ✨ Fonctionnalités
