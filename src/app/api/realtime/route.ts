@@ -43,10 +43,30 @@ export async function GET() {
         }
 
         // 2. Merge with Static Schedule
-        // Filter static schedule for relevant times (e.g. now - 10 min to now + 2 hours)
-        // But actually, we want to show the next buses.
+        // The static schedule is for a specific date (e.g., 20251126). 
+        // We need to shift it to the current date to make it relevant.
+
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const todayMidnight = Math.floor(today.getTime() / 1000);
+
+        // Get the date from the first item in the schedule
+        const scheduleDateStr = (staticSchedule as any[])[0]?.date || "20251126";
+        const sYear = parseInt(scheduleDateStr.substring(0, 4));
+        const sMonth = parseInt(scheduleDateStr.substring(4, 6)) - 1;
+        const sDay = parseInt(scheduleDateStr.substring(6, 8));
+        const scheduleDate = new Date(sYear, sMonth, sDay);
+        scheduleDate.setHours(0, 0, 0, 0);
+        const scheduleMidnight = Math.floor(scheduleDate.getTime() / 1000);
+
+        const timeOffset = todayMidnight - scheduleMidnight;
 
         const combinedUpdates = staticSchedule
+            .map((item: any) => ({
+                ...item,
+                arrival: item.arrival + timeOffset,
+                departure: item.departure + timeOffset
+            }))
             .filter((item: any) => item.arrival > now - 600) // Keep recent past to show "just left" if needed, or just future
             .map((item: any) => {
                 const rt = realtimeUpdates[item.tripId];
