@@ -8,6 +8,7 @@ import ClockWidget from '@/components/ClockWidget';
 import RelativeTime from '@/components/RelativeTime';
 import { useDepartures } from '@/hooks/useDepartures';
 import { useDelayNotifications } from '@/hooks/useDelayNotifications';
+import { useAlerts } from '@/hooks/useAlerts';
 import { TransportFilter } from '@/types';
 
 export default function Home() {
@@ -16,6 +17,9 @@ export default function Home() {
 
   // Enable delay notifications
   useDelayNotifications(departures, arrivals);
+
+  // Enable trip-specific alerts with sound/speech
+  const { toggleAlert, isAlerted } = useAlerts(departures, arrivals);
 
   // Filter departures and arrivals based on transport type
   const filteredDepartures = useMemo(() => {
@@ -136,8 +140,8 @@ export default function Home() {
               {filter !== 'all' && <span className="text-sm font-normal opacity-70">({filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'})</span>}
             </h2>
           </div>
-          <DeparturesBoard departures={filteredDepartures} loading={isLoading} />
-          <DeparturesList departures={filteredDepartures} loading={isLoading} />
+          <DeparturesBoard departures={filteredDepartures} loading={isLoading} onToggleAlert={toggleAlert} isAlerted={isAlerted} />
+          <DeparturesList departures={filteredDepartures} loading={isLoading} onToggleAlert={toggleAlert} isAlerted={isAlerted} />
         </div>
 
         {/* Arrivals Board */}
@@ -149,8 +153,8 @@ export default function Home() {
               {filter !== 'all' && <span className="text-sm font-normal opacity-70">({filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'})</span>}
             </h2>
           </div>
-          <DeparturesBoard departures={filteredArrivals} loading={isLoading} boardType="arrivals" />
-          <DeparturesList departures={filteredArrivals} loading={isLoading} boardType="arrivals" />
+          <DeparturesBoard departures={filteredArrivals} loading={isLoading} boardType="arrivals" onToggleAlert={toggleAlert} isAlerted={isAlerted} />
+          <DeparturesList departures={filteredArrivals} loading={isLoading} boardType="arrivals" onToggleAlert={toggleAlert} isAlerted={isAlerted} />
         </div>
 
         {/* Scrolling Ticker */}

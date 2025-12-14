@@ -1,4 +1,4 @@
-import { ArrowRight, Bus, Train, RefreshCw } from 'lucide-react';
+import { ArrowRight, Bus, Train, RefreshCw, Bell, BellOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
@@ -8,9 +8,11 @@ interface DeparturesBoardProps {
     departures: UnifiedEntry[];
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
+    onToggleAlert?: (id: string) => void;
+    isAlerted?: (id: string) => boolean;
 }
 
-export default function DeparturesBoard({ departures, loading, boardType = 'departures' }: DeparturesBoardProps) {
+export default function DeparturesBoard({ departures, loading, boardType = 'departures', onToggleAlert, isAlerted }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
 
     return (
@@ -24,6 +26,7 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
                         <th className="px-6 py-4 text-left">{boardType === 'arrivals' ? 'Provenance' : 'Destination'}</th>
                         <th className="px-6 py-4 text-left">Quai</th>
                         <th className="px-6 py-4 text-center">État</th>
+                        <th className="px-6 py-4 text-center">Alerte</th>
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-800">
@@ -130,6 +133,24 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
                                             <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] animate-pulse"></div>
                                         )}
                                     </div>
+                                </td>
+
+                                {/* Alert Bell */}
+                                <td className="px-6 py-5 text-center">
+                                    {onToggleAlert && isAlerted && (
+                                        <button
+                                            onClick={() => onToggleAlert(entry.id)}
+                                            className={`p-2 rounded-lg transition-all ${isAlerted(entry.id) ? 'bg-yellow-500/20 text-yellow-500' : 'bg-gray-800 text-gray-500 hover:bg-gray-700 hover:text-gray-400'}`}
+                                            title={isAlerted(entry.id) ? 'Désactiver l\'alerte' : 'Activer l\'alerte vocale'}
+                                            aria-pressed={isAlerted(entry.id)}
+                                        >
+                                            {isAlerted(entry.id) ? (
+                                                <Bell className="w-5 h-5" />
+                                            ) : (
+                                                <BellOff className="w-5 h-5" />
+                                            )}
+                                        </button>
+                                    )}
                                 </td>
                             </tr>
                         ))
