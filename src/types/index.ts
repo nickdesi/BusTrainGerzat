@@ -12,6 +12,7 @@ export interface TrainUpdate {
     tripId: string;
     trainNumber: string;
     direction: string;
+    origin: string;
     arrival: { time: string; delay: number };
     departure: { time: string; delay: number };
     delay: number;

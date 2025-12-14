@@ -88,7 +88,7 @@ export function useDepartures() {
             platform: 'Champfleuri',
         });
 
-        // Train mapping
+        // Train mapping - use real destination from API
         const mapTrainDeparture = (train: TrainUpdate): UnifiedEntry => ({
             id: `train-${train.tripId}`,
             type: 'TER',
@@ -96,7 +96,8 @@ export function useDepartures() {
             arrivalTime: Number(train.arrival.time),
             departureTime: Number(train.departure.time),
             line: train.trainNumber,
-            destination: 'Clermont-Ferrand',
+            destination: train.direction || 'Inconnu',
+            provenance: train.origin || 'Inconnu',
             delay: train.delay,
             isRealtime: train.isRealtime,
             platform: 'Voie 1',
@@ -109,8 +110,8 @@ export function useDepartures() {
             arrivalTime: Number(train.arrival.time),
             departureTime: Number(train.departure.time),
             line: train.trainNumber,
-            destination: train.direction === 'From Clermont' ? 'Riom / Moulins' : 'Clermont-Ferrand',
-            provenance: 'Clermont-Ferrand',
+            destination: train.direction || 'Inconnu',
+            provenance: train.origin || 'Inconnu',
             delay: train.delay,
             isRealtime: train.isRealtime,
             platform: 'Voie 2',
@@ -119,8 +120,11 @@ export function useDepartures() {
         // Separate and map
         const busDepartures = deduplicate(updates.filter(u => u.direction === 0));
         const busArrivals = deduplicate(updates.filter(u => u.direction === 1));
-        const trainDepartures = trainUpdates.filter(t => t.direction === 'To Clermont');
-        const trainArrivals = trainUpdates.filter(t => t.direction === 'From Clermont');
+
+        // All trains from SNCF API are departures from Gerzat (with arrival time = when it arrives at Gerzat)
+        // Show all trains in both boards - they arrive at Gerzat, then depart from Gerzat
+        const trainDepartures = trainUpdates;
+        const trainArrivals = trainUpdates;
 
         const deps: UnifiedEntry[] = [
             ...busDepartures.map(mapBusDeparture),
