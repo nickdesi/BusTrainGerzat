@@ -26,7 +26,20 @@ export async function GET() {
         if (fs.existsSync(staticFilePath)) {
             const fileContent = fs.readFileSync(staticFilePath, 'utf-8');
             const allSchedules = JSON.parse(fileContent);
-            staticSchedule = allSchedules[dateKey] || [];
+
+            // Try to find today's schedule, otherwise fallback to the most recent one available
+            // This ensures we always have a template schedule even if the JSON is outdated
+            if (allSchedules[dateKey]) {
+                staticSchedule = allSchedules[dateKey];
+            } else {
+                // Get all keys, sort them, and pick the last one
+                const keys = Object.keys(allSchedules).sort();
+                if (keys.length > 0) {
+                    const lastKey = keys[keys.length - 1];
+                    staticSchedule = allSchedules[lastKey];
+                    // console.log(`Using fallback schedule from ${lastKey} for ${dateKey}`);
+                }
+            }
         }
 
         // 2. Fetch Real-time Data
@@ -103,30 +116,42 @@ export async function GET() {
             const [h, m, s] = staticTrip.arrivalTime.split(':').map(Number);
             const tripDate = new Date(today);
             tripDate.setHours(h, m, s, 0);
-            const staticTimestamp = Math.floor(tripDate.getTime() / 1000);
+            let staticTimestamp = Math.floor(tripDate.getTime() / 1000);
+
+            // Parse departure time
+            const [dh, dm, ds] = staticTrip.departureTime.split(':').map(Number);
+            const departureDate = new Date(today);
+            departureDate.setHours(dh, dm, ds, 0);
+            let staticDepartureTimestamp = Math.floor(departureDate.getTime() / 1000);
+
+            // Cyclic Logic: If the static arrival timestamp is in the past (> 5 mins ago), assume it's for tomorrow
+            if (staticTimestamp < now - 300) {
+                staticTimestamp += 86400; // Add 24 hours
+                staticDepartureTimestamp += 86400;
+            }
 
             if (rtUpdate) {
                 isRealtime = true;
                 arrivalTime = rtUpdate.arrival?.time ? Number(rtUpdate.arrival.time) : staticTimestamp;
-                departureTime = rtUpdate.departure?.time ? Number(rtUpdate.departure.time) : staticTimestamp;
+                departureTime = rtUpdate.departure?.time ? Number(rtUpdate.departure.time) : staticDepartureTimestamp;
                 delay = rtUpdate.delay;
             } else {
                 arrivalTime = staticTimestamp;
-                departureTime = staticTimestamp; // Approximation
+                departureTime = staticDepartureTimestamp;
             }
 
-            // Only add if in future (or recent past)
-            if (arrivalTime > now - 300) {
-                mergedUpdates.push({
-                    tripId: staticTrip.tripId,
-                    trainNumber: staticTrip.trainNumber,
-                    direction: staticTrip.direction,
-                    arrival: { time: arrivalTime.toString(), delay: delay },
-                    departure: { time: departureTime.toString(), delay: delay },
-                    delay: delay,
-                    isRealtime: isRealtime
-                });
-            }
+            // Always add (filtering happens later or via projection)
+            // But we can filter too far future if needed, e.g. > 24h + now
+
+            mergedUpdates.push({
+                tripId: staticTrip.tripId,
+                trainNumber: staticTrip.trainNumber,
+                direction: staticTrip.direction,
+                arrival: { time: arrivalTime.toString(), delay: delay },
+                departure: { time: departureTime.toString(), delay: delay },
+                delay: delay,
+                isRealtime: isRealtime
+            });
         });
 
         // Add any real-time updates that weren't in static (unlikely but possible)

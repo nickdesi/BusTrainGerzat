@@ -38,7 +38,8 @@
   ],
   "exclude": [
     "node_modules",
-    "../*.ts",
-    "../*.py"
+    "BusTrainGerzat",
+    "inspect_sncf.ts",
+    "debug_sncf.ts"
   ]
 }
