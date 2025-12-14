@@ -14,6 +14,7 @@ interface TrainUpdate {
     departure: { time: string; delay: number };
     delay: number;
     isRealtime: boolean;
+    isCancelled: boolean;
 }
 
 function parseSncfDateTime(dateTimeStr: string): number {
@@ -74,6 +75,11 @@ export async function GET() {
                     }
                 }
 
+                // Detect cancellation from display_informations or data_freshness
+                const isCancelled = displayInfo.physical_mode === 'Cancelled' ||
+                    stopDateTime.data_freshness === 'deleted' ||
+                    dep.display_informations?.commercial_mode === 'Supprimé';
+
                 updates.push({
                     tripId: dep.links?.find((l: any) => l.type === 'vehicle_journey')?.id || '',
                     trainNumber: displayInfo.trip_short_name || displayInfo.headsign || 'Inconnu',
@@ -82,7 +88,8 @@ export async function GET() {
                     arrival: { time: arrivalTime.toString(), delay },
                     departure: { time: departureTime.toString(), delay },
                     delay,
-                    isRealtime: stopDateTime.data_freshness === 'realtime'
+                    isRealtime: stopDateTime.data_freshness === 'realtime',
+                    isCancelled
                 });
             });
         }

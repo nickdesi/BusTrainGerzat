@@ -125,7 +125,7 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
                                 {/* Status */}
                                 <td className="px-6 py-5 text-center">
                                     <div className="flex items-center justify-center gap-3">
-                                        <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} />
+                                        <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
                                         {entry.isRealtime && (
                                             <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] animate-pulse"></div>
                                         )}

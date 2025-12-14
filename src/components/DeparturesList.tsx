@@ -72,7 +72,7 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                                 {entry.platform}
                             </span>
                             <div className="flex items-center gap-2">
-                                <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} />
+                                <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
                                 {entry.isRealtime && (
                                     <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></div>
                                 )}

@@ -4,6 +4,7 @@ export interface Update {
     departure: number;
     delay: number;
     isRealtime: boolean;
+    isCancelled: boolean;
     headsign: string;
     direction: number;
 }
@@ -17,6 +18,7 @@ export interface TrainUpdate {
     departure: { time: string; delay: number };
     delay: number;
     isRealtime: boolean;
+    isCancelled: boolean;
 }
 
 export interface UnifiedEntry {
@@ -30,8 +32,8 @@ export interface UnifiedEntry {
     provenance?: string; // For arrivals: where it comes from
     delay: number;
     isRealtime: boolean;
+    isCancelled: boolean;
     platform?: string;
 }
 
 export type TransportFilter = 'all' | 'bus' | 'train';
-

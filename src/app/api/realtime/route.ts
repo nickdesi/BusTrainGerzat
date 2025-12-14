@@ -25,12 +25,19 @@ export async function GET() {
                     if (entity.tripUpdate) {
                         const tripUpdate = entity.tripUpdate;
                         if (tripUpdate.trip.routeId === targetRouteId) {
+                            // Check for trip-level cancellation (GTFS-RT schedule_relationship)
+                            const isTripCancelled = tripUpdate.trip.scheduleRelationship === 3; // CANCELED = 3
+
                             tripUpdate.stopTimeUpdate?.forEach((stopTimeUpdate) => {
                                 if (stopTimeUpdate.stopId === targetStopId) {
+                                    // Check for stop-level cancellation
+                                    const isStopCancelled = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED = 1
+
                                     realtimeUpdates[tripUpdate.trip.tripId as string] = {
                                         arrival: stopTimeUpdate.arrival,
                                         departure: stopTimeUpdate.departure,
                                         delay: stopTimeUpdate.arrival?.delay || stopTimeUpdate.departure?.delay || 0,
+                                        isCancelled: isTripCancelled || isStopCancelled
                                     };
                                 }
                             });
@@ -87,8 +94,10 @@ export async function GET() {
                 return {
                     tripId: item.tripId,
                     arrival: arrival,
+                    departure: item.departure + timeOffset,
                     delay: delay,
                     isRealtime: isRealtime,
+                    isCancelled: rt?.isCancelled || false,
                     headsign: item.headsign,
                     direction: item.direction
                 };

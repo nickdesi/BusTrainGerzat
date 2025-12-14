@@ -3,9 +3,15 @@ import SplitFlapDisplay from './SplitFlapDisplay';
 interface StatusDisplayProps {
     delay: number;
     isRealtime: boolean;
+    isCancelled?: boolean;
 }
 
-export default function StatusDisplay({ delay, isRealtime }: StatusDisplayProps) {
+export default function StatusDisplay({ delay, isRealtime, isCancelled }: StatusDisplayProps) {
+    // Show cancellation status first
+    if (isCancelled) {
+        return <SplitFlapDisplay text="SUPPRIMÉ" size="xs" color="text-red-600" />;
+    }
+
     if (!isRealtime) {
         return <SplitFlapDisplay text="THEORIQUE" size="xs" color="text-gray-400" />;
     }
@@ -23,4 +29,3 @@ export default function StatusDisplay({ delay, isRealtime }: StatusDisplayProps)
 
     return <SplitFlapDisplay text={`AVANCE ${minutes}M`} size="xs" color="text-blue-400" />;
 }
-

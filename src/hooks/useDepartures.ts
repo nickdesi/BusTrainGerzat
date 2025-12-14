@@ -71,6 +71,7 @@ export function useDepartures() {
             destination: bus.headsign,
             delay: bus.delay,
             isRealtime: bus.isRealtime,
+            isCancelled: bus.isCancelled || false,
             platform: 'Champfleuri',
         });
 
@@ -85,6 +86,7 @@ export function useDepartures() {
             provenance: 'Clermont-Ferrand / Aéroport',
             delay: bus.delay,
             isRealtime: bus.isRealtime,
+            isCancelled: bus.isCancelled || false,
             platform: 'Champfleuri',
         });
 
@@ -100,6 +102,7 @@ export function useDepartures() {
             provenance: train.origin || 'Inconnu',
             delay: train.delay,
             isRealtime: train.isRealtime,
+            isCancelled: train.isCancelled || false,
             platform: 'Voie 1',
         });
 
@@ -114,6 +117,7 @@ export function useDepartures() {
             provenance: train.origin || 'Inconnu',
             delay: train.delay,
             isRealtime: train.isRealtime,
+            isCancelled: train.isCancelled || false,
             platform: 'Voie 2',
         });
 
