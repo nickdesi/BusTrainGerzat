@@ -81,9 +81,22 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
   python3 generate_train_static.py
   ```
 
-## 📱 PWA
+## 📱 Installer l'Application sur Mobile
 
-L'application est configurée pour être installée sur iOS et Android.
+L'application peut être installée comme une app native sur votre téléphone !
 
-- **iOS** : Ouvrir dans Safari -> "Sur l'écran d'accueil".
-- **Android** : Ouvrir dans Chrome -> "Installer l'application".
+### 🍎 iPhone / iPad
+
+1. Ouvrez **Safari** et allez sur [gertzatlive.desimone.fr](https://gertzatlive.desimone.fr)
+2. Appuyez sur l'icône **Partager** (carré avec flèche vers le haut)
+3. Faites défiler et appuyez sur **« Sur l'écran d'accueil »**
+4. Nommez l'app (ex: "Gerzat Live") et appuyez sur **Ajouter**
+
+### 🤖 Android
+
+1. Ouvrez **Chrome** et allez sur [gertzatlive.desimone.fr](https://gertzatlive.desimone.fr)
+2. Appuyez sur les **3 points** en haut à droite
+3. Appuyez sur **« Installer l'application »** ou **« Ajouter à l'écran d'accueil »**
+4. Confirmez l'installation
+
+Une fois installée, l'application apparaît sur votre écran d'accueil avec sa propre icône et fonctionne comme une app native !
