@@ -23,10 +23,14 @@ export const metadata: Metadata = {
   title: "Gare de Gerzat - Départs & Arrivées",
   description: "Affichage temps réel des bus et trains pour la gare de Gerzat",
   manifest: "/manifest.json",
+  icons: {
+    icon: "/icon-512.png",
+    apple: "/apple-touch-icon.png",
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "Gerzat",
+    title: "Gerzat Live",
   },
 };
 
