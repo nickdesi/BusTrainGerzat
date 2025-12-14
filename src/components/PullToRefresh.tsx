@@ -9,34 +9,59 @@ interface PullToRefreshProps {
 }
 
 export default function PullToRefresh({ onRefresh, children }: PullToRefreshProps) {
-    const [isPulling, setIsPulling] = useState(false);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [pullDistance, setPullDistance] = useState(0);
     const startY = useRef(0);
-    const containerRef = useRef<HTMLDivElement>(null);
+    const isPulling = useRef(false);
+    const hasMoved = useRef(false);
 
-    const THRESHOLD = 80;
+    // Higher threshold to prevent accidental triggers
+    const THRESHOLD = 120;
+    // Minimum Y movement before we consider it a pull
+    const MIN_PULL_START = 20;
 
     const handleTouchStart = useCallback((e: React.TouchEvent) => {
-        if (containerRef.current?.scrollTop === 0) {
+        // Only enable if already at top of page
+        if (window.scrollY <= 0 && !isRefreshing) {
             startY.current = e.touches[0].clientY;
-            setIsPulling(true);
+            isPulling.current = false;
+            hasMoved.current = false;
         }
-    }, []);
+    }, [isRefreshing]);
 
     const handleTouchMove = useCallback((e: React.TouchEvent) => {
-        if (!isPulling || isRefreshing) return;
+        if (isRefreshing) return;
 
         const currentY = e.touches[0].clientY;
         const diff = currentY - startY.current;
 
-        if (diff > 0 && containerRef.current?.scrollTop === 0) {
-            setPullDistance(Math.min(diff * 0.5, THRESHOLD * 1.5));
+        // Must be at top of page AND pulling down
+        if (window.scrollY <= 0 && diff > MIN_PULL_START) {
+            // Start pull mode only after clear downward movement
+            if (!isPulling.current && !hasMoved.current) {
+                isPulling.current = true;
+            }
+
+            if (isPulling.current) {
+                // Apply resistance to make it feel intentional
+                const resistance = 0.4;
+                const distance = Math.min((diff - MIN_PULL_START) * resistance, THRESHOLD * 1.2);
+                setPullDistance(distance);
+            }
+        } else if (diff < 0) {
+            // Scrolling up - cancel any pull
+            isPulling.current = false;
+            setPullDistance(0);
         }
-    }, [isPulling, isRefreshing]);
+
+        hasMoved.current = true;
+    }, [isRefreshing]);
 
     const handleTouchEnd = useCallback(async () => {
-        if (!isPulling) return;
+        if (!isPulling.current) {
+            setPullDistance(0);
+            return;
+        }
 
         if (pullDistance >= THRESHOLD && !isRefreshing) {
             setIsRefreshing(true);
@@ -47,42 +72,39 @@ export default function PullToRefresh({ onRefresh, children }: PullToRefreshProp
             }
         }
 
-        setIsPulling(false);
+        isPulling.current = false;
         setPullDistance(0);
-    }, [isPulling, pullDistance, isRefreshing, onRefresh]);
+    }, [pullDistance, isRefreshing, onRefresh]);
+
+    const showIndicator = pullDistance > 10 || isRefreshing;
 
     return (
-        <div
-            ref={containerRef}
-            className="relative h-full overflow-auto"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-        >
-            {/* Pull indicator */}
-            <div
-                className="absolute left-1/2 -translate-x-1/2 flex items-center justify-center transition-all duration-200 z-50"
-                style={{
-                    top: pullDistance - 40,
-                    opacity: pullDistance / THRESHOLD
-                }}
-            >
-                <div className={`p-3 rounded-full bg-yellow-500/20 border border-yellow-500/50 ${isRefreshing ? 'animate-spin' : ''}`}>
-                    <RefreshCw
-                        className="w-5 h-5 text-yellow-500"
-                        style={{
-                            transform: `rotate(${pullDistance * 2}deg)`
-                        }}
-                    />
+        <div className="relative min-h-screen">
+            {/* Pull indicator - only visible when actively pulling */}
+            {showIndicator && (
+                <div
+                    className="fixed left-1/2 -translate-x-1/2 flex items-center justify-center z-50 transition-opacity duration-200"
+                    style={{
+                        top: Math.max(pullDistance - 50, 10),
+                        opacity: Math.min(pullDistance / THRESHOLD, 1)
+                    }}
+                >
+                    <div className={`p-3 rounded-full bg-yellow-500/20 border border-yellow-500/50 backdrop-blur-sm ${isRefreshing ? 'animate-spin' : ''}`}>
+                        <RefreshCw
+                            className="w-5 h-5 text-yellow-500"
+                            style={{
+                                transform: `rotate(${pullDistance * 3}deg)`
+                            }}
+                        />
+                    </div>
                 </div>
-            </div>
+            )}
 
-            {/* Content with pull offset */}
+            {/* Content - no transform to avoid scroll issues */}
             <div
-                className="transition-transform duration-200"
-                style={{
-                    transform: `translateY(${isPulling || isRefreshing ? pullDistance : 0}px)`
-                }}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+                onTouchEnd={handleTouchEnd}
             >
                 {children}
             </div>
