@@ -1,4 +1,4 @@
-import { ArrowRight, RefreshCw, Bell, BellOff } from 'lucide-react';
+import { ArrowRight, RefreshCw } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
@@ -8,11 +8,9 @@ interface DeparturesListProps {
     departures: UnifiedEntry[];
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
-    onToggleAlert?: (id: string) => void;
-    isAlerted?: (id: string) => boolean;
 }
 
-export default function DeparturesList({ departures, loading, boardType = 'departures', onToggleAlert, isAlerted }: DeparturesListProps) {
+export default function DeparturesList({ departures, loading, boardType = 'departures' }: DeparturesListProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
 
     return (
@@ -77,15 +75,6 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                                 <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
                                 {entry.isRealtime && (
                                     <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></div>
-                                )}
-                                {onToggleAlert && isAlerted && (
-                                    <button
-                                        onClick={() => onToggleAlert(entry.id)}
-                                        className={`p-1.5 rounded-lg transition-all ${isAlerted(entry.id) ? 'bg-yellow-500/20 text-yellow-500' : 'bg-gray-800 text-gray-500'}`}
-                                        aria-label={isAlerted(entry.id) ? 'Désactiver l\'alerte' : 'Activer l\'alerte'}
-                                    >
-                                        {isAlerted(entry.id) ? <Bell className="w-4 h-4" /> : <BellOff className="w-4 h-4" />}
-                                    </button>
                                 )}
                             </div>
                         </div>
