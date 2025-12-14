@@ -1,141 +1,141 @@
 @import "tailwindcss";
 
-:root {
-  /* Modern Dark Theme Palette */
-  --background: #050505;
-  --foreground: #ffffff;
-
-  /* Glassmorphism Colors */
-  --glass-bg: rgba(20, 20, 25, 0.6);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-highlight: rgba(255, 255, 255, 0.03);
-
-  /* Brand Colors */
-  --accent-primary: #3b82f6;
-  /* Blue */
-  --accent-secondary: #ef4444;
-  /* Red */
-  --accent-glow: rgba(59, 130, 246, 0.5);
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: #0a0a0a;
+  --color-foreground: #ededed;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
 
-  /* Custom Utilities */
-  --backdrop-blur-xs: blur(2px);
-  --backdrop-blur-xl: blur(24px);
+html {
+  color-scheme: dark;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans), system-ui, sans-serif;
-  background-image:
-    radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
-    radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.08), transparent 25%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-  animation: bg-pulse 10s ease-in-out infinite alternate;
 }
 
-@keyframes bg-pulse {
+/* Text glow effect for headers */
+.text-glow {
+  text-shadow: 0 0 30px rgba(250, 204, 21, 0.3), 0 0 60px rgba(250, 204, 21, 0.1);
+}
+
+/* Split-flap display character styling */
+.split-flap-char {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.split-flap-char::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(0, 0, 0, 0.6);
+}
+
+/* Flip animation for new entries */
+@keyframes flipIn {
   0% {
-    background-position: 0% 0%;
-  }
-
-  100% {
-    background-position: 10% 10%;
-  }
-}
-
-/* Glassmorphism Utilities */
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid var(--glass-border);
-  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.02);
-}
-
-.glass-card {
-  background: linear-gradient(145deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from {
+    transform: rotateX(-90deg);
     opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes shimmer {
-  0% {
-    background-position: -200% 0;
   }
 
   100% {
-    background-position: 200% 0;
+    transform: rotateX(0);
+    opacity: 1;
   }
 }
 
-.animate-fade-in {
-  animation: fadeIn 0.5s ease-out forwards;
+.flip-enter {
+  animation: flipIn 0.4s ease-out;
+  transform-origin: top center;
 }
 
-.animate-pulse {
-  animation: shimmer 2s infinite linear;
-  background: linear-gradient(90deg,
-      rgba(55, 65, 81, 0.3) 0%,
-      rgba(75, 85, 99, 0.5) 50%,
-      rgba(55, 65, 81, 0.3) 100%);
-  background-size: 200% 100%;
+/* Slide-up animation */
+@keyframes slideUp {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
-.delay-100 {
-  animation-delay: 100ms;
+.slide-up {
+  animation: slideUp 0.5s ease-out;
 }
 
-.delay-200 {
-  animation-delay: 200ms;
+/* Pulse glow for real-time indicator */
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    box-shadow: 0 0 5px currentColor, 0 0 10px currentColor;
+  }
+
+  50% {
+    box-shadow: 0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor;
+  }
 }
 
-.delay-300 {
-  animation-delay: 300ms;
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
-/* Scrollbar */
+/* Marquee animation */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: inline-flex;
+  animation: marquee 30s linear infinite;
+  white-space: nowrap;
+}
+
+/* Pause animation on hover */
+.group:hover .animate-marquee,
+.animate-marquee.pause {
+  animation-play-state: paused;
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent;
+  background: #0a0a0a;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #333;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #444;
 }
