@@ -2,11 +2,8 @@
 
 Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
 
-[![Demo](https://img.shields.io/badge/Demo-gertzatlive.desimone.fr-green)](https://gertzatlive.desimone.fr)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black)](https://nextjs.org/)
-[![Deployed with Coolify](https://img.shields.io/badge/Deployed%20with-Coolify-blueviolet)](https://coolify.io/)
-
-> **🔗 Démo live :** [https://gertzatlive.desimone.fr](https://gertzatlive.desimone.fr)
+[![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gertzatlive.desimone.fr)
+[![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
 ## 🚀 Fonctionnalités
 
