@@ -50,15 +50,21 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
                             >
                                 {/* Time */}
                                 <td className="px-6 py-5">
-                                    <div className="flex flex-col gap-1">
-                                        <SplitFlapDisplay text={formatTime(entry.departureTime)} size="xl" color="text-yellow-500" />
-                                        {entry.type === 'TER' && (
-                                            <div className="flex items-center gap-2 opacity-60">
-                                                <span className="text-[10px] uppercase text-gray-400">Arr.</span>
-                                                <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="xs" color="text-yellow-500/80" />
+                                    {entry.type === 'TER' ? (
+                                        <div className="flex items-center gap-4">
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[10px] uppercase text-gray-500 mb-1">Arrivée</span>
+                                                <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="lg" color="text-yellow-500" />
                                             </div>
-                                        )}
-                                    </div>
+                                            <span className="text-gray-600 text-xl">→</span>
+                                            <div className="flex flex-col items-center">
+                                                <span className="text-[10px] uppercase text-gray-500 mb-1">Départ</span>
+                                                <SplitFlapDisplay text={formatTime(entry.departureTime)} size="lg" color="text-yellow-500" />
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <SplitFlapDisplay text={formatTime(entry.departureTime)} size="xl" color="text-yellow-500" />
+                                    )}
                                 </td>
 
                                 {/* Type */}
