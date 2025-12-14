@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
 
-const SNCF_API_KEY = process.env.SNCF_API_KEY || 'ade4c333-d247-48cd-bb87-3ca56f059a94';
+const SNCF_API_KEY = process.env.SNCF_API_KEY;
 const GERZAT_STOP_AREA = 'stop_area:SNCF:87734046';
 
 interface TrainUpdate {

@@ -47,7 +47,16 @@ Le projet a été refactorisé pour une meilleure maintenabilité et performance
     npm install
     ```
 
-2. **Lancer le serveur de développement** :
+2. **Configurer les variables d'environnement** :
+
+    ```bash
+    # Créer le fichier .env.local
+    echo "SNCF_API_KEY=votre_clé_api_sncf" > .env.local
+    ```
+
+    > Obtenez votre clé sur [digital.sncf.com](https://www.digital.sncf.com/startup/api)
+
+3. **Lancer le serveur de développement** :
 
     ```bash
     npm run dev
