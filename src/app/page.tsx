@@ -67,14 +67,14 @@ export default function Home() {
 
           {/* Controls Row */}
           <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-900/50 rounded-lg p-4 border border-gray-800">
-            {/* Status */}
-            <div className="flex items-center gap-2 text-sm text-gray-400" role="status" aria-live="polite">
+            {/* Status - fixed width to prevent layout shift */}
+            <div className="flex items-center gap-2 text-sm text-gray-400 min-w-[180px]" role="status" aria-live="polite">
               <div className="flex h-2 w-2 relative">
                 <span className={`absolute inline-flex h-2 w-2 rounded-full opacity-75 ${isFetching ? 'animate-ping bg-yellow-400' : 'bg-green-400'}`}></span>
                 <span className={`relative inline-flex rounded-full h-2 w-2 ${isFetching ? 'bg-yellow-500' : 'bg-green-500'}`}></span>
               </div>
-              <span className="font-medium">
-                Dernière MAJ : <RelativeTime timestamp={lastUpdated} />
+              <span className="font-medium whitespace-nowrap">
+                MAJ : <RelativeTime timestamp={lastUpdated} />
               </span>
             </div>
 
