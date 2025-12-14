@@ -3,42 +3,43 @@
 import { useEffect, useState } from 'react';
 
 export default function ServiceWorkerRegistration() {
-    const [isOnline, setIsOnline] = useState(true);
     const [showOfflineBanner, setShowOfflineBanner] = useState(false);
 
     useEffect(() => {
-        // Register service worker
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/service-worker.js')
-                .then((registration) => {
-                    console.log('SW registered:', registration.scope);
-                })
-                .catch((error) => {
-                    console.error('SW registration failed:', error);
-                });
+        // Only run on client side
+        if (typeof window === 'undefined') return;
+
+        try {
+            // Register service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then((registration) => {
+                        console.log('SW registered:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.warn('SW registration failed:', error);
+                    });
+            }
+
+            // Online/offline detection
+            const handleOnline = () => setShowOfflineBanner(false);
+            const handleOffline = () => setShowOfflineBanner(true);
+
+            // Check initial state
+            if (!navigator.onLine) {
+                setShowOfflineBanner(true);
+            }
+
+            window.addEventListener('online', handleOnline);
+            window.addEventListener('offline', handleOffline);
+
+            return () => {
+                window.removeEventListener('online', handleOnline);
+                window.removeEventListener('offline', handleOffline);
+            };
+        } catch (error) {
+            console.warn('ServiceWorker setup error:', error);
         }
-
-        // Online/offline detection
-        const handleOnline = () => {
-            setIsOnline(true);
-            setShowOfflineBanner(false);
-        };
-
-        const handleOffline = () => {
-            setIsOnline(false);
-            setShowOfflineBanner(true);
-        };
-
-        setIsOnline(navigator.onLine);
-        setShowOfflineBanner(!navigator.onLine);
-
-        window.addEventListener('online', handleOnline);
-        window.addEventListener('offline', handleOffline);
-
-        return () => {
-            window.removeEventListener('online', handleOnline);
-            window.removeEventListener('offline', handleOffline);
-        };
     }, []);
 
     if (!showOfflineBanner) return null;

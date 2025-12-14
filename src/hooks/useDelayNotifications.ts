@@ -12,12 +12,20 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
 
     // Request notification permission on mount
     useEffect(() => {
-        if ('Notification' in window && Notification.permission === 'default') {
-            Notification.requestPermission().then((permission) => {
-                permissionGranted.current = permission === 'granted';
-            });
-        } else if ('Notification' in window) {
-            permissionGranted.current = Notification.permission === 'granted';
+        if (typeof window === 'undefined') return;
+
+        try {
+            if ('Notification' in window && Notification.permission === 'default') {
+                Notification.requestPermission().then((permission) => {
+                    permissionGranted.current = permission === 'granted';
+                }).catch(() => {
+                    // Permission request failed, ignore
+                });
+            } else if ('Notification' in window) {
+                permissionGranted.current = Notification.permission === 'granted';
+            }
+        } catch (error) {
+            console.warn('Notification setup error:', error);
         }
     }, []);
 
