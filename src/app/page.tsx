@@ -34,7 +34,7 @@ export default function Home() {
         <header className="mb-8 border-b-2 border-yellow-500/30 pb-6 relative">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             <div className="text-center lg:text-left">
-              <h1 className="text-5xl md:text-7xl font-bold tracking-wider text-yellow-500 uppercase mb-2 font-mono text-glow">
+              <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-yellow-500 uppercase mb-2 font-mono text-glow">
                 GERZAT
               </h1>
               <p className="text-sm md:text-base text-yellow-500/80 uppercase tracking-[0.5em] font-medium pl-1">
