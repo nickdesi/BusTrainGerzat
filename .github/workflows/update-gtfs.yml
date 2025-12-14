@@ -1,0 +1,45 @@
+name: Update T2C GTFS Schedule
+
+on:
+  schedule:
+    # Every Sunday at 22:00 UTC (23:00 Paris time)
+    - cron: '0 22 * * 0'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  update-gtfs:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Download T2C GTFS
+        run: |
+          curl -L -o gtfs_t2c.zip "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs"
+          unzip -o gtfs_t2c.zip -d gtfs_data
+          rm gtfs_t2c.zip
+
+      - name: Generate static schedule
+        run: python3 generate_static_json.py
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet src/app/api/realtime/static_schedule.json || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.changes == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add src/app/api/realtime/static_schedule.json
+          git commit -m "chore: Auto-update T2C bus schedule [skip ci]"
+          git push
