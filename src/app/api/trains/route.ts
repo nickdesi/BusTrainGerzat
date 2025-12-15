@@ -64,11 +64,23 @@ export async function GET() {
         console.log('SNCF API arrivals status:', arrivalsRes.status);
 
         const updates: TrainUpdate[] = [];
+        const departuresUrl = `https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=20`;
         let debugInfo: any = {
             departuresStatus: departuresRes.status,
             arrivalsStatus: arrivalsRes.status,
-            apiKeyConfigured: true
+            apiKeyConfigured: true,
+            requestUrl: departuresUrl
         };
+
+        // If not OK, get the error response body
+        if (!departuresRes.ok) {
+            try {
+                const errorBody = await departuresRes.json();
+                debugInfo.errorBody = errorBody;
+            } catch {
+                debugInfo.errorBody = 'Could not parse error response';
+            }
+        }
 
         if (departuresRes.ok) {
             const departuresData = await departuresRes.json();
