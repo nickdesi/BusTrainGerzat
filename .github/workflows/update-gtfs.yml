@@ -2,8 +2,8 @@ name: Update T2C GTFS Schedule
 
 on:
   schedule:
-    # Every Sunday at 22:00 UTC (23:00 Paris time)
-    - cron: '0 22 * * 0'
+    # Every day at 03:00 UTC (04:00 Paris time)
+    - cron: '0 3 * * *'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -23,23 +23,48 @@ jobs:
 
       - name: Download T2C GTFS
         run: |
-          curl -L -o gtfs_t2c.zip "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs"
+          echo "📥 Downloading GTFS data from T2C..."
+          curl -L -f -o gtfs_t2c.zip "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs" || exit 1
+          echo "📦 Extracting GTFS data..."
           unzip -o gtfs_t2c.zip -d gtfs_data
           rm gtfs_t2c.zip
+          echo "✅ GTFS data downloaded successfully"
 
       - name: Generate static schedule
-        run: python3 generate_static_json.py
+        run: |
+          echo "🔄 Generating static schedule..."
+          python3 generate_static_json.py
+          echo "✅ Static schedule generated"
+
+      - name: Validate schedule
+        run: |
+          echo "🔍 Validating schedule..."
+          STOPS=$(python3 -c "import json; print(len(json.load(open('src/app/api/realtime/static_schedule.json'))))")
+          echo "Found $STOPS scheduled stops"
+          if [ "$STOPS" -lt 100 ]; then
+            echo "❌ Error: Too few stops ($STOPS), something may be wrong"
+            exit 1
+          fi
+          echo "✅ Schedule validation passed"
 
       - name: Check for changes
         id: check_changes
         run: |
-          git diff --quiet src/app/api/realtime/static_schedule.json || echo "changes=true" >> $GITHUB_OUTPUT
+          git add -A
+          if git diff --cached --quiet; then
+            echo "changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected"
+          else
+            echo "changes=true" >> $GITHUB_OUTPUT
+            echo "📝 Changes detected, will commit"
+          fi
 
       - name: Commit and push changes
         if: steps.check_changes.outputs.changes == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add src/app/api/realtime/static_schedule.json
-          git commit -m "chore: Auto-update T2C bus schedule [skip ci]"
+          git commit -m "chore: Auto-update T2C GTFS data [$(date +'%Y-%m-%d')]"
           git push
+          echo "🚀 Changes pushed to repository"
+
