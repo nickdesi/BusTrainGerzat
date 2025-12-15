@@ -70,7 +70,7 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
     npm run dev
     ```
 
-3. **Accéder à l'application** :
+4. **Accéder à l'application** :
     Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
 ## 🔧 Scripts Utiles

@@ -71,7 +71,7 @@
 
 #### Structure du Projet
 
-```
+```text
 src/
 ├── app/
 │   ├── page.tsx          # Page principale
