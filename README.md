@@ -5,14 +5,14 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 [![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gertzatlive.desimone.fr)
 [![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
-## � Arrêts surveillés
+## 📍 Arrêts surveillés
 
 | Transport | Arrêt / Gare | Ligne(s) |
 |-----------|--------------|----------|
 | 🚌 Bus T2C | **Gerzat Champfleuri** | Ligne 20 |
 | 🚆 Train TER | **Gare de Gerzat** | TER Auvergne |
 
-## �🚀 Fonctionnalités
+## 🚀 Fonctionnalités
 
 ### 🚌 Bus T2C (Ligne 20 - Arrêt Champfleuri)
 
