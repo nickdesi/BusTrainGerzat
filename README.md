@@ -43,7 +43,7 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 | Transport | API | Source |
 |-----------|-----|--------|
-| **Train TER** | API SNCF officielle | [api.sncf.com](https://api.sncf.com) (clé requise) |
+| **Train TER** | API SNCF (Navitia) | [api.sncf.com](https://api.sncf.com) / [doc.navitia.io](https://doc.navitia.io) (clé requise) |
 | **Bus T2C** | GTFS-RT temps réel | [transport.data.gouv.fr](https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update) |
 | **Bus T2C** | GTFS statique | [opendata.clermontmetropole.eu](https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs) |
 

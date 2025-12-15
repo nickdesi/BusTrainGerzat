@@ -1,11 +1,23 @@
 # Changelog
 
+## [1.0.2] - 2025-12-15
+
+### 🐛 Correctifs
+
+- **API SNCF/Navitia** : Correction de l'URL d'appel API qui causait une erreur 400 Bad Request. Ajout du préfixe `/stop_areas/` manquant dans le chemin de requête.
+
+### 📝 Documentation
+
+- Ajout du lien vers la documentation Navitia dans les sources de données.
+
 ## [1.0.1] - 2025-12-05
 
 ### 🔒 Sécurité
+
 - **Mise à jour critique** : Upgrade de Next.js (16.0.7) et React (19.2.1) pour corriger les vulnérabilités CVE-2025-55182 et CVE-2025-66478.
 
 ### 🐛 Correctifs
+
 - **Bus T2C** : Correction de l'affichage des bus qui disparaissaient à cause d'horaires statiques périmés. Ajout d'un ajustement dynamique des dates pour garantir la continuité du service.
 
 ## [1.0.0] - 2025-12-02
@@ -13,6 +25,7 @@
 ### ✨ Fonctionnalités
 
 #### Transport en Temps Réel
+
 - **Bus T2C Ligne 20** : Suivi en temps réel avec données GTFS-RT
   - Séparation claire Départs/Arrivées
   - Indicateurs de retard visuels (badges de couleur)
@@ -25,6 +38,7 @@
   - Numéro de train et statut en temps réel
 
 #### Interface & UX
+
 - **Design Glassmorphism** : Interface sombre moderne avec effets de transparence
 - **Composants Modulaires** : Architecture propre avec composants réutilisables
 - **Loading States** : Squelettes de chargement pour une expérience fluide
@@ -35,6 +49,7 @@
   - Pas de clignotement pendant le refresh
 
 #### PWA & Performance
+
 - **Progressive Web App** : Installable sur iOS/Android
 - **Service Worker** : Fonctionne hors ligne
 - **Chargement Parallèle** : Fetch simultané Bus + Train
@@ -43,6 +58,7 @@
 ### 🏗 Architecture Technique
 
 #### Structure du Projet
+
 ```
 src/
 ├── app/
@@ -61,6 +77,7 @@ src/
 ```
 
 #### Stack Technique
+
 - **Framework** : Next.js 16 (App Router)
 - **Styling** : TailwindCSS v4
 - **Language** : TypeScript
@@ -68,6 +85,7 @@ src/
 - **PWA** : @ducanh2912/next-pwa
 
 ### 🐛 Correctifs
+
 - Fix: Suppression du cercle vert clignotant sur les indicateurs temps réel
 - Fix: Suppression des points pulsants sur les titres de section
 - Fix: Adoucissement de l'effet hover (de 200ms à 300ms, opacité réduite)
@@ -75,6 +93,7 @@ src/
 - Fix: Configuration webpack pour build PWA
 
 ### 📝 Documentation
+
 - README.md complet avec architecture et installation
 - Instructions PWA pour iOS/Android
 - Scripts de mise à jour des horaires théoriques
