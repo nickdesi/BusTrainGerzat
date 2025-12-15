@@ -43,14 +43,15 @@ export async function GET() {
         }
 
         // Fetch departures from SNCF API
+        // Format: /coverage/{region}/stop_areas/{stop_area_id}/departures
         const [departuresRes, arrivalsRes] = await Promise.all([
-            fetch(`https://api.sncf.com/v1/coverage/sncf/${GERZAT_STOP_AREA}/departures?count=20`, {
+            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=20`, {
                 headers: {
                     'Authorization': `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`
                 },
                 cache: 'no-store'
             }),
-            fetch(`https://api.sncf.com/v1/coverage/sncf/${GERZAT_STOP_AREA}/arrivals?count=20`, {
+            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/arrivals?count=20`, {
                 headers: {
                     'Authorization': `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`
                 },
