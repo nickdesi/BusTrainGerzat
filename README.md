@@ -76,17 +76,27 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 ## 🔧 Scripts Utiles
 
 - **Build** : `npm run build` (Utilise Webpack pour la compatibilité PWA).
-- **Mise à jour Bus (Théorique)** :
+- **Mise à jour Bus (Manuelle)** :
 
   ```bash
   python3 generate_static_json.py
   ```
 
-- **Mise à jour Train (Théorique)** :
+- **Mise à jour Train (Manuelle)** :
 
   ```bash
   python3 generate_train_static.py
   ```
+
+## 🔄 Mise à jour automatique
+
+Les horaires de bus T2C sont mis à jour **automatiquement chaque nuit** à 4h00 via GitHub Actions :
+
+- Téléchargement des données GTFS depuis la source T2C officielle
+- Régénération du fichier `static_schedule.json`
+- Commit et push automatique si des changements sont détectés
+
+Vous pouvez aussi déclencher la mise à jour manuellement depuis [GitHub Actions](https://github.com/nickdesi/BusTrainGerzat/actions).
 
 ## 📱 Installer l'Application sur Mobile
 

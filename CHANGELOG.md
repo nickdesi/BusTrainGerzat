@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.0.3] - 2025-12-15
+
+### 🐛 Correctifs
+
+- **Horaires Bus T2C** : Mise à jour des données GTFS pour corriger les horaires de bus qui ne correspondaient pas au PDF officiel T2C.
+
+### ⚙️ Infrastructure
+
+- **Mise à jour automatique quotidienne** : Le workflow GitHub Actions met maintenant à jour les horaires de bus chaque nuit à 4h00 (au lieu d'une fois par semaine).
+- Ajout d'une validation des données (vérifie que le schedule contient suffisamment d'arrêts).
+- Amélioration des logs avec messages détaillés.
+
 ## [1.0.2] - 2025-12-15
 
 ### 🐛 Correctifs
