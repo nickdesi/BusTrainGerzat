@@ -1,366 +1,158 @@
 [
   {
-    "tripId": "4503749951683539",
-    "arrival": 1765692000,
-    "departure": 1765692000,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565275",
-    "arrival": 1765694580,
-    "departure": 1765694580,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951683555",
-    "arrival": 1765695720,
-    "departure": 1765695720,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565276",
-    "arrival": 1765698360,
-    "departure": 1765698360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661636",
-    "arrival": 1765699620,
-    "departure": 1765699620,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565111",
-    "arrival": 1765701780,
-    "departure": 1765701780,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661669",
-    "arrival": 1765702560,
-    "departure": 1765702560,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565278",
-    "arrival": 1765705200,
-    "departure": 1765705200,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661637",
-    "arrival": 1765706460,
-    "departure": 1765706460,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951379271",
-    "arrival": 1765708740,
-    "departure": 1765708740,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661670",
-    "arrival": 1765709820,
-    "departure": 1765709820,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951379257",
-    "arrival": 1765712280,
-    "departure": 1765712280,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661792",
-    "arrival": 1765713300,
-    "departure": 1765713300,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565287",
-    "arrival": 1765715700,
-    "departure": 1765715700,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661640",
-    "arrival": 1765716180,
-    "departure": 1765716180,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565123",
-    "arrival": 1765718040,
-    "departure": 1765718040,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661793",
-    "arrival": 1765718700,
-    "departure": 1765718700,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565289",
-    "arrival": 1765720740,
-    "departure": 1765720740,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661797",
-    "arrival": 1765720920,
-    "departure": 1765720920,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951379284",
-    "arrival": 1765723380,
-    "departure": 1765723380,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661794",
-    "arrival": 1765723980,
-    "departure": 1765723980,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565125",
-    "arrival": 1765725900,
-    "departure": 1765725900,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661818",
-    "arrival": 1765725960,
-    "departure": 1765725960,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661804",
-    "arrival": 1765728720,
-    "departure": 1765728720,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565282",
-    "arrival": 1765728900,
-    "departure": 1765728900,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565291",
-    "arrival": 1765731000,
-    "departure": 1765731000,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661795",
-    "arrival": 1765731480,
-    "departure": 1765731480,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565137",
-    "arrival": 1765734000,
-    "departure": 1765734000,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661805",
-    "arrival": 1765734540,
-    "departure": 1765734540,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565284",
-    "arrival": 1765736700,
-    "departure": 1765736700,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661836",
-    "arrival": 1765737000,
-    "departure": 1765737000,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565139",
-    "arrival": 1765739460,
-    "departure": 1765739460,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951661796",
-    "arrival": 1765739640,
-    "departure": 1765739640,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951565109",
-    "arrival": 1765742400,
-    "departure": 1765742400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951683728",
-    "arrival": 1765743060,
-    "departure": 1765743060,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251214"
-  },
-  {
-    "tripId": "4503749951328557",
-    "arrival": 1765745940,
-    "departure": 1765745940,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251214"
-  },
-  {
     "tripId": "4503749951495720",
-    "arrival": 1765775040,
-    "departure": 1765775040,
+    "arrival": 1765771440,
+    "departure": 1765771440,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951495721",
-    "arrival": 1765777440,
-    "departure": 1765777440,
+    "arrival": 1765773840,
+    "departure": 1765773840,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684834",
-    "arrival": 1765778160,
-    "departure": 1765778160,
+    "arrival": 1765774560,
+    "departure": 1765774560,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684873",
-    "arrival": 1765778820,
-    "departure": 1765778820,
+    "arrival": 1765775220,
+    "departure": 1765775220,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684908",
-    "arrival": 1765779540,
-    "departure": 1765779540,
+    "arrival": 1765775940,
+    "departure": 1765775940,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684958",
-    "arrival": 1765780320,
-    "departure": 1765780320,
+    "arrival": 1765776720,
+    "departure": 1765776720,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684925",
-    "arrival": 1765780500,
-    "departure": 1765780500,
+    "arrival": 1765776900,
+    "departure": 1765776900,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684926",
-    "arrival": 1765780860,
-    "departure": 1765780860,
+    "arrival": 1765777260,
+    "departure": 1765777260,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684986",
-    "arrival": 1765781520,
-    "departure": 1765781520,
+    "arrival": 1765777920,
+    "departure": 1765777920,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684874",
+    "arrival": 1765778160,
+    "departure": 1765778160,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684875",
+    "arrival": 1765778700,
+    "departure": 1765778700,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951686010",
+    "arrival": 1765779240,
+    "departure": 1765779240,
+    "headsign": "Les Vignes",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684846",
+    "arrival": 1765779360,
+    "departure": 1765779360,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685069",
+    "arrival": 1765779540,
+    "departure": 1765779540,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684847",
+    "arrival": 1765780020,
+    "departure": 1765780020,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684959",
+    "arrival": 1765780020,
+    "departure": 1765780020,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685023",
+    "arrival": 1765780800,
+    "departure": 1765780800,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684960",
+    "arrival": 1765780860,
+    "departure": 1765780860,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685024",
+    "arrival": 1765781460,
+    "departure": 1765781460,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684909",
     "arrival": 1765781760,
     "departure": 1765781760,
     "headsign": "GERZAT Champfleuri",
@@ -368,127 +160,95 @@
     "date": "20251215"
   },
   {
-    "tripId": "4503749951684875",
+    "tripId": "4503749951686260",
     "arrival": 1765782300,
     "departure": 1765782300,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951686010",
-    "arrival": 1765782840,
-    "departure": 1765782840,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684846",
-    "arrival": 1765782960,
-    "departure": 1765782960,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685069",
-    "arrival": 1765783140,
-    "departure": 1765783140,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684847",
-    "arrival": 1765783620,
-    "departure": 1765783620,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684959",
-    "arrival": 1765783620,
-    "departure": 1765783620,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685023",
-    "arrival": 1765784400,
-    "departure": 1765784400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684960",
-    "arrival": 1765784460,
-    "departure": 1765784460,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685024",
-    "arrival": 1765785060,
-    "departure": 1765785060,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684909",
-    "arrival": 1765785360,
-    "departure": 1765785360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951686260",
-    "arrival": 1765785900,
-    "departure": 1765785900,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684927",
-    "arrival": 1765786440,
-    "departure": 1765786440,
+    "arrival": 1765782840,
+    "departure": 1765782840,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684910",
-    "arrival": 1765786500,
-    "departure": 1765786500,
+    "arrival": 1765782900,
+    "departure": 1765782900,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684928",
-    "arrival": 1765787460,
-    "departure": 1765787460,
+    "arrival": 1765783860,
+    "departure": 1765783860,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684987",
-    "arrival": 1765787460,
-    "departure": 1765787460,
+    "arrival": 1765783860,
+    "departure": 1765783860,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684876",
+    "arrival": 1765784880,
+    "departure": 1765784880,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684877",
+    "arrival": 1765785300,
+    "departure": 1765785300,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684848",
+    "arrival": 1765785840,
+    "departure": 1765785840,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685011",
+    "arrival": 1765786500,
+    "departure": 1765786500,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685130",
+    "arrival": 1765787160,
+    "departure": 1765787160,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685131",
+    "arrival": 1765787700,
+    "departure": 1765787700,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684911",
     "arrival": 1765788480,
     "departure": 1765788480,
     "headsign": "GERZAT Champfleuri",
@@ -496,311 +256,311 @@
     "date": "20251215"
   },
   {
-    "tripId": "4503749951684877",
-    "arrival": 1765788900,
-    "departure": 1765788900,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684848",
-    "arrival": 1765789440,
-    "departure": 1765789440,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685011",
-    "arrival": 1765790100,
-    "departure": 1765790100,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685130",
-    "arrival": 1765790760,
-    "departure": 1765790760,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685131",
-    "arrival": 1765791300,
-    "departure": 1765791300,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684911",
-    "arrival": 1765792080,
-    "departure": 1765792080,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
     "tripId": "4503749951684912",
-    "arrival": 1765792740,
-    "departure": 1765792740,
+    "arrival": 1765789140,
+    "departure": 1765789140,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684929",
-    "arrival": 1765793280,
-    "departure": 1765793280,
+    "arrival": 1765789680,
+    "departure": 1765789680,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684930",
-    "arrival": 1765793760,
-    "departure": 1765793760,
+    "arrival": 1765790160,
+    "departure": 1765790160,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685014",
-    "arrival": 1765794000,
-    "departure": 1765794000,
+    "arrival": 1765790400,
+    "departure": 1765790400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685015",
-    "arrival": 1765794540,
-    "departure": 1765794540,
+    "arrival": 1765790940,
+    "departure": 1765790940,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684880",
-    "arrival": 1765795020,
-    "departure": 1765795020,
+    "arrival": 1765791420,
+    "departure": 1765791420,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684881",
-    "arrival": 1765795500,
-    "departure": 1765795500,
+    "arrival": 1765791900,
+    "departure": 1765791900,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685132",
-    "arrival": 1765796400,
-    "departure": 1765796400,
+    "arrival": 1765792800,
+    "departure": 1765792800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685133",
-    "arrival": 1765797120,
-    "departure": 1765797120,
+    "arrival": 1765793520,
+    "departure": 1765793520,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685027",
-    "arrival": 1765797480,
-    "departure": 1765797480,
+    "arrival": 1765793880,
+    "departure": 1765793880,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685028",
-    "arrival": 1765798200,
-    "departure": 1765798200,
+    "arrival": 1765794600,
+    "departure": 1765794600,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684882",
-    "arrival": 1765798740,
-    "departure": 1765798740,
+    "arrival": 1765795140,
+    "departure": 1765795140,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684883",
-    "arrival": 1765799280,
-    "departure": 1765799280,
+    "arrival": 1765795680,
+    "departure": 1765795680,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685016",
-    "arrival": 1765799760,
-    "departure": 1765799760,
+    "arrival": 1765796160,
+    "departure": 1765796160,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685017",
-    "arrival": 1765800420,
-    "departure": 1765800420,
+    "arrival": 1765796820,
+    "departure": 1765796820,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685029",
-    "arrival": 1765800960,
-    "departure": 1765800960,
+    "arrival": 1765797360,
+    "departure": 1765797360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685030",
-    "arrival": 1765801440,
-    "departure": 1765801440,
+    "arrival": 1765797840,
+    "departure": 1765797840,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684916",
-    "arrival": 1765802040,
-    "departure": 1765802040,
+    "arrival": 1765798440,
+    "departure": 1765798440,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684917",
-    "arrival": 1765802460,
-    "departure": 1765802460,
+    "arrival": 1765798860,
+    "departure": 1765798860,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685134",
-    "arrival": 1765802760,
-    "departure": 1765802760,
+    "arrival": 1765799160,
+    "departure": 1765799160,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685135",
-    "arrival": 1765803300,
-    "departure": 1765803300,
+    "arrival": 1765799700,
+    "departure": 1765799700,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685056",
-    "arrival": 1765803600,
-    "departure": 1765803600,
+    "arrival": 1765800000,
+    "departure": 1765800000,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685057",
-    "arrival": 1765804200,
-    "departure": 1765804200,
+    "arrival": 1765800600,
+    "departure": 1765800600,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684990",
-    "arrival": 1765804500,
-    "departure": 1765804500,
+    "arrival": 1765800900,
+    "departure": 1765800900,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684991",
-    "arrival": 1765805100,
-    "departure": 1765805100,
+    "arrival": 1765801500,
+    "departure": 1765801500,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685086",
-    "arrival": 1765805700,
-    "departure": 1765805700,
+    "arrival": 1765802100,
+    "departure": 1765802100,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685087",
-    "arrival": 1765806120,
-    "departure": 1765806120,
+    "arrival": 1765802520,
+    "departure": 1765802520,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685042",
-    "arrival": 1765806840,
-    "departure": 1765806840,
+    "arrival": 1765803240,
+    "departure": 1765803240,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685043",
-    "arrival": 1765807500,
-    "departure": 1765807500,
+    "arrival": 1765803900,
+    "departure": 1765803900,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684918",
-    "arrival": 1765807680,
-    "departure": 1765807680,
+    "arrival": 1765804080,
+    "departure": 1765804080,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684919",
-    "arrival": 1765808580,
-    "departure": 1765808580,
+    "arrival": 1765804980,
+    "departure": 1765804980,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684938",
-    "arrival": 1765808880,
-    "departure": 1765808880,
+    "arrival": 1765805280,
+    "departure": 1765805280,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684939",
+    "arrival": 1765806360,
+    "departure": 1765806360,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685058",
+    "arrival": 1765806540,
+    "departure": 1765806540,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685059",
+    "arrival": 1765807380,
+    "departure": 1765807380,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685125",
+    "arrival": 1765807740,
+    "departure": 1765807740,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685126",
+    "arrival": 1765808580,
+    "departure": 1765808580,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685138",
+    "arrival": 1765809480,
+    "departure": 1765809480,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685139",
     "arrival": 1765809960,
     "departure": 1765809960,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
@@ -808,55 +568,63 @@
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685058",
-    "arrival": 1765810140,
-    "departure": 1765810140,
+    "tripId": "4503749951685032",
+    "arrival": 1765811160,
+    "departure": 1765811160,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685059",
-    "arrival": 1765810980,
-    "departure": 1765810980,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "tripId": "4503749951685033",
+    "arrival": 1765811700,
+    "departure": 1765811700,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685125",
-    "arrival": 1765811340,
-    "departure": 1765811340,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685126",
+    "tripId": "4503749951684940",
     "arrival": 1765812180,
     "departure": 1765812180,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685138",
-    "arrival": 1765813080,
-    "departure": 1765813080,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685139",
-    "arrival": 1765813560,
-    "departure": 1765813560,
+    "tripId": "4503749951684968",
+    "arrival": 1765812720,
+    "departure": 1765812720,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684941",
+    "arrival": 1765812840,
+    "departure": 1765812840,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685032",
+    "tripId": "4503749951684998",
+    "arrival": 1765813560,
+    "departure": 1765813560,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684999",
+    "arrival": 1765814100,
+    "departure": 1765814100,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685127",
     "arrival": 1765814760,
     "departure": 1765814760,
     "headsign": "GERZAT Champfleuri",
@@ -864,63 +632,87 @@
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685033",
-    "arrival": 1765815300,
-    "departure": 1765815300,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684940",
-    "arrival": 1765815780,
-    "departure": 1765815780,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684968",
-    "arrival": 1765816320,
-    "departure": 1765816320,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684941",
-    "arrival": 1765816440,
-    "departure": 1765816440,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684998",
-    "arrival": 1765817160,
-    "departure": 1765817160,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684999",
-    "arrival": 1765817700,
-    "departure": 1765817700,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685127",
-    "arrival": 1765818360,
-    "departure": 1765818360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
     "tripId": "4503749951686273",
+    "arrival": 1765815180,
+    "departure": 1765815180,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685074",
+    "arrival": 1765815420,
+    "departure": 1765815420,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685075",
+    "arrival": 1765815960,
+    "departure": 1765815960,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685140",
+    "arrival": 1765816200,
+    "departure": 1765816200,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685141",
+    "arrival": 1765816740,
+    "departure": 1765816740,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951684970",
+    "arrival": 1765816800,
+    "departure": 1765816800,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685094",
+    "arrival": 1765817220,
+    "departure": 1765817220,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685095",
+    "arrival": 1765817760,
+    "departure": 1765817760,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685034",
+    "arrival": 1765817940,
+    "departure": 1765817940,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951686274",
+    "arrival": 1765818480,
+    "departure": 1765818480,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251215"
+  },
+  {
+    "tripId": "4503749951685035",
     "arrival": 1765818780,
     "departure": 1765818780,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -928,295 +720,295 @@
     "date": "20251215"
   },
   {
-    "tripId": "4503749951685074",
-    "arrival": 1765819020,
-    "departure": 1765819020,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685075",
-    "arrival": 1765819560,
-    "departure": 1765819560,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685140",
-    "arrival": 1765819800,
-    "departure": 1765819800,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685141",
-    "arrival": 1765820340,
-    "departure": 1765820340,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951684970",
-    "arrival": 1765820400,
-    "departure": 1765820400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685094",
-    "arrival": 1765820820,
-    "departure": 1765820820,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685095",
-    "arrival": 1765821360,
-    "departure": 1765821360,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685034",
-    "arrival": 1765821540,
-    "departure": 1765821540,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951686274",
-    "arrival": 1765822080,
-    "departure": 1765822080,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251215"
-  },
-  {
-    "tripId": "4503749951685035",
-    "arrival": 1765822380,
-    "departure": 1765822380,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251215"
-  },
-  {
     "tripId": "4503749951684942",
-    "arrival": 1765822860,
-    "departure": 1765822860,
+    "arrival": 1765819260,
+    "departure": 1765819260,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685066",
-    "arrival": 1765823340,
-    "departure": 1765823340,
+    "arrival": 1765819740,
+    "departure": 1765819740,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684943",
-    "arrival": 1765823460,
-    "departure": 1765823460,
+    "arrival": 1765819860,
+    "departure": 1765819860,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685000",
-    "arrival": 1765824180,
-    "departure": 1765824180,
+    "arrival": 1765820580,
+    "departure": 1765820580,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685001",
-    "arrival": 1765824720,
-    "departure": 1765824720,
+    "arrival": 1765821120,
+    "departure": 1765821120,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685144",
-    "arrival": 1765824960,
-    "departure": 1765824960,
+    "arrival": 1765821360,
+    "departure": 1765821360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685076",
-    "arrival": 1765825800,
-    "departure": 1765825800,
+    "arrival": 1765822200,
+    "departure": 1765822200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685077",
-    "arrival": 1765826280,
-    "departure": 1765826280,
+    "arrival": 1765822680,
+    "departure": 1765822680,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684982",
-    "arrival": 1765827000,
-    "departure": 1765827000,
+    "arrival": 1765823400,
+    "departure": 1765823400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684983",
-    "arrival": 1765827840,
-    "departure": 1765827840,
+    "arrival": 1765824240,
+    "departure": 1765824240,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684945",
-    "arrival": 1765828500,
-    "departure": 1765828500,
+    "arrival": 1765824900,
+    "departure": 1765824900,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685003",
-    "arrival": 1765829580,
-    "departure": 1765829580,
+    "arrival": 1765825980,
+    "departure": 1765825980,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685004",
-    "arrival": 1765829820,
-    "departure": 1765829820,
+    "arrival": 1765826220,
+    "departure": 1765826220,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951684984",
-    "arrival": 1765830900,
-    "departure": 1765830900,
+    "arrival": 1765827300,
+    "departure": 1765827300,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951626306",
-    "arrival": 1765831020,
-    "departure": 1765831020,
+    "arrival": 1765827420,
+    "departure": 1765827420,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251215"
   },
   {
     "tripId": "4503749951685005",
-    "arrival": 1765832520,
-    "departure": 1765832520,
+    "arrival": 1765828920,
+    "departure": 1765828920,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951626307",
-    "arrival": 1765833960,
-    "departure": 1765833960,
+    "arrival": 1765830360,
+    "departure": 1765830360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251215"
   },
   {
     "tripId": "4503749951495720",
-    "arrival": 1765861440,
-    "departure": 1765861440,
+    "arrival": 1765857840,
+    "departure": 1765857840,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951495721",
-    "arrival": 1765863840,
-    "departure": 1765863840,
+    "arrival": 1765860240,
+    "departure": 1765860240,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684834",
-    "arrival": 1765864560,
-    "departure": 1765864560,
+    "arrival": 1765860960,
+    "departure": 1765860960,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684873",
-    "arrival": 1765865220,
-    "departure": 1765865220,
+    "arrival": 1765861620,
+    "departure": 1765861620,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684908",
-    "arrival": 1765865940,
-    "departure": 1765865940,
+    "arrival": 1765862340,
+    "departure": 1765862340,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684958",
-    "arrival": 1765866720,
-    "departure": 1765866720,
+    "arrival": 1765863120,
+    "departure": 1765863120,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684925",
-    "arrival": 1765866900,
-    "departure": 1765866900,
+    "arrival": 1765863300,
+    "departure": 1765863300,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684926",
-    "arrival": 1765867260,
-    "departure": 1765867260,
+    "arrival": 1765863660,
+    "departure": 1765863660,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684986",
-    "arrival": 1765867920,
-    "departure": 1765867920,
+    "arrival": 1765864320,
+    "departure": 1765864320,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684874",
+    "arrival": 1765864560,
+    "departure": 1765864560,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684875",
+    "arrival": 1765865100,
+    "departure": 1765865100,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951686010",
+    "arrival": 1765865640,
+    "departure": 1765865640,
+    "headsign": "Les Vignes",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684846",
+    "arrival": 1765865760,
+    "departure": 1765865760,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685069",
+    "arrival": 1765865940,
+    "departure": 1765865940,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684847",
+    "arrival": 1765866420,
+    "departure": 1765866420,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684959",
+    "arrival": 1765866420,
+    "departure": 1765866420,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685023",
+    "arrival": 1765867200,
+    "departure": 1765867200,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684960",
+    "arrival": 1765867260,
+    "departure": 1765867260,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685024",
+    "arrival": 1765867860,
+    "departure": 1765867860,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684909",
     "arrival": 1765868160,
     "departure": 1765868160,
     "headsign": "GERZAT Champfleuri",
@@ -1224,127 +1016,95 @@
     "date": "20251216"
   },
   {
-    "tripId": "4503749951684875",
+    "tripId": "4503749951686260",
     "arrival": 1765868700,
     "departure": 1765868700,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951686010",
-    "arrival": 1765869240,
-    "departure": 1765869240,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684846",
-    "arrival": 1765869360,
-    "departure": 1765869360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685069",
-    "arrival": 1765869540,
-    "departure": 1765869540,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684847",
-    "arrival": 1765870020,
-    "departure": 1765870020,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684959",
-    "arrival": 1765870020,
-    "departure": 1765870020,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685023",
-    "arrival": 1765870800,
-    "departure": 1765870800,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684960",
-    "arrival": 1765870860,
-    "departure": 1765870860,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685024",
-    "arrival": 1765871460,
-    "departure": 1765871460,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684909",
-    "arrival": 1765871760,
-    "departure": 1765871760,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951686260",
-    "arrival": 1765872300,
-    "departure": 1765872300,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684927",
-    "arrival": 1765872840,
-    "departure": 1765872840,
+    "arrival": 1765869240,
+    "departure": 1765869240,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684910",
-    "arrival": 1765872900,
-    "departure": 1765872900,
+    "arrival": 1765869300,
+    "departure": 1765869300,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684928",
-    "arrival": 1765873860,
-    "departure": 1765873860,
+    "arrival": 1765870260,
+    "departure": 1765870260,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684987",
-    "arrival": 1765873860,
-    "departure": 1765873860,
+    "arrival": 1765870260,
+    "departure": 1765870260,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684876",
+    "arrival": 1765871280,
+    "departure": 1765871280,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684877",
+    "arrival": 1765871700,
+    "departure": 1765871700,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684848",
+    "arrival": 1765872240,
+    "departure": 1765872240,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685011",
+    "arrival": 1765872900,
+    "departure": 1765872900,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685130",
+    "arrival": 1765873560,
+    "departure": 1765873560,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685131",
+    "arrival": 1765874100,
+    "departure": 1765874100,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684911",
     "arrival": 1765874880,
     "departure": 1765874880,
     "headsign": "GERZAT Champfleuri",
@@ -1352,311 +1112,311 @@
     "date": "20251216"
   },
   {
-    "tripId": "4503749951684877",
-    "arrival": 1765875300,
-    "departure": 1765875300,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684848",
-    "arrival": 1765875840,
-    "departure": 1765875840,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685011",
-    "arrival": 1765876500,
-    "departure": 1765876500,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685130",
-    "arrival": 1765877160,
-    "departure": 1765877160,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685131",
-    "arrival": 1765877700,
-    "departure": 1765877700,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684911",
-    "arrival": 1765878480,
-    "departure": 1765878480,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
     "tripId": "4503749951684912",
-    "arrival": 1765879140,
-    "departure": 1765879140,
+    "arrival": 1765875540,
+    "departure": 1765875540,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684929",
-    "arrival": 1765879680,
-    "departure": 1765879680,
+    "arrival": 1765876080,
+    "departure": 1765876080,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684930",
-    "arrival": 1765880160,
-    "departure": 1765880160,
+    "arrival": 1765876560,
+    "departure": 1765876560,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685014",
-    "arrival": 1765880400,
-    "departure": 1765880400,
+    "arrival": 1765876800,
+    "departure": 1765876800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685015",
-    "arrival": 1765880940,
-    "departure": 1765880940,
+    "arrival": 1765877340,
+    "departure": 1765877340,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684880",
-    "arrival": 1765881420,
-    "departure": 1765881420,
+    "arrival": 1765877820,
+    "departure": 1765877820,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684881",
-    "arrival": 1765881900,
-    "departure": 1765881900,
+    "arrival": 1765878300,
+    "departure": 1765878300,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685132",
-    "arrival": 1765882800,
-    "departure": 1765882800,
+    "arrival": 1765879200,
+    "departure": 1765879200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685133",
-    "arrival": 1765883520,
-    "departure": 1765883520,
+    "arrival": 1765879920,
+    "departure": 1765879920,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685027",
-    "arrival": 1765883880,
-    "departure": 1765883880,
+    "arrival": 1765880280,
+    "departure": 1765880280,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685028",
-    "arrival": 1765884600,
-    "departure": 1765884600,
+    "arrival": 1765881000,
+    "departure": 1765881000,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684882",
-    "arrival": 1765885140,
-    "departure": 1765885140,
+    "arrival": 1765881540,
+    "departure": 1765881540,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684883",
-    "arrival": 1765885680,
-    "departure": 1765885680,
+    "arrival": 1765882080,
+    "departure": 1765882080,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685016",
-    "arrival": 1765886160,
-    "departure": 1765886160,
+    "arrival": 1765882560,
+    "departure": 1765882560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685017",
-    "arrival": 1765886820,
-    "departure": 1765886820,
+    "arrival": 1765883220,
+    "departure": 1765883220,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685029",
-    "arrival": 1765887360,
-    "departure": 1765887360,
+    "arrival": 1765883760,
+    "departure": 1765883760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685030",
-    "arrival": 1765887840,
-    "departure": 1765887840,
+    "arrival": 1765884240,
+    "departure": 1765884240,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684916",
-    "arrival": 1765888440,
-    "departure": 1765888440,
+    "arrival": 1765884840,
+    "departure": 1765884840,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684917",
-    "arrival": 1765888860,
-    "departure": 1765888860,
+    "arrival": 1765885260,
+    "departure": 1765885260,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685134",
-    "arrival": 1765889160,
-    "departure": 1765889160,
+    "arrival": 1765885560,
+    "departure": 1765885560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685135",
-    "arrival": 1765889700,
-    "departure": 1765889700,
+    "arrival": 1765886100,
+    "departure": 1765886100,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685056",
-    "arrival": 1765890000,
-    "departure": 1765890000,
+    "arrival": 1765886400,
+    "departure": 1765886400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685057",
-    "arrival": 1765890600,
-    "departure": 1765890600,
+    "arrival": 1765887000,
+    "departure": 1765887000,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684990",
-    "arrival": 1765890900,
-    "departure": 1765890900,
+    "arrival": 1765887300,
+    "departure": 1765887300,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684991",
-    "arrival": 1765891500,
-    "departure": 1765891500,
+    "arrival": 1765887900,
+    "departure": 1765887900,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685086",
-    "arrival": 1765892100,
-    "departure": 1765892100,
+    "arrival": 1765888500,
+    "departure": 1765888500,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685087",
-    "arrival": 1765892520,
-    "departure": 1765892520,
+    "arrival": 1765888920,
+    "departure": 1765888920,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685042",
-    "arrival": 1765893240,
-    "departure": 1765893240,
+    "arrival": 1765889640,
+    "departure": 1765889640,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685043",
-    "arrival": 1765893900,
-    "departure": 1765893900,
+    "arrival": 1765890300,
+    "departure": 1765890300,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684918",
-    "arrival": 1765894080,
-    "departure": 1765894080,
+    "arrival": 1765890480,
+    "departure": 1765890480,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684919",
-    "arrival": 1765894980,
-    "departure": 1765894980,
+    "arrival": 1765891380,
+    "departure": 1765891380,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684938",
-    "arrival": 1765895280,
-    "departure": 1765895280,
+    "arrival": 1765891680,
+    "departure": 1765891680,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684939",
+    "arrival": 1765892760,
+    "departure": 1765892760,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685058",
+    "arrival": 1765892940,
+    "departure": 1765892940,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685059",
+    "arrival": 1765893780,
+    "departure": 1765893780,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685125",
+    "arrival": 1765894140,
+    "departure": 1765894140,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685126",
+    "arrival": 1765894980,
+    "departure": 1765894980,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685138",
+    "arrival": 1765895880,
+    "departure": 1765895880,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685139",
     "arrival": 1765896360,
     "departure": 1765896360,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
@@ -1664,55 +1424,63 @@
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685058",
-    "arrival": 1765896540,
-    "departure": 1765896540,
+    "tripId": "4503749951685032",
+    "arrival": 1765897560,
+    "departure": 1765897560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685059",
-    "arrival": 1765897380,
-    "departure": 1765897380,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "tripId": "4503749951685033",
+    "arrival": 1765898100,
+    "departure": 1765898100,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685125",
-    "arrival": 1765897740,
-    "departure": 1765897740,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685126",
+    "tripId": "4503749951684940",
     "arrival": 1765898580,
     "departure": 1765898580,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685138",
-    "arrival": 1765899480,
-    "departure": 1765899480,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685139",
-    "arrival": 1765899960,
-    "departure": 1765899960,
+    "tripId": "4503749951684968",
+    "arrival": 1765899120,
+    "departure": 1765899120,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684941",
+    "arrival": 1765899240,
+    "departure": 1765899240,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685032",
+    "tripId": "4503749951684998",
+    "arrival": 1765899960,
+    "departure": 1765899960,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684999",
+    "arrival": 1765900500,
+    "departure": 1765900500,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685127",
     "arrival": 1765901160,
     "departure": 1765901160,
     "headsign": "GERZAT Champfleuri",
@@ -1720,63 +1488,87 @@
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685033",
-    "arrival": 1765901700,
-    "departure": 1765901700,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684940",
-    "arrival": 1765902180,
-    "departure": 1765902180,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684968",
-    "arrival": 1765902720,
-    "departure": 1765902720,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684941",
-    "arrival": 1765902840,
-    "departure": 1765902840,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684998",
-    "arrival": 1765903560,
-    "departure": 1765903560,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684999",
-    "arrival": 1765904100,
-    "departure": 1765904100,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685127",
-    "arrival": 1765904760,
-    "departure": 1765904760,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
     "tripId": "4503749951686273",
+    "arrival": 1765901580,
+    "departure": 1765901580,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685074",
+    "arrival": 1765901820,
+    "departure": 1765901820,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685075",
+    "arrival": 1765902360,
+    "departure": 1765902360,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685140",
+    "arrival": 1765902600,
+    "departure": 1765902600,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685141",
+    "arrival": 1765903140,
+    "departure": 1765903140,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951684970",
+    "arrival": 1765903200,
+    "departure": 1765903200,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685094",
+    "arrival": 1765903620,
+    "departure": 1765903620,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685095",
+    "arrival": 1765904160,
+    "departure": 1765904160,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685034",
+    "arrival": 1765904340,
+    "departure": 1765904340,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951686274",
+    "arrival": 1765904880,
+    "departure": 1765904880,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251216"
+  },
+  {
+    "tripId": "4503749951685035",
     "arrival": 1765905180,
     "departure": 1765905180,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -1784,295 +1576,295 @@
     "date": "20251216"
   },
   {
-    "tripId": "4503749951685074",
-    "arrival": 1765905420,
-    "departure": 1765905420,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685075",
-    "arrival": 1765905960,
-    "departure": 1765905960,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685140",
-    "arrival": 1765906200,
-    "departure": 1765906200,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685141",
-    "arrival": 1765906740,
-    "departure": 1765906740,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951684970",
-    "arrival": 1765906800,
-    "departure": 1765906800,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685094",
-    "arrival": 1765907220,
-    "departure": 1765907220,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685095",
-    "arrival": 1765907760,
-    "departure": 1765907760,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685034",
-    "arrival": 1765907940,
-    "departure": 1765907940,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951686274",
-    "arrival": 1765908480,
-    "departure": 1765908480,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251216"
-  },
-  {
-    "tripId": "4503749951685035",
-    "arrival": 1765908780,
-    "departure": 1765908780,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251216"
-  },
-  {
     "tripId": "4503749951684942",
-    "arrival": 1765909260,
-    "departure": 1765909260,
+    "arrival": 1765905660,
+    "departure": 1765905660,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685066",
-    "arrival": 1765909740,
-    "departure": 1765909740,
+    "arrival": 1765906140,
+    "departure": 1765906140,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684943",
-    "arrival": 1765909860,
-    "departure": 1765909860,
+    "arrival": 1765906260,
+    "departure": 1765906260,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685000",
-    "arrival": 1765910580,
-    "departure": 1765910580,
+    "arrival": 1765906980,
+    "departure": 1765906980,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685001",
-    "arrival": 1765911120,
-    "departure": 1765911120,
+    "arrival": 1765907520,
+    "departure": 1765907520,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685144",
-    "arrival": 1765911360,
-    "departure": 1765911360,
+    "arrival": 1765907760,
+    "departure": 1765907760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685076",
-    "arrival": 1765912200,
-    "departure": 1765912200,
+    "arrival": 1765908600,
+    "departure": 1765908600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685077",
-    "arrival": 1765912680,
-    "departure": 1765912680,
+    "arrival": 1765909080,
+    "departure": 1765909080,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684982",
-    "arrival": 1765913400,
-    "departure": 1765913400,
+    "arrival": 1765909800,
+    "departure": 1765909800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684983",
-    "arrival": 1765914240,
-    "departure": 1765914240,
+    "arrival": 1765910640,
+    "departure": 1765910640,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684945",
-    "arrival": 1765914900,
-    "departure": 1765914900,
+    "arrival": 1765911300,
+    "departure": 1765911300,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685003",
-    "arrival": 1765915980,
-    "departure": 1765915980,
+    "arrival": 1765912380,
+    "departure": 1765912380,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685004",
-    "arrival": 1765916220,
-    "departure": 1765916220,
+    "arrival": 1765912620,
+    "departure": 1765912620,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951684984",
-    "arrival": 1765917300,
-    "departure": 1765917300,
+    "arrival": 1765913700,
+    "departure": 1765913700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951626306",
-    "arrival": 1765917420,
-    "departure": 1765917420,
+    "arrival": 1765913820,
+    "departure": 1765913820,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251216"
   },
   {
     "tripId": "4503749951685005",
-    "arrival": 1765918920,
-    "departure": 1765918920,
+    "arrival": 1765915320,
+    "departure": 1765915320,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951626307",
-    "arrival": 1765920360,
-    "departure": 1765920360,
+    "arrival": 1765916760,
+    "departure": 1765916760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251216"
   },
   {
     "tripId": "4503749951495720",
-    "arrival": 1765947840,
-    "departure": 1765947840,
+    "arrival": 1765944240,
+    "departure": 1765944240,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951495721",
-    "arrival": 1765950240,
-    "departure": 1765950240,
+    "arrival": 1765946640,
+    "departure": 1765946640,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684834",
-    "arrival": 1765950960,
-    "departure": 1765950960,
+    "arrival": 1765947360,
+    "departure": 1765947360,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684873",
-    "arrival": 1765951620,
-    "departure": 1765951620,
+    "arrival": 1765948020,
+    "departure": 1765948020,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684908",
-    "arrival": 1765952340,
-    "departure": 1765952340,
+    "arrival": 1765948740,
+    "departure": 1765948740,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684958",
-    "arrival": 1765953120,
-    "departure": 1765953120,
+    "arrival": 1765949520,
+    "departure": 1765949520,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684925",
-    "arrival": 1765953300,
-    "departure": 1765953300,
+    "arrival": 1765949700,
+    "departure": 1765949700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684926",
-    "arrival": 1765953660,
-    "departure": 1765953660,
+    "arrival": 1765950060,
+    "departure": 1765950060,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684986",
-    "arrival": 1765954320,
-    "departure": 1765954320,
+    "arrival": 1765950720,
+    "departure": 1765950720,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684874",
+    "arrival": 1765950960,
+    "departure": 1765950960,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684875",
+    "arrival": 1765951500,
+    "departure": 1765951500,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951686010",
+    "arrival": 1765952040,
+    "departure": 1765952040,
+    "headsign": "Les Vignes",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684846",
+    "arrival": 1765952160,
+    "departure": 1765952160,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685069",
+    "arrival": 1765952340,
+    "departure": 1765952340,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684847",
+    "arrival": 1765952820,
+    "departure": 1765952820,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684959",
+    "arrival": 1765952820,
+    "departure": 1765952820,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685023",
+    "arrival": 1765953600,
+    "departure": 1765953600,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684960",
+    "arrival": 1765953660,
+    "departure": 1765953660,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685024",
+    "arrival": 1765954260,
+    "departure": 1765954260,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684909",
     "arrival": 1765954560,
     "departure": 1765954560,
     "headsign": "GERZAT Champfleuri",
@@ -2080,127 +1872,95 @@
     "date": "20251217"
   },
   {
-    "tripId": "4503749951684875",
+    "tripId": "4503749951686260",
     "arrival": 1765955100,
     "departure": 1765955100,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951686010",
-    "arrival": 1765955640,
-    "departure": 1765955640,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684846",
-    "arrival": 1765955760,
-    "departure": 1765955760,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685069",
-    "arrival": 1765955940,
-    "departure": 1765955940,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684847",
-    "arrival": 1765956420,
-    "departure": 1765956420,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684959",
-    "arrival": 1765956420,
-    "departure": 1765956420,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685023",
-    "arrival": 1765957200,
-    "departure": 1765957200,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684960",
-    "arrival": 1765957260,
-    "departure": 1765957260,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685024",
-    "arrival": 1765957860,
-    "departure": 1765957860,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684909",
-    "arrival": 1765958160,
-    "departure": 1765958160,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951686260",
-    "arrival": 1765958700,
-    "departure": 1765958700,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684927",
-    "arrival": 1765959240,
-    "departure": 1765959240,
+    "arrival": 1765955640,
+    "departure": 1765955640,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684910",
-    "arrival": 1765959300,
-    "departure": 1765959300,
+    "arrival": 1765955700,
+    "departure": 1765955700,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684928",
-    "arrival": 1765960260,
-    "departure": 1765960260,
+    "arrival": 1765956660,
+    "departure": 1765956660,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684987",
-    "arrival": 1765960260,
-    "departure": 1765960260,
+    "arrival": 1765956660,
+    "departure": 1765956660,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684876",
+    "arrival": 1765957680,
+    "departure": 1765957680,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684877",
+    "arrival": 1765958100,
+    "departure": 1765958100,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684848",
+    "arrival": 1765958640,
+    "departure": 1765958640,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685011",
+    "arrival": 1765959300,
+    "departure": 1765959300,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685130",
+    "arrival": 1765959960,
+    "departure": 1765959960,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685131",
+    "arrival": 1765960500,
+    "departure": 1765960500,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684911",
     "arrival": 1765961280,
     "departure": 1765961280,
     "headsign": "GERZAT Champfleuri",
@@ -2208,319 +1968,319 @@
     "date": "20251217"
   },
   {
-    "tripId": "4503749951684877",
-    "arrival": 1765961700,
-    "departure": 1765961700,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684848",
-    "arrival": 1765962240,
-    "departure": 1765962240,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685011",
-    "arrival": 1765962900,
-    "departure": 1765962900,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685130",
-    "arrival": 1765963560,
-    "departure": 1765963560,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685131",
-    "arrival": 1765964100,
-    "departure": 1765964100,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684911",
-    "arrival": 1765964880,
-    "departure": 1765964880,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
     "tripId": "4503749951684912",
-    "arrival": 1765965540,
-    "departure": 1765965540,
+    "arrival": 1765961940,
+    "departure": 1765961940,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684929",
-    "arrival": 1765966080,
-    "departure": 1765966080,
+    "arrival": 1765962480,
+    "departure": 1765962480,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684930",
-    "arrival": 1765966560,
-    "departure": 1765966560,
+    "arrival": 1765962960,
+    "departure": 1765962960,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685014",
-    "arrival": 1765966800,
-    "departure": 1765966800,
+    "arrival": 1765963200,
+    "departure": 1765963200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685015",
-    "arrival": 1765967340,
-    "departure": 1765967340,
+    "arrival": 1765963740,
+    "departure": 1765963740,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684880",
-    "arrival": 1765967820,
-    "departure": 1765967820,
+    "arrival": 1765964220,
+    "departure": 1765964220,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684881",
-    "arrival": 1765968300,
-    "departure": 1765968300,
+    "arrival": 1765964700,
+    "departure": 1765964700,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685132",
-    "arrival": 1765969200,
-    "departure": 1765969200,
+    "arrival": 1765965600,
+    "departure": 1765965600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685133",
-    "arrival": 1765969920,
-    "departure": 1765969920,
+    "arrival": 1765966320,
+    "departure": 1765966320,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685027",
-    "arrival": 1765970280,
-    "departure": 1765970280,
+    "arrival": 1765966680,
+    "departure": 1765966680,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685028",
-    "arrival": 1765971000,
-    "departure": 1765971000,
+    "arrival": 1765967400,
+    "departure": 1765967400,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684882",
-    "arrival": 1765971540,
-    "departure": 1765971540,
+    "arrival": 1765967940,
+    "departure": 1765967940,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684883",
-    "arrival": 1765972080,
-    "departure": 1765972080,
+    "arrival": 1765968480,
+    "departure": 1765968480,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685016",
-    "arrival": 1765972560,
-    "departure": 1765972560,
+    "arrival": 1765968960,
+    "departure": 1765968960,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685017",
-    "arrival": 1765973220,
-    "departure": 1765973220,
+    "arrival": 1765969620,
+    "departure": 1765969620,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685029",
-    "arrival": 1765973760,
-    "departure": 1765973760,
+    "arrival": 1765970160,
+    "departure": 1765970160,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685030",
-    "arrival": 1765974240,
-    "departure": 1765974240,
+    "arrival": 1765970640,
+    "departure": 1765970640,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684916",
-    "arrival": 1765974840,
-    "departure": 1765974840,
+    "arrival": 1765971240,
+    "departure": 1765971240,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685712",
-    "arrival": 1765975200,
-    "departure": 1765975200,
+    "arrival": 1765971600,
+    "departure": 1765971600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684917",
-    "arrival": 1765975260,
-    "departure": 1765975260,
+    "arrival": 1765971660,
+    "departure": 1765971660,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685134",
-    "arrival": 1765975560,
-    "departure": 1765975560,
+    "arrival": 1765971960,
+    "departure": 1765971960,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685135",
-    "arrival": 1765976100,
-    "departure": 1765976100,
+    "arrival": 1765972500,
+    "departure": 1765972500,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685056",
-    "arrival": 1765976400,
-    "departure": 1765976400,
+    "arrival": 1765972800,
+    "departure": 1765972800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685057",
-    "arrival": 1765977000,
-    "departure": 1765977000,
+    "arrival": 1765973400,
+    "departure": 1765973400,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684990",
-    "arrival": 1765977300,
-    "departure": 1765977300,
+    "arrival": 1765973700,
+    "departure": 1765973700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684991",
-    "arrival": 1765977900,
-    "departure": 1765977900,
+    "arrival": 1765974300,
+    "departure": 1765974300,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685086",
-    "arrival": 1765978500,
-    "departure": 1765978500,
+    "arrival": 1765974900,
+    "departure": 1765974900,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685087",
-    "arrival": 1765978920,
-    "departure": 1765978920,
+    "arrival": 1765975320,
+    "departure": 1765975320,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685042",
-    "arrival": 1765979640,
-    "departure": 1765979640,
+    "arrival": 1765976040,
+    "departure": 1765976040,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685043",
-    "arrival": 1765980300,
-    "departure": 1765980300,
+    "arrival": 1765976700,
+    "departure": 1765976700,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684918",
-    "arrival": 1765980480,
-    "departure": 1765980480,
+    "arrival": 1765976880,
+    "departure": 1765976880,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684919",
-    "arrival": 1765981380,
-    "departure": 1765981380,
+    "arrival": 1765977780,
+    "departure": 1765977780,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684938",
-    "arrival": 1765981680,
-    "departure": 1765981680,
+    "arrival": 1765978080,
+    "departure": 1765978080,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684939",
+    "arrival": 1765979160,
+    "departure": 1765979160,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685058",
+    "arrival": 1765979340,
+    "departure": 1765979340,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685059",
+    "arrival": 1765980180,
+    "departure": 1765980180,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685125",
+    "arrival": 1765980540,
+    "departure": 1765980540,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685126",
+    "arrival": 1765981380,
+    "departure": 1765981380,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685138",
+    "arrival": 1765982280,
+    "departure": 1765982280,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685139",
     "arrival": 1765982760,
     "departure": 1765982760,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
@@ -2528,55 +2288,55 @@
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685058",
-    "arrival": 1765982940,
-    "departure": 1765982940,
+    "tripId": "4503749951685032",
+    "arrival": 1765983960,
+    "departure": 1765983960,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685059",
-    "arrival": 1765983780,
-    "departure": 1765983780,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "tripId": "4503749951685033",
+    "arrival": 1765984500,
+    "departure": 1765984500,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685125",
-    "arrival": 1765984140,
-    "departure": 1765984140,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685126",
+    "tripId": "4503749951684940",
     "arrival": 1765984980,
     "departure": 1765984980,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685138",
-    "arrival": 1765985880,
-    "departure": 1765985880,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685139",
-    "arrival": 1765986360,
-    "departure": 1765986360,
+    "tripId": "4503749951684941",
+    "arrival": 1765985640,
+    "departure": 1765985640,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685032",
+    "tripId": "4503749951684998",
+    "arrival": 1765986360,
+    "departure": 1765986360,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951684999",
+    "arrival": 1765986900,
+    "departure": 1765986900,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685127",
     "arrival": 1765987560,
     "departure": 1765987560,
     "headsign": "GERZAT Champfleuri",
@@ -2584,55 +2344,79 @@
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685033",
-    "arrival": 1765988100,
-    "departure": 1765988100,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684940",
-    "arrival": 1765988580,
-    "departure": 1765988580,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684941",
-    "arrival": 1765989240,
-    "departure": 1765989240,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684998",
-    "arrival": 1765989960,
-    "departure": 1765989960,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951684999",
-    "arrival": 1765990500,
-    "departure": 1765990500,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685127",
-    "arrival": 1765991160,
-    "departure": 1765991160,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
     "tripId": "4503749951686273",
+    "arrival": 1765987980,
+    "departure": 1765987980,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685074",
+    "arrival": 1765988220,
+    "departure": 1765988220,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685075",
+    "arrival": 1765988760,
+    "departure": 1765988760,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685140",
+    "arrival": 1765989000,
+    "departure": 1765989000,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685141",
+    "arrival": 1765989540,
+    "departure": 1765989540,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685094",
+    "arrival": 1765990020,
+    "departure": 1765990020,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685095",
+    "arrival": 1765990560,
+    "departure": 1765990560,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685034",
+    "arrival": 1765990740,
+    "departure": 1765990740,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951686274",
+    "arrival": 1765991280,
+    "departure": 1765991280,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251217"
+  },
+  {
+    "tripId": "4503749951685035",
     "arrival": 1765991580,
     "departure": 1765991580,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -2640,287 +2424,295 @@
     "date": "20251217"
   },
   {
-    "tripId": "4503749951685074",
-    "arrival": 1765991820,
-    "departure": 1765991820,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685075",
-    "arrival": 1765992360,
-    "departure": 1765992360,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685140",
-    "arrival": 1765992600,
-    "departure": 1765992600,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685141",
-    "arrival": 1765993140,
-    "departure": 1765993140,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685094",
-    "arrival": 1765993620,
-    "departure": 1765993620,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685095",
-    "arrival": 1765994160,
-    "departure": 1765994160,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685034",
-    "arrival": 1765994340,
-    "departure": 1765994340,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951686274",
-    "arrival": 1765994880,
-    "departure": 1765994880,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251217"
-  },
-  {
-    "tripId": "4503749951685035",
-    "arrival": 1765995180,
-    "departure": 1765995180,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251217"
-  },
-  {
     "tripId": "4503749951684942",
-    "arrival": 1765995660,
-    "departure": 1765995660,
+    "arrival": 1765992060,
+    "departure": 1765992060,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685066",
-    "arrival": 1765996140,
-    "departure": 1765996140,
+    "arrival": 1765992540,
+    "departure": 1765992540,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684943",
-    "arrival": 1765996260,
-    "departure": 1765996260,
+    "arrival": 1765992660,
+    "departure": 1765992660,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685000",
-    "arrival": 1765996980,
-    "departure": 1765996980,
+    "arrival": 1765993380,
+    "departure": 1765993380,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685001",
-    "arrival": 1765997520,
-    "departure": 1765997520,
+    "arrival": 1765993920,
+    "departure": 1765993920,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685144",
-    "arrival": 1765997760,
-    "departure": 1765997760,
+    "arrival": 1765994160,
+    "departure": 1765994160,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685076",
-    "arrival": 1765998600,
-    "departure": 1765998600,
+    "arrival": 1765995000,
+    "departure": 1765995000,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685077",
-    "arrival": 1765999080,
-    "departure": 1765999080,
+    "arrival": 1765995480,
+    "departure": 1765995480,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684982",
-    "arrival": 1765999800,
-    "departure": 1765999800,
+    "arrival": 1765996200,
+    "departure": 1765996200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684983",
-    "arrival": 1766000640,
-    "departure": 1766000640,
+    "arrival": 1765997040,
+    "departure": 1765997040,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684945",
-    "arrival": 1766001300,
-    "departure": 1766001300,
+    "arrival": 1765997700,
+    "departure": 1765997700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685003",
-    "arrival": 1766002380,
-    "departure": 1766002380,
+    "arrival": 1765998780,
+    "departure": 1765998780,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685004",
-    "arrival": 1766002620,
-    "departure": 1766002620,
+    "arrival": 1765999020,
+    "departure": 1765999020,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951684984",
-    "arrival": 1766003700,
-    "departure": 1766003700,
+    "arrival": 1766000100,
+    "departure": 1766000100,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951626306",
-    "arrival": 1766003820,
-    "departure": 1766003820,
+    "arrival": 1766000220,
+    "departure": 1766000220,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251217"
   },
   {
     "tripId": "4503749951685005",
-    "arrival": 1766005320,
-    "departure": 1766005320,
+    "arrival": 1766001720,
+    "departure": 1766001720,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951626307",
-    "arrival": 1766006760,
-    "departure": 1766006760,
+    "arrival": 1766003160,
+    "departure": 1766003160,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251217"
   },
   {
     "tripId": "4503749951495720",
-    "arrival": 1766034240,
-    "departure": 1766034240,
+    "arrival": 1766030640,
+    "departure": 1766030640,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951495721",
-    "arrival": 1766036640,
-    "departure": 1766036640,
+    "arrival": 1766033040,
+    "departure": 1766033040,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684834",
-    "arrival": 1766037360,
-    "departure": 1766037360,
+    "arrival": 1766033760,
+    "departure": 1766033760,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684873",
-    "arrival": 1766038020,
-    "departure": 1766038020,
+    "arrival": 1766034420,
+    "departure": 1766034420,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684908",
-    "arrival": 1766038740,
-    "departure": 1766038740,
+    "arrival": 1766035140,
+    "departure": 1766035140,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684958",
-    "arrival": 1766039520,
-    "departure": 1766039520,
+    "arrival": 1766035920,
+    "departure": 1766035920,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684925",
-    "arrival": 1766039700,
-    "departure": 1766039700,
+    "arrival": 1766036100,
+    "departure": 1766036100,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684926",
-    "arrival": 1766040060,
-    "departure": 1766040060,
+    "arrival": 1766036460,
+    "departure": 1766036460,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684986",
-    "arrival": 1766040720,
-    "departure": 1766040720,
+    "arrival": 1766037120,
+    "departure": 1766037120,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684874",
+    "arrival": 1766037360,
+    "departure": 1766037360,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684875",
+    "arrival": 1766037900,
+    "departure": 1766037900,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951686010",
+    "arrival": 1766038440,
+    "departure": 1766038440,
+    "headsign": "Les Vignes",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684846",
+    "arrival": 1766038560,
+    "departure": 1766038560,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685069",
+    "arrival": 1766038740,
+    "departure": 1766038740,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684847",
+    "arrival": 1766039220,
+    "departure": 1766039220,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684959",
+    "arrival": 1766039220,
+    "departure": 1766039220,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685023",
+    "arrival": 1766040000,
+    "departure": 1766040000,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684960",
+    "arrival": 1766040060,
+    "departure": 1766040060,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685024",
+    "arrival": 1766040660,
+    "departure": 1766040660,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684909",
     "arrival": 1766040960,
     "departure": 1766040960,
     "headsign": "GERZAT Champfleuri",
@@ -2928,127 +2720,95 @@
     "date": "20251218"
   },
   {
-    "tripId": "4503749951684875",
+    "tripId": "4503749951686260",
     "arrival": 1766041500,
     "departure": 1766041500,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951686010",
-    "arrival": 1766042040,
-    "departure": 1766042040,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684846",
-    "arrival": 1766042160,
-    "departure": 1766042160,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685069",
-    "arrival": 1766042340,
-    "departure": 1766042340,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684847",
-    "arrival": 1766042820,
-    "departure": 1766042820,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684959",
-    "arrival": 1766042820,
-    "departure": 1766042820,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685023",
-    "arrival": 1766043600,
-    "departure": 1766043600,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684960",
-    "arrival": 1766043660,
-    "departure": 1766043660,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685024",
-    "arrival": 1766044260,
-    "departure": 1766044260,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684909",
-    "arrival": 1766044560,
-    "departure": 1766044560,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951686260",
-    "arrival": 1766045100,
-    "departure": 1766045100,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684927",
-    "arrival": 1766045640,
-    "departure": 1766045640,
+    "arrival": 1766042040,
+    "departure": 1766042040,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684910",
-    "arrival": 1766045700,
-    "departure": 1766045700,
+    "arrival": 1766042100,
+    "departure": 1766042100,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684928",
-    "arrival": 1766046660,
-    "departure": 1766046660,
+    "arrival": 1766043060,
+    "departure": 1766043060,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684987",
-    "arrival": 1766046660,
-    "departure": 1766046660,
+    "arrival": 1766043060,
+    "departure": 1766043060,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684876",
+    "arrival": 1766044080,
+    "departure": 1766044080,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684877",
+    "arrival": 1766044500,
+    "departure": 1766044500,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684848",
+    "arrival": 1766045040,
+    "departure": 1766045040,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685011",
+    "arrival": 1766045700,
+    "departure": 1766045700,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685130",
+    "arrival": 1766046360,
+    "departure": 1766046360,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685131",
+    "arrival": 1766046900,
+    "departure": 1766046900,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684911",
     "arrival": 1766047680,
     "departure": 1766047680,
     "headsign": "GERZAT Champfleuri",
@@ -3056,311 +2816,311 @@
     "date": "20251218"
   },
   {
-    "tripId": "4503749951684877",
-    "arrival": 1766048100,
-    "departure": 1766048100,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684848",
-    "arrival": 1766048640,
-    "departure": 1766048640,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685011",
-    "arrival": 1766049300,
-    "departure": 1766049300,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685130",
-    "arrival": 1766049960,
-    "departure": 1766049960,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685131",
-    "arrival": 1766050500,
-    "departure": 1766050500,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684911",
-    "arrival": 1766051280,
-    "departure": 1766051280,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
     "tripId": "4503749951684912",
-    "arrival": 1766051940,
-    "departure": 1766051940,
+    "arrival": 1766048340,
+    "departure": 1766048340,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684929",
-    "arrival": 1766052480,
-    "departure": 1766052480,
+    "arrival": 1766048880,
+    "departure": 1766048880,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684930",
-    "arrival": 1766052960,
-    "departure": 1766052960,
+    "arrival": 1766049360,
+    "departure": 1766049360,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685014",
-    "arrival": 1766053200,
-    "departure": 1766053200,
+    "arrival": 1766049600,
+    "departure": 1766049600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685015",
-    "arrival": 1766053740,
-    "departure": 1766053740,
+    "arrival": 1766050140,
+    "departure": 1766050140,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684880",
-    "arrival": 1766054220,
-    "departure": 1766054220,
+    "arrival": 1766050620,
+    "departure": 1766050620,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684881",
-    "arrival": 1766054700,
-    "departure": 1766054700,
+    "arrival": 1766051100,
+    "departure": 1766051100,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685132",
-    "arrival": 1766055600,
-    "departure": 1766055600,
+    "arrival": 1766052000,
+    "departure": 1766052000,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685133",
-    "arrival": 1766056320,
-    "departure": 1766056320,
+    "arrival": 1766052720,
+    "departure": 1766052720,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685027",
-    "arrival": 1766056680,
-    "departure": 1766056680,
+    "arrival": 1766053080,
+    "departure": 1766053080,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685028",
-    "arrival": 1766057400,
-    "departure": 1766057400,
+    "arrival": 1766053800,
+    "departure": 1766053800,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684882",
-    "arrival": 1766057940,
-    "departure": 1766057940,
+    "arrival": 1766054340,
+    "departure": 1766054340,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684883",
-    "arrival": 1766058480,
-    "departure": 1766058480,
+    "arrival": 1766054880,
+    "departure": 1766054880,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685016",
-    "arrival": 1766058960,
-    "departure": 1766058960,
+    "arrival": 1766055360,
+    "departure": 1766055360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685017",
-    "arrival": 1766059620,
-    "departure": 1766059620,
+    "arrival": 1766056020,
+    "departure": 1766056020,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685029",
-    "arrival": 1766060160,
-    "departure": 1766060160,
+    "arrival": 1766056560,
+    "departure": 1766056560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685030",
-    "arrival": 1766060640,
-    "departure": 1766060640,
+    "arrival": 1766057040,
+    "departure": 1766057040,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684916",
-    "arrival": 1766061240,
-    "departure": 1766061240,
+    "arrival": 1766057640,
+    "departure": 1766057640,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684917",
-    "arrival": 1766061660,
-    "departure": 1766061660,
+    "arrival": 1766058060,
+    "departure": 1766058060,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685134",
-    "arrival": 1766061960,
-    "departure": 1766061960,
+    "arrival": 1766058360,
+    "departure": 1766058360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685135",
-    "arrival": 1766062500,
-    "departure": 1766062500,
+    "arrival": 1766058900,
+    "departure": 1766058900,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685056",
-    "arrival": 1766062800,
-    "departure": 1766062800,
+    "arrival": 1766059200,
+    "departure": 1766059200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685057",
-    "arrival": 1766063400,
-    "departure": 1766063400,
+    "arrival": 1766059800,
+    "departure": 1766059800,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684990",
-    "arrival": 1766063700,
-    "departure": 1766063700,
+    "arrival": 1766060100,
+    "departure": 1766060100,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684991",
-    "arrival": 1766064300,
-    "departure": 1766064300,
+    "arrival": 1766060700,
+    "departure": 1766060700,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685086",
-    "arrival": 1766064900,
-    "departure": 1766064900,
+    "arrival": 1766061300,
+    "departure": 1766061300,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685087",
-    "arrival": 1766065320,
-    "departure": 1766065320,
+    "arrival": 1766061720,
+    "departure": 1766061720,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685042",
-    "arrival": 1766066040,
-    "departure": 1766066040,
+    "arrival": 1766062440,
+    "departure": 1766062440,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685043",
-    "arrival": 1766066700,
-    "departure": 1766066700,
+    "arrival": 1766063100,
+    "departure": 1766063100,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684918",
-    "arrival": 1766066880,
-    "departure": 1766066880,
+    "arrival": 1766063280,
+    "departure": 1766063280,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684919",
-    "arrival": 1766067780,
-    "departure": 1766067780,
+    "arrival": 1766064180,
+    "departure": 1766064180,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684938",
-    "arrival": 1766068080,
-    "departure": 1766068080,
+    "arrival": 1766064480,
+    "departure": 1766064480,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684939",
+    "arrival": 1766065560,
+    "departure": 1766065560,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685058",
+    "arrival": 1766065740,
+    "departure": 1766065740,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685059",
+    "arrival": 1766066580,
+    "departure": 1766066580,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685125",
+    "arrival": 1766066940,
+    "departure": 1766066940,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685126",
+    "arrival": 1766067780,
+    "departure": 1766067780,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685138",
+    "arrival": 1766068680,
+    "departure": 1766068680,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685139",
     "arrival": 1766069160,
     "departure": 1766069160,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
@@ -3368,55 +3128,63 @@
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685058",
-    "arrival": 1766069340,
-    "departure": 1766069340,
+    "tripId": "4503749951685032",
+    "arrival": 1766070360,
+    "departure": 1766070360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685059",
-    "arrival": 1766070180,
-    "departure": 1766070180,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "tripId": "4503749951685033",
+    "arrival": 1766070900,
+    "departure": 1766070900,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685125",
-    "arrival": 1766070540,
-    "departure": 1766070540,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685126",
+    "tripId": "4503749951684940",
     "arrival": 1766071380,
     "departure": 1766071380,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685138",
-    "arrival": 1766072280,
-    "departure": 1766072280,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685139",
-    "arrival": 1766072760,
-    "departure": 1766072760,
+    "tripId": "4503749951684968",
+    "arrival": 1766071920,
+    "departure": 1766071920,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684941",
+    "arrival": 1766072040,
+    "departure": 1766072040,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685032",
+    "tripId": "4503749951684998",
+    "arrival": 1766072760,
+    "departure": 1766072760,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684999",
+    "arrival": 1766073300,
+    "departure": 1766073300,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685127",
     "arrival": 1766073960,
     "departure": 1766073960,
     "headsign": "GERZAT Champfleuri",
@@ -3424,63 +3192,87 @@
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685033",
-    "arrival": 1766074500,
-    "departure": 1766074500,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684940",
-    "arrival": 1766074980,
-    "departure": 1766074980,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684968",
-    "arrival": 1766075520,
-    "departure": 1766075520,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684941",
-    "arrival": 1766075640,
-    "departure": 1766075640,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684998",
-    "arrival": 1766076360,
-    "departure": 1766076360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684999",
-    "arrival": 1766076900,
-    "departure": 1766076900,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685127",
-    "arrival": 1766077560,
-    "departure": 1766077560,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
     "tripId": "4503749951686273",
+    "arrival": 1766074380,
+    "departure": 1766074380,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685074",
+    "arrival": 1766074620,
+    "departure": 1766074620,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685075",
+    "arrival": 1766075160,
+    "departure": 1766075160,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685140",
+    "arrival": 1766075400,
+    "departure": 1766075400,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685141",
+    "arrival": 1766075940,
+    "departure": 1766075940,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951684970",
+    "arrival": 1766076000,
+    "departure": 1766076000,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685094",
+    "arrival": 1766076420,
+    "departure": 1766076420,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685095",
+    "arrival": 1766076960,
+    "departure": 1766076960,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685034",
+    "arrival": 1766077140,
+    "departure": 1766077140,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951686274",
+    "arrival": 1766077680,
+    "departure": 1766077680,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251218"
+  },
+  {
+    "tripId": "4503749951685035",
     "arrival": 1766077980,
     "departure": 1766077980,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -3488,295 +3280,295 @@
     "date": "20251218"
   },
   {
-    "tripId": "4503749951685074",
-    "arrival": 1766078220,
-    "departure": 1766078220,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685075",
-    "arrival": 1766078760,
-    "departure": 1766078760,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685140",
-    "arrival": 1766079000,
-    "departure": 1766079000,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685141",
-    "arrival": 1766079540,
-    "departure": 1766079540,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951684970",
-    "arrival": 1766079600,
-    "departure": 1766079600,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685094",
-    "arrival": 1766080020,
-    "departure": 1766080020,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685095",
-    "arrival": 1766080560,
-    "departure": 1766080560,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685034",
-    "arrival": 1766080740,
-    "departure": 1766080740,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951686274",
-    "arrival": 1766081280,
-    "departure": 1766081280,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251218"
-  },
-  {
-    "tripId": "4503749951685035",
-    "arrival": 1766081580,
-    "departure": 1766081580,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251218"
-  },
-  {
     "tripId": "4503749951684942",
-    "arrival": 1766082060,
-    "departure": 1766082060,
+    "arrival": 1766078460,
+    "departure": 1766078460,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685066",
-    "arrival": 1766082540,
-    "departure": 1766082540,
+    "arrival": 1766078940,
+    "departure": 1766078940,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684943",
-    "arrival": 1766082660,
-    "departure": 1766082660,
+    "arrival": 1766079060,
+    "departure": 1766079060,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685000",
-    "arrival": 1766083380,
-    "departure": 1766083380,
+    "arrival": 1766079780,
+    "departure": 1766079780,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685001",
-    "arrival": 1766083920,
-    "departure": 1766083920,
+    "arrival": 1766080320,
+    "departure": 1766080320,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685144",
-    "arrival": 1766084160,
-    "departure": 1766084160,
+    "arrival": 1766080560,
+    "departure": 1766080560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685076",
-    "arrival": 1766085000,
-    "departure": 1766085000,
+    "arrival": 1766081400,
+    "departure": 1766081400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685077",
-    "arrival": 1766085480,
-    "departure": 1766085480,
+    "arrival": 1766081880,
+    "departure": 1766081880,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684982",
-    "arrival": 1766086200,
-    "departure": 1766086200,
+    "arrival": 1766082600,
+    "departure": 1766082600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684983",
-    "arrival": 1766087040,
-    "departure": 1766087040,
+    "arrival": 1766083440,
+    "departure": 1766083440,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684945",
-    "arrival": 1766087700,
-    "departure": 1766087700,
+    "arrival": 1766084100,
+    "departure": 1766084100,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685003",
-    "arrival": 1766088780,
-    "departure": 1766088780,
+    "arrival": 1766085180,
+    "departure": 1766085180,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685004",
-    "arrival": 1766089020,
-    "departure": 1766089020,
+    "arrival": 1766085420,
+    "departure": 1766085420,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951684984",
-    "arrival": 1766090100,
-    "departure": 1766090100,
+    "arrival": 1766086500,
+    "departure": 1766086500,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951626306",
-    "arrival": 1766090220,
-    "departure": 1766090220,
+    "arrival": 1766086620,
+    "departure": 1766086620,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251218"
   },
   {
     "tripId": "4503749951685005",
-    "arrival": 1766091720,
-    "departure": 1766091720,
+    "arrival": 1766088120,
+    "departure": 1766088120,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951626307",
-    "arrival": 1766093160,
-    "departure": 1766093160,
+    "arrival": 1766089560,
+    "departure": 1766089560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251218"
   },
   {
     "tripId": "4503749951495720",
-    "arrival": 1766120640,
-    "departure": 1766120640,
+    "arrival": 1766117040,
+    "departure": 1766117040,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951495721",
-    "arrival": 1766123040,
-    "departure": 1766123040,
+    "arrival": 1766119440,
+    "departure": 1766119440,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684834",
-    "arrival": 1766123760,
-    "departure": 1766123760,
+    "arrival": 1766120160,
+    "departure": 1766120160,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684873",
-    "arrival": 1766124420,
-    "departure": 1766124420,
+    "arrival": 1766120820,
+    "departure": 1766120820,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684908",
-    "arrival": 1766125140,
-    "departure": 1766125140,
+    "arrival": 1766121540,
+    "departure": 1766121540,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684958",
-    "arrival": 1766125920,
-    "departure": 1766125920,
+    "arrival": 1766122320,
+    "departure": 1766122320,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684925",
-    "arrival": 1766126100,
-    "departure": 1766126100,
+    "arrival": 1766122500,
+    "departure": 1766122500,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684926",
-    "arrival": 1766126460,
-    "departure": 1766126460,
+    "arrival": 1766122860,
+    "departure": 1766122860,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684986",
-    "arrival": 1766127120,
-    "departure": 1766127120,
+    "arrival": 1766123520,
+    "departure": 1766123520,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684874",
+    "arrival": 1766123760,
+    "departure": 1766123760,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684875",
+    "arrival": 1766124300,
+    "departure": 1766124300,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951686010",
+    "arrival": 1766124840,
+    "departure": 1766124840,
+    "headsign": "Les Vignes",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684846",
+    "arrival": 1766124960,
+    "departure": 1766124960,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685069",
+    "arrival": 1766125140,
+    "departure": 1766125140,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684847",
+    "arrival": 1766125620,
+    "departure": 1766125620,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684959",
+    "arrival": 1766125620,
+    "departure": 1766125620,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685023",
+    "arrival": 1766126400,
+    "departure": 1766126400,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684960",
+    "arrival": 1766126460,
+    "departure": 1766126460,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685024",
+    "arrival": 1766127060,
+    "departure": 1766127060,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684909",
     "arrival": 1766127360,
     "departure": 1766127360,
     "headsign": "GERZAT Champfleuri",
@@ -3784,127 +3576,95 @@
     "date": "20251219"
   },
   {
-    "tripId": "4503749951684875",
+    "tripId": "4503749951686260",
     "arrival": 1766127900,
     "departure": 1766127900,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951686010",
-    "arrival": 1766128440,
-    "departure": 1766128440,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684846",
-    "arrival": 1766128560,
-    "departure": 1766128560,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685069",
-    "arrival": 1766128740,
-    "departure": 1766128740,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684847",
-    "arrival": 1766129220,
-    "departure": 1766129220,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684959",
-    "arrival": 1766129220,
-    "departure": 1766129220,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685023",
-    "arrival": 1766130000,
-    "departure": 1766130000,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684960",
-    "arrival": 1766130060,
-    "departure": 1766130060,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685024",
-    "arrival": 1766130660,
-    "departure": 1766130660,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684909",
-    "arrival": 1766130960,
-    "departure": 1766130960,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951686260",
-    "arrival": 1766131500,
-    "departure": 1766131500,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684927",
-    "arrival": 1766132040,
-    "departure": 1766132040,
+    "arrival": 1766128440,
+    "departure": 1766128440,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684910",
-    "arrival": 1766132100,
-    "departure": 1766132100,
+    "arrival": 1766128500,
+    "departure": 1766128500,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684928",
-    "arrival": 1766133060,
-    "departure": 1766133060,
+    "arrival": 1766129460,
+    "departure": 1766129460,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684987",
-    "arrival": 1766133060,
-    "departure": 1766133060,
+    "arrival": 1766129460,
+    "departure": 1766129460,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684876",
+    "arrival": 1766130480,
+    "departure": 1766130480,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684877",
+    "arrival": 1766130900,
+    "departure": 1766130900,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684848",
+    "arrival": 1766131440,
+    "departure": 1766131440,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685011",
+    "arrival": 1766132100,
+    "departure": 1766132100,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685130",
+    "arrival": 1766132760,
+    "departure": 1766132760,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685131",
+    "arrival": 1766133300,
+    "departure": 1766133300,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684911",
     "arrival": 1766134080,
     "departure": 1766134080,
     "headsign": "GERZAT Champfleuri",
@@ -3912,311 +3672,311 @@
     "date": "20251219"
   },
   {
-    "tripId": "4503749951684877",
-    "arrival": 1766134500,
-    "departure": 1766134500,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684848",
-    "arrival": 1766135040,
-    "departure": 1766135040,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685011",
-    "arrival": 1766135700,
-    "departure": 1766135700,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685130",
-    "arrival": 1766136360,
-    "departure": 1766136360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685131",
-    "arrival": 1766136900,
-    "departure": 1766136900,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684911",
-    "arrival": 1766137680,
-    "departure": 1766137680,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
     "tripId": "4503749951684912",
-    "arrival": 1766138340,
-    "departure": 1766138340,
+    "arrival": 1766134740,
+    "departure": 1766134740,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684929",
-    "arrival": 1766138880,
-    "departure": 1766138880,
+    "arrival": 1766135280,
+    "departure": 1766135280,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684930",
-    "arrival": 1766139360,
-    "departure": 1766139360,
+    "arrival": 1766135760,
+    "departure": 1766135760,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685014",
-    "arrival": 1766139600,
-    "departure": 1766139600,
+    "arrival": 1766136000,
+    "departure": 1766136000,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685015",
-    "arrival": 1766140140,
-    "departure": 1766140140,
+    "arrival": 1766136540,
+    "departure": 1766136540,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684880",
-    "arrival": 1766140620,
-    "departure": 1766140620,
+    "arrival": 1766137020,
+    "departure": 1766137020,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684881",
-    "arrival": 1766141100,
-    "departure": 1766141100,
+    "arrival": 1766137500,
+    "departure": 1766137500,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685132",
-    "arrival": 1766142000,
-    "departure": 1766142000,
+    "arrival": 1766138400,
+    "departure": 1766138400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685133",
-    "arrival": 1766142720,
-    "departure": 1766142720,
+    "arrival": 1766139120,
+    "departure": 1766139120,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685027",
-    "arrival": 1766143080,
-    "departure": 1766143080,
+    "arrival": 1766139480,
+    "departure": 1766139480,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685028",
-    "arrival": 1766143800,
-    "departure": 1766143800,
+    "arrival": 1766140200,
+    "departure": 1766140200,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684882",
-    "arrival": 1766144340,
-    "departure": 1766144340,
+    "arrival": 1766140740,
+    "departure": 1766140740,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684883",
-    "arrival": 1766144880,
-    "departure": 1766144880,
+    "arrival": 1766141280,
+    "departure": 1766141280,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685016",
-    "arrival": 1766145360,
-    "departure": 1766145360,
+    "arrival": 1766141760,
+    "departure": 1766141760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685017",
-    "arrival": 1766146020,
-    "departure": 1766146020,
+    "arrival": 1766142420,
+    "departure": 1766142420,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685029",
-    "arrival": 1766146560,
-    "departure": 1766146560,
+    "arrival": 1766142960,
+    "departure": 1766142960,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685030",
-    "arrival": 1766147040,
-    "departure": 1766147040,
+    "arrival": 1766143440,
+    "departure": 1766143440,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684916",
-    "arrival": 1766147640,
-    "departure": 1766147640,
+    "arrival": 1766144040,
+    "departure": 1766144040,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684917",
-    "arrival": 1766148060,
-    "departure": 1766148060,
+    "arrival": 1766144460,
+    "departure": 1766144460,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685134",
-    "arrival": 1766148360,
-    "departure": 1766148360,
+    "arrival": 1766144760,
+    "departure": 1766144760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685135",
-    "arrival": 1766148900,
-    "departure": 1766148900,
+    "arrival": 1766145300,
+    "departure": 1766145300,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685056",
-    "arrival": 1766149200,
-    "departure": 1766149200,
+    "arrival": 1766145600,
+    "departure": 1766145600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685057",
-    "arrival": 1766149800,
-    "departure": 1766149800,
+    "arrival": 1766146200,
+    "departure": 1766146200,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684990",
-    "arrival": 1766150100,
-    "departure": 1766150100,
+    "arrival": 1766146500,
+    "departure": 1766146500,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684991",
-    "arrival": 1766150700,
-    "departure": 1766150700,
+    "arrival": 1766147100,
+    "departure": 1766147100,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685086",
-    "arrival": 1766151300,
-    "departure": 1766151300,
+    "arrival": 1766147700,
+    "departure": 1766147700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685087",
-    "arrival": 1766151720,
-    "departure": 1766151720,
+    "arrival": 1766148120,
+    "departure": 1766148120,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685042",
-    "arrival": 1766152440,
-    "departure": 1766152440,
+    "arrival": 1766148840,
+    "departure": 1766148840,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685043",
-    "arrival": 1766153100,
-    "departure": 1766153100,
+    "arrival": 1766149500,
+    "departure": 1766149500,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684918",
-    "arrival": 1766153280,
-    "departure": 1766153280,
+    "arrival": 1766149680,
+    "departure": 1766149680,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684919",
-    "arrival": 1766154180,
-    "departure": 1766154180,
+    "arrival": 1766150580,
+    "departure": 1766150580,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684938",
-    "arrival": 1766154480,
-    "departure": 1766154480,
+    "arrival": 1766150880,
+    "departure": 1766150880,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684939",
+    "arrival": 1766151960,
+    "departure": 1766151960,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685058",
+    "arrival": 1766152140,
+    "departure": 1766152140,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685059",
+    "arrival": 1766152980,
+    "departure": 1766152980,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685125",
+    "arrival": 1766153340,
+    "departure": 1766153340,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685126",
+    "arrival": 1766154180,
+    "departure": 1766154180,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685138",
+    "arrival": 1766155080,
+    "departure": 1766155080,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685139",
     "arrival": 1766155560,
     "departure": 1766155560,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
@@ -4224,55 +3984,63 @@
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685058",
-    "arrival": 1766155740,
-    "departure": 1766155740,
+    "tripId": "4503749951685032",
+    "arrival": 1766156760,
+    "departure": 1766156760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685059",
-    "arrival": 1766156580,
-    "departure": 1766156580,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "tripId": "4503749951685033",
+    "arrival": 1766157300,
+    "departure": 1766157300,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685125",
-    "arrival": 1766156940,
-    "departure": 1766156940,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685126",
+    "tripId": "4503749951684940",
     "arrival": 1766157780,
     "departure": 1766157780,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685138",
-    "arrival": 1766158680,
-    "departure": 1766158680,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685139",
-    "arrival": 1766159160,
-    "departure": 1766159160,
+    "tripId": "4503749951684968",
+    "arrival": 1766158320,
+    "departure": 1766158320,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684941",
+    "arrival": 1766158440,
+    "departure": 1766158440,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685032",
+    "tripId": "4503749951684998",
+    "arrival": 1766159160,
+    "departure": 1766159160,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684999",
+    "arrival": 1766159700,
+    "departure": 1766159700,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685127",
     "arrival": 1766160360,
     "departure": 1766160360,
     "headsign": "GERZAT Champfleuri",
@@ -4280,63 +4048,87 @@
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685033",
-    "arrival": 1766160900,
-    "departure": 1766160900,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684940",
-    "arrival": 1766161380,
-    "departure": 1766161380,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684968",
-    "arrival": 1766161920,
-    "departure": 1766161920,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684941",
-    "arrival": 1766162040,
-    "departure": 1766162040,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684998",
-    "arrival": 1766162760,
-    "departure": 1766162760,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684999",
-    "arrival": 1766163300,
-    "departure": 1766163300,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685127",
-    "arrival": 1766163960,
-    "departure": 1766163960,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
     "tripId": "4503749951686273",
+    "arrival": 1766160780,
+    "departure": 1766160780,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685074",
+    "arrival": 1766161020,
+    "departure": 1766161020,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685075",
+    "arrival": 1766161560,
+    "departure": 1766161560,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685140",
+    "arrival": 1766161800,
+    "departure": 1766161800,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685141",
+    "arrival": 1766162340,
+    "departure": 1766162340,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951684970",
+    "arrival": 1766162400,
+    "departure": 1766162400,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685094",
+    "arrival": 1766162820,
+    "departure": 1766162820,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685095",
+    "arrival": 1766163360,
+    "departure": 1766163360,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685034",
+    "arrival": 1766163540,
+    "departure": 1766163540,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951686274",
+    "arrival": 1766164080,
+    "departure": 1766164080,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251219"
+  },
+  {
+    "tripId": "4503749951685035",
     "arrival": 1766164380,
     "departure": 1766164380,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -4344,287 +4136,271 @@
     "date": "20251219"
   },
   {
-    "tripId": "4503749951685074",
-    "arrival": 1766164620,
-    "departure": 1766164620,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685075",
-    "arrival": 1766165160,
-    "departure": 1766165160,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685140",
-    "arrival": 1766165400,
-    "departure": 1766165400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685141",
-    "arrival": 1766165940,
-    "departure": 1766165940,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951684970",
-    "arrival": 1766166000,
-    "departure": 1766166000,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685094",
-    "arrival": 1766166420,
-    "departure": 1766166420,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685095",
-    "arrival": 1766166960,
-    "departure": 1766166960,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685034",
-    "arrival": 1766167140,
-    "departure": 1766167140,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951686274",
-    "arrival": 1766167680,
-    "departure": 1766167680,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251219"
-  },
-  {
-    "tripId": "4503749951685035",
-    "arrival": 1766167980,
-    "departure": 1766167980,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251219"
-  },
-  {
     "tripId": "4503749951684942",
-    "arrival": 1766168460,
-    "departure": 1766168460,
+    "arrival": 1766164860,
+    "departure": 1766164860,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685066",
-    "arrival": 1766168940,
-    "departure": 1766168940,
+    "arrival": 1766165340,
+    "departure": 1766165340,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684943",
-    "arrival": 1766169060,
-    "departure": 1766169060,
+    "arrival": 1766165460,
+    "departure": 1766165460,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685000",
-    "arrival": 1766169780,
-    "departure": 1766169780,
+    "arrival": 1766166180,
+    "departure": 1766166180,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685001",
-    "arrival": 1766170320,
-    "departure": 1766170320,
+    "arrival": 1766166720,
+    "departure": 1766166720,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685144",
-    "arrival": 1766170560,
-    "departure": 1766170560,
+    "arrival": 1766166960,
+    "departure": 1766166960,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685076",
-    "arrival": 1766171400,
-    "departure": 1766171400,
+    "arrival": 1766167800,
+    "departure": 1766167800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685077",
-    "arrival": 1766171880,
-    "departure": 1766171880,
+    "arrival": 1766168280,
+    "departure": 1766168280,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684982",
-    "arrival": 1766172600,
-    "departure": 1766172600,
+    "arrival": 1766169000,
+    "departure": 1766169000,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684983",
-    "arrival": 1766173440,
-    "departure": 1766173440,
+    "arrival": 1766169840,
+    "departure": 1766169840,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684945",
-    "arrival": 1766174100,
-    "departure": 1766174100,
+    "arrival": 1766170500,
+    "departure": 1766170500,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685003",
-    "arrival": 1766175180,
-    "departure": 1766175180,
+    "arrival": 1766171580,
+    "departure": 1766171580,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685004",
-    "arrival": 1766175420,
-    "departure": 1766175420,
+    "arrival": 1766171820,
+    "departure": 1766171820,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951684984",
-    "arrival": 1766176500,
-    "departure": 1766176500,
+    "arrival": 1766172900,
+    "departure": 1766172900,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951626306",
-    "arrival": 1766176620,
-    "departure": 1766176620,
+    "arrival": 1766173020,
+    "departure": 1766173020,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251219"
   },
   {
     "tripId": "4503749951685005",
-    "arrival": 1766178120,
-    "departure": 1766178120,
+    "arrival": 1766174520,
+    "departure": 1766174520,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951626307",
-    "arrival": 1766179560,
-    "departure": 1766179560,
+    "arrival": 1766175960,
+    "departure": 1766175960,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251219"
   },
   {
     "tripId": "4503749951495720",
-    "arrival": 1766207040,
-    "departure": 1766207040,
+    "arrival": 1766203440,
+    "departure": 1766203440,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951495721",
-    "arrival": 1766209440,
-    "departure": 1766209440,
+    "arrival": 1766205840,
+    "departure": 1766205840,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682170",
-    "arrival": 1766210220,
-    "departure": 1766210220,
+    "arrival": 1766206620,
+    "departure": 1766206620,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682233",
-    "arrival": 1766211300,
-    "departure": 1766211300,
+    "arrival": 1766207700,
+    "departure": 1766207700,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682252",
-    "arrival": 1766212860,
-    "departure": 1766212860,
+    "arrival": 1766209260,
+    "departure": 1766209260,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682253",
-    "arrival": 1766213160,
-    "departure": 1766213160,
+    "arrival": 1766209560,
+    "departure": 1766209560,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682234",
-    "arrival": 1766214000,
-    "departure": 1766214000,
+    "arrival": 1766210400,
+    "departure": 1766210400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682328",
-    "arrival": 1766214240,
-    "departure": 1766214240,
+    "arrival": 1766210640,
+    "departure": 1766210640,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682235",
+    "arrival": 1766211120,
+    "departure": 1766211120,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682171",
+    "arrival": 1766211420,
+    "departure": 1766211420,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682172",
+    "arrival": 1766211960,
+    "departure": 1766211960,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682367",
+    "arrival": 1766212560,
+    "departure": 1766212560,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951542094",
+    "arrival": 1766213040,
+    "departure": 1766213040,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682236",
+    "arrival": 1766213580,
+    "departure": 1766213580,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682237",
+    "arrival": 1766214060,
+    "departure": 1766214060,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682254",
+    "arrival": 1766214300,
+    "departure": 1766214300,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682255",
     "arrival": 1766214720,
     "departure": 1766214720,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -4632,63 +4408,47 @@
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682171",
-    "arrival": 1766215020,
-    "departure": 1766215020,
+    "tripId": "4503749951682329",
+    "arrival": 1766215620,
+    "departure": 1766215620,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682172",
-    "arrival": 1766215560,
-    "departure": 1766215560,
+    "tripId": "4503749951682330",
+    "arrival": 1766216040,
+    "departure": 1766216040,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682367",
-    "arrival": 1766216160,
-    "departure": 1766216160,
+    "tripId": "4503749951682395",
+    "arrival": 1766216700,
+    "departure": 1766216700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951542094",
-    "arrival": 1766216640,
-    "departure": 1766216640,
+    "tripId": "4503749951542065",
+    "arrival": 1766217180,
+    "departure": 1766217180,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682236",
-    "arrival": 1766217180,
-    "departure": 1766217180,
+    "tripId": "4503749951682256",
+    "arrival": 1766217720,
+    "departure": 1766217720,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682237",
-    "arrival": 1766217660,
-    "departure": 1766217660,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682254",
-    "arrival": 1766217900,
-    "departure": 1766217900,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682255",
+    "tripId": "4503749951682257",
     "arrival": 1766218320,
     "departure": 1766218320,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
@@ -4696,39 +4456,39 @@
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682329",
-    "arrival": 1766219220,
-    "departure": 1766219220,
+    "tripId": "4503749951682213",
+    "arrival": 1766218920,
+    "departure": 1766218920,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682330",
-    "arrival": 1766219640,
-    "departure": 1766219640,
+    "tripId": "4503749951682214",
+    "arrival": 1766219520,
+    "departure": 1766219520,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682395",
-    "arrival": 1766220300,
-    "departure": 1766220300,
+    "tripId": "4503749951682371",
+    "arrival": 1766220180,
+    "departure": 1766220180,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951542065",
-    "arrival": 1766220780,
-    "departure": 1766220780,
+    "tripId": "4503749951682372",
+    "arrival": 1766220660,
+    "departure": 1766220660,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682256",
+    "tripId": "4503749951682331",
     "arrival": 1766221320,
     "departure": 1766221320,
     "headsign": "GERZAT Champfleuri",
@@ -4736,223 +4496,223 @@
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682257",
-    "arrival": 1766221920,
-    "departure": 1766221920,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682213",
-    "arrival": 1766222520,
-    "departure": 1766222520,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682214",
-    "arrival": 1766223120,
-    "departure": 1766223120,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682371",
-    "arrival": 1766223780,
-    "departure": 1766223780,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682372",
-    "arrival": 1766224260,
-    "departure": 1766224260,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682331",
-    "arrival": 1766224920,
-    "departure": 1766224920,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
     "tripId": "4503749951682332",
-    "arrival": 1766225400,
-    "departure": 1766225400,
+    "arrival": 1766221800,
+    "departure": 1766221800,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682240",
-    "arrival": 1766226180,
-    "departure": 1766226180,
+    "arrival": 1766222580,
+    "departure": 1766222580,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682241",
-    "arrival": 1766227140,
-    "departure": 1766227140,
+    "arrival": 1766223540,
+    "departure": 1766223540,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682298",
-    "arrival": 1766228040,
-    "departure": 1766228040,
+    "arrival": 1766224440,
+    "departure": 1766224440,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951542091",
-    "arrival": 1766228400,
-    "departure": 1766228400,
+    "arrival": 1766224800,
+    "departure": 1766224800,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682215",
-    "arrival": 1766229060,
-    "departure": 1766229060,
+    "arrival": 1766225460,
+    "departure": 1766225460,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951542074",
-    "arrival": 1766230200,
-    "departure": 1766230200,
+    "arrival": 1766226600,
+    "departure": 1766226600,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682299",
-    "arrival": 1766230920,
-    "departure": 1766230920,
+    "arrival": 1766227320,
+    "departure": 1766227320,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682300",
-    "arrival": 1766231460,
-    "departure": 1766231460,
+    "arrival": 1766227860,
+    "departure": 1766227860,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682335",
-    "arrival": 1766232600,
-    "departure": 1766232600,
+    "arrival": 1766229000,
+    "departure": 1766229000,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682242",
-    "arrival": 1766232840,
-    "departure": 1766232840,
+    "arrival": 1766229240,
+    "departure": 1766229240,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682243",
-    "arrival": 1766233680,
-    "departure": 1766233680,
+    "arrival": 1766230080,
+    "departure": 1766230080,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682216",
-    "arrival": 1766233860,
-    "departure": 1766233860,
+    "arrival": 1766230260,
+    "departure": 1766230260,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682355",
-    "arrival": 1766235000,
-    "departure": 1766235000,
+    "arrival": 1766231400,
+    "departure": 1766231400,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682356",
-    "arrival": 1766235420,
-    "departure": 1766235420,
+    "arrival": 1766231820,
+    "departure": 1766231820,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682176",
-    "arrival": 1766236680,
-    "departure": 1766236680,
+    "arrival": 1766233080,
+    "departure": 1766233080,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682177",
-    "arrival": 1766237040,
-    "departure": 1766237040,
+    "arrival": 1766233440,
+    "departure": 1766233440,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682419",
-    "arrival": 1766238540,
-    "departure": 1766238540,
+    "arrival": 1766234940,
+    "departure": 1766234940,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682420",
-    "arrival": 1766238900,
-    "departure": 1766238900,
+    "arrival": 1766235300,
+    "departure": 1766235300,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682357",
-    "arrival": 1766240400,
-    "departure": 1766240400,
+    "arrival": 1766236800,
+    "departure": 1766236800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682358",
-    "arrival": 1766240880,
-    "departure": 1766240880,
+    "arrival": 1766237280,
+    "departure": 1766237280,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682378",
+    "arrival": 1766238120,
+    "departure": 1766238120,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682379",
+    "arrival": 1766238780,
+    "departure": 1766238780,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682181",
+    "arrival": 1766239800,
+    "departure": 1766239800,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682182",
+    "arrival": 1766240400,
+    "departure": 1766240400,
+    "headsign": "AULNAT St Exup. via A\u00e9ro.",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682220",
+    "arrival": 1766240760,
+    "departure": 1766240760,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682221",
+    "arrival": 1766241300,
+    "departure": 1766241300,
+    "headsign": "Mus\u00e9e d'Art R. Quilliot",
+    "direction": 0,
+    "date": "20251220"
+  },
+  {
+    "tripId": "4503749951682339",
     "arrival": 1766241720,
     "departure": 1766241720,
     "headsign": "GERZAT Champfleuri",
@@ -4960,257 +4720,209 @@
     "date": "20251220"
   },
   {
-    "tripId": "4503749951682379",
-    "arrival": 1766242380,
-    "departure": 1766242380,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682181",
-    "arrival": 1766243400,
-    "departure": 1766243400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682182",
-    "arrival": 1766244000,
-    "departure": 1766244000,
-    "headsign": "AULNAT St Exup. via A\u00e9ro.",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682220",
-    "arrival": 1766244360,
-    "departure": 1766244360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682221",
-    "arrival": 1766244900,
-    "departure": 1766244900,
-    "headsign": "Mus\u00e9e d'Art R. Quilliot",
-    "direction": 0,
-    "date": "20251220"
-  },
-  {
-    "tripId": "4503749951682339",
-    "arrival": 1766245320,
-    "departure": 1766245320,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20251220"
-  },
-  {
     "tripId": "4503749951682340",
-    "arrival": 1766245800,
-    "departure": 1766245800,
+    "arrival": 1766242200,
+    "departure": 1766242200,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682363",
-    "arrival": 1766246460,
-    "departure": 1766246460,
+    "arrival": 1766242860,
+    "departure": 1766242860,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682364",
-    "arrival": 1766247120,
-    "departure": 1766247120,
+    "arrival": 1766243520,
+    "departure": 1766243520,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682380",
-    "arrival": 1766247780,
-    "departure": 1766247780,
+    "arrival": 1766244180,
+    "departure": 1766244180,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682203",
-    "arrival": 1766248320,
-    "departure": 1766248320,
+    "arrival": 1766244720,
+    "departure": 1766244720,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682286",
-    "arrival": 1766249160,
-    "departure": 1766249160,
+    "arrival": 1766245560,
+    "departure": 1766245560,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682287",
-    "arrival": 1766249640,
-    "departure": 1766249640,
+    "arrival": 1766246040,
+    "departure": 1766246040,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682341",
-    "arrival": 1766250960,
-    "departure": 1766250960,
+    "arrival": 1766247360,
+    "departure": 1766247360,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682342",
-    "arrival": 1766251380,
-    "departure": 1766251380,
+    "arrival": 1766247780,
+    "departure": 1766247780,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682307",
-    "arrival": 1766252400,
-    "departure": 1766252400,
+    "arrival": 1766248800,
+    "departure": 1766248800,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682308",
-    "arrival": 1766252880,
-    "departure": 1766252880,
+    "arrival": 1766249280,
+    "departure": 1766249280,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682204",
-    "arrival": 1766253720,
-    "departure": 1766253720,
+    "arrival": 1766250120,
+    "departure": 1766250120,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682205",
-    "arrival": 1766254320,
-    "departure": 1766254320,
+    "arrival": 1766250720,
+    "departure": 1766250720,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682288",
-    "arrival": 1766254860,
-    "departure": 1766254860,
+    "arrival": 1766251260,
+    "departure": 1766251260,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682289",
-    "arrival": 1766255460,
-    "departure": 1766255460,
+    "arrival": 1766251860,
+    "departure": 1766251860,
     "headsign": "AULNAT St Exup. via A\u00e9ro.",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682188",
-    "arrival": 1766256300,
-    "departure": 1766256300,
+    "arrival": 1766252700,
+    "departure": 1766252700,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682189",
-    "arrival": 1766256780,
-    "departure": 1766256780,
+    "arrival": 1766253180,
+    "departure": 1766253180,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682309",
-    "arrival": 1766257980,
-    "departure": 1766257980,
+    "arrival": 1766254380,
+    "departure": 1766254380,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682310",
-    "arrival": 1766258820,
-    "departure": 1766258820,
+    "arrival": 1766255220,
+    "departure": 1766255220,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682190",
-    "arrival": 1766259360,
-    "departure": 1766259360,
+    "arrival": 1766255760,
+    "departure": 1766255760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682191",
-    "arrival": 1766259780,
-    "departure": 1766259780,
+    "arrival": 1766256180,
+    "departure": 1766256180,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682290",
-    "arrival": 1766260320,
-    "departure": 1766260320,
+    "arrival": 1766256720,
+    "departure": 1766256720,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951497870",
-    "arrival": 1766260800,
-    "departure": 1766260800,
+    "arrival": 1766257200,
+    "departure": 1766257200,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503749951682192",
-    "arrival": 1766262540,
-    "departure": 1766262540,
+    "arrival": 1766258940,
+    "departure": 1766258940,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
   },
   {
     "tripId": "4503749951542086",
-    "arrival": 1766262960,
-    "departure": 1766262960,
+    "arrival": 1766259360,
+    "departure": 1766259360,
     "headsign": "Mus\u00e9e d'Art R. Quilliot",
     "direction": 0,
     "date": "20251220"
   },
   {
     "tripId": "4503737118707738",
-    "arrival": 1766265900,
-    "departure": 1766265900,
+    "arrival": 1766262300,
+    "departure": 1766262300,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20251220"
