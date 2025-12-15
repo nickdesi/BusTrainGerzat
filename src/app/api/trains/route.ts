@@ -32,6 +32,16 @@ export async function GET() {
     try {
         const now = Math.floor(Date.now() / 1000);
 
+        // Debug: Check if API key is configured
+        if (!SNCF_API_KEY) {
+            console.error('SNCF_API_KEY is not configured');
+            return NextResponse.json({
+                error: 'SNCF_API_KEY not configured',
+                updates: [],
+                debug: { apiKeyConfigured: false }
+            }, { status: 500 });
+        }
+
         // Fetch departures from SNCF API
         const [departuresRes, arrivalsRes] = await Promise.all([
             fetch(`https://api.sncf.com/v1/coverage/sncf/${GERZAT_STOP_AREA}/departures?count=20`, {
@@ -48,10 +58,21 @@ export async function GET() {
             })
         ]);
 
+        // Debug: Log response status
+        console.log('SNCF API departures status:', departuresRes.status);
+        console.log('SNCF API arrivals status:', arrivalsRes.status);
+
         const updates: TrainUpdate[] = [];
+        let debugInfo: any = {
+            departuresStatus: departuresRes.status,
+            arrivalsStatus: arrivalsRes.status,
+            apiKeyConfigured: true
+        };
 
         if (departuresRes.ok) {
             const departuresData = await departuresRes.json();
+            debugInfo.departuresCount = departuresData.departures?.length || 0;
+            debugInfo.rawError = departuresData.error || null;
 
             departuresData.departures?.forEach((dep: any) => {
                 const stopDateTime = dep.stop_date_time;
@@ -100,9 +121,18 @@ export async function GET() {
         // Filter to only future departures
         const futureUpdates = updates.filter(u => Number(u.departure.time) > now - 60);
 
+        // Include debug info if no updates found
+        if (futureUpdates.length === 0) {
+            return NextResponse.json({
+                updates: futureUpdates,
+                timestamp: now,
+                debug: debugInfo
+            });
+        }
+
         return NextResponse.json({ updates: futureUpdates, timestamp: now });
     } catch (error) {
         console.error('Error fetching SNCF data:', error);
-        return NextResponse.json({ error: 'Failed to fetch data', updates: [] }, { status: 500 });
+        return NextResponse.json({ error: 'Failed to fetch data', updates: [], debug: { error: String(error) } }, { status: 500 });
     }
 }
