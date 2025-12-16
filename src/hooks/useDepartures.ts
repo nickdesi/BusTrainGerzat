@@ -91,7 +91,8 @@ export function useDepartures() {
         });
 
         // Train mapping - use real destination from API
-        const mapTrainDeparture = (train: TrainUpdate): UnifiedEntry => ({
+        // Consolidated function to avoid duplication
+        const mapTrain = (train: TrainUpdate, platform: string): UnifiedEntry => ({
             id: `train-${train.tripId}`,
             type: 'TER',
             time: Number(train.arrival.time),
@@ -103,22 +104,7 @@ export function useDepartures() {
             delay: train.delay,
             isRealtime: train.isRealtime,
             isCancelled: train.isCancelled || false,
-            platform: 'Voie 1',
-        });
-
-        const mapTrainArrival = (train: TrainUpdate): UnifiedEntry => ({
-            id: `train-${train.tripId}`,
-            type: 'TER',
-            time: Number(train.arrival.time),
-            arrivalTime: Number(train.arrival.time),
-            departureTime: Number(train.departure.time),
-            line: train.trainNumber,
-            destination: train.direction || 'Inconnu',
-            provenance: train.origin || 'Inconnu',
-            delay: train.delay,
-            isRealtime: train.isRealtime,
-            isCancelled: train.isCancelled || false,
-            platform: 'Voie 2',
+            platform,
         });
 
         // Separate and map
@@ -132,12 +118,12 @@ export function useDepartures() {
 
         const deps: UnifiedEntry[] = [
             ...busDepartures.map(mapBusDeparture),
-            ...trainDepartures.map(mapTrainDeparture),
+            ...trainDepartures.map(t => mapTrain(t, 'Voie 1')),
         ].sort((a, b) => a.time - b.time);
 
         const arrs: UnifiedEntry[] = [
             ...busArrivals.map(mapBusArrival),
-            ...trainArrivals.map(mapTrainArrival),
+            ...trainArrivals.map(t => mapTrain(t, 'Voie 2')),
         ].sort((a, b) => a.time - b.time);
 
         return { departures: deps, arrivals: arrs };

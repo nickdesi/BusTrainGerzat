@@ -57,9 +57,7 @@ export async function GET() {
             })
         ]);
 
-        // Debug: Log response status
-        console.log('SNCF API base_schedule status:', baseScheduleRes.status);
-        console.log('SNCF API realtime status:', realtimeRes.status);
+
 
         const updates: TrainUpdate[] = [];
         let debugInfo: any = {
@@ -125,12 +123,12 @@ export async function GET() {
                 // 1. data_freshness is 'deleted' OR
                 // 2. It's in base_schedule but NOT in realtime (meaning it was removed)
                 const isInRealtime = vehicleJourneyId ? realtimeTrainIds.has(vehicleJourneyId) : true;
-                const hasDisruption = dep.links?.some((l: any) => l.type === 'disruption');
+                // Train is cancelled if deleted, physical mode is Cancelled, or not present in realtime data
                 const isCancelled =
                     stopDateTime.data_freshness === 'deleted' ||
                     displayInfo.physical_mode === 'Cancelled' ||
                     dep.display_informations?.commercial_mode === 'Supprimé' ||
-                    (!isInRealtime && realtimeTrainIds.size > 0); // Not in realtime = cancelled
+                    (!isInRealtime && realtimeTrainIds.size > 0);
 
                 updates.push({
                     tripId: vehicleJourneyId || '',

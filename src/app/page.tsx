@@ -119,13 +119,6 @@ export default function Home() {
           </div>
         </header>
 
-        {/* Error Message */}
-        {error && (
-          <div className="mb-6 bg-red-900/20 border-2 border-red-500/50 rounded-lg p-4 flex items-center gap-3 text-red-400 slide-up" role="alert">
-            <AlertTriangle className="w-5 h-5 flex-shrink-0" aria-hidden="true" />
-            <p className="font-bold uppercase tracking-wide">Erreur de chargement des données</p>
-          </div>
-        )}
 
         {/* Departures Board */}
         <div className="bg-[#1a1a1a] rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 
 interface SplitFlapDisplayProps {
     text: string;
@@ -6,7 +6,7 @@ interface SplitFlapDisplayProps {
     color?: string;
 }
 
-export default function SplitFlapDisplay({ text, size = 'xl', color = 'text-yellow-500' }: SplitFlapDisplayProps) {
+const SplitFlapDisplay = memo(function SplitFlapDisplay({ text, size = 'xl', color = 'text-yellow-500' }: SplitFlapDisplayProps) {
     const chars = text.split('');
     return (
         <div className={`split-flap-container split-flap-${size} ${color} flex`}>
@@ -24,4 +24,6 @@ export default function SplitFlapDisplay({ text, size = 'xl', color = 'text-yell
             ))}
         </div>
     );
-}
+});
+
+export default SplitFlapDisplay;

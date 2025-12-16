@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import SplitFlapDisplay from './SplitFlapDisplay';
 
 interface StatusDisplayProps {
@@ -6,7 +7,7 @@ interface StatusDisplayProps {
     isCancelled?: boolean;
 }
 
-export default function StatusDisplay({ delay, isRealtime, isCancelled }: StatusDisplayProps) {
+const StatusDisplay = memo(function StatusDisplay({ delay, isRealtime, isCancelled }: StatusDisplayProps) {
     // Show cancellation status first
     if (isCancelled) {
         return <SplitFlapDisplay text="ANNULÉ" size="xs" color="text-red-600" />;
@@ -28,4 +29,6 @@ export default function StatusDisplay({ delay, isRealtime, isCancelled }: Status
     }
 
     return <SplitFlapDisplay text={`AVANCE ${minutes}M`} size="xs" color="text-blue-400" />;
-}
+});
+
+export default StatusDisplay;
