@@ -10,6 +10,12 @@ interface DeparturesBoardProps {
     boardType?: 'departures' | 'arrivals';
 }
 
+// Helper to get the display time based on board type
+const getDisplayTime = (entry: UnifiedEntry, boardType: 'departures' | 'arrivals') => {
+    if (entry.type === 'TER') return null; // TER shows both times
+    return boardType === 'arrivals' ? entry.arrivalTime : entry.departureTime;
+};
+
 export default function DeparturesBoard({ departures, loading, boardType = 'departures' }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
 
@@ -63,7 +69,7 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
                                             </div>
                                         </div>
                                     ) : (
-                                        <SplitFlapDisplay text={formatTime(entry.departureTime)} size="xl" color="text-yellow-500" />
+                                        <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="xl" color="text-yellow-500" />
                                     )}
                                 </td>
 
