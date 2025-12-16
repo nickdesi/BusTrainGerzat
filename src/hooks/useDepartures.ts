@@ -60,11 +60,11 @@ export function useDepartures() {
 
     // Memoized departures and arrivals
     const { departures, arrivals } = useMemo(() => {
-        // Bus mapping
+        // Bus mapping - use departure time for departures board sorting
         const mapBusDeparture = (bus: Update): UnifiedEntry => ({
-            id: `bus-${bus.tripId}-${bus.arrival}`,
+            id: `bus-${bus.tripId}-${bus.departure}`,
             type: 'BUS',
-            time: bus.arrival,
+            time: bus.departure || bus.arrival, // Sort by departure time
             arrivalTime: bus.arrival,
             departureTime: bus.departure || bus.arrival,
             line: '20',
@@ -90,12 +90,12 @@ export function useDepartures() {
             platform: 'Champfleuri',
         });
 
-        // Train mapping - use real destination from API
+        // Train mapping - use departure time for departures board sorting
         // Consolidated function to avoid duplication
         const mapTrain = (train: TrainUpdate, platform: string): UnifiedEntry => ({
             id: `train-${train.tripId}`,
             type: 'TER',
-            time: Number(train.arrival.time),
+            time: Number(train.departure.time), // Sort by departure time
             arrivalTime: Number(train.arrival.time),
             departureTime: Number(train.departure.time),
             line: train.trainNumber,
