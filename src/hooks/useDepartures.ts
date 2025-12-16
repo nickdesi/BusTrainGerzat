@@ -1,6 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { UnifiedEntry, Update, TrainUpdate } from '@/types';
+import { normalizeText } from '@/utils/format';
 
 async function fetchBusData() {
     const res = await fetch('/api/realtime');
@@ -68,7 +69,7 @@ export function useDepartures() {
             arrivalTime: bus.arrival,
             departureTime: bus.departure || bus.arrival,
             line: '20',
-            destination: bus.headsign,
+            destination: normalizeText(bus.headsign),
             delay: bus.delay,
             isRealtime: bus.isRealtime,
             isCancelled: bus.isCancelled || false,
@@ -83,7 +84,7 @@ export function useDepartures() {
             departureTime: bus.departure || bus.arrival,
             line: '20',
             destination: 'GERZAT Champfleuri',
-            provenance: 'Clermont-Ferrand / Aéroport',
+            provenance: normalizeText('Clermont-Ferrand / Aéroport'),
             delay: bus.delay,
             isRealtime: bus.isRealtime,
             isCancelled: bus.isCancelled || false,
@@ -99,8 +100,8 @@ export function useDepartures() {
             arrivalTime: Number(train.arrival.time),
             departureTime: Number(train.departure.time),
             line: train.trainNumber,
-            destination: train.direction || 'Inconnu',
-            provenance: train.origin || 'Inconnu',
+            destination: normalizeText(train.direction || 'Inconnu'),
+            provenance: normalizeText(train.origin || 'Inconnu'),
             delay: train.delay,
             isRealtime: train.isRealtime,
             isCancelled: train.isCancelled || false,

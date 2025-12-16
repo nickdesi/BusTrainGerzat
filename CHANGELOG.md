@@ -58,6 +58,24 @@
   - **Horaires détaillés** : Arrivée ET Départ pour chaque train
   - Numéro de train et statut en temps réel
 
+## [Unreleased]
+
+### ⚡ Performance & Optimisation
+
+- **Service Worker** : Désactivation du cache pour les routes API (`/api/*`) afin de garantir des données temps-réel fraîches sur mobile.
+- **Frontend** :
+  - Déplacement de la normalisation de texte (`regex`) hors de la boucle de rendu.
+  - Mémorisation du composant `DepartureRow` pour éviter les re-rendus inutiles.
+  - Utilisation du timestamp serveur pour l'affichage "Dernière MAJ" (plus précis).
+- **Backend** :
+  - Optimisation de l'API Trains : Inversion de la logique de tri/filtrage (Filtrage O(N) avant Tri O(M log M)).
+- **CSS** : Nettoyage du code mort et des définitions dupliquées (`globals.css`).
+
+### 🐛 Corrections
+
+- Correction du tri du tableau des arrivées (tri par date d'arrivée au lieu de départ).
+- Ajustement des intervalles de rafraîchissement (30s) pour une meilleure réactivité.
+
 #### Interface & UX
 
 - **Design Glassmorphism** : Interface sombre moderne avec effets de transparence

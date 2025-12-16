@@ -144,11 +144,11 @@ export async function GET() {
             });
         }
 
-        // Sort by departure time
-        updates.sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
-
-        // Filter to only future departures
+        // Filter to only future departures first (Efficiency: Reduce arrays size before sorting)
         const futureUpdates = updates.filter(u => Number(u.departure.time) > now - 60);
+
+        // Sort by departure time
+        futureUpdates.sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
 
         // Include debug info if no updates found
         if (futureUpdates.length === 0) {

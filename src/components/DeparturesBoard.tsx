@@ -2,7 +2,7 @@ import { ArrowRight, Bus, Train, RefreshCw } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
-import { formatTime, normalizeText } from '@/utils/format';
+import { formatTime } from '@/utils/format';
 
 interface DeparturesBoardProps {
     departures: UnifiedEntry[];
@@ -113,7 +113,7 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
                                         <ArrowRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
                                         <div className="overflow-hidden">
                                             <SplitFlapDisplay
-                                                text={normalizeText(boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination)}
+                                                text={boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination}
                                                 size="xs"
                                                 color="text-gray-200"
                                             />
