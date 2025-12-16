@@ -9,7 +9,7 @@ interface StatusDisplayProps {
 export default function StatusDisplay({ delay, isRealtime, isCancelled }: StatusDisplayProps) {
     // Show cancellation status first
     if (isCancelled) {
-        return <SplitFlapDisplay text="SUPPRIMÉ" size="xs" color="text-red-600" />;
+        return <SplitFlapDisplay text="ANNULÉ" size="xs" color="text-red-600" />;
     }
 
     if (!isRealtime) {

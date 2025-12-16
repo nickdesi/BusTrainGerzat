@@ -42,52 +42,62 @@ export async function GET() {
             }, { status: 500 });
         }
 
-        // Fetch departures from SNCF API
-        // Format: /coverage/{region}/stop_areas/{stop_area_id}/departures
-        const [departuresRes, arrivalsRes] = await Promise.all([
-            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=20`, {
-                headers: {
-                    'Authorization': `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`
-                },
+        // Strategy: Fetch both base_schedule and realtime data
+        // Trains in base_schedule but NOT in realtime are cancelled
+        const authHeader = `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`;
+
+        const [baseScheduleRes, realtimeRes] = await Promise.all([
+            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, {
+                headers: { 'Authorization': authHeader },
                 cache: 'no-store'
             }),
-            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/arrivals?count=20`, {
-                headers: {
-                    'Authorization': `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`
-                },
+            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, {
+                headers: { 'Authorization': authHeader },
                 cache: 'no-store'
             })
         ]);
 
         // Debug: Log response status
-        console.log('SNCF API departures status:', departuresRes.status);
-        console.log('SNCF API arrivals status:', arrivalsRes.status);
+        console.log('SNCF API base_schedule status:', baseScheduleRes.status);
+        console.log('SNCF API realtime status:', realtimeRes.status);
 
         const updates: TrainUpdate[] = [];
-        const departuresUrl = `https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=20`;
         let debugInfo: any = {
-            departuresStatus: departuresRes.status,
-            arrivalsStatus: arrivalsRes.status,
+            baseScheduleStatus: baseScheduleRes.status,
+            realtimeStatus: realtimeRes.status,
             apiKeyConfigured: true,
-            requestUrl: departuresUrl
         };
 
         // If not OK, get the error response body
-        if (!departuresRes.ok) {
+        if (!baseScheduleRes.ok) {
             try {
-                const errorBody = await departuresRes.json();
+                const errorBody = await baseScheduleRes.json();
                 debugInfo.errorBody = errorBody;
             } catch {
                 debugInfo.errorBody = 'Could not parse error response';
             }
         }
 
-        if (departuresRes.ok) {
-            const departuresData = await departuresRes.json();
-            debugInfo.departuresCount = departuresData.departures?.length || 0;
-            debugInfo.rawError = departuresData.error || null;
+        if (baseScheduleRes.ok) {
+            const baseScheduleData = await baseScheduleRes.json();
 
-            departuresData.departures?.forEach((dep: any) => {
+            // Get realtime train IDs to check which ones are cancelled
+            let realtimeTrainIds = new Set<string>();
+            if (realtimeRes.ok) {
+                const realtimeData = await realtimeRes.json();
+                realtimeData.departures?.forEach((dep: any) => {
+                    const vehicleJourneyId = dep.links?.find((l: any) => l.type === 'vehicle_journey')?.id;
+                    if (vehicleJourneyId) {
+                        realtimeTrainIds.add(vehicleJourneyId);
+                    }
+                });
+                debugInfo.realtimeCount = realtimeData.departures?.length || 0;
+            }
+
+            debugInfo.baseScheduleCount = baseScheduleData.departures?.length || 0;
+            debugInfo.rawError = baseScheduleData.error || null;
+
+            baseScheduleData.departures?.forEach((dep: any) => {
                 const stopDateTime = dep.stop_date_time;
                 const displayInfo = dep.display_informations;
 
@@ -102,27 +112,35 @@ export async function GET() {
                 let origin = 'Inconnu';
                 const originLink = displayInfo.links?.find((l: any) => l.rel === 'origins');
                 if (originLink) {
-                    // Extract origin name from departures data origins array
-                    const originData = departuresData.origins?.find((o: any) => o.id === originLink.id);
+                    const originData = baseScheduleData.origins?.find((o: any) => o.id === originLink.id);
                     if (originData) {
                         origin = originData.name;
                     }
                 }
 
-                // Detect cancellation from display_informations or data_freshness
-                const isCancelled = displayInfo.physical_mode === 'Cancelled' ||
+                // Get vehicle journey ID to check if train is in realtime list
+                const vehicleJourneyId = dep.links?.find((l: any) => l.type === 'vehicle_journey')?.id;
+
+                // Train is cancelled if:
+                // 1. data_freshness is 'deleted' OR
+                // 2. It's in base_schedule but NOT in realtime (meaning it was removed)
+                const isInRealtime = vehicleJourneyId ? realtimeTrainIds.has(vehicleJourneyId) : true;
+                const hasDisruption = dep.links?.some((l: any) => l.type === 'disruption');
+                const isCancelled =
                     stopDateTime.data_freshness === 'deleted' ||
-                    dep.display_informations?.commercial_mode === 'Supprimé';
+                    displayInfo.physical_mode === 'Cancelled' ||
+                    dep.display_informations?.commercial_mode === 'Supprimé' ||
+                    (!isInRealtime && realtimeTrainIds.size > 0); // Not in realtime = cancelled
 
                 updates.push({
-                    tripId: dep.links?.find((l: any) => l.type === 'vehicle_journey')?.id || '',
+                    tripId: vehicleJourneyId || '',
                     trainNumber: displayInfo.trip_short_name || displayInfo.headsign || 'Inconnu',
-                    direction: displayInfo.direction?.replace(/ \([^)]+\)$/, '') || 'Inconnu', // Remove "(City)" suffix
+                    direction: displayInfo.direction?.replace(/ \([^)]+\)$/, '') || 'Inconnu',
                     origin: origin,
                     arrival: { time: arrivalTime.toString(), delay },
                     departure: { time: departureTime.toString(), delay },
                     delay,
-                    isRealtime: stopDateTime.data_freshness === 'realtime',
+                    isRealtime: isInRealtime && stopDateTime.data_freshness === 'realtime',
                     isCancelled
                 });
             });
