@@ -124,7 +124,7 @@ export function useDepartures() {
         const arrs: UnifiedEntry[] = [
             ...busArrivals.map(mapBusArrival),
             ...trainArrivals.map(t => mapTrain(t, 'Voie 2')),
-        ].sort((a, b) => a.time - b.time);
+        ].sort((a, b) => a.arrivalTime - b.arrivalTime);
 
         return { departures: deps, arrivals: arrs };
     }, [updates, trainUpdates]);
@@ -141,7 +141,10 @@ export function useDepartures() {
         isLoading,
         isFetching,
         error,
-        lastUpdated: Math.max(busUpdatedAt || 0, trainUpdatedAt || 0),
+        lastUpdated: Math.max(
+            (busData?.timestamp ? busData.timestamp * 1000 : busUpdatedAt) || 0,
+            (trainData?.timestamp ? trainData.timestamp * 1000 : trainUpdatedAt) || 0
+        ),
         refetch
     };
 }
