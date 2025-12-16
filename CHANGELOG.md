@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.0.4] - 2025-12-16
+
+### ✨ Fonctionnalités
+
+- **Trains annulés** : Affichage des trains supprimés avec un statut "ANNULÉ" en rouge.
+  - Comparaison des horaires théoriques (`base_schedule`) avec les horaires temps réel (`realtime`)
+  - Les trains présents dans l'horaire théorique mais absents du temps réel sont marqués comme annulés
+  - Détection fiable des suppressions de trains via l'API SNCF
+
 ## [1.0.3] - 2025-12-15
 
 ### 🐛 Correctifs

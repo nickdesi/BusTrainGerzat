@@ -26,6 +26,7 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Double Sens** : Affichage séparé des trains vers Clermont-Ferrand et vers Riom/Moulins.
 - **Horaires Détaillés** : Affichage de l'heure d'arrivée ET de départ pour chaque train à Gerzat.
 - **Détails du Train** : Numéro de train et statut du retard en temps réel.
+- **Trains Annulés** : Détection et affichage des trains supprimés avec statut "ANNULÉ" en rouge.
 
 ### ✨ Expérience Utilisateur (UX/UI)
 
