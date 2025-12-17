@@ -8,18 +8,18 @@ interface RelativeTimeProps {
 }
 
 export default function RelativeTime({ timestamp, className = '' }: RelativeTimeProps) {
-    const [, setTick] = useState(0);
+    const [now, setNow] = useState(() => Date.now());
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setTick(t => t + 1);
+            setNow(Date.now());
         }, 1000);
         return () => clearInterval(interval);
     }, []);
 
     const formatRelativeTime = (ts: number): string => {
         if (!ts) return '--:--:--';
-        const seconds = Math.floor((Date.now() - ts) / 1000);
+        const seconds = Math.floor((now - ts) / 1000);
         if (seconds < 5) return 'À l\'instant';
         if (seconds < 60) return `il y a ${seconds}s`;
         const minutes = Math.floor(seconds / 60);

@@ -12,7 +12,7 @@ const SplitFlapDisplay = memo(function SplitFlapDisplay({ text, size = 'xl', col
         <div className={`split-flap-container split-flap-${size} ${color} flex`}>
             {chars.map((char, idx) => (
                 <span
-                    key={idx}
+                    key={`${idx}-${char}`}
                     className={`split-flap-char ${char === ':' ? 'colon' : ''
                         } ${char === ' ' ? 'space' : ''
                         } ${char === '-' ? 'dash' : ''

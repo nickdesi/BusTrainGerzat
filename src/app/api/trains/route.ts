@@ -160,8 +160,7 @@ export async function GET() {
         }
 
         return NextResponse.json({ updates: futureUpdates, timestamp: now });
-    } catch (error) {
-        console.error('Error fetching SNCF data:', error);
-        return NextResponse.json({ error: 'Failed to fetch data', updates: [], debug: { error: String(error) } }, { status: 500 });
+    } catch {
+        return NextResponse.json({ error: 'Failed to fetch data', updates: [] }, { status: 500 });
     }
 }

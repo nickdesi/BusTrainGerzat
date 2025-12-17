@@ -9,7 +9,7 @@ export async function GET() {
         const now = Math.floor(Date.now() / 1000);
 
         // 1. Fetch Real-time Data
-        let realtimeUpdates: Record<string, any> = {};
+        const realtimeUpdates: Record<string, { arrival?: { time?: number; delay?: number }; departure?: { time?: number; delay?: number }; delay: number; isCancelled: boolean }> = {};
         try {
             const response = await fetch('https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update', {
                 cache: 'no-store',
@@ -34,8 +34,8 @@ export async function GET() {
                                     const isStopCancelled = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED = 1
 
                                     realtimeUpdates[tripUpdate.trip.tripId as string] = {
-                                        arrival: stopTimeUpdate.arrival,
-                                        departure: stopTimeUpdate.departure,
+                                        arrival: stopTimeUpdate.arrival ?? undefined,
+                                        departure: stopTimeUpdate.departure ?? undefined,
                                         delay: stopTimeUpdate.arrival?.delay || stopTimeUpdate.departure?.delay || 0,
                                         isCancelled: isTripCancelled || isStopCancelled
                                     };
@@ -45,8 +45,8 @@ export async function GET() {
                     }
                 });
             }
-        } catch (e) {
-            console.error("Failed to fetch real-time data", e);
+        } catch {
+            // Real-time data fetch failed - will fallback to static schedule
         }
 
         // 2. Merge with Static Schedule
@@ -110,8 +110,7 @@ export async function GET() {
         const nextBuses = combinedUpdates.filter((u: any) => u.arrival > now - 60).slice(0, 20);
 
         return NextResponse.json({ updates: nextBuses, timestamp: now });
-    } catch (error) {
-        console.error('Error in API route:', error);
+    } catch {
         return NextResponse.json({ error: 'Failed to process data' }, { status: 500 });
     }
 }

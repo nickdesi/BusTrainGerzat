@@ -3,19 +3,13 @@ import { ArrowRight, RefreshCw } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
-import { formatTime } from '@/utils/format';
+import { formatTime, getDisplayTime } from '@/utils/format';
 
 interface DeparturesListProps {
     departures: UnifiedEntry[];
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
 }
-
-// Helper to get the display time based on board type
-const getDisplayTime = (entry: UnifiedEntry, boardType: 'departures' | 'arrivals') => {
-    if (entry.type === 'TER') return null; // TER shows both times
-    return boardType === 'arrivals' ? entry.arrivalTime : entry.departureTime;
-};
 
 interface DepartureRowProps {
     entry: UnifiedEntry;

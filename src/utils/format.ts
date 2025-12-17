@@ -12,3 +12,12 @@ export const normalizeText = (text: string) => {
         .toUpperCase()
         .replace(/[^A-Z0-9 \-']/g, ' ');
 };
+
+// Shared helper to get display time based on board type
+export const getDisplayTime = (
+    entry: { type: string; arrivalTime: number; departureTime: number },
+    boardType: 'departures' | 'arrivals'
+): number | null => {
+    if (entry.type === 'TER') return null; // TER shows both times
+    return boardType === 'arrivals' ? entry.arrivalTime : entry.departureTime;
+};
