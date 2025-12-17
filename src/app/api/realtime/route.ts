@@ -33,10 +33,16 @@ export async function GET() {
                                     // Check for stop-level cancellation
                                     const isStopCancelled = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED = 1
 
+                                    // Extract only the numeric values we need from GTFS-RT types
+                                    const arrivalTime = stopTimeUpdate.arrival?.time;
+                                    const arrivalDelay = stopTimeUpdate.arrival?.delay;
+                                    const departureTime = stopTimeUpdate.departure?.time;
+                                    const departureDelay = stopTimeUpdate.departure?.delay;
+
                                     realtimeUpdates[tripUpdate.trip.tripId as string] = {
-                                        arrival: stopTimeUpdate.arrival ?? undefined,
-                                        departure: stopTimeUpdate.departure ?? undefined,
-                                        delay: stopTimeUpdate.arrival?.delay || stopTimeUpdate.departure?.delay || 0,
+                                        arrival: arrivalTime != null ? { time: Number(arrivalTime), delay: arrivalDelay ?? 0 } : undefined,
+                                        departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
+                                        delay: Number(arrivalDelay || departureDelay || 0),
                                         isCancelled: isTripCancelled || isStopCancelled
                                     };
                                 }
