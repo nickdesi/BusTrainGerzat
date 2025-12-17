@@ -1,12 +1,16 @@
 import csv
 import json
 from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
+# Use Paris timezone for GTFS schedules
+PARIS_TZ = ZoneInfo('Europe/Paris')
 
 target_route_id = '11821953316814877'
 target_stop_id = '3377704015495667'
 
 # Generate for today and next 7 days
-start_date = datetime.now()
+start_date = datetime.now(PARIS_TZ)
 dates = [(start_date + timedelta(days=i)).strftime('%Y%m%d') for i in range(8)]
 
 schedule_data = {}
@@ -50,7 +54,7 @@ with open('gtfs_data/stop_times.txt', 'r') as f:
 final_schedule = []
 
 for date_str in dates:
-    dt = datetime.strptime(date_str, '%Y%m%d')
+    dt = datetime.strptime(date_str, '%Y%m%d').replace(tzinfo=PARIS_TZ)
     day_of_week = dt.weekday() # 0=Mon, 6=Sun
     days_key = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'][day_of_week]
     
