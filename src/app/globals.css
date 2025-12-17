@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
 
 @theme inline {
   --color-background: #0a0a0a;
@@ -138,4 +139,102 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #444;
+}
+
+/* =================================
+   Leaflet Map Custom Styles
+   ================================= */
+
+/* Bus marker styles */
+.bus-marker {
+  background: none !important;
+  border: none !important;
+}
+
+.bus-icon-container {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bus-icon {
+  font-size: 28px;
+  z-index: 2;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+.bus-icon-pulse {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  background: rgba(141, 198, 63, 0.4);
+  border-radius: 50%;
+  animation: busPulse 2s ease-in-out infinite;
+}
+
+@keyframes busPulse {
+
+  0%,
+  100% {
+    transform: scale(0.8);
+    opacity: 0.8;
+  }
+
+  50% {
+    transform: scale(1.4);
+    opacity: 0;
+  }
+}
+
+/* Terminus marker styles */
+.terminus-marker {
+  background: none !important;
+  border: none !important;
+}
+
+/* Custom popup styles - Glassmorphism */
+.leaflet-popup-content-wrapper {
+  background: rgba(22, 22, 22, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  color: white;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  padding: 0 !important;
+  overflow: hidden;
+}
+
+.leaflet-popup-tip {
+  background: rgba(22, 22, 22, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-top: none !important;
+  border-left: none !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: auto !important;
+  min-width: 200px;
+}
+
+.leaflet-popup-close-button {
+  color: rgba(255, 255, 255, 0.6) !important;
+  padding: 8px !important;
+  font-size: 20px !important;
+  z-index: 10;
+}
+
+.leaflet-popup-close-button:hover {
+  color: white !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 0 12px 0 12px;
+}
+
+/* Remove default marker shadow */
+.leaflet-marker-shadow {
+  display: none;
 }

@@ -1,0 +1,32 @@
+import { CircleMarker, Popup } from 'react-leaflet';
+import { Stop } from '@/hooks/useLine20Data';
+
+interface StopMarkerProps {
+    stop: Stop;
+    isTerminus: boolean;
+    routeColor: string;
+}
+
+export default function StopMarker({ stop, isTerminus, routeColor }: StopMarkerProps) {
+    return (
+        <CircleMarker
+            center={[stop.lat, stop.lon]}
+            radius={isTerminus ? 8 : 4}
+            fillColor={isTerminus ? routeColor : '#ffffff'}
+            fillOpacity={isTerminus ? 1 : 0.8}
+            color={isTerminus ? '#ffffff' : routeColor}
+            weight={isTerminus ? 2 : 1}
+        >
+            <Popup>
+                <div className="text-white">
+                    <div className="font-bold text-lg mb-1">{stop.name}</div>
+                    {isTerminus && (
+                        <span className="inline-block px-2 py-0.5 rounded bg-green-500/20 text-green-400 text-xs border border-green-500/50">
+                            Terminus
+                        </span>
+                    )}
+                </div>
+            </Popup>
+        </CircleMarker>
+    );
+}

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { RefreshCw, AlertTriangle, Bus, Train, Filter, WifiOff } from 'lucide-react';
+import Link from 'next/link';
+import { RefreshCw, AlertTriangle, Bus, Train, Filter, WifiOff, Map } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
@@ -62,7 +63,16 @@ export default function Home() {
                 Départs & Arrivées
               </p>
             </div>
-            <ClockWidget />
+            <div className="flex items-center gap-4">
+              <Link
+                href="/carte"
+                className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg transition-all hover:scale-105 active:scale-95"
+              >
+                <Map className="w-5 h-5" />
+                <span className="hidden sm:inline">Carte Live</span>
+              </Link>
+              <ClockWidget />
+            </div>
           </div>
 
           {/* Controls Row */}
