@@ -41,8 +41,9 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 - **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
 - **Animations Optimisées** : Transitions douces et squelettes de chargement sans animations agressives.
-- **Progressive Web App (PWA)** : Installable sur mobile comme une application native, fonctionne hors ligne.
+- **Progressive Web App (PWA)** : Installable sur mobile comme une application native.
 - **Auto-Refresh** : Mise à jour automatique des données toutes les 30 secondes sans clignotement.
+- **Cache Intelligent** : Stratégie network-first pour toujours afficher le contenu à jour, avec mises à jour automatiques du Service Worker.
 
 ## 🛠 Architecture Technique
 
