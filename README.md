@@ -28,6 +28,15 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Détails du Train** : Numéro de train et statut du retard en temps réel.
 - **Trains Annulés** : Détection et affichage des trains supprimés avec statut "ANNULÉ" en rouge.
 
+### 🗺️ Carte Live (Ligne 20)
+
+- **Position en temps réel** : Visualisation des bus sur une carte interactive avec le tracé de la ligne.
+- **Estimation intelligente** : Positions estimées à partir des données GTFS-RT Trip Updates avec "Snap to Route".
+- **Direction affichée** : Bandeau indiquant le terminus (→ Musée d'Art Roger Quilliot ou → GERZAT Champfleuri).
+- **ETA au terminus** : Heure d'arrivée estimée au terminus pour chaque bus.
+- **Prochain arrêt** : Nom de l'arrêt suivant et heure d'arrivée estimée.
+- **Indicateur de retard** : Retard affiché en temps réel dans le popup.
+
 ### ✨ Expérience Utilisateur (UX/UI)
 
 - **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
