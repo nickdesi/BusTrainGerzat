@@ -10,30 +10,58 @@ export default function ServiceWorkerRegistration() {
         if (typeof window === 'undefined') return;
 
         try {
-            // Register service worker
+            // Register service worker with aggressive update checking
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
                     .then((registration) => {
                         console.log('SW registered:', registration.scope);
+
+                        // Check for updates immediately
+                        registration.update();
+
+                        // Check for updates every 30 seconds
+                        setInterval(() => registration.update(), 30000);
+
+                        // Listen for new service worker
+                        registration.addEventListener('updatefound', () => {
+                            const newWorker = registration.installing;
+                            if (newWorker) {
+                                newWorker.addEventListener('statechange', () => {
+                                    if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                        // New version installed, force refresh
+                                        console.log('New version available, refreshing...');
+                                        newWorker.postMessage('skipWaiting');
+                                        window.location.reload();
+                                    }
+                                });
+                            }
+                        });
                     })
                     .catch((error) => {
                         console.warn('SW registration failed:', error);
                     });
+
+                // Handle controller change (new SW took over)
+                navigator.serviceWorker.addEventListener('controllerchange', () => {
+                    console.log('Controller changed, reloading...');
+                    window.location.reload();
+                });
             }
 
             // Online/offline detection
             const handleOnline = () => setShowOfflineBanner(false);
             const handleOffline = () => setShowOfflineBanner(true);
 
-            // Check initial state
-            if (!navigator.onLine) {
-                setShowOfflineBanner(true);
-            }
+            // Check initial state - use timeout to avoid sync setState
+            const checkOnline = setTimeout(() => {
+                if (!navigator.onLine) setShowOfflineBanner(true);
+            }, 0);
 
             window.addEventListener('online', handleOnline);
             window.addEventListener('offline', handleOffline);
 
             return () => {
+                clearTimeout(checkOnline);
                 window.removeEventListener('online', handleOnline);
                 window.removeEventListener('offline', handleOffline);
             };
