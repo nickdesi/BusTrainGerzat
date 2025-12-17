@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { RefreshCw, AlertTriangle, Bus, Train, Filter, WifiOff, Map } from 'lucide-react';
+import { RefreshCw, Bus, Train, Filter, WifiOff, Map } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';

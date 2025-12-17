@@ -21,29 +21,23 @@ const Polyline = dynamic(
     () => import('react-leaflet').then((mod) => mod.Polyline),
     { ssr: false }
 );
-const Marker = dynamic(
-    () => import('react-leaflet').then((mod) => mod.Marker),
-    { ssr: false }
-);
-const Popup = dynamic(
-    () => import('react-leaflet').then((mod) => mod.Popup),
-    { ssr: false }
-);
-const CircleMarker = dynamic(
-    () => import('react-leaflet').then((mod) => mod.CircleMarker),
-    { ssr: false }
-);
 
-// Zoom handler component
-const ZoomHandler = ({ setZoom }: { setZoom: (z: number) => void }) => {
-    const { useMapEvents } = require('react-leaflet');
-    useMapEvents({
-        zoomend: (e: any) => {
-            setZoom(e.target.getZoom());
-        },
-    });
-    return null;
-};
+// Zoom handler component - using useMapEvents hook
+const ZoomHandlerComponent = dynamic(
+    () => import('react-leaflet').then((mod) => {
+        const { useMapEvents } = mod;
+        // eslint-disable-next-line react/display-name
+        return function ZoomHandler({ setZoom }: { setZoom: (z: number) => void }) {
+            useMapEvents({
+                zoomend: (e) => {
+                    setZoom(e.target.getZoom());
+                },
+            });
+            return null;
+        };
+    }),
+    { ssr: false }
+);
 
 // Center of the Line 20 route (approximately)
 const MAP_CENTER: [number, number] = [45.81, 3.135];
@@ -62,27 +56,21 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
 
 
-    // Identify terminus stops (first and last in each direction)
+    // Identify terminus stops (only main termini)
     const terminusStopIds = useMemo(() => {
         if (!lineData) return new Set<string>();
         const ids = new Set<string>();
 
-        // Find min and max sequence for each direction
-        const dir0Stops = lineData.stops.filter(s => s.direction === 0);
-        const dir1Stops = lineData.stops.filter(s => s.direction === 1);
+        const MAIN_TERMINI = [
+            'GERZAT Champfleuri',
+            "Musée d'Art Roger Quilliot"
+        ];
 
-        if (dir0Stops.length > 0) {
-            const minSeq = Math.min(...dir0Stops.map(s => s.sequence));
-            const maxSeq = Math.max(...dir0Stops.map(s => s.sequence));
-            dir0Stops.filter(s => s.sequence === minSeq || s.sequence === maxSeq)
-                .forEach(s => ids.add(s.stopId));
-        }
-        if (dir1Stops.length > 0) {
-            const minSeq = Math.min(...dir1Stops.map(s => s.sequence));
-            const maxSeq = Math.max(...dir1Stops.map(s => s.sequence));
-            dir1Stops.filter(s => s.sequence === minSeq || s.sequence === maxSeq)
-                .forEach(s => ids.add(s.stopId));
-        }
+        lineData.stops.forEach(stop => {
+            if (MAIN_TERMINI.includes(stop.name)) {
+                ids.add(stop.stopId);
+            }
+        });
 
         return ids;
     }, [lineData]);
@@ -133,7 +121,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 className="h-full w-full z-0"
                 scrollWheelZoom={true}
             >
-                <ZoomHandler setZoom={setCurrentZoom} />
+                <ZoomHandlerComponent setZoom={setCurrentZoom} />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
                     url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
@@ -176,10 +164,39 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                     );
                 })}
 
-                {/* Vehicle markers */}
-                {vehicleData?.vehicles.map((vehicle: VehiclePosition) => (
-                    <BusMarker key={vehicle.tripId} vehicle={vehicle} />
-                ))}
+                {/* Vehicle markers with collision detection */}
+                {(() => {
+                    const sortedVehicles = [...(vehicleData?.vehicles || [])].sort((a, b) => a.lat - b.lat || a.lon - b.lon);
+                    const positions = new Map<string, number>();
+
+                    return sortedVehicles.map((vehicle: VehiclePosition) => {
+                        const key = `${vehicle.lat}-${vehicle.lon}`;
+                        const count = positions.get(key) || 0;
+                        positions.set(key, count + 1);
+
+                        // If multiple buses are at the exact same spot, apply a small offset
+                        // 0.0001 degrees is roughly 11 meters
+                        let displayLat = vehicle.lat;
+                        let displayLon = vehicle.lon;
+
+                        if (count > 0) {
+                            // Circular offset pattern (0°, 90°, 180°, 270°) for even distribution
+                            const angle = (count * 90) * Math.PI / 180;
+                            const offset = 0.00012; // ~13m offset
+                            displayLat += offset * Math.cos(angle);
+                            displayLon += offset * Math.sin(angle);
+                        }
+
+                        // Create a modified vehicle object for display
+                        const displayVehicle = {
+                            ...vehicle,
+                            lat: displayLat,
+                            lon: displayLon
+                        };
+
+                        return <BusMarker key={vehicle.tripId} vehicle={displayVehicle} />;
+                    });
+                })()}
             </MapContainer>
 
             {/* Legend */}

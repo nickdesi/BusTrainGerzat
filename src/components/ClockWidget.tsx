@@ -5,14 +5,24 @@ import { Clock, Calendar } from 'lucide-react';
 import SplitFlapDisplay from './SplitFlapDisplay';
 
 export default function ClockWidget() {
-    const [currentTime, setCurrentTime] = useState<Date | null>(null);
+    // Use lazy initial state to avoid hydration mismatch and set initial value in effect callback
+    const [currentTime, setCurrentTime] = useState<Date | null>(() => {
+        // Return null during SSR to avoid hydration mismatch
+        if (typeof window === 'undefined') return null;
+        return null; // We'll set it in the interval callback
+    });
 
     useEffect(() => {
-        setCurrentTime(new Date());
+        // Set initial time via interval callback (not synchronously)
         const timer = setInterval(() => {
             setCurrentTime(new Date());
         }, 1000);
-        return () => clearInterval(timer);
+        // Trigger first update immediately via timeout (async, not sync)
+        const immediate = setTimeout(() => setCurrentTime(new Date()), 0);
+        return () => {
+            clearInterval(timer);
+            clearTimeout(immediate);
+        };
     }, []);
 
     const formatClock = () => {

@@ -18,7 +18,7 @@ interface EstimatedVehicle {
 }
 
 const LINE_20_ROUTE_ID = '11821953316814877';
-const GERZAT_STOP_ID = '3377704015495667';
+
 
 export async function GET() {
     try {
@@ -86,7 +86,7 @@ export async function GET() {
                         // Calculate estimated position
                         let lat = nextStop.lat;
                         let lon = nextStop.lon;
-                        let progress = currentStopIndex / stopTimeUpdates.length;
+                        const progress = (nextStopUpdate.stopSequence ?? 0) / (tripUpdate.stopTimeUpdate?.length || 1);
                         let bearing = 0;
 
                         // Calculate bearing function
@@ -102,7 +102,57 @@ export async function GET() {
                             return (toDeg(Math.atan2(y, x)) + 360) % 360;
                         };
 
-                        // If we have a previous stop, interpolate position
+                        // Snap to Route Logic
+                        const snapToRoute = (lat: number, lon: number, shapePoints: number[][]) => {
+                            let minDest = Infinity;
+                            let bestLat = lat;
+                            let bestLon = lon;
+                            let bestBearing = 0;
+
+                            for (let i = 0; i < shapePoints.length - 1; i++) {
+                                const [p1Lat, p1Lon] = shapePoints[i];
+                                const [p2Lat, p2Lon] = shapePoints[i + 1];
+
+                                // Project point onto segment
+                                const A = lat - p1Lat;
+                                const B = lon - p1Lon;
+                                const C = p2Lat - p1Lat;
+                                const D = p2Lon - p1Lon;
+
+                                const dot = A * C + B * D;
+                                const lenSq = C * C + D * D;
+                                let param = -1;
+                                if (lenSq !== 0) param = dot / lenSq;
+
+                                let xx, yy;
+
+                                if (param < 0) {
+                                    xx = p1Lat;
+                                    yy = p1Lon;
+                                } else if (param > 1) {
+                                    xx = p2Lat;
+                                    yy = p2Lon;
+                                } else {
+                                    xx = p1Lat + param * C;
+                                    yy = p1Lon + param * D;
+                                }
+
+                                const dx = lat - xx;
+                                const dy = lon - yy;
+                                const dist = dx * dx + dy * dy;
+
+                                if (dist < minDest) {
+                                    minDest = dist;
+                                    bestLat = xx;
+                                    bestLon = yy;
+                                    // Use segment bearing
+                                    bestBearing = calculateBearing(p1Lat, p1Lon, p2Lat, p2Lon);
+                                }
+                            }
+                            return { lat: bestLat, lon: bestLon, bearing: bestBearing };
+                        };
+
+                        // Initial linear interpolation
                         if (prevStopUpdate) {
                             const prevStopId = prevStopUpdate.stopId as string;
                             const prevStop = stopsById.get(prevStopId);
@@ -110,15 +160,32 @@ export async function GET() {
                                 const prevTime = Number(prevStopUpdate.departure?.time || prevStopUpdate.arrival?.time || 0);
                                 const nextTime = Number(nextStopUpdate.arrival?.time || 0);
 
-                                // Calculate bearing between stops regardless of progress to establish direction
-                                bearing = calculateBearing(prevStop.lat, prevStop.lon, nextStop.lat, nextStop.lon);
-
                                 if (nextTime > prevTime) {
                                     const fraction = (now - prevTime) / (nextTime - prevTime);
                                     const clampedFraction = Math.max(0, Math.min(1, fraction));
 
                                     lat = prevStop.lat + (nextStop.lat - prevStop.lat) * clampedFraction;
                                     lon = prevStop.lon + (nextStop.lon - prevStop.lon) * clampedFraction;
+                                }
+                            }
+                        }
+
+                        // Apply Snap to Route if shape is available
+                        const directionKey = `direction${nextStop.direction}` as keyof typeof line20Data.shapes;
+                        const shape = line20Data.shapes[directionKey];
+
+                        if (shape && Array.isArray(shape)) {
+                            const snapped = snapToRoute(lat, lon, shape as number[][]);
+                            lat = snapped.lat;
+                            lon = snapped.lon;
+                            bearing = snapped.bearing;
+                        } else {
+                            // Fallback bearing if no shape or snap failed
+                            if (prevStopUpdate) {
+                                const prevStopId = prevStopUpdate.stopId as string;
+                                const prevStop = stopsById.get(prevStopId);
+                                if (prevStop) {
+                                    bearing = calculateBearing(prevStop.lat, prevStop.lon, nextStop.lat, nextStop.lon);
                                 }
                             }
                         }
@@ -140,8 +207,8 @@ export async function GET() {
                     }
                 });
             }
-        } catch (e) {
-            console.error('Failed to fetch trip updates for vehicle estimation:', e);
+        } catch {
+            // Failed to fetch trip updates - continue without estimated positions
         }
 
         return NextResponse.json({
@@ -150,8 +217,7 @@ export async function GET() {
             count: estimatedVehicles.length,
             isEstimated: true, // Flag to indicate these are estimated positions
         });
-    } catch (error) {
-        console.error('Error in vehicles API route:', error);
+    } catch {
         return NextResponse.json(
             { error: 'Failed to estimate vehicle positions' },
             { status: 500 }

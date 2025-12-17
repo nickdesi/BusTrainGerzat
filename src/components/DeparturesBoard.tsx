@@ -1,8 +1,9 @@
+import { memo } from 'react';
 import { ArrowRight, Bus, Train, RefreshCw } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
-import { formatTime } from '@/utils/format';
+import { formatTime, getDisplayTime } from '@/utils/format';
 
 interface DeparturesBoardProps {
     departures: UnifiedEntry[];
@@ -10,13 +11,7 @@ interface DeparturesBoardProps {
     boardType?: 'departures' | 'arrivals';
 }
 
-// Helper to get the display time based on board type
-const getDisplayTime = (entry: UnifiedEntry, boardType: 'departures' | 'arrivals') => {
-    if (entry.type === 'TER') return null; // TER shows both times
-    return boardType === 'arrivals' ? entry.arrivalTime : entry.departureTime;
-};
-
-export default function DeparturesBoard({ departures, loading, boardType = 'departures' }: DeparturesBoardProps) {
+export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures' }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
 
     return (
@@ -144,4 +139,4 @@ export default function DeparturesBoard({ departures, loading, boardType = 'depa
             </table>
         </div>
     );
-}
+});
