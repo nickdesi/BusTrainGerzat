@@ -7,10 +7,12 @@ export interface VehiclePosition {
     direction: number;
     nextStop: string;
     nextStopName: string;
+    headsign: string; // Terminus name
     bearing: number;
     delay: number;
     progress: number;
     estimatedArrival: number;
+    terminusEta: number; // ETA at terminus
 }
 
 interface VehiclesResponse {

@@ -45,6 +45,13 @@ export default function BusMarker({ vehicle }: BusMarkerProps) {
                         <span>Ligne 20</span>
                     </div>
 
+                    {/* Direction indicator */}
+                    <div className="bg-green-500/20 border border-green-500/30 rounded px-2 py-1 mb-2 text-center">
+                        <span className="text-green-400 font-medium text-sm">
+                            → {vehicle.headsign}
+                        </span>
+                    </div>
+
                     <div className="space-y-2">
                         <div className="bg-white/5 rounded p-2 border border-white/10">
                             <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Prochain arrêt</div>
@@ -63,6 +70,14 @@ export default function BusMarker({ vehicle }: BusMarkerProps) {
                                 <div className="font-bold text-white">
                                     {new Date(vehicle.estimatedArrival * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                                 </div>
+                            </div>
+                        </div>
+
+                        {/* Terminus ETA */}
+                        <div className="bg-white/5 rounded p-2 border border-white/10">
+                            <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Terminus ({vehicle.headsign.split(' ')[0]})</div>
+                            <div className="font-medium text-yellow-400">
+                                ETA: {new Date(vehicle.terminusEta * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
                             </div>
                         </div>
                     </div>

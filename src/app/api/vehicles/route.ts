@@ -11,10 +11,12 @@ interface EstimatedVehicle {
     direction: number;
     nextStop: string;
     nextStopName: string;
+    headsign: string; // Terminus name (e.g., "Musée d'Art Roger Quilliot")
     bearing: number;
     delay: number;
     progress: number; // 0-1 progress along the route
     estimatedArrival: number;
+    terminusEta: number; // Estimated arrival at terminus
 }
 
 const LINE_20_ROUTE_ID = '11821953316814877';
@@ -192,6 +194,15 @@ export async function GET() {
 
                         const delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
 
+                        // Get terminus info based on direction
+                        const headsign = nextStop.direction === 0
+                            ? "Musée d'Art Roger Quilliot"
+                            : "GERZAT Champfleuri";
+
+                        // Get terminus ETA (last stop in the trip)
+                        const lastStopUpdate = stopTimeUpdates[stopTimeUpdates.length - 1];
+                        const terminusEta = Number(lastStopUpdate?.arrival?.time || lastStopUpdate?.departure?.time || 0);
+
                         estimatedVehicles.push({
                             tripId: tripUpdate.trip.tripId as string,
                             lat,
@@ -199,10 +210,12 @@ export async function GET() {
                             direction: nextStop.direction,
                             nextStop: nextStopId,
                             nextStopName: nextStop.name,
+                            headsign,
                             bearing,
                             delay: delay,
                             progress,
                             estimatedArrival: Number(nextStopUpdate.arrival?.time || 0),
+                            terminusEta,
                         });
                     }
                 });
