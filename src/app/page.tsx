@@ -2,37 +2,94 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { RefreshCw, Bus, Train, Filter, WifiOff, Map } from 'lucide-react';
+import { RefreshCw, Bus, Train, Filter, WifiOff, Map, Eye, EyeOff } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
 import RelativeTime from '@/components/RelativeTime';
+import SearchWidget from '@/components/SearchWidget';
 import { useDepartures } from '@/hooks/useDepartures';
 import { useDelayNotifications } from '@/hooks/useDelayNotifications';
+import { useFavorites } from '@/hooks/useFavorites';
+import { useColorblind } from '@/context/ColorblindContext';
+import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
+import { AlertTriangle } from 'lucide-react';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
   const [filter, setFilter] = useState<TransportFilter>('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const { favorites, toggleFavorite } = useFavorites();
+  const { isColorblindMode, toggleColorblindMode } = useColorblind();
+  const { getPrediction } = usePredictiveDelay();
+
+  // Smart Alert Logic: Check if any favorited line has a predicted delay
+  const smartAlert = useMemo(() => {
+    if (favorites.length === 0) return null;
+
+    // Check next departures for favorites
+    for (const departure of departures) {
+      if (!favorites.some(f => f.id === `${departure.line}-${departure.destination}`)) continue;
+
+      const dTime = new Date(departure.departureTime);
+      const prediction = getPrediction(departure.line, dTime.getHours(), dTime.getDay());
+
+      if (prediction.probability === 'HIGH') {
+        return {
+          line: departure.line,
+          destination: departure.destination,
+          delay: prediction.estimatedDelay,
+          reason: prediction.reason
+        };
+      }
+    }
+    return null;
+  }, [departures, favorites]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Enable delay notifications
+
   useDelayNotifications(departures, arrivals);
 
-  // Filter departures and arrivals based on transport type
+  // Filter departures and arrivals based on transport type and search query
   const filteredDepartures = useMemo(() => {
-    if (filter === 'all') return departures;
-    if (filter === 'bus') return departures.filter(d => d.type === 'BUS');
-    return departures.filter(d => d.type === 'TER');
-  }, [departures, filter]);
+    let result = departures;
+
+    // Type filter
+    if (filter === 'bus') result = result.filter(d => d.type === 'BUS');
+    else if (filter === 'train') result = result.filter(d => d.type === 'TER');
+
+    // Search filter
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(d =>
+        d.line.toLowerCase().includes(q) ||
+        d.destination.toLowerCase().includes(q)
+      );
+    }
+    return result;
+  }, [departures, filter, searchQuery]);
 
   const filteredArrivals = useMemo(() => {
-    if (filter === 'all') return arrivals;
-    if (filter === 'bus') return arrivals.filter(a => a.type === 'BUS');
-    return arrivals.filter(a => a.type === 'TER');
-  }, [arrivals, filter]);
+    let result = arrivals;
+
+    // Type filter
+    if (filter === 'bus') result = result.filter(a => a.type === 'BUS');
+    else if (filter === 'train') result = result.filter(a => a.type === 'TER');
+
+    // Search filter
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(a =>
+        a.line.toLowerCase().includes(q) ||
+        (a.provenance && a.provenance.toLowerCase().includes(q))
+      );
+    }
+    return result;
+  }, [arrivals, filter, searchQuery]);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a] text-gray-100 font-sans">
+    <main id="main-content" className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a] text-gray-100 font-sans">
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
 
         {/* Error Banner */}
@@ -63,10 +120,43 @@ export default function Home() {
                 Départs & Arrivées
               </p>
             </div>
-            <div className="flex items-center gap-4">
-              <ClockWidget />
+            <div className="flex flex-col gap-4 items-end">
+              <div className="flex items-center gap-4">
+                <button
+                  onClick={toggleColorblindMode}
+                  className={`p-2 rounded-lg border transition-colors ${isColorblindMode ? 'bg-blue-900/50 border-blue-500 text-blue-400' : 'bg-gray-800 border-gray-700 text-gray-400 hover:text-gray-200'}`}
+                  title={isColorblindMode ? "Désactiver mode daltonien" : "Activer mode daltonien"}
+                  aria-label={isColorblindMode ? "Désactiver le mode daltonien" : "Activer le mode daltonien"}
+                  aria-pressed={isColorblindMode}
+                >
+                  {isColorblindMode ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
+                </button>
+                <ClockWidget />
+              </div>
+              <div className="w-full max-w-[200px] lg:max-w-xs">
+                <SearchWidget onSearch={setSearchQuery} />
+              </div>
             </div>
           </div>
+
+          {/* Smart Alert Banner */}
+          {smartAlert && (
+            <div className="mt-6 p-4 rounded-lg bg-purple-900/40 border border-purple-500/50 flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+              <div className="p-2 bg-purple-900/50 rounded-full shrink-0">
+                <AlertTriangle className="w-6 h-6 text-purple-400" />
+              </div>
+              <div>
+                <h3 className="text-purple-200 font-bold flex items-center gap-2">
+                  Perturbation probable sur vos favoris
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 border border-purple-500/30 uppercase">IA</span>
+                </h3>
+                <p className="text-purple-300/80 text-sm mt-1">
+                  Ligne <span className="font-bold text-white">{smartAlert.line}</span> vers {smartAlert.destination} :
+                  Risque de <span className="font-bold text-white">+{smartAlert.delay} min</span> ({smartAlert.reason})
+                </p>
+              </div>
+            </div>
+          )}
 
           {/* Controls Row */}
           <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-900/50 rounded-lg p-4 border border-gray-800">
@@ -141,7 +231,12 @@ export default function Home() {
               {filter !== 'all' && <span className="text-sm font-normal opacity-70">({filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'})</span>}
             </h2>
           </div>
-          <DeparturesBoard departures={filteredDepartures} loading={isLoading} />
+          <DeparturesBoard
+            departures={filteredDepartures}
+            loading={isLoading}
+            favorites={favorites.map(f => f.id)}
+            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+          />
           <DeparturesList departures={filteredDepartures} loading={isLoading} />
         </div>
 
@@ -154,7 +249,13 @@ export default function Home() {
               {filter !== 'all' && <span className="text-sm font-normal opacity-70">({filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'})</span>}
             </h2>
           </div>
-          <DeparturesBoard departures={filteredArrivals} loading={isLoading} boardType="arrivals" />
+          <DeparturesBoard
+            departures={filteredArrivals}
+            loading={isLoading}
+            boardType="arrivals"
+            favorites={favorites.map(f => f.id)}
+            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+          />
           <DeparturesList departures={filteredArrivals} loading={isLoading} boardType="arrivals" />
         </div>
 

@@ -37,13 +37,22 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Prochain arrêt** : Nom de l'arrêt suivant et heure d'arrivée estimée.
 - **Indicateur de retard** : Retard affiché en temps réel dans le popup.
 
-### ✨ Expérience Utilisateur (UX/UI)
+### ✨ Expérience Utilisateur (UX/UI & Accessibilité)
 
 - **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
-- **Animations Optimisées** : Transitions douces et squelettes de chargement sans animations agressives.
-- **Progressive Web App (PWA)** : Installable sur mobile comme une application native.
-- **Auto-Refresh** : Mise à jour automatique des données toutes les 30 secondes sans clignotement.
-- **Cache Intelligent** : Stratégie network-first pour toujours afficher le contenu à jour, avec mises à jour automatiques du Service Worker.
+- **Recherche & Favoris** : Filtrage instantané des lignes et mise en favoris pour un accès rapide en haut de liste.
+- **Accessibilité (A11y)** : Mode Daltonien (couleurs contrastées), navigation clavier optimisée (Skip Link) et attributs ARIA complets.
+
+### 🧠 Intelligence Artificielle (Phase 3)
+
+- **Prédictions de Retard** : Badges "IA" indiquant les risques de retard basés sur l'historique (heures de pointe, sorties scolaires).
+- **Alertes Intelligentes** : Bannière dynamique avertissant des perturbations probables sur vos lignes favorites dès l'ouverture.
+
+### ⚡ Performance & Temps Réel (Phase 4)
+
+- **Server-Sent Events (SSE)** : Flux de données continu sans rechargement (plus de polling API).
+- **Mises à jour Silencieuses** : Rafraîchissement instantané des horaires et statuts sans clignotement.
+- **Cache Intelligent** : Stratégie network-first via Service Worker pour une PWA ultra-rapide.
 
 ## 🛠 Architecture Technique
 

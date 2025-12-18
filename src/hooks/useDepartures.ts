@@ -1,4 +1,4 @@
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { UnifiedEntry, Update, TrainUpdate } from '@/types';
 import { normalizeText } from '@/utils/format';
@@ -39,6 +39,8 @@ export function useDepartures() {
     } = useQuery({
         queryKey: ['bus-realtime'],
         queryFn: fetchBusData,
+        refetchInterval: false, // Disable polling, use SSE
+        refetchOnWindowFocus: false,
     });
 
     const {
@@ -50,7 +52,39 @@ export function useDepartures() {
     } = useQuery({
         queryKey: ['train-realtime'],
         queryFn: fetchTrainData,
+        refetchInterval: false, // Disable polling, use SSE
+        refetchOnWindowFocus: false,
     });
+
+    // SSE Subscription
+    useEffect(() => {
+        const eventSource = new EventSource('/api/stream');
+
+        eventSource.onmessage = (event) => {
+            try {
+                const data = JSON.parse(event.data);
+                if (data.bus) {
+                    queryClient.setQueryData(['bus-realtime'], data.bus);
+                }
+                if (data.train) {
+                    queryClient.setQueryData(['train-realtime'], data.train);
+                }
+            } catch (err) {
+                console.error('Failed to parse SSE data', err);
+            }
+        };
+
+        eventSource.onerror = (err) => {
+            console.error('SSE Error', err);
+            eventSource.close();
+            // Optional: Strategy to reconnect or fallback to polling could go here
+            // For now, EventSource auto-retries connection errors
+        };
+
+        return () => {
+            eventSource.close();
+        };
+    }, [queryClient]);
 
     const isLoading = busLoading || trainLoading;
     const isFetching = busFetching || trainFetching;
