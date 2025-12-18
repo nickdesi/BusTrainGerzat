@@ -21,10 +21,26 @@ interface EstimatedVehicle {
 
 const LINE_20_ROUTE_ID = '11821953316814877';
 
+// Simple in-memory cache
+let vehicleCache: {
+    data: any;
+    timestamp: number;
+} | null = null;
+const CACHE_DURATION = 5000; // 5 seconds
 
 export async function GET() {
     try {
         const now = Math.floor(Date.now() / 1000);
+
+        // Return cached data if valid
+        if (vehicleCache && (Date.now() - vehicleCache.timestamp < CACHE_DURATION)) {
+            return NextResponse.json({
+                ...vehicleCache.data,
+                timestamp: now, // Update timestamp to show liveness
+                cached: true
+            });
+        }
+
         const estimatedVehicles: EstimatedVehicle[] = [];
 
         // Fetch trip updates to see which trips are currently active
@@ -233,12 +249,20 @@ export async function GET() {
             // Failed to fetch trip updates - continue without estimated positions
         }
 
-        return NextResponse.json({
+        const responseData = {
             vehicles: estimatedVehicles,
             timestamp: now,
             count: estimatedVehicles.length,
-            isEstimated: true, // Flag to indicate these are estimated positions
-        });
+            isEstimated: true,
+        };
+
+        // Update cache
+        vehicleCache = {
+            data: responseData,
+            timestamp: Date.now()
+        };
+
+        return NextResponse.json(responseData);
     } catch {
         return NextResponse.json(
             { error: 'Failed to estimate vehicle positions' },

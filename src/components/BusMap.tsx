@@ -88,6 +88,40 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         return Array.from(seen.values());
     }, [lineData]);
 
+    // Vehicle markers with collision detection
+    const vehicleMarkers = useMemo(() => {
+        const sortedVehicles = [...(vehicleData?.vehicles || [])].sort((a, b) => a.lat - b.lat || a.lon - b.lon);
+        const positions = new Map<string, number>();
+
+        return sortedVehicles.map((vehicle: VehiclePosition) => {
+            const key = `${vehicle.lat}-${vehicle.lon}`;
+            const count = positions.get(key) || 0;
+            positions.set(key, count + 1);
+
+            // If multiple buses are at the exact same spot, apply a small offset
+            // 0.0001 degrees is roughly 11 meters
+            let displayLat = vehicle.lat;
+            let displayLon = vehicle.lon;
+
+            if (count > 0) {
+                // Circular offset pattern (0°, 90°, 180°, 270°) for even distribution
+                const angle = (count * 90) * Math.PI / 180;
+                const offset = 0.00012; // ~13m offset
+                displayLat += offset * Math.cos(angle);
+                displayLon += offset * Math.sin(angle);
+            }
+
+            // Create a modified vehicle object for display
+            const displayVehicle = {
+                ...vehicle,
+                lat: displayLat,
+                lon: displayLon
+            };
+
+            return <BusMarker key={vehicle.tripId} vehicle={displayVehicle} />;
+        });
+    }, [vehicleData?.vehicles]);
+
     if (lineLoading) {
         return (
             <div className="flex items-center justify-center h-full bg-gray-900">
@@ -165,38 +199,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 })}
 
                 {/* Vehicle markers with collision detection */}
-                {(() => {
-                    const sortedVehicles = [...(vehicleData?.vehicles || [])].sort((a, b) => a.lat - b.lat || a.lon - b.lon);
-                    const positions = new Map<string, number>();
-
-                    return sortedVehicles.map((vehicle: VehiclePosition) => {
-                        const key = `${vehicle.lat}-${vehicle.lon}`;
-                        const count = positions.get(key) || 0;
-                        positions.set(key, count + 1);
-
-                        // If multiple buses are at the exact same spot, apply a small offset
-                        // 0.0001 degrees is roughly 11 meters
-                        let displayLat = vehicle.lat;
-                        let displayLon = vehicle.lon;
-
-                        if (count > 0) {
-                            // Circular offset pattern (0°, 90°, 180°, 270°) for even distribution
-                            const angle = (count * 90) * Math.PI / 180;
-                            const offset = 0.00012; // ~13m offset
-                            displayLat += offset * Math.cos(angle);
-                            displayLon += offset * Math.sin(angle);
-                        }
-
-                        // Create a modified vehicle object for display
-                        const displayVehicle = {
-                            ...vehicle,
-                            lat: displayLat,
-                            lon: displayLon
-                        };
-
-                        return <BusMarker key={vehicle.tripId} vehicle={displayVehicle} />;
-                    });
-                })()}
+                {vehicleMarkers}
             </MapContainer>
 
             {/* Legend */}

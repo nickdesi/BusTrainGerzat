@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, memo } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import { VehiclePosition } from '@/hooks/useVehiclePositions';
 import { Bus } from 'lucide-react';
@@ -7,7 +7,7 @@ interface BusMarkerProps {
     vehicle: VehiclePosition;
 }
 
-export default function BusMarker({ vehicle }: BusMarkerProps) {
+const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // Create custom bus icon
     const busIcon = useMemo(() => {
         if (typeof window === 'undefined') return null;
@@ -85,4 +85,6 @@ export default function BusMarker({ vehicle }: BusMarkerProps) {
             </Popup>
         </Marker>
     );
-}
+});
+
+export default BusMarker;
