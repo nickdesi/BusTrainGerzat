@@ -69,6 +69,15 @@ export async function GET() {
                             const arrivalTime = Number(stu.arrival?.time || stu.departure?.time || 0);
 
                             if (arrivalTime > now) {
+                                // FIX: Ignore trips that are too far in the future (e.g. > 30 mins)
+                                // This prevents showing the entire day's schedule as "Live" buses
+                                if (arrivalTime - now > 1800) break;
+
+                                // FIX: For the very first stop, be stricter (e.g. > 10 mins)
+                                // We don't want to show a bus waiting at terminus for 20 mins
+                                const isFirstStop = stu.stopSequence === 1;
+                                if (isFirstStop && (arrivalTime - now > 600)) break;
+
                                 currentStopIndex = i;
                                 nextStopUpdate = stu;
                                 if (i > 0) {
