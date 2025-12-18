@@ -98,7 +98,7 @@ for date_str in dates:
 final_schedule.sort(key=lambda x: x['arrival'])
 
 # Save
-with open('src/app/api/realtime/static_schedule.json', 'w') as f:
+with open('src/data/static_schedule.json', 'w') as f:
     json.dump(final_schedule, f, indent=2)
 
 print(f"Generated {len(final_schedule)} scheduled stops")

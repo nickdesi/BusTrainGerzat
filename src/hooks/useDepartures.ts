@@ -90,11 +90,10 @@ export function useDepartures() {
     const isFetching = busFetching || trainFetching;
     const error = busError || trainError;
 
-    const updates: Update[] = busData?.updates || [];
-    const trainUpdates: TrainUpdate[] = trainData?.updates || [];
-
     // Memoized departures and arrivals
     const { departures, arrivals } = useMemo(() => {
+        const updates: Update[] = busData?.updates || [];
+        const trainUpdates: TrainUpdate[] = trainData?.updates || [];
         // Bus mapping - use departure time for departures board sorting
         const mapBusDeparture = (bus: Update): UnifiedEntry => ({
             id: `bus-${bus.tripId}-${bus.departure}`,
@@ -162,7 +161,7 @@ export function useDepartures() {
         ].sort((a, b) => a.arrivalTime - b.arrivalTime);
 
         return { departures: deps, arrivals: arrs };
-    }, [updates, trainUpdates]);
+    }, [busData, trainData]);
 
     // Memoized refetch function
     const refetch = useCallback(() => {

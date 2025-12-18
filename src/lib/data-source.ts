@@ -1,5 +1,5 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
-import staticSchedule from '@/app/api/realtime/static_schedule.json';
+import staticSchedule from '@/data/static_schedule.json';
 
 // --- Types ---
 export interface BusUpdate {
