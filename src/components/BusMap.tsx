@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLine20Data, Stop } from '@/hooks/useLine20Data';
 import { useVehiclePositions, VehiclePosition } from '@/hooks/useVehiclePositions';
-import { Loader2, MapPin, AlertCircle } from 'lucide-react';
+import { Loader2, MapPin, AlertCircle, Sun, Moon } from 'lucide-react';
 import StopMarker from './StopMarker';
 import BusMarker from './BusMarker';
 
@@ -51,6 +51,13 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const { data: lineData, isLoading: lineLoading, error: lineError } = useLine20Data();
     const { data: vehicleData, isLoading: vehiclesLoading, isFetching } = useVehiclePositions();
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
+    const [isDarkMode, setIsDarkMode] = useState(true);
+
+    // Map tile URLs
+    const TILE_URLS = {
+        dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+    };
 
     // Leaflet CSS is imported in globals.css
 
@@ -158,7 +165,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 <ZoomHandlerComponent setZoom={setCurrentZoom} />
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                    url={isDarkMode ? TILE_URLS.dark : TILE_URLS.light}
                 />
 
                 {/* Route shapes */}
@@ -179,6 +186,16 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                         dashArray="10, 10"
                     />
                 )}
+                {/* Additional branch shapes (Aulnat, Les Vignes, etc.) */}
+                {lineData?.shapes.branches?.map((branch: [number, number][], index: number) => (
+                    <Polyline
+                        key={`branch-${index}`}
+                        positions={branch}
+                        color={routeColor}
+                        weight={4}
+                        opacity={0.6}
+                    />
+                ))}
 
                 {/* Stop markers - Only show standard stops when zoomed in */}
                 {showStops && uniqueStops.map((stop) => {
@@ -203,7 +220,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </MapContainer>
 
             {/* Legend */}
-            <div className="absolute bottom-4 left-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1000] border border-gray-700">
+            <div className="absolute bottom-4 left-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1001] border border-gray-700">
                 <div className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                     <MapPin className="w-4 h-4" style={{ color: routeColor }} />
                     Ligne {lineData?.routeName}
@@ -236,6 +253,17 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                         {vehiclesLoading ? 'Chargement...' : `${vehicleData?.count || 0} bus en ligne`}
                     </span>
                 </div>
+            </div>
+
+            {/* Theme Toggle */}
+            <div className="absolute bottom-4 right-4 z-[1001]">
+                <button
+                    onClick={() => setIsDarkMode(!isDarkMode)}
+                    className="bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 border border-gray-700 text-white hover:bg-gray-800 transition-colors"
+                    aria-label={isDarkMode ? 'Mode clair' : 'Mode sombre'}
+                >
+                    {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
+                </button>
             </div>
         </div>
     );

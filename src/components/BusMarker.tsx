@@ -8,20 +8,26 @@ interface BusMarkerProps {
 }
 
 const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
-    // Create custom bus icon
+    // Create custom bus icon with SVG that rotates properly
     const busIcon = useMemo(() => {
         if (typeof window === 'undefined') return null;
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const L = require('leaflet');
+
+        // SVG bus icon pointing up (will be rotated by bearing)
+        const svgIcon = `
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="#8dc63f" style="transform: rotate(${vehicle.bearing || 0}deg); filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));">
+                <path d="M12 2C8 2 4 2.5 4 6v9.5c0 .95.38 1.81 1 2.44V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-2.06c.62-.63 1-1.49 1-2.44V6c0-3.5-4-4-8-4zm-3.5 15c-.83 0-1.5-.67-1.5-1.5S7.67 14 8.5 14s1.5.67 1.5 1.5S9.33 17 8.5 17zm7 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H7V7h10v4z"/>
+            </svg>
+        `;
+
         return L.divIcon({
             className: 'bus-marker',
             html: `
                 <div class="bus-icon-container">
                     <div class="bus-icon-pulse"></div>
                     <div class="bus-icon">
-                        <div style="transform: rotate(${vehicle.bearing || 0}deg);">
-                            🚌
-                        </div>
+                        ${svgIcon}
                     </div>
                 </div>
             `,

@@ -53,26 +53,49 @@ def main():
     if not line_20_trips:
         return
     
-    # Get shape IDs for direction 0 and 1
-    shape_ids = {}
+    # Get ALL unique shape IDs (Line 20 has multiple branches)
+    # Count how many trips use each shape
+    shape_trip_counts = {}
     for trip in line_20_trips:
-        direction = trip.get('direction_id', '0')
-        if direction not in shape_ids:
-            shape_ids[direction] = trip.get('shape_id')
+        shape_id = trip.get('shape_id')
+        if shape_id:
+            shape_trip_counts[shape_id] = shape_trip_counts.get(shape_id, 0) + 1
     
-    print(f"Shape IDs: {shape_ids}")
+    # Filter out shapes with very few trips (likely errors or special services)
+    MIN_TRIPS = 10
+    all_shape_ids = {s for s, count in shape_trip_counts.items() if count >= MIN_TRIPS}
     
-    # 3. Extract shapes
+    print(f"Found {len(all_shape_ids)} shapes with >= {MIN_TRIPS} trips")
+    for shape_id, count in sorted(shape_trip_counts.items(), key=lambda x: -x[1]):
+        status = "✅" if count >= MIN_TRIPS else "❌ (filtered)"
+        print(f"  {shape_id}: {count} trips {status}")
+    
+    # 3. Extract shapes - group by shape_id
     shapes_data = read_csv("shapes.txt")
+    all_shapes = {}
+    
+    for shape_id in all_shape_ids:
+        shape_points = [(s.get('shape_pt_lat'), s.get('shape_pt_lon'), int(s.get('shape_pt_sequence', 0)))
+                       for s in shapes_data if s.get('shape_id') == shape_id]
+        shape_points.sort(key=lambda x: x[2])
+        all_shapes[shape_id] = [[float(p[0]), float(p[1])] for p in shape_points]
+        print(f"  Shape {shape_id}: {len(all_shapes[shape_id])} points")
+    
+    # Combine shapes by direction for backward compatibility
+    # direction 0 = toward Musée/Aulnat, direction 1 = toward Gerzat
     shapes = {"0": [], "1": []}
     
-    for direction, shape_id in shape_ids.items():
-        if shape_id:
-            shape_points = [(s.get('shape_pt_lat'), s.get('shape_pt_lon'), int(s.get('shape_pt_sequence', 0)))
-                           for s in shapes_data if s.get('shape_id') == shape_id]
-            shape_points.sort(key=lambda x: x[2])
-            shapes[direction] = [[float(p[0]), float(p[1])] for p in shape_points]
-            print(f"Direction {direction}: {len(shapes[direction])} shape points")
+    for trip in line_20_trips:
+        direction = trip.get('direction_id', '0')
+        shape_id = trip.get('shape_id')
+        if shape_id and shape_id in all_shapes and not shapes.get(direction):
+            shapes[direction] = all_shapes[shape_id]
+    
+    # Also expose all shapes for more complete rendering
+    additional_shapes = []
+    for shape_id, points in all_shapes.items():
+        if points != shapes.get("0") and points != shapes.get("1"):
+            additional_shapes.append(points)
     
     # 4. Find all stops for Line 20
     # First get all stop_ids from stop_times for Line 20 trips
@@ -128,7 +151,8 @@ def main():
         "stops": stops_list,
         "shapes": {
             "direction0": shapes.get("0", []),
-            "direction1": shapes.get("1", [])
+            "direction1": shapes.get("1", []),
+            "branches": additional_shapes
         }
     }
     

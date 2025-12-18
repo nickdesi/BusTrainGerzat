@@ -18,6 +18,7 @@ export interface Line20Data {
     shapes: {
         direction0: [number, number][];
         direction1: [number, number][];
+        branches?: [number, number][][];
     };
 }
 
