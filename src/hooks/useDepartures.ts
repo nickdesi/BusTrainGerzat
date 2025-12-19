@@ -142,8 +142,17 @@ export function useDepartures() {
         });
 
         // Separate and map
-        const busDepartures = deduplicate(updates.filter(u => u.direction === 0));
-        const busArrivals = deduplicate(updates.filter(u => u.direction === 1));
+        console.log('UseDepartures - Raw updates:', updates.length, updates);
+
+        // For bus stops, all directions are "Departures". We show all of them in the departures board.
+        // We still deduplicate to ensure we don't show the same bus twice if data overlaps.
+        const busDepartures = deduplicate(updates);
+
+
+        // For arrivals board, we conceptually could show the same list (as they arrive then depart)
+        // or just keep it empty/specific if needed. For now, let's mirror departures for buses 
+        // as every bus arriving also departs (except terminus).
+        const busArrivals = deduplicate(updates);
 
         // All trains from SNCF API are departures from Gerzat (with arrival time = when it arrives at Gerzat)
         // Show all trains in both boards - they arrive at Gerzat, then depart from Gerzat

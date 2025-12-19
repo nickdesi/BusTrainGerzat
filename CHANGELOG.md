@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.3.0] - 2025-12-19
+
+### ✨ Interface Utilisateur
+
+- **Mode Daltonien** : Nouveau bouton intégré dans la barre de contrôles.
+  - Styleharmonisé avec le thème ambre/noir.
+  - Meilleure visibilité et accessibilité.
+
+### 🐛 Correctifs
+
+- **Tri des Départs** : Correction critique de l'algorithme de tri.
+  - Résolution du bug où les bus (temps réel) s'affichaient après les trains.
+  - Fixe le problème de fusion des dates : les mises à jour temps réel ne sont plus appliquées à tort aux horaires du lendemain.
+
 ## [1.0.4] - 2025-12-16
 
 ### ✨ Fonctionnalités

@@ -56,11 +56,15 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                     const departureTime = stopTimeUpdate.departure?.time;
                                     const departureDelay = stopTimeUpdate.departure?.delay;
 
+                                    // Extract start date from trip update if available, or just use tripId
+                                    // Ideally we would match on start_date too.
+
                                     realtimeUpdates[tripUpdate.trip.tripId as string] = {
                                         arrival: arrivalTime != null ? { time: Number(arrivalTime), delay: arrivalDelay ?? 0 } : undefined,
                                         departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
                                         delay: Number(arrivalDelay || departureDelay || 0),
-                                        isCancelled: isTripCancelled || isStopCancelled
+                                        isCancelled: isTripCancelled || isStopCancelled,
+                                        scheduleRelationship: tripUpdate.trip.scheduleRelationship
                                     };
                                 }
                             });
@@ -88,35 +92,66 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         const timeOffset = todayMidnight - scheduleMidnight;
 
         const combinedUpdates = staticSchedule
-            .map((item: any) => ({
-                ...item,
-                arrival: item.arrival + timeOffset,
-                departure: item.departure + timeOffset
-            }))
+            .map((item: any) => {
+                // Calculate static timestamps for this item
+                const staticArrival = item.arrival + timeOffset;
+                const staticDeparture = item.departure + timeOffset;
+
+                return {
+                    ...item,
+                    originalArrival: item.arrival, // Keep original for debug/ref
+                    arrival: staticArrival,
+                    departure: staticDeparture
+                };
+            })
             .filter((item: any) => item.arrival > now - 600)
             .map((item: any) => {
                 const rt = realtimeUpdates[item.tripId];
                 let arrival = item.arrival;
+                let departure = item.departure;
                 let delay = 0;
                 let isRealtime = false;
+                let isCancelled = rt?.isCancelled || false;
 
                 if (rt) {
-                    isRealtime = true;
-                    if (rt.arrival?.time) {
-                        arrival = Number(rt.arrival.time);
-                    } else if (rt.departure?.time) {
-                        arrival = Number(rt.departure.time);
+                    // CRITICAL FIX: Only apply RT update if the static time is close to the RT time (e.g. within 4 hours)
+                    // This prevents applying "Today's" RT update to "Tomorrow's" static schedule entry for the same tripId.
+                    const rtTime = rt.arrival?.time || rt.departure?.time || 0;
+                    if (rtTime && Math.abs(rtTime - item.arrival) < 14400) { // 4 hours window
+                        isRealtime = true;
+
+                        if (rt.arrival?.time) {
+                            arrival = Number(rt.arrival.time);
+                        } else if (rt.departure?.time) {
+                            arrival = Number(rt.departure.time);
+                        }
+
+                        // Also update departure!
+                        if (rt.departure?.time) {
+                            departure = Number(rt.departure.time);
+                        } else {
+                            // If no specific departure in RT, assume departure = arrival (standard for bus stops)
+                            // But better to maintain the original dwell time difference if possible?
+                            // For simplicity, sync departure to arrival + original dwell.
+                            // Or just set equal if we treat it as a point.
+                            // Let's set it to arrival if missing, to ensure sort order is correct.
+                            if (rt.arrival?.time) {
+                                const dwell = item.departure - item.arrival;
+                                departure = Number(rt.arrival.time) + (dwell > 0 ? dwell : 0);
+                            }
+                        }
+
+                        delay = rt.delay || 0;
                     }
-                    delay = rt.delay || 0;
                 }
 
                 return {
                     tripId: item.tripId,
                     arrival: arrival,
-                    departure: item.departure + timeOffset,
+                    departure: departure,
                     delay: delay,
                     isRealtime: isRealtime,
-                    isCancelled: rt?.isCancelled || false,
+                    isCancelled: isCancelled,
                     headsign: item.headsign,
                     direction: item.direction
                 };

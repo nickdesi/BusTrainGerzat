@@ -122,15 +122,6 @@ export default function Home() {
             </div>
             <div className="flex flex-col gap-4 items-end">
               <div className="flex items-center gap-4">
-                <button
-                  onClick={toggleColorblindMode}
-                  className={`p-2 rounded-lg border transition-colors ${isColorblindMode ? 'bg-blue-900/50 border-blue-500 text-blue-400' : 'bg-gray-800 border-gray-700 text-gray-400 hover:text-gray-200'}`}
-                  title={isColorblindMode ? "Désactiver mode daltonien" : "Activer mode daltonien"}
-                  aria-label={isColorblindMode ? "Désactiver le mode daltonien" : "Activer le mode daltonien"}
-                  aria-pressed={isColorblindMode}
-                >
-                  {isColorblindMode ? <Eye className="w-5 h-5" /> : <EyeOff className="w-5 h-5" />}
-                </button>
                 <ClockWidget />
               </div>
               <div className="w-full max-w-[200px] lg:max-w-xs">
@@ -198,6 +189,20 @@ export default function Home() {
                 </button>
               </div>
             </div>
+
+            {/* Colorblind Toggle */}
+            <button
+              onClick={toggleColorblindMode}
+              className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all hover:scale-105 active:scale-95 ${isColorblindMode
+                ? 'bg-yellow-100 border-yellow-500 text-black shadow-[0_0_10px_rgba(234,179,8,0.3)]'
+                : 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-yellow-500 hover:border-gray-600'
+                }`}
+              title={isColorblindMode ? "Désactiver mode daltonien" : "Activer mode daltonien"}
+              aria-pressed={isColorblindMode}
+            >
+              {isColorblindMode ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+              <span className="uppercase">{isColorblindMode ? 'Daltonien' : 'Daltonien'}</span>
+            </button>
 
             {/* Carte Live Button */}
             <Link
