@@ -31,7 +31,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         const now = Math.floor(Date.now() / 1000);
 
         // 1. Fetch Real-time Data
-        const realtimeUpdates: Record<string, { arrival?: { time?: number; delay?: number }; departure?: { time?: number; delay?: number }; delay: number; isCancelled: boolean }> = {};
+        const realtimeUpdates: Record<string, { arrival?: { time?: number; delay?: number }; departure?: { time?: number; delay?: number }; delay: number; isCancelled: boolean; scheduleRelationship?: number }> = {};
         try {
             const response = await fetch('https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update', {
                 cache: 'no-store',
@@ -64,7 +64,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                         departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
                                         delay: Number(arrivalDelay || departureDelay || 0),
                                         isCancelled: isTripCancelled || isStopCancelled,
-                                        scheduleRelationship: tripUpdate.trip.scheduleRelationship
+                                        scheduleRelationship: tripUpdate.trip.scheduleRelationship ?? undefined
                                     };
                                 }
                             });
