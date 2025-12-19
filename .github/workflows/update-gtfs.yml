@@ -39,7 +39,7 @@ jobs:
       - name: Validate schedule
         run: |
           echo "🔍 Validating schedule..."
-          STOPS=$(python3 -c "import json; print(len(json.load(open('src/app/api/realtime/static_schedule.json'))))")
+          STOPS=$(python3 -c "import json; print(len(json.load(open('src/data/static_schedule.json'))))")
           echo "Found $STOPS scheduled stops"
           if [ "$STOPS" -lt 100 ]; then
             echo "❌ Error: Too few stops ($STOPS), something may be wrong"
