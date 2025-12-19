@@ -14,7 +14,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { useColorblind } from '@/context/ColorblindContext';
 import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
-import { AlertTriangle } from 'lucide-react';
+import { AlertTriangle, Github } from 'lucide-react';
 
 const APP_VERSION = '2.3.1';
 
@@ -282,10 +282,23 @@ export default function Home() {
         </div>
 
         {/* Version Footer */}
-        <div className="w-full text-center py-4 mt-8 opacity-30 hover:opacity-100 transition-opacity duration-300">
-          <p className="text-[10px] font-mono text-white/50 tracking-widest uppercase">
-            Gerzat Live v{APP_VERSION} • {new Date().getFullYear()}
-          </p>
+        <div className="w-full text-center py-4 mt-8 opacity-40 hover:opacity-100 transition-opacity duration-300">
+          <div className="flex flex-col items-center gap-2">
+            <Link
+              href="https://github.com/nickdesi/BusTrainGerzat"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/5 hover:border-white/20 group"
+            >
+              <Github className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+              <span className="text-xs font-medium text-white/50 group-hover:text-white transition-colors">
+                Code source sur GitHub
+              </span>
+            </Link>
+            <p className="text-[10px] font-mono text-white/30 tracking-widest uppercase mt-2">
+              Gerzat Live v{APP_VERSION} • {new Date().getFullYear()}
+            </p>
+          </div>
         </div>
       </div>
     </main>
