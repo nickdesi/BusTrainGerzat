@@ -278,6 +278,13 @@ export default function Home() {
             <span>T2C & SNCF vous souhaitent une agréable journée</span>
           </div>
         </div>
+
+        {/* Version Footer */}
+        <div className="w-full text-center py-4 mt-8 opacity-30 hover:opacity-100 transition-opacity duration-300">
+          <p className="text-[10px] font-mono text-white/50 tracking-widest uppercase">
+            Gerzat Live v{process.env.npm_package_version || '2.3.1'} • {new Date().getFullYear()}
+          </p>
+        </div>
       </div>
     </main>
   );
