@@ -16,6 +16,8 @@ import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
 import { AlertTriangle } from 'lucide-react';
 
+const APP_VERSION = '2.3.1';
+
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
   const [filter, setFilter] = useState<TransportFilter>('all');
@@ -282,7 +284,7 @@ export default function Home() {
         {/* Version Footer */}
         <div className="w-full text-center py-4 mt-8 opacity-30 hover:opacity-100 transition-opacity duration-300">
           <p className="text-[10px] font-mono text-white/50 tracking-widest uppercase">
-            Gerzat Live v{process.env.npm_package_version || '2.3.1'} • {new Date().getFullYear()}
+            Gerzat Live v{APP_VERSION} • {new Date().getFullYear()}
           </p>
         </div>
       </div>
