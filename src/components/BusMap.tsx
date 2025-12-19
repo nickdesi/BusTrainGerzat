@@ -226,21 +226,28 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                     Ligne {lineData?.routeName}
                 </div>
                 <div className="space-y-1 text-xs">
+                    {/* Direction colors */}
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-1 rounded" style={{ backgroundColor: routeColor }}></div>
-                        <span className="text-gray-300">Direction Aller</span>
+                        <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span className="text-gray-300">Vers Gerzat</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-4 h-1 rounded border-dashed border-t-2" style={{ borderColor: routeColor }}></div>
-                        <span className="text-gray-300">Direction Retour</span>
+                        <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                        <span className="text-gray-300">Vers Clermont</span>
+                    </div>
+                    <div className="h-px bg-gray-700 my-1.5"></div>
+                    {/* Delay status */}
+                    <div className="flex items-center gap-2">
+                        <div className="w-3 h-3 rounded-full bg-green-500/50 animate-pulse"></div>
+                        <span className="text-gray-300">À l&apos;heure</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 rounded-full bg-white border-2" style={{ borderColor: routeColor }}></div>
-                        <span className="text-gray-300">Arrêt</span>
+                        <div className="w-3 h-3 rounded-full bg-orange-500/60 animate-pulse"></div>
+                        <span className="text-gray-300">Retard 5-10 min</span>
                     </div>
                     <div className="flex items-center gap-2">
-                        <span className="text-lg">🚌</span>
-                        <span className="text-gray-300">Bus en circulation</span>
+                        <div className="w-3 h-3 rounded-full bg-red-500/70 animate-pulse"></div>
+                        <span className="text-gray-300">Retard &gt;10 min</span>
                     </div>
                 </div>
             </div>

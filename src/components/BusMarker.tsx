@@ -8,6 +8,19 @@ interface BusMarkerProps {
 }
 
 const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
+    // Determine bus color based on direction
+    // direction 0 = Towards Gerzat (green), direction 1 = From Gerzat (blue)
+    const iconColor = vehicle.direction === 0 ? '#22c55e' : '#3b82f6';
+
+    // Determine pulse class based on delay
+    const delayMinutes = Math.round(vehicle.delay / 60);
+    const getPulseClass = () => {
+        if (delayMinutes > 10) return 'bus-icon-pulse bus-icon-pulse-red';
+        if (delayMinutes >= 5) return 'bus-icon-pulse bus-icon-pulse-orange';
+        return 'bus-icon-pulse bus-icon-pulse-green';
+    };
+    const pulseClass = getPulseClass();
+
     // Create custom bus icon with SVG that rotates properly
     const busIcon = useMemo(() => {
         if (typeof window === 'undefined') return null;
@@ -16,7 +29,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
 
         // SVG bus icon pointing up (will be rotated by bearing)
         const svgIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="#8dc63f" style="transform: rotate(${vehicle.bearing || 0}deg); filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="${iconColor}" style="transform: rotate(${vehicle.bearing || 0}deg); filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));">
                 <path d="M12 2C8 2 4 2.5 4 6v9.5c0 .95.38 1.81 1 2.44V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-2.06c.62-.63 1-1.49 1-2.44V6c0-3.5-4-4-8-4zm-3.5 15c-.83 0-1.5-.67-1.5-1.5S7.67 14 8.5 14s1.5.67 1.5 1.5S9.33 17 8.5 17zm7 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H7V7h10v4z"/>
             </svg>
         `;
@@ -25,7 +38,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
             className: 'bus-marker',
             html: `
                 <div class="bus-icon-container">
-                    <div class="bus-icon-pulse"></div>
+                    <div class="${pulseClass}"></div>
                     <div class="bus-icon">
                         ${svgIcon}
                     </div>
@@ -35,7 +48,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
             iconAnchor: [20, 20],
             popupAnchor: [0, -20],
         });
-    }, [vehicle.bearing]);
+    }, [vehicle.bearing, iconColor, pulseClass]);
 
     if (!busIcon) return null;
 
