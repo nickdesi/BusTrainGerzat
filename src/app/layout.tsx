@@ -21,8 +21,11 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Gare de Gerzat - Départs & Arrivées",
-  description: "Affichage temps réel des bus et trains pour la gare de Gerzat",
+  title: "🚉 Gerzat Live - Hub Multimodal",
+  description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne 20) et les trains TER à Gerzat.",
+  applicationName: "Gerzat Live",
+  authors: [{ name: "Nicolas De Simone" }],
+  keywords: ["bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER", "ligne 20"],
   manifest: "/manifest.json",
   icons: {
     icon: "/icon-512.png",
@@ -32,6 +35,22 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Gerzat Live",
+  },
+  verification: {
+    google: "TuCtfpsMfaMi13jU8fbz5LFA1vxzqeLZMHc74ulWRig",
+  },
+  openGraph: {
+    type: "website",
+    locale: "fr_FR",
+    url: "https://gerzatlive.desimone.fr",
+    title: "🚉 Gerzat Live - Hub Multimodal",
+    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne 20) et les trains TER à Gerzat.",
+    siteName: "Gerzat Live",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "🚉 Gerzat Live - Hub Multimodal",
+    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne 20) et les trains TER à Gerzat.",
   },
 };
 
