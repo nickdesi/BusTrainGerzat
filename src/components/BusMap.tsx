@@ -220,7 +220,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </MapContainer>
 
             {/* Legend */}
-            <div className="absolute bottom-20 left-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1001] border border-gray-700">
+            <div className="absolute top-16 right-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1001] border border-gray-700">
                 <div className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                     <MapPin className="w-4 h-4" style={{ color: routeColor }} />
                     Ligne {lineData?.routeName}
@@ -263,7 +263,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </div>
 
             {/* Theme Toggle */}
-            <div className="absolute bottom-4 right-4 z-[1001]">
+            <div className="absolute top-64 right-4 z-[1001]">
                 <button
                     onClick={() => setIsDarkMode(!isDarkMode)}
                     className="bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 border border-gray-700 text-white hover:bg-gray-800 transition-colors"
