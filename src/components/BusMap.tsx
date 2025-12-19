@@ -220,7 +220,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </MapContainer>
 
             {/* Legend */}
-            <div className="absolute bottom-4 left-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1001] border border-gray-700">
+            <div className="absolute bottom-20 left-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1001] border border-gray-700">
                 <div className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                     <MapPin className="w-4 h-4" style={{ color: routeColor }} />
                     Ligne {lineData?.routeName}
