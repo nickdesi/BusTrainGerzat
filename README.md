@@ -58,7 +58,7 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 ## 🛠 Architecture Technique
 
-- **Framework** : Next.js 15 (App Router)
+- **Framework** : Next.js 16 (App Router)
 - **Styling** : TailwindCSS v4
 - **State** : TanStack Query (React Query)
 
