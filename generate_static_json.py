@@ -1,13 +1,15 @@
 import csv
 import json
+import sys
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
 # Use Paris timezone for GTFS schedules
 PARIS_TZ = ZoneInfo('Europe/Paris')
 
-target_route_id = '11821953316814877'
-target_stop_id = '3377704015495667'
+# Target line and stop by NAME (more resilient to ID changes)
+TARGET_ROUTE_NAMES = ['E1', '20']  # E1 is the new name, 20 was the old name
+TARGET_STOP_NAME = 'GERZAT Champfleuri'
 
 # Generate for today and next 7 days
 start_date = datetime.now(PARIS_TZ)
@@ -15,9 +17,35 @@ dates = [(start_date + timedelta(days=i)).strftime('%Y%m%d') for i in range(8)]
 
 schedule_data = {}
 
+# Find route_id by name
+target_route_ids = set()
+with open('gtfs_data/routes.txt', 'r', encoding='utf-8-sig') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        if row['route_short_name'] in TARGET_ROUTE_NAMES:
+            target_route_ids.add(row['route_id'])
+            print(f"✅ Found route: {row['route_short_name']} -> route_id={row['route_id']}")
+
+if not target_route_ids:
+    print(f"❌ Error: Could not find route with names {TARGET_ROUTE_NAMES}")
+    sys.exit(1)
+
+# Find stop_id by name
+target_stop_ids = set()
+with open('gtfs_data/stops.txt', 'r', encoding='utf-8-sig') as f:
+    reader = csv.DictReader(f)
+    for row in reader:
+        if TARGET_STOP_NAME.lower() in row['stop_name'].lower():
+            target_stop_ids.add(row['stop_id'])
+            print(f"✅ Found stop: {row['stop_name']} -> stop_id={row['stop_id']}")
+
+if not target_stop_ids:
+    print(f"❌ Error: Could not find stop with name containing '{TARGET_STOP_NAME}'")
+    sys.exit(1)
+
 # Load calendar
 services = {}
-with open('gtfs_data/calendar.txt', 'r') as f:
+with open('gtfs_data/calendar.txt', 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
         services[row['service_id']] = row
@@ -34,21 +62,25 @@ try:
 except FileNotFoundError:
     pass
 
-# Load trips
+# Load trips for target routes
 trips = {}
-with open('gtfs_data/trips.txt', 'r') as f:
+with open('gtfs_data/trips.txt', 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        if row['route_id'] == target_route_id:
+        if row['route_id'] in target_route_ids:
             trips[row['trip_id']] = row
 
-# Load stop times
+print(f"📋 Found {len(trips)} trips for target routes")
+
+# Load stop times for target stops
 trip_stops = []
-with open('gtfs_data/stop_times.txt', 'r') as f:
+with open('gtfs_data/stop_times.txt', 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        if row['trip_id'] in trips and row['stop_id'] == target_stop_id:
+        if row['trip_id'] in trips and row['stop_id'] in target_stop_ids:
             trip_stops.append(row)
+
+print(f"📋 Found {len(trip_stops)} stop times at target stops")
 
 # Build schedule
 final_schedule = []
@@ -101,4 +133,4 @@ final_schedule.sort(key=lambda x: x['arrival'])
 with open('src/data/static_schedule.json', 'w') as f:
     json.dump(final_schedule, f, indent=2)
 
-print(f"Generated {len(final_schedule)} scheduled stops")
+print(f"✅ Generated {len(final_schedule)} scheduled stops")
