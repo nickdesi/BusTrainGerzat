@@ -9,18 +9,22 @@ interface DeparturesListProps {
     departures: UnifiedEntry[];
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
+    favorites?: string[];
+    onToggleFavorite?: (line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
 interface DepartureRowProps {
     entry: UnifiedEntry;
     index: number;
     boardType: 'departures' | 'arrivals';
+    isFav: boolean;
+    onToggleFavorite?: (line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
-const DepartureRow = memo(function DepartureRow({ entry, index, boardType }: DepartureRowProps) {
+const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav, onToggleFavorite }: DepartureRowProps) {
     return (
         <div
-            className={`p-4 flip-enter ${index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
+            className={`p-4 flip-enter ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
         >
             <div className="flex items-start justify-between mb-3">
                 {entry.type === 'TER' ? (
@@ -37,7 +41,21 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType }: Dep
                 ) : (
                     <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="lg" color="text-yellow-500" />
                 )}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                    {onToggleFavorite && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onToggleFavorite(entry.line, entry.destination, entry.type);
+                            }}
+                            className={`p-1 transition-all active:scale-95 ${isFav ? 'text-yellow-400' : 'text-gray-600'}`}
+                            title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                            </svg>
+                        </button>
+                    )}
                     {entry.type === 'BUS' ? (
                         <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold border border-yellow-600/50" style={{ backgroundColor: '#fdc300', color: '#000' }}>
                             BUS {entry.line}
@@ -72,8 +90,20 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType }: Dep
     );
 });
 
-export default function DeparturesList({ departures, loading, boardType = 'departures' }: DeparturesListProps) {
+export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
+
+    // Sort departures: Favorites first
+    const sortedDepartures = [...departures].sort((a, b) => {
+        const idA = `${a.line}-${a.destination}`;
+        const idB = `${b.line}-${b.destination}`;
+        const isFavA = favorites.includes(idA);
+        const isFavB = favorites.includes(idB);
+
+        if (isFavA && !isFavB) return -1;
+        if (!isFavA && isFavB) return 1;
+        return 0;
+    });
 
     return (
         <div className="md:hidden divide-y divide-gray-800">
@@ -89,14 +119,21 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                     <p className="text-sm uppercase tracking-wide">{emptyMessage}</p>
                 </div>
             ) : (
-                departures.map((entry, index) => (
-                    <DepartureRow
-                        key={entry.id}
-                        entry={entry}
-                        index={index}
-                        boardType={boardType}
-                    />
-                ))
+                sortedDepartures.map((entry, index) => {
+                    const favId = `${entry.line}-${entry.destination}`;
+                    const isFav = favorites.includes(favId);
+
+                    return (
+                        <DepartureRow
+                            key={entry.id}
+                            entry={entry}
+                            index={index}
+                            boardType={boardType}
+                            isFav={isFav}
+                            onToggleFavorite={onToggleFavorite}
+                        />
+                    );
+                })
             )}
         </div>
     );

@@ -6,7 +6,7 @@ import { UnifiedEntry } from '@/types';
 const DELAY_THRESHOLD_MINUTES = 5;
 const NOTIFICATION_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes between same notifications
 
-export function useDelayNotifications(departures: UnifiedEntry[], arrivals: UnifiedEntry[]) {
+export function useDelayNotifications(departures: UnifiedEntry[], arrivals: UnifiedEntry[], favorites: string[]) {
     const notifiedIds = useRef<Map<string, number>>(new Map());
     const permissionGranted = useRef(false);
 
@@ -75,12 +75,15 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
 
         allEntries.forEach((entry) => {
             const delayMinutes = Math.floor(entry.delay / 60);
-            if (delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
+            const entryFavId = `${entry.line}-${entry.destination}`;
+            const isFavorite = favorites.includes(entryFavId);
+
+            if (isFavorite && delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
                 const type = departures.includes(entry) ? 'departure' : 'arrival';
                 showNotification(entry, type);
             }
         });
-    }, [departures, arrivals, showNotification]);
+    }, [departures, arrivals, favorites, showNotification]);
 
     // Function to manually request permission
     const requestPermission = useCallback(async () => {

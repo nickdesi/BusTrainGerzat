@@ -50,8 +50,7 @@ export default function Home() {
   }, [departures, favorites]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Enable delay notifications
-
-  useDelayNotifications(departures, arrivals);
+  useDelayNotifications(departures, arrivals, favorites.map(f => f.id));
 
   // Filter departures and arrivals based on transport type and search query
   const filteredDepartures = useMemo(() => {
@@ -244,7 +243,12 @@ export default function Home() {
             favorites={favorites.map(f => f.id)}
             onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
           />
-          <DeparturesList departures={filteredDepartures} loading={isLoading} />
+          <DeparturesList
+            departures={filteredDepartures}
+            loading={isLoading}
+            favorites={favorites.map(f => f.id)}
+            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+          />
         </div>
 
         {/* Arrivals Board */}
@@ -263,7 +267,13 @@ export default function Home() {
             favorites={favorites.map(f => f.id)}
             onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
           />
-          <DeparturesList departures={filteredArrivals} loading={isLoading} boardType="arrivals" />
+          <DeparturesList
+            departures={filteredArrivals}
+            loading={isLoading}
+            boardType="arrivals"
+            favorites={favorites.map(f => f.id)}
+            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+          />
         </div>
 
         {/* Scrolling Ticker */}
