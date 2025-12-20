@@ -2,9 +2,14 @@
 
 Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
 
-[![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gertzatlive.desimone.fr)
+[![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gerzatlive.desimone.fr)
 [![version](https://img.shields.io/badge/version-2.5.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
 [![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
+
+<div align="center">
+  <img src="docs/images/homepage.png" alt="Tableau des départs" width="400"/>
+  <img src="docs/images/map.png" alt="Carte live des bus" width="400"/>
+</div>
 
 ## 📍 Arrêts surveillés
 
@@ -138,14 +143,14 @@ L'application peut être installée comme une app native sur votre téléphone !
 
 ### 🍎 iPhone / iPad
 
-1. Ouvrez **Safari** et allez sur [gertzatlive.desimone.fr](https://gertzatlive.desimone.fr)
+1. Ouvrez **Safari** et allez sur [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr)
 2. Appuyez sur l'icône **Partager** (carré avec flèche vers le haut)
 3. Faites défiler et appuyez sur **« Sur l'écran d'accueil »**
 4. Nommez l'app (ex: "Gerzat Live") et appuyez sur **Ajouter**
 
 ### 🤖 Android
 
-1. Ouvrez **Chrome** et allez sur [gertzatlive.desimone.fr](https://gertzatlive.desimone.fr)
+1. Ouvrez **Chrome** et allez sur [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr)
 2. Appuyez sur les **3 points** en haut à droite
 3. Appuyez sur **« Installer l'application »** ou **« Ajouter à l'écran d'accueil »**
 4. Confirmez l'installation
