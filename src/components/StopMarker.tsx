@@ -11,11 +11,11 @@ export default function StopMarker({ stop, isTerminus, routeColor }: StopMarkerP
     return (
         <CircleMarker
             center={[stop.lat, stop.lon]}
-            radius={isTerminus ? 8 : 4}
+            radius={isTerminus ? 10 : 6}
             fillColor={isTerminus ? routeColor : '#ffffff'}
-            fillOpacity={isTerminus ? 1 : 0.8}
+            fillOpacity={isTerminus ? 1 : 0.9}
             color={isTerminus ? '#ffffff' : routeColor}
-            weight={isTerminus ? 2 : 1}
+            weight={isTerminus ? 3 : 2}
         >
             <Popup>
                 <div className="text-white">
