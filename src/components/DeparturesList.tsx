@@ -39,7 +39,7 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType }: Dep
                 )}
                 <div className="flex items-center gap-2">
                     {entry.type === 'BUS' ? (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-red-900/30 text-red-400 border border-red-700/50">
+                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold border border-yellow-600/50" style={{ backgroundColor: '#fdc300', color: '#000' }}>
                             BUS {entry.line}
                         </span>
                     ) : (

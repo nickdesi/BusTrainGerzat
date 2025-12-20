@@ -40,8 +40,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             if (response.ok) {
                 const buffer = await response.arrayBuffer();
                 const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
-                const targetRouteId = '11821953316814877'; // Line 20
-                const targetStopId = '3377704015495667'; // Gerzat Champfleuri
+                const targetRouteId = '3'; // Line E1 (formerly Line 20)
+                const targetStopIds = new Set(['GECHR', 'GECHA', 'GECH']); // Gerzat Champfleuri stops
 
                 feed.entity.forEach((entity) => {
                     if (entity.tripUpdate) {
@@ -49,7 +49,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                         if (tripUpdate.trip.routeId === targetRouteId) {
                             const isTripCancelled = tripUpdate.trip.scheduleRelationship === 3; // CANCELED
                             tripUpdate.stopTimeUpdate?.forEach((stopTimeUpdate) => {
-                                if (stopTimeUpdate.stopId === targetStopId) {
+                                if (stopTimeUpdate.stopId && targetStopIds.has(stopTimeUpdate.stopId)) {
                                     const isStopCancelled = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED
                                     const arrivalTime = stopTimeUpdate.arrival?.time;
                                     const arrivalDelay = stopTimeUpdate.arrival?.delay;

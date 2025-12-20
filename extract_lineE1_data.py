@@ -1,18 +1,19 @@
 #!/usr/bin/env python3
 """
-Extract Line 20 data from GTFS files.
+Extract Line E1 data from GTFS files.
 Outputs a JSON file with stops and shapes for use in the map.
 """
 
 import csv
 import json
+import sys
 from pathlib import Path
 
 GTFS_DIR = Path("gtfs_data")
-OUTPUT_FILE = Path("public/data/line20_data.json")
+OUTPUT_FILE = Path("public/data/lineE1_data.json")
 
-# Line 20 route ID from the existing code
-LINE_20_ROUTE_ID = "11821953316814877"
+# Target route names (E1 is the new name, 20 is the old one)
+TARGET_ROUTE_NAMES = ['E1', '20']
 
 def read_csv(filename):
     """Read a CSV file and return list of dicts."""
@@ -26,37 +27,36 @@ def read_csv(filename):
         return list(reader)
 
 def main():
-    print("Extracting Line 20 data from GTFS...")
+    print("Extracting Line E1 data from GTFS...")
     
-    # 1. Find Line 20 route
+    # 1. Find Line E1 route
     routes = read_csv("routes.txt")
-    line_20 = None
+    target_route = None
+    
     for route in routes:
-        if route.get('route_id') == LINE_20_ROUTE_ID:
-            line_20 = route
+        if route.get('route_short_name') in TARGET_ROUTE_NAMES:
+            target_route = route
             break
     
-    if not line_20:
-        print(f"Error: Route {LINE_20_ROUTE_ID} not found in routes.txt")
-        print("Available routes:")
-        for r in routes[:10]:
-            print(f"  {r.get('route_id')}: {r.get('route_short_name')} - {r.get('route_long_name')}")
+    if not target_route:
+        print(f"Error: Route E1/20 not found in routes.txt files")
         return
+
+    target_route_id = target_route.get('route_id')
+    print(f"Found route: {target_route.get('route_short_name')} (ID: {target_route_id}) - {target_route.get('route_long_name')}")
     
-    print(f"Found route: {line_20.get('route_short_name')} - {line_20.get('route_long_name')}")
-    
-    # 2. Find all trips for Line 20
+    # 2. Find all trips for Line E1
     trips = read_csv("trips.txt")
-    line_20_trips = [t for t in trips if t.get('route_id') == LINE_20_ROUTE_ID]
-    print(f"Found {len(line_20_trips)} trips for Line 20")
+    line_e1_trips = [t for t in trips if t.get('route_id') == target_route_id]
+    print(f"Found {len(line_e1_trips)} trips for Line E1")
     
-    if not line_20_trips:
+    if not line_e1_trips:
         return
     
-    # Get ALL unique shape IDs (Line 20 has multiple branches)
+    # Get ALL unique shape IDs
     # Count how many trips use each shape
     shape_trip_counts = {}
-    for trip in line_20_trips:
+    for trip in line_e1_trips:
         shape_id = trip.get('shape_id')
         if shape_id:
             shape_trip_counts[shape_id] = shape_trip_counts.get(shape_id, 0) + 1
@@ -81,25 +81,29 @@ def main():
         all_shapes[shape_id] = [[float(p[0]), float(p[1])] for p in shape_points]
         print(f"  Shape {shape_id}: {len(all_shapes[shape_id])} points")
     
-    # Combine shapes by direction for backward compatibility
-    # direction 0 = toward Musée/Aulnat, direction 1 = toward Gerzat
+    # Combine shapes by direction
     shapes = {"0": [], "1": []}
     
-    for trip in line_20_trips:
+    # We take the most frequent shape for each direction as the "main" shape
+    # This helps filter out variants like the Aulnat branch if E1 has any (though E1 shouldn't)
+    main_shapes_by_dir = {} # direction -> (shape_id, count)
+    
+    for trip in line_e1_trips:
         direction = trip.get('direction_id', '0')
         shape_id = trip.get('shape_id')
-        if shape_id and shape_id in all_shapes and not shapes.get(direction):
+        if shape_id and shape_id in all_shape_ids:
+            count = shape_trip_counts[shape_id]
+            if direction not in main_shapes_by_dir or count > main_shapes_by_dir[direction][1]:
+                main_shapes_by_dir[direction] = (shape_id, count)
+
+    for direction, (shape_id, count) in main_shapes_by_dir.items():
+        if shape_id in all_shapes:
             shapes[direction] = all_shapes[shape_id]
-    
-    # Also expose all shapes for more complete rendering
-    additional_shapes = []
-    for shape_id, points in all_shapes.items():
-        if points != shapes.get("0") and points != shapes.get("1"):
-            additional_shapes.append(points)
-    
-    # 4. Find all stops for Line 20
-    # First get all stop_ids from stop_times for Line 20 trips
-    trip_ids = {t.get('trip_id') for t in line_20_trips}
+            print(f"Selected main shape for direction {direction}: {shape_id} ({count} trips)")
+
+    # 4. Find all stops for Line E1
+    # First get all stop_ids from stop_times for Line E1 trips
+    trip_ids = {t.get('trip_id') for t in line_e1_trips}
     stop_times = read_csv("stop_times.txt")
     
     # Get unique stops with their sequence in each direction
@@ -108,7 +112,7 @@ def main():
     for st in stop_times:
         if st.get('trip_id') in trip_ids:
             # Find the direction for this trip
-            trip = next((t for t in line_20_trips if t.get('trip_id') == st.get('trip_id')), None)
+            trip = next((t for t in line_e1_trips if t.get('trip_id') == st.get('trip_id')), None)
             if trip:
                 direction = trip.get('direction_id', '0')
                 stop_id = st.get('stop_id')
@@ -144,15 +148,15 @@ def main():
     
     # 6. Create output
     output = {
-        "routeId": LINE_20_ROUTE_ID,
-        "routeName": line_20.get('route_short_name', '20'),
-        "routeLongName": line_20.get('route_long_name', 'Ligne 20'),
-        "routeColor": line_20.get('route_color', 'E30613'),
+        "routeId": target_route_id,
+        "routeName": target_route.get('route_short_name', 'E1'),
+        "routeLongName": target_route.get('route_long_name', 'Ligne E1'),
+        "routeColor": target_route.get('route_color', 'fdc300'), # Default to E1 yellow if missing
         "stops": stops_list,
         "shapes": {
             "direction0": shapes.get("0", []),
             "direction1": shapes.get("1", []),
-            "branches": additional_shapes
+            "branches": [] # No branches for E1 main line display
         }
     }
     

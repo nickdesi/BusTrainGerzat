@@ -1,5 +1,5 @@
 import { CircleMarker, Popup } from 'react-leaflet';
-import { Stop } from '@/hooks/useLine20Data';
+import { Stop } from '@/hooks/useLineE1Data';
 
 interface StopMarkerProps {
     stop: Stop;

@@ -13,7 +13,7 @@ export function usePredictiveDelay() {
         const isRushHour = (hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19);
 
         // Simulate historical data analysis
-        if (line === '20') {
+        if (line === 'E1') {
             if (isRushHour && !isWeekend) {
                 return {
                     probability: 'HIGH',

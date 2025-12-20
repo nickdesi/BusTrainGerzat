@@ -139,8 +139,8 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                     {/* Line */}
                                     <td className="px-6 py-5">
                                         {entry.type === 'BUS' ? (
-                                            <div className="w-10 h-10 bg-red-600 flex items-center justify-center rounded shadow-lg shadow-red-900/40 border border-red-500/50">
-                                                <span className="text-lg font-bold text-white font-sans tracking-tight">{entry.line}</span>
+                                            <div className="w-10 h-10 flex items-center justify-center rounded shadow-lg border border-yellow-600/50" style={{ backgroundColor: '#fdc300', boxShadow: '0 4px 14px rgba(253, 195, 0, 0.3)' }}>
+                                                <span className="text-lg font-bold text-black font-sans tracking-tight">{entry.line}</span>
                                             </div>
                                         ) : (
                                             <div className="px-3 py-1.5 bg-blue-600 flex items-center justify-center rounded shadow-lg shadow-blue-900/40 border border-blue-500/50 min-w-[70px]">

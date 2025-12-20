@@ -1,6 +1,6 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import { NextResponse } from 'next/server';
-import line20Data from '../../../../public/data/line20_data.json';
+import lineE1Data from '../../../../public/data/lineE1_data.json';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,7 +11,7 @@ interface EstimatedVehicle {
     direction: number;
     nextStop: string;
     nextStopName: string;
-    headsign: string; // Terminus name (e.g., "Musée d'Art Roger Quilliot")
+    headsign: string; // Terminus name (e.g., "AUBIÈRE Pl. des Ramacles")
     bearing: number;
     delay: number;
     progress: number; // 0-1 progress along the route
@@ -19,7 +19,7 @@ interface EstimatedVehicle {
     terminusEta: number; // Estimated arrival at terminus
 }
 
-const LINE_20_ROUTE_ID = '11821953316814877';
+const LINE_E1_ROUTE_ID = '3'; // Line E1 (formerly Line 20)
 
 // Simple in-memory cache
 let vehicleCache: {
@@ -58,7 +58,7 @@ export async function GET() {
 
                 // Get stops data for mapping
                 const stopsById = new Map(
-                    line20Data.stops.map(s => [s.stopId, s])
+                    lineE1Data.stops.map(s => [s.stopId, s])
                 );
 
                 // Process each trip update
@@ -66,8 +66,8 @@ export async function GET() {
                     if (entity.tripUpdate) {
                         const tripUpdate = entity.tripUpdate;
 
-                        // Only process Line 20 trips
-                        if (tripUpdate.trip.routeId !== LINE_20_ROUTE_ID) return;
+                        // Only process Line E1 trips
+                        if (tripUpdate.trip.routeId !== LINE_E1_ROUTE_ID) return;
 
                         // Check for trip-level cancellation
                         if (tripUpdate.trip.scheduleRelationship === 3) return; // CANCELED
@@ -198,8 +198,8 @@ export async function GET() {
                         }
 
                         // Apply Snap to Route if shape is available
-                        const directionKey = `direction${nextStop.direction}` as keyof typeof line20Data.shapes;
-                        const shape = line20Data.shapes[directionKey];
+                        const directionKey = `direction${nextStop.direction}` as keyof typeof lineE1Data.shapes;
+                        const shape = lineE1Data.shapes[directionKey];
 
                         if (shape && Array.isArray(shape)) {
                             const snapped = snapToRoute(lat, lon, shape as number[][]);
@@ -219,9 +219,8 @@ export async function GET() {
 
                         const delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
 
-                        // Get terminus info based on direction
                         const headsign = nextStop.direction === 0
-                            ? "Musée d'Art Roger Quilliot"
+                            ? "AUBIÈRE Pl. des Ramacles"
                             : "GERZAT Champfleuri";
 
                         // Get terminus ETA (last stop in the trip)

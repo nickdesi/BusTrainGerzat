@@ -22,10 +22,10 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: "🚉 Gerzat Live - Hub Multimodal",
-  description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne 20) et les trains TER à Gerzat.",
+  description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne E1) et les trains TER à Gerzat.",
   applicationName: "Gerzat Live",
   authors: [{ name: "Nicolas De Simone" }],
-  keywords: ["bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER", "ligne 20"],
+  keywords: ["bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER", "ligne E1"],
   manifest: "/manifest.json",
   icons: {
     icon: "/icon-512.png",
@@ -44,13 +44,13 @@ export const metadata: Metadata = {
     locale: "fr_FR",
     url: "https://gerzatlive.desimone.fr",
     title: "🚉 Gerzat Live - Hub Multimodal",
-    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne 20) et les trains TER à Gerzat.",
+    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne E1) et les trains TER à Gerzat.",
     siteName: "Gerzat Live",
   },
   twitter: {
     card: "summary_large_image",
     title: "🚉 Gerzat Live - Hub Multimodal",
-    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne 20) et les trains TER à Gerzat.",
+    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne E1) et les trains TER à Gerzat.",
   },
 };
 

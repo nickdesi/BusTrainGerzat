@@ -9,7 +9,7 @@ export interface Stop {
     direction: number;
 }
 
-export interface Line20Data {
+export interface LineE1Data {
     routeId: string;
     routeName: string;
     routeLongName: string;
@@ -22,18 +22,18 @@ export interface Line20Data {
     };
 }
 
-async function fetchLine20Data(): Promise<Line20Data> {
-    const res = await fetch('/api/line20');
+async function fetchLineE1Data(): Promise<LineE1Data> {
+    const res = await fetch('/api/lineE1');
     if (!res.ok) {
-        throw new Error('Failed to fetch Line 20 data');
+        throw new Error('Failed to fetch Line E1 data');
     }
     return res.json();
 }
 
-export function useLine20Data() {
+export function useLineE1Data() {
     return useQuery({
-        queryKey: ['line20-data'],
-        queryFn: fetchLine20Data,
+        queryKey: ['lineE1-data'],
+        queryFn: fetchLineE1Data,
         staleTime: Infinity, // Static data, never stale
         gcTime: Infinity,
     });

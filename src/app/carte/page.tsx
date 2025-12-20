@@ -47,7 +47,7 @@ export default function CartePage() {
                         <div className="flex items-center gap-3">
                             <Map className="w-6 h-6 text-green-500" />
                             <h1 className="text-xl font-bold text-white">
-                                Ligne 20 <span className="text-green-500">Live</span>
+                                Ligne E1 <span className="text-green-500">Live</span>
                             </h1>
                         </div>
                     </div>
@@ -58,8 +58,8 @@ export default function CartePage() {
                         <button
                             onClick={() => setShowStops(!showStops)}
                             className={`flex items-center gap-2 px-3 py-2 rounded-lg transition-colors ${showStops
-                                    ? 'bg-green-600/20 text-green-400 border border-green-600/50'
-                                    : 'bg-gray-800 text-gray-400 border border-gray-700'
+                                ? 'bg-green-600/20 text-green-400 border border-green-600/50'
+                                : 'bg-gray-800 text-gray-400 border border-gray-700'
                                 }`}
                             title={showStops ? 'Masquer les arrêts' : 'Afficher les arrêts'}
                         >

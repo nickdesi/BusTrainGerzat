@@ -9,16 +9,16 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 | Transport | Arrêt / Gare | Ligne(s) |
 |-----------|--------------|----------|
-| 🚌 Bus T2C | **Gerzat Champfleuri** | Ligne 20 |
+| 🚌 Bus T2C | **Gerzat Champfleuri** | Ligne E1 |
 | 🚆 Train TER | **Gare de Gerzat** | TER Auvergne |
 
 ## 🚀 Fonctionnalités
 
-### 🚌 Bus T2C (Ligne 20 - Arrêt Champfleuri)
+### 🚌 Bus T2C (Ligne E1 - Arrêt Champfleuri)
 
 - **Temps réel & Théorique** : Affichage précis des prochains passages avec distinction claire par badges de couleur.
 - **Indicateurs de Retard** : Visualisation immédiate de l'état du trafic (À l'heure, En avance, Retard).
-- **Directions Claires** : Séparation distincte entre les départs (Vers Clermont/Aéroport) et les arrivées (Terminus Gerzat).
+- **Directions Claires** : Séparation distincte entre les départs (Vers Aubière/Romagnat) et les arrivées (Terminus Gerzat).
 
 ### 🚆 Trains TER (Gare de Gerzat)
 
@@ -28,11 +28,11 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Détails du Train** : Numéro de train et statut du retard en temps réel.
 - **Trains Annulés** : Détection et affichage des trains supprimés avec statut "ANNULÉ" en rouge.
 
-### 🗺️ Carte Live (Ligne 20)
+### 🗺️ Carte Live (Ligne E1)
 
 - **Position en temps réel** : Visualisation des bus sur une carte interactive avec le tracé de la ligne.
 - **Estimation intelligente** : Positions estimées à partir des données GTFS-RT Trip Updates avec "Snap to Route".
-- **Direction affichée** : Bandeau indiquant le terminus (→ Musée d'Art Roger Quilliot ou → GERZAT Champfleuri).
+- **Direction affichée** : Bandeau indiquant le terminus (→ AUBIÈRE Pl. des Ramacles ou → GERZAT Champfleuri).
 - **ETA au terminus** : Heure d'arrivée estimée au terminus pour chaque bus.
 - **Prochain arrêt** : Nom de l'arrêt suivant et heure d'arrivée estimée.
 - **Indicateur de retard** : Retard affiché en temps réel dans le popup.

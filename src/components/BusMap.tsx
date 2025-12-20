@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { useLine20Data, Stop } from '@/hooks/useLine20Data';
+import { useLineE1Data, Stop } from '@/hooks/useLineE1Data';
 import { useVehiclePositions, VehiclePosition } from '@/hooks/useVehiclePositions';
 import { Loader2, MapPin, AlertCircle, Sun, Moon } from 'lucide-react';
 import StopMarker from './StopMarker';
@@ -39,16 +39,16 @@ const ZoomHandlerComponent = dynamic(
     { ssr: false }
 );
 
-// Center of the Line 20 route (approximately)
-const MAP_CENTER: [number, number] = [45.81, 3.135];
-const MAP_ZOOM = 13;
+// Center of the Line E1 route (approximately)
+const MAP_CENTER: [number, number] = [45.78, 3.10]; // Centered between Gerzat and Romagnat
+const MAP_ZOOM = 12;
 
 interface BusMapProps {
     showStops?: boolean;
 }
 
 export default function BusMap({ showStops = true }: BusMapProps) {
-    const { data: lineData, isLoading: lineLoading, error: lineError } = useLine20Data();
+    const { data: lineData, isLoading: lineLoading, error: lineError } = useLineE1Data();
     const { data: vehicleData, isLoading: vehiclesLoading, isFetching } = useVehiclePositions();
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
     const [isDarkMode, setIsDarkMode] = useState(true);
@@ -70,7 +70,8 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
         const MAIN_TERMINI = [
             'GERZAT Champfleuri',
-            "Musée d'Art Roger Quilliot"
+            "ROMAGNAT La Gazelle",
+            "AUBIÈRE Pl. des Ramacles"
         ];
 
         lineData.stops.forEach(stop => {
@@ -151,7 +152,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         );
     }
 
-    const routeColor = lineData?.routeColor ? `#${lineData.routeColor}` : '#8dc63f';
+    const routeColor = lineData?.routeColor ? `#${lineData.routeColor}` : '#fdc300';
 
     return (
         <div className="relative h-full w-full">
@@ -186,7 +187,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                         dashArray="10, 10"
                     />
                 )}
-                {/* Additional branch shapes (Aulnat, Les Vignes, etc.) */}
+                {/* Additional branch shapes (if any) */}
                 {lineData?.shapes.branches?.map((branch: [number, number][], index: number) => (
                     <Polyline
                         key={`branch-${index}`}
@@ -233,7 +234,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                     </div>
                     <div className="flex items-center gap-2">
                         <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                        <span className="text-gray-300">Vers Clermont</span>
+                        <span className="text-gray-300">Vers Aubière/Romagnat</span>
                     </div>
                     <div className="h-px bg-gray-700 my-1.5"></div>
                     {/* Delay status */}
