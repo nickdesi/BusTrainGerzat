@@ -61,7 +61,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                 <div className="p-1">
                     <div className="font-bold text-lg flex items-center gap-2 text-white mb-2">
                         <Bus className="w-5 h-5 text-green-400" />
-                        <span>Ligne 20</span>
+                        <span>Ligne E1</span>
                     </div>
 
                     {/* Direction indicator */}

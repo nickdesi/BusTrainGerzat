@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.0.0] - 2025-12-20
+
+### 🚌 Migration Ligne E1
+
+- **Restructuration T2C** : Migration complète de la Ligne 20 vers la Ligne E1.
+  - Nouveau tracé : Gerzat Champfleuri ↔ Aubière Pl. des Ramacles / Romagnat
+  - Couleur badge : Jaune (#fdc300) avec texte noir
+  - Nouveaux IDs GTFS : route_id=3, stop_ids=GECHR/GECHA
+
+### 🐛 Correctifs
+
+- **Crash Mobile** : Correction de l'erreur `Illegal constructor` pour les notifications.
+  - Utilisation de `ServiceWorkerRegistration.showNotification()` au lieu de `new Notification()`
+- **Error Boundaries** : Ajout de pages d'erreur conviviales (`error.tsx`, `global-error.tsx`).
+
 ## [2.3.0] - 2025-12-19
 
 ### ✨ Interface Utilisateur
