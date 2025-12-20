@@ -74,19 +74,6 @@ export default function RootLayout({
           {children}
         </QueryProvider>
         <ServiceWorkerRegistration />
-        {/* Eruda Mobile Debugger - Remove in production when done debugging */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                var script = document.createElement('script');
-                script.src = 'https://cdn.jsdelivr.net/npm/eruda';
-                script.onload = function() { eruda.init(); };
-                document.body.appendChild(script);
-              })();
-            `,
-          }}
-        />
       </body>
     </html>
   );
