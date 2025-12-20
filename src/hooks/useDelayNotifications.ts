@@ -29,7 +29,7 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
         }
     }, []);
 
-    const showNotification = useCallback((entry: UnifiedEntry, type: 'departure' | 'arrival') => {
+    const showNotification = useCallback(async (entry: UnifiedEntry, type: 'departure' | 'arrival') => {
         if (!('Notification' in window) || Notification.permission !== 'granted') return;
 
         const delayMinutes = Math.floor(entry.delay / 60);
@@ -42,16 +42,31 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
             return;
         }
 
-        // Show notification
-        new Notification(title, {
-            body,
-            icon: '/icon-512.png',
-            badge: '/icon-512.png',
-            tag: entry.id,
-            silent: false
-        });
-
-        notifiedIds.current.set(entry.id, Date.now());
+        try {
+            // Use ServiceWorker API for notifications (required on mobile)
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                const registration = await navigator.serviceWorker.ready;
+                await registration.showNotification(title, {
+                    body,
+                    icon: '/icon-512.png',
+                    badge: '/icon-512.png',
+                    tag: entry.id,
+                    silent: false
+                });
+            } else {
+                // Fallback for desktop browsers without ServiceWorker
+                new Notification(title, {
+                    body,
+                    icon: '/icon-512.png',
+                    badge: '/icon-512.png',
+                    tag: entry.id,
+                    silent: false
+                });
+            }
+            notifiedIds.current.set(entry.id, Date.now());
+        } catch (error) {
+            console.warn('Failed to show notification:', error);
+        }
     }, []);
 
     // Check for significant delays
