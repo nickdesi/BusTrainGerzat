@@ -16,7 +16,7 @@ import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 
-const APP_VERSION = '2.3.1';
+const APP_VERSION = '2.4.0';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
@@ -26,11 +26,10 @@ export default function Home() {
   const { isColorblindMode, toggleColorblindMode } = useColorblind();
   const { getPrediction } = usePredictiveDelay();
 
-  // Smart Alert Logic: Check if any favorited line has a predicted delay
+  // Smart Alert Logic: Check if any favorited trip has a predicted delay
   const smartAlert = useMemo(() => {
     if (favorites.length === 0) return null;
 
-    // Check next departures for favorites
     for (const departure of departures) {
       if (!favorites.some(f => f.id === departure.id)) continue;
 
@@ -47,7 +46,7 @@ export default function Home() {
       }
     }
     return null;
-  }, [departures, favorites]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [departures, favorites, getPrediction]);
 
   // Enable delay notifications
   useDelayNotifications(departures, arrivals, favorites.map(f => f.id));

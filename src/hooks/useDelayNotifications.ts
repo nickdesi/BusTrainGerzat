@@ -75,8 +75,8 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
 
         allEntries.forEach((entry) => {
             const delayMinutes = Math.floor(entry.delay / 60);
-            const entryFavId = `${entry.line}-${entry.destination}`;
-            const isFavorite = favorites.includes(entryFavId);
+            // Use entry.id directly since favorites now store unique trip IDs
+            const isFavorite = favorites.includes(entry.id);
 
             if (isFavorite && delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
                 const type = departures.includes(entry) ? 'departure' : 'arrival';

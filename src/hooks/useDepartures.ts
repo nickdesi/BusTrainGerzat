@@ -141,8 +141,7 @@ export function useDepartures() {
             platform,
         });
 
-        // Separate and map
-        console.log('UseDepartures - Raw updates:', updates.length, updates);
+
 
         // Filter by direction:
         // - Departures: buses LEAVING Gerzat (direction 0 = towards Aubière/Romagnat)
