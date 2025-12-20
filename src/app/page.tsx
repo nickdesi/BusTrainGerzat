@@ -16,7 +16,7 @@ import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 
-const APP_VERSION = '2.4.0';
+const APP_VERSION = '2.5.0';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();

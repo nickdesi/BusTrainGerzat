@@ -1,13 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
-// Favorite is uniquely identified by line + destination + stop
+/**
+ * Represents a user's favorite trip
+ */
 export interface Favorite {
-    id: string; // generated from line + destination
+    id: string;
     line: string;
     destination: string;
     type: 'BUS' | 'TER';
 }
 
+/**
+ * Hook for managing user favorites with localStorage persistence.
+ * Uses unique trip IDs for granular selection.
+ */
 export function useFavorites() {
     const [favorites, setFavorites] = useState<Favorite[]>(() => {
         if (typeof window === 'undefined') return [];
@@ -19,28 +25,23 @@ export function useFavorites() {
         }
     });
 
-    // Save favorites to local storage whenever they change
     useEffect(() => {
         localStorage.setItem('gerzat_favorites', JSON.stringify(favorites));
     }, [favorites]);
 
-    const toggleFavorite = (item: Favorite) => {
-        // Use the specific item.id provided (bus-123-1200) instead of generating one
-        const id = item.id;
-
+    const toggleFavorite = useCallback((item: Favorite) => {
         setFavorites(prev => {
-            const exists = prev.some(f => f.id === id);
-            if (exists) {
-                return prev.filter(f => f.id !== id);
-            } else {
-                return [...prev, item];
-            }
+            const exists = prev.some(f => f.id === item.id);
+            return exists
+                ? prev.filter(f => f.id !== item.id)
+                : [...prev, item];
         });
-    };
+    }, []);
 
-    const isFavorite = (id: string) => {
+    const isFavorite = useCallback((id: string) => {
         return favorites.some(f => f.id === id);
-    };
+    }, [favorites]);
 
     return { favorites, toggleFavorite, isFavorite };
 }
+
