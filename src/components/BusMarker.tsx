@@ -9,8 +9,9 @@ interface BusMarkerProps {
 
 const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // Determine bus color based on direction
-    // direction 0 = Towards Gerzat (green), direction 1 = From Gerzat (blue)
-    const iconColor = vehicle.direction === 0 ? '#22c55e' : '#3b82f6';
+    // direction 0 = From Gerzat towards Aubière/Romagnat (blue)
+    // direction 1 = Towards Gerzat (green)
+    const iconColor = vehicle.direction === 1 ? '#22c55e' : '#3b82f6';
 
     // Determine pulse class based on delay
     const delayMinutes = Math.round(vehicle.delay / 60);
