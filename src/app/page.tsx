@@ -32,7 +32,7 @@ export default function Home() {
 
     // Check next departures for favorites
     for (const departure of departures) {
-      if (!favorites.some(f => f.id === `${departure.line}-${departure.destination}`)) continue;
+      if (!favorites.some(f => f.id === departure.id)) continue;
 
       const dTime = new Date(departure.departureTime);
       const prediction = getPrediction(departure.line, dTime.getHours(), dTime.getDay());
@@ -241,13 +241,13 @@ export default function Home() {
             departures={filteredDepartures}
             loading={isLoading}
             favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
           />
           <DeparturesList
             departures={filteredDepartures}
             loading={isLoading}
             favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
           />
         </div>
 
@@ -265,14 +265,14 @@ export default function Home() {
             loading={isLoading}
             boardType="arrivals"
             favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
           />
           <DeparturesList
             departures={filteredArrivals}
             loading={isLoading}
             boardType="arrivals"
             favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(line, dest, type) => toggleFavorite({ line, destination: dest, type })}
+            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
           />
         </div>
 

@@ -12,7 +12,7 @@ interface DeparturesBoardProps {
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
     favorites?: string[]; // IDs of favorite lines
-    onToggleFavorite?: (line: string, destination: string, type: 'BUS' | 'TER') => void;
+    onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
 export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
@@ -21,8 +21,8 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
 
     // Sort departures: Favorites first, then by time
     const sortedDepartures = [...departures].sort((a, b) => {
-        const idA = `${a.line}-${a.destination}`;
-        const idB = `${b.line}-${b.destination}`;
+        const idA = a.id;
+        const idB = b.id;
         const isFavA = favorites.includes(idA);
         const isFavB = favorites.includes(idB);
 
@@ -63,8 +63,7 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                         </tr>
                     ) : (
                         sortedDepartures.map((entry, index) => {
-                            const favId = `${entry.line}-${entry.destination}`;
-                            const isFav = favorites.includes(favId);
+                            const isFav = favorites.includes(entry.id);
 
                             // Prediction Logic
                             const departureTime = new Date(entry.departureTime);
@@ -82,7 +81,7 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                             <button
                                                 onClick={(e) => {
                                                     e.stopPropagation();
-                                                    onToggleFavorite(entry.line, entry.destination, entry.type);
+                                                    onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
                                                 }}
                                                 className={`transition-all hover:scale-110 ${isFav ? 'text-yellow-400' : 'text-gray-700 hover:text-gray-400'}`}
                                                 title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}

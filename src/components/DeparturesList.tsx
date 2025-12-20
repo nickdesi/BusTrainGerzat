@@ -10,7 +10,7 @@ interface DeparturesListProps {
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
     favorites?: string[];
-    onToggleFavorite?: (line: string, destination: string, type: 'BUS' | 'TER') => void;
+    onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
 interface DepartureRowProps {
@@ -18,7 +18,7 @@ interface DepartureRowProps {
     index: number;
     boardType: 'departures' | 'arrivals';
     isFav: boolean;
-    onToggleFavorite?: (line: string, destination: string, type: 'BUS' | 'TER') => void;
+    onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
 const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav, onToggleFavorite }: DepartureRowProps) {
@@ -46,7 +46,7 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleFavorite(entry.line, entry.destination, entry.type);
+                                onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
                             }}
                             className={`p-1 transition-all active:scale-95 ${isFav ? 'text-yellow-400' : 'text-gray-600'}`}
                             title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
@@ -95,8 +95,8 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
 
     // Sort departures: Favorites first
     const sortedDepartures = [...departures].sort((a, b) => {
-        const idA = `${a.line}-${a.destination}`;
-        const idB = `${b.line}-${b.destination}`;
+        const idA = a.id;
+        const idB = b.id;
         const isFavA = favorites.includes(idA);
         const isFavB = favorites.includes(idB);
 
@@ -120,8 +120,7 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                 </div>
             ) : (
                 sortedDepartures.map((entry, index) => {
-                    const favId = `${entry.line}-${entry.destination}`;
-                    const isFav = favorites.includes(favId);
+                    const isFav = favorites.includes(entry.id);
 
                     return (
                         <DepartureRow
