@@ -3,6 +3,7 @@
 Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
 
 [![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gertzatlive.desimone.fr)
+[![version](https://img.shields.io/badge/version-2.5.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
 [![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
 ## 📍 Arrêts surveillés
@@ -32,7 +33,7 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 - **Position en temps réel** : Visualisation des bus sur une carte interactive avec le tracé de la ligne.
 - **Estimation intelligente** : Positions estimées à partir des données GTFS-RT Trip Updates avec "Snap to Route".
-- **Direction affichée** : Bandeau indiquant le terminus (→ AUBIÈRE Pl. des Ramacles ou → GERZAT Champfleuri).
+- **Direction affichée** : 🟢 Vert = Vers Gerzat / 🔵 Bleu = Vers Aubière/Romagnat.
 - **ETA au terminus** : Heure d'arrivée estimée au terminus pour chaque bus.
 - **Prochain arrêt** : Nom de l'arrêt suivant et heure d'arrivée estimée.
 - **Indicateur de retard** : Retard affiché en temps réel dans le popup.
@@ -40,13 +41,14 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 ### ✨ Expérience Utilisateur (UX/UI & Accessibilité)
 
 - **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
-- **Recherche & Favoris** : Filtrage instantané des lignes et mise en favoris pour un accès rapide en haut de liste.
+- **Recherche & Favoris** : Filtrage instantané et favoris granulaires par trajet spécifique (bus/train à une heure précise).
+- **Notifications de retard** : Alertes push pour vos trajets favoris en retard (≥5 min).
 - **Accessibilité (A11y)** : Mode Daltonien (couleurs contrastées), navigation clavier optimisée (Skip Link) et attributs ARIA complets.
 
 ### 🧠 Intelligence Artificielle
 
 - **Prédictions de Retard** : Badges "IA" indiquant les risques de retard basés sur l'historique (heures de pointe, sorties scolaires).
-- **Alertes Intelligentes** : Bannière dynamique avertissant des perturbations probables sur vos lignes favorites dès l'ouverture.
+- **Alertes Intelligentes** : Bannière dynamique avertissant des perturbations probables sur vos trajets favoris dès l'ouverture.
 
 ### ⚡ Performance & Temps Réel
 
@@ -56,8 +58,20 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 ## 🛠 Architecture Technique
 
-- **Framework** : Next.js 16 (App Router)
+- **Framework** : Next.js 15 (App Router)
 - **Styling** : TailwindCSS v4
+- **State** : TanStack Query (React Query)
+
+### 🧩 Hooks modulaires (v2.5.0)
+
+| Hook | Responsabilité |
+|------|----------------|
+| `useBusData` | Fetch données bus GTFS-RT |
+| `useTrainData` | Fetch données train SNCF |
+| `useDeparturesModel` | Transformation & tri |
+| `useDepartures` | Composition des hooks ci-dessus |
+| `useFavorites` | Gestion des favoris (localStorage) |
+| `useDelayNotifications` | Notifications push retards |
 
 ### 📡 Sources de données
 
