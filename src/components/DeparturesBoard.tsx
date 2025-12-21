@@ -1,8 +1,9 @@
-import { memo } from 'react';
-import { ArrowRight, Bus, Train, RefreshCw } from 'lucide-react';
+import { memo, useState } from 'react';
+import { ArrowRight, Bus, Train, RefreshCw, ChevronRight } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
+import TripDetailModal from './TripDetailModal';
 import { formatTime, getDisplayTime } from '@/utils/format';
 import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { BrainCircuit } from 'lucide-react';
@@ -18,6 +19,7 @@ interface DeparturesBoardProps {
 export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
     const { getPrediction } = usePredictiveDelay();
+    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 
     // Sort departures: Favorites first, then by time
     const sortedDepartures = [...departures].sort((a, b) => {
@@ -73,7 +75,12 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                             return (
                                 <tr
                                     key={entry.id}
-                                    className={`flip-enter hover:bg-gray-800/50 transition-colors ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
+                                    onClick={() => entry.type === 'BUS' && entry.tripId && setSelectedTrip({ tripId: entry.tripId, line: entry.line })}
+                                    className={`flip-enter transition-colors ${entry.type === 'BUS' && entry.tripId
+                                            ? 'cursor-pointer hover:bg-yellow-900/20'
+                                            : 'hover:bg-gray-800/50'
+                                        } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
+                                    title={entry.type === 'BUS' ? 'Cliquez pour voir le détail du trajet' : undefined}
                                 >
                                     {/* Favorite Toggle */}
                                     <td className="px-2 py-5 text-center">
@@ -188,12 +195,26 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                             )}
                                         </div>
                                     </td>
+
+                                    {/* Click indicator for buses */}
+                                    {entry.type === 'BUS' && entry.tripId && (
+                                        <td className="px-2 py-5">
+                                            <ChevronRight className="w-4 h-4 text-gray-600" />
+                                        </td>
+                                    )}
                                 </tr>
                             )
                         })
                     )}
                 </tbody>
             </table>
+
+            {/* Trip Detail Modal */}
+            <TripDetailModal
+                tripId={selectedTrip?.tripId || null}
+                lineName={selectedTrip?.line || 'E1'}
+                onClose={() => setSelectedTrip(null)}
+            />
         </div>
     );
 });

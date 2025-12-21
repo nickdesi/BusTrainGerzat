@@ -23,6 +23,7 @@ export interface TrainUpdate {
 
 export interface UnifiedEntry {
     id: string;
+    tripId?: string; // Original trip ID for API calls
     type: 'BUS' | 'TER';
     time: number;
     arrivalTime: number;

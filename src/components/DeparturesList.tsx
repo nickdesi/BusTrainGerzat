@@ -1,8 +1,9 @@
-import { memo } from 'react';
-import { ArrowRight, RefreshCw } from 'lucide-react';
+import { memo, useState } from 'react';
+import { ArrowRight, RefreshCw, ChevronRight } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
+import TripDetailModal from './TripDetailModal';
 import { formatTime, getDisplayTime } from '@/utils/format';
 
 interface DeparturesListProps {
@@ -19,12 +20,16 @@ interface DepartureRowProps {
     boardType: 'departures' | 'arrivals';
     isFav: boolean;
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
+    onTripClick?: (tripId: string, line: string) => void;
 }
 
-const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav, onToggleFavorite }: DepartureRowProps) {
+const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav, onToggleFavorite, onTripClick }: DepartureRowProps) {
+    const isClickable = entry.type === 'BUS' && entry.tripId;
+
     return (
         <div
-            className={`p-4 flip-enter ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
+            onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
+            className={`p-4 flip-enter ${isClickable ? 'cursor-pointer active:bg-yellow-900/30' : ''} ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
         >
             <div className="flex items-start justify-between mb-3">
                 {entry.type === 'TER' ? (
@@ -84,6 +89,9 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
                     {entry.isRealtime && (
                         <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></div>
                     )}
+                    {isClickable && (
+                        <ChevronRight className="w-4 h-4 text-gray-500" />
+                    )}
                 </div>
             </div>
         </div>
@@ -92,6 +100,7 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
 
 export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
+    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 
     // Sort departures: Favorites first
     const sortedDepartures = [...departures].sort((a, b) => {
@@ -130,10 +139,18 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                             boardType={boardType}
                             isFav={isFav}
                             onToggleFavorite={onToggleFavorite}
+                            onTripClick={(tripId, line) => setSelectedTrip({ tripId, line })}
                         />
                     );
                 })
             )}
+
+            {/* Trip Detail Modal */}
+            <TripDetailModal
+                tripId={selectedTrip?.tripId || null}
+                lineName={selectedTrip?.line || 'E1'}
+                onClose={() => setSelectedTrip(null)}
+            />
         </div>
     );
 }
