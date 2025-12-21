@@ -81,6 +81,9 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         // 1. Fetch Real-time Data
         const realtimeUpdates: Record<string, { arrival?: { time?: number; delay?: number }; departure?: { time?: number; delay?: number }; delay: number; isCancelled: boolean; scheduleRelationship?: number }> = {};
+        // Store ADDED trips (SR=1) as replacement trips that should be shown even if not in static schedule
+        const addedTrips: BusUpdate[] = [];
+
         try {
             const response = await fetch('https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update', {
                 cache: 'no-store',
@@ -96,7 +99,10 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     if (entity.tripUpdate) {
                         const tripUpdate = entity.tripUpdate;
                         if (tripUpdate.trip.routeId === targetRouteId) {
-                            const isTripCancelled = tripUpdate.trip.scheduleRelationship === 3; // CANCELED
+                            const scheduleRelationship = tripUpdate.trip.scheduleRelationship ?? 0;
+                            const isTripCancelled = scheduleRelationship === 3; // CANCELED
+                            const isTripAdded = scheduleRelationship === 1; // ADDED (replacement trip)
+
                             tripUpdate.stopTimeUpdate?.forEach((stopTimeUpdate) => {
                                 if (stopTimeUpdate.stopId && targetStopIds.has(stopTimeUpdate.stopId)) {
                                     const isStopCancelled = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED
@@ -105,16 +111,31 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                     const departureTime = stopTimeUpdate.departure?.time;
                                     const departureDelay = stopTimeUpdate.departure?.delay;
 
-                                    // Extract start date from trip update if available, or just use tripId
-                                    // Ideally we would match on start_date too.
-
-                                    realtimeUpdates[tripUpdate.trip.tripId as string] = {
-                                        arrival: arrivalTime != null ? { time: Number(arrivalTime), delay: arrivalDelay ?? 0 } : undefined,
-                                        departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
-                                        delay: Number(arrivalDelay || departureDelay || 0),
-                                        isCancelled: isTripCancelled || isStopCancelled,
-                                        scheduleRelationship: tripUpdate.trip.scheduleRelationship ?? undefined
-                                    };
+                                    // For ADDED trips, create a new entry directly (not in static schedule)
+                                    if (isTripAdded && arrivalTime) {
+                                        // Determine direction based on headsign or stop sequence
+                                        // For now, assume direction based on trip headsign if available
+                                        const direction = tripUpdate.trip.directionId ?? 0;
+                                        addedTrips.push({
+                                            tripId: tripUpdate.trip.tripId as string,
+                                            arrival: Number(arrivalTime),
+                                            departure: Number(departureTime || arrivalTime),
+                                            delay: Number(arrivalDelay || departureDelay || 0),
+                                            isRealtime: true,
+                                            isCancelled: false,
+                                            headsign: direction === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
+                                            direction: direction
+                                        });
+                                    } else {
+                                        // Regular update for existing static schedule trips
+                                        realtimeUpdates[tripUpdate.trip.tripId as string] = {
+                                            arrival: arrivalTime != null ? { time: Number(arrivalTime), delay: arrivalDelay ?? 0 } : undefined,
+                                            departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
+                                            delay: Number(arrivalDelay || departureDelay || 0),
+                                            isCancelled: isTripCancelled || isStopCancelled,
+                                            scheduleRelationship: scheduleRelationship
+                                        };
+                                    }
                                 }
                             });
                         }
@@ -205,6 +226,9 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     direction: item.direction
                 };
             });
+
+        // Add ADDED trips (replacement trips from GTFS-RT)
+        combinedUpdates.push(...addedTrips);
 
         combinedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
         const nextBuses = combinedUpdates.filter((u: BusUpdate) => u.arrival > now - 60).slice(0, 20);
