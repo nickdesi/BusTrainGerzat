@@ -14,7 +14,7 @@ export default function ServiceWorkerRegistration() {
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js')
                     .then((registration) => {
-                        console.log('SW registered:', registration.scope);
+                        // Service Worker registered successfully
 
                         // Check for updates immediately
                         registration.update();
@@ -29,7 +29,7 @@ export default function ServiceWorkerRegistration() {
                                 newWorker.addEventListener('statechange', () => {
                                     if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
                                         // New version installed, force refresh
-                                        console.log('New version available, refreshing...');
+                                        // New version available, trigger update
                                         newWorker.postMessage('skipWaiting');
                                         window.location.reload();
                                     }
@@ -43,7 +43,7 @@ export default function ServiceWorkerRegistration() {
 
                 // Handle controller change (new SW took over)
                 navigator.serviceWorker.addEventListener('controllerchange', () => {
-                    console.log('Controller changed, reloading...');
+                    // Controller changed, reload to update
                     window.location.reload();
                 });
             }

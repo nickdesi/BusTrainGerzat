@@ -1,4 +1,4 @@
-
+import { useCallback } from 'react';
 
 export interface Prediction {
     probability: 'LOW' | 'MEDIUM' | 'HIGH';
@@ -7,7 +7,7 @@ export interface Prediction {
 }
 
 export function usePredictiveDelay() {
-    const getPrediction = (line: string, hour: number, day: number): Prediction => {
+    const getPrediction = useCallback((line: string, hour: number, day: number): Prediction => {
         // 0 = Sunday, 6 = Saturday
         const isWeekend = day === 0 || day === 6;
         const isRushHour = (hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19);
@@ -45,7 +45,7 @@ export function usePredictiveDelay() {
             estimatedDelay: 0,
             reason: 'Trafic fluide'
         };
-    };
+    }, []);
 
     return { getPrediction };
 }

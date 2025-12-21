@@ -12,7 +12,6 @@ import { useDepartures } from '@/hooks/useDepartures';
 import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useFavorites } from '@/hooks/useFavorites';
 import { useColorblind } from '@/context/ColorblindContext';
-import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 
@@ -24,17 +23,30 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const { favorites, toggleFavorite } = useFavorites();
   const { isColorblindMode, toggleColorblindMode } = useColorblind();
-  const { getPrediction } = usePredictiveDelay();
 
   // Smart Alert Logic: Check if any favorited trip has a predicted delay
+  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const smartAlert = useMemo(() => {
     if (favorites.length === 0) return null;
+
+    // Inline prediction logic to avoid callback dependency issues
+    const getInlinePrediction = (line: string, hour: number, day: number) => {
+      const isWeekend = day === 0 || day === 6;
+      const isRushHour = (hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19);
+
+      if (line === 'E1') {
+        if (isRushHour && !isWeekend) {
+          return { probability: 'HIGH' as const, estimatedDelay: 5, reason: 'Pointe matin/soir (Hist. +5min)' };
+        }
+      }
+      return { probability: 'LOW' as const, estimatedDelay: 0, reason: 'Trafic fluide' };
+    };
 
     for (const departure of departures) {
       if (!favorites.some(f => f.id === departure.id)) continue;
 
       const dTime = new Date(departure.departureTime);
-      const prediction = getPrediction(departure.line, dTime.getHours(), dTime.getDay());
+      const prediction = getInlinePrediction(departure.line, dTime.getHours(), dTime.getDay());
 
       if (prediction.probability === 'HIGH') {
         return {
@@ -46,7 +58,7 @@ export default function Home() {
       }
     }
     return null;
-  }, [departures, favorites, getPrediction]);
+  }, [departures, favorites]);
 
   // Enable delay notifications
   useDelayNotifications(departures, arrivals, favorites.map(f => f.id));
