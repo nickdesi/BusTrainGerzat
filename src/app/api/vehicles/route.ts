@@ -229,13 +229,20 @@ export async function GET() {
 
                         const delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
 
-                        const headsign = directionId === 0
+                        // Get terminus ETA (last stop in the trip)
+                        const lastStopUpdate = stopTimeUpdates[stopTimeUpdates.length - 1];
+                        const lastStopId = lastStopUpdate?.stopId as string;
+                        const lastStopInfo = stopsById.get(lastStopId);
+                        const terminusEta = Number(lastStopUpdate?.arrival?.time || lastStopUpdate?.departure?.time || 0);
+
+                        let headsign = directionId === 0
                             ? "AUBIÈRE Pl. des Ramacles"
                             : "GERZAT Champfleuri";
 
-                        // Get terminus ETA (last stop in the trip)
-                        const lastStopUpdate = stopTimeUpdates[stopTimeUpdates.length - 1];
-                        const terminusEta = Number(lastStopUpdate?.arrival?.time || lastStopUpdate?.departure?.time || 0);
+                        // Use actual last stop name if available (handles partial trips like "Les Vignes")
+                        if (lastStopInfo?.stopName) {
+                            headsign = lastStopInfo.stopName;
+                        }
 
                         estimatedVehicles.push({
                             tripId: tripUpdate.trip.tripId as string,

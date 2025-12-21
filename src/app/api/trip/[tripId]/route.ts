@@ -79,9 +79,18 @@ export async function GET(
                 const direction = tripUpdate.trip.directionId ?? 0;
 
                 // Build headsign based on direction
-                const headsign = direction === 0
+                let headsign = direction === 0
                     ? "AUBIÈRE Pl. des Ramacles"
                     : "GERZAT Champfleuri";
+
+                // Use actual last stop name if available
+                const lastStopId = stopTimeUpdates[stopTimeUpdates.length - 1]?.stopId as string;
+                if (lastStopId) {
+                    const lastStopInfo = stopsById.get(lastStopId);
+                    if (lastStopInfo?.stopName) {
+                        headsign = lastStopInfo.stopName;
+                    }
+                }
 
                 // Find current stop (first stop with arrival > now)
                 let currentStopIndex = -1;
