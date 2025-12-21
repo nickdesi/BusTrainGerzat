@@ -2,8 +2,8 @@ name: Update T2C GTFS Schedule
 
 on:
   schedule:
-    # Every day at 03:00 UTC (04:00 Paris time)
-    - cron: '0 3 * * *'
+    # Every Monday at 06:00 UTC (07:00 Paris time)
+    - cron: '0 6 * * 1'
   workflow_dispatch: # Allow manual trigger
 
 jobs:
@@ -21,7 +21,23 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Check if GTFS is up-to-date (Sentinel Check)
+        id: sentinel_check
+        run: |
+          echo "🔍 Checking if official GTFS contains new schedule..."
+          if python3 scripts/check_gtfs_update.py; then
+            echo "is_updated=true" >> $GITHUB_OUTPUT
+            echo "✅ Official data IS up-to-date. Proceeding with update."
+          else
+            echo "is_updated=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Official data is still old. Skipping update to preserve manual corrections."
+          fi
+
       - name: Download T2C GTFS
+        if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
           echo "📥 Downloading GTFS data from T2C..."
           curl -L -f -o gtfs_t2c.zip "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs" || exit 1
@@ -31,12 +47,14 @@ jobs:
           echo "✅ GTFS data downloaded successfully"
 
       - name: Generate static schedule
+        if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
           echo "🔄 Generating static schedule..."
           python3 generate_static_json.py
           echo "✅ Static schedule generated"
 
       - name: Validate schedule
+        if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
           echo "🔍 Validating schedule..."
           STOPS=$(python3 -c "import json; print(len(json.load(open('src/data/static_schedule.json'))))")
@@ -48,6 +66,7 @@ jobs:
           echo "✅ Schedule validation passed"
 
       - name: Check for changes
+        if: steps.sentinel_check.outputs.is_updated == 'true'
         id: check_changes
         run: |
           git add -A
@@ -60,7 +79,7 @@ jobs:
           fi
 
       - name: Commit and push changes
-        if: steps.check_changes.outputs.changes == 'true'
+        if: steps.sentinel_check.outputs.is_updated == 'true' && steps.check_changes.outputs.changes == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"

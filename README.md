@@ -129,11 +129,21 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 ## 🔄 Mise à jour automatique
 
-Les horaires de bus T2C sont mis à jour **automatiquement chaque nuit** à 4h00 via GitHub Actions :
+Les horaires de bus T2C sont vérifiés **automatiquement chaque lundi** à 7h00 (heure de Paris) via GitHub Actions :
 
-- Téléchargement des données GTFS depuis la source T2C officielle
-- Régénération du fichier `static_schedule.json`
-- Commit et push automatique si des changements sont détectés
+- **Vérification sentinelle** : Le script vérifie d'abord si les données officielles contiennent les nouveaux horaires (ex: départ de 05h53).
+- **Protection des corrections manuelles** : Si les données officielles sont encore obsolètes, le workflow s'arrête sans modifier les horaires corrigés manuellement.
+- **Mise à jour automatique** : Si les données officielles sont à jour, téléchargement GTFS et régénération du fichier `static_schedule.json`.
+
+### Scripts de vérification
+
+```bash
+# Vérifier si les données officielles sont à jour
+python3 scripts/check_gtfs_update.py
+
+# Comparer les horaires avec une liste officielle (PDF)
+python3 scripts/verify_schedule.py user_schedule.txt
+```
 
 Vous pouvez aussi déclencher la mise à jour manuellement depuis [GitHub Actions](https://github.com/nickdesi/BusTrainGerzat/actions).
 
