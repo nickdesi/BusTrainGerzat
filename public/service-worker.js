@@ -10,7 +10,7 @@ const STATIC_ASSETS = [
 
 // Install: Skip waiting immediately
 self.addEventListener('install', (event) => {
-  console.log('[SW] Installing new version:', CACHE_VERSION);
+  // Installing new version
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
   );
@@ -19,14 +19,14 @@ self.addEventListener('install', (event) => {
 
 // Activate: Delete ALL old caches aggressively
 self.addEventListener('activate', (event) => {
-  console.log('[SW] Activating and clearing old caches');
+  // Activating and clearing old caches
   event.waitUntil(
     caches.keys().then((names) =>
       Promise.all(
         names
           .filter((n) => n !== CACHE_NAME)
           .map((n) => {
-            console.log('[SW] Deleting old cache:', n);
+            // Deleting old cache
             return caches.delete(n);
           })
       )
