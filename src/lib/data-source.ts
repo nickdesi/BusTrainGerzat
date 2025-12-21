@@ -25,6 +25,55 @@ export interface TrainUpdate {
     isCancelled: boolean;
 }
 
+// Internal types for static schedule
+interface StaticScheduleItem {
+    tripId: string;
+    arrival: number;
+    departure: number;
+    headsign: string;
+    direction: number;
+    date: string;
+}
+
+interface ProcessedScheduleItem extends StaticScheduleItem {
+    originalArrival: number;
+}
+
+// SNCF API types
+interface SncfLink {
+    type?: string;
+    rel?: string;
+    id?: string;
+}
+
+interface SncfDeparture {
+    stop_date_time: {
+        departure_date_time: string;
+        arrival_date_time: string;
+        base_departure_date_time: string;
+        data_freshness?: string;
+    };
+    display_informations: {
+        trip_short_name?: string;
+        headsign?: string;
+        direction?: string;
+        physical_mode?: string;
+        commercial_mode?: string;
+        links?: SncfLink[];
+    };
+    links?: SncfLink[];
+}
+
+interface SncfOrigin {
+    id: string;
+    name: string;
+}
+
+interface SncfApiResponse {
+    departures?: SncfDeparture[];
+    origins?: SncfOrigin[];
+}
+
 // --- BUS LOGIC ---
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
@@ -81,7 +130,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         today.setHours(0, 0, 0, 0);
         const todayMidnight = Math.floor(today.getTime() / 1000);
 
-        const scheduleDateStr = (staticSchedule as any[])[0]?.date || "20251126";
+        const scheduleDateStr = (staticSchedule as StaticScheduleItem[])[0]?.date || "20251126";
         const sYear = parseInt(scheduleDateStr.substring(0, 4));
         const sMonth = parseInt(scheduleDateStr.substring(4, 6)) - 1;
         const sDay = parseInt(scheduleDateStr.substring(6, 8));
@@ -91,8 +140,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         const timeOffset = todayMidnight - scheduleMidnight;
 
-        const combinedUpdates = staticSchedule
-            .map((item: any) => {
+        const combinedUpdates = (staticSchedule as StaticScheduleItem[])
+            .map((item: StaticScheduleItem) => {
                 // Calculate static timestamps for this item
                 const staticArrival = item.arrival + timeOffset;
                 const staticDeparture = item.departure + timeOffset;
@@ -104,14 +153,14 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     departure: staticDeparture
                 };
             })
-            .filter((item: any) => item.arrival > now - 600)
-            .map((item: any) => {
+            .filter((item: ProcessedScheduleItem) => item.arrival > now - 600)
+            .map((item: ProcessedScheduleItem) => {
                 const rt = realtimeUpdates[item.tripId];
                 let arrival = item.arrival;
                 let departure = item.departure;
                 let delay = 0;
                 let isRealtime = false;
-                let isCancelled = rt?.isCancelled || false;
+                const isCancelled = rt?.isCancelled || false;
 
                 if (rt) {
                     // CRITICAL FIX: Only apply RT update if the static time is close to the RT time (e.g. within 4 hours)
@@ -157,8 +206,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 };
             });
 
-        combinedUpdates.sort((a: any, b: any) => a.arrival - b.arrival);
-        const nextBuses = combinedUpdates.filter((u: any) => u.arrival > now - 60).slice(0, 20);
+        combinedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
+        const nextBuses = combinedUpdates.filter((u: BusUpdate) => u.arrival > now - 60).slice(0, 20);
 
         return { updates: nextBuses, timestamp: now };
     } catch (error) {
@@ -181,7 +230,7 @@ function parseSncfDateTime(dateTimeStr: string): number {
     return Math.floor(new Date(year, month, day, hour, minute, second).getTime() / 1000);
 }
 
-export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestamp: number, error?: string, debug?: any }> {
+export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestamp: number, error?: string, debug?: Record<string, unknown> }> {
     try {
         const now = Math.floor(Date.now() / 1000);
         if (!SNCF_API_KEY) {
@@ -202,21 +251,21 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         ]);
 
         const updates: TrainUpdate[] = [];
-        let debugInfo: any = {};
+        const debugInfo: Record<string, unknown> = {};
 
         if (baseScheduleRes.ok) {
             const baseScheduleData = await baseScheduleRes.json();
-            let realtimeTrainIds = new Set<string>();
+            const realtimeTrainIds = new Set<string>();
 
             if (realtimeRes.ok) {
-                const realtimeData = await realtimeRes.json();
-                realtimeData.departures?.forEach((dep: any) => {
-                    const vehicleJourneyId = dep.links?.find((l: any) => l.type === 'vehicle_journey')?.id;
+                const realtimeData = await realtimeRes.json() as SncfApiResponse;
+                realtimeData.departures?.forEach((dep: SncfDeparture) => {
+                    const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
                     if (vehicleJourneyId) realtimeTrainIds.add(vehicleJourneyId);
                 });
             }
 
-            baseScheduleData.departures?.forEach((dep: any) => {
+            (baseScheduleData as SncfApiResponse).departures?.forEach((dep: SncfDeparture) => {
                 const stopDateTime = dep.stop_date_time;
                 const displayInfo = dep.display_informations;
                 const departureTime = parseSncfDateTime(stopDateTime.departure_date_time);
@@ -225,13 +274,13 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
                 const delay = departureTime - baseDepartureTime;
 
                 let origin = 'Inconnu';
-                const originLink = displayInfo.links?.find((l: any) => l.rel === 'origins');
+                const originLink = displayInfo.links?.find((l: SncfLink) => l.rel === 'origins');
                 if (originLink) {
-                    const originData = baseScheduleData.origins?.find((o: any) => o.id === originLink.id);
+                    const originData = (baseScheduleData as SncfApiResponse).origins?.find((o: SncfOrigin) => o.id === originLink.id);
                     if (originData) origin = originData.name;
                 }
 
-                const vehicleJourneyId = dep.links?.find((l: any) => l.type === 'vehicle_journey')?.id;
+                const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
                 const isInRealtime = vehicleJourneyId ? realtimeTrainIds.has(vehicleJourneyId) : true;
                 const isCancelled =
                     stopDateTime.data_freshness === 'deleted' ||

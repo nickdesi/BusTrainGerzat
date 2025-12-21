@@ -22,8 +22,15 @@ interface EstimatedVehicle {
 const LINE_E1_ROUTE_ID = '3'; // Line E1 (formerly Line 20)
 
 // Simple in-memory cache
+interface VehicleCacheData {
+    vehicles: EstimatedVehicle[];
+    timestamp: number;
+    count: number;
+    isEstimated: boolean;
+}
+
 let vehicleCache: {
-    data: any;
+    data: VehicleCacheData;
     timestamp: number;
 } | null = null;
 const CACHE_DURATION = 5000; // 5 seconds
@@ -76,7 +83,6 @@ export async function GET() {
                         if (stopTimeUpdates.length === 0) return;
 
                         // Find the next stop (first stop with arrival time in the future)
-                        let currentStopIndex = -1;
                         let nextStopUpdate = null;
                         let prevStopUpdate = null;
 
@@ -94,7 +100,7 @@ export async function GET() {
                                 const isFirstStop = stu.stopSequence === 1;
                                 if (isFirstStop && (arrivalTime - now > 600)) break;
 
-                                currentStopIndex = i;
+                                // Variable `i` is used for prevStopUpdate, no need for separate index
                                 nextStopUpdate = stu;
                                 if (i > 0) {
                                     prevStopUpdate = stopTimeUpdates[i - 1];

@@ -26,7 +26,7 @@ const Polyline = dynamic(
 const ZoomHandlerComponent = dynamic(
     () => import('react-leaflet').then((mod) => {
         const { useMapEvents } = mod;
-        // eslint-disable-next-line react/display-name
+         
         return function ZoomHandler({ setZoom }: { setZoom: (z: number) => void }) {
             useMapEvents({
                 zoomend: (e) => {
