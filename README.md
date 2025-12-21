@@ -3,7 +3,7 @@
 Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
 
 [![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gerzatlive.desimone.fr)
-[![version](https://img.shields.io/badge/version-2.5.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
+[![version](https://img.shields.io/badge/version-2.6.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
 [![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
 <div align="center">
@@ -86,6 +86,90 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 | **Bus T2C** | GTFS-RT temps réel | [transport.data.gouv.fr](https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update) |
 | **Bus T2C** | GTFS statique | [opendata.clermontmetropole.eu](https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs) |
 
+### 🔄 Architecture des Données Bus GTFS-RT
+
+Le système de gestion des données bus suit une architecture robuste qui combine les horaires statiques avec les mises à jour temps réel :
+
+```mermaid
+flowchart TD
+    subgraph Sources["📡 Sources de Données"]
+        GTFS_STATIC["GTFS Statique<br/>(static_schedule.json)"]
+        GTFS_RT["GTFS-RT Trip Updates<br/>(transport.data.gouv.fr)"]
+    end
+
+    subgraph Processing["⚙️ Traitement (data-source.ts)"]
+        FETCH["Fetch GTFS-RT"]
+        PARSE["Parse Protobuf"]
+        FILTER["Filtre Route E1<br/>+ Arrêts Gerzat"]
+        CLASSIFY["Classification<br/>Schedule Relationship"]
+    end
+
+    subgraph Classification["📊 Types de Trajets"]
+        SCHEDULED["SCHEDULED (0)<br/>Trajet normal"]
+        ADDED["ADDED (1)<br/>Trajet de remplacement"]
+        CANCELED["CANCELED (3)<br/>Trajet annulé"]
+    end
+
+    subgraph Merge["🔗 Fusion Données"]
+        MATCH["Matching TripId + StartDate"]
+        APPLY_RT["Appliquer Temps Réel"]
+        ADD_NEW["Ajouter Trajets ADDED"]
+    end
+
+    subgraph Output["📤 Résultat Final"]
+        COMBINE["Combiner & Trier"]
+        DISPLAY["Affichage UI"]
+    end
+
+    GTFS_STATIC --> MATCH
+    GTFS_RT --> FETCH --> PARSE --> FILTER --> CLASSIFY
+    CLASSIFY --> SCHEDULED --> MATCH
+    CLASSIFY --> ADDED --> ADD_NEW
+    CLASSIFY --> CANCELED --> MATCH
+    MATCH --> APPLY_RT --> COMBINE
+    ADD_NEW --> COMBINE
+    COMBINE --> DISPLAY
+```
+
+#### Logique de Matching RT/Statique
+
+```mermaid
+flowchart LR
+    subgraph Input["Entrée"]
+        STATIC["Horaire Statique<br/>(tripId, date)"]
+        RT["Données RT<br/>(tripId, startDate)"]
+    end
+
+    subgraph Validation["Validation"]
+        CHECK_DATE{"startDate<br/>disponible ?"}
+        DATE_MATCH{"Dates<br/>correspondent ?"}
+        TIME_CHECK{"Fenêtre<br/>4h ?"}
+    end
+
+    subgraph Result["Résultat"]
+        APPLY["✅ Appliquer RT<br/>(retard, annulation)"]
+        SKIP["⏭️ Ignorer RT"]
+    end
+
+    STATIC --> CHECK_DATE
+    RT --> CHECK_DATE
+    CHECK_DATE -->|Oui| DATE_MATCH
+    CHECK_DATE -->|Non| TIME_CHECK
+    DATE_MATCH -->|Oui| APPLY
+    DATE_MATCH -->|Non| SKIP
+    TIME_CHECK -->|Oui| APPLY
+    TIME_CHECK -->|Non| SKIP
+```
+
+#### Gestion des Schedule Relationships
+
+| Code | Nom | Description | Traitement |
+|------|-----|-------------|------------|
+| `0` | SCHEDULED | Trajet planifié normal | Mis à jour avec données RT |
+| `1` | ADDED | Trajet ajouté (remplacement) | Créé dynamiquement, affiché même sans horaire statique |
+| `2` | UNSCHEDULED | Trajet sans horaire fixe | Traité comme ADDED |
+| `3` | CANCELED | Trajet annulé | Marqué "ANNULÉ" en rouge |
+
 ## 📦 Installation
 
 1. **Installer les dépendances** :
@@ -135,15 +219,17 @@ Les horaires de bus T2C sont vérifiés **automatiquement chaque lundi** à 7h00
 - **Protection des corrections manuelles** : Si les données officielles sont encore obsolètes, le workflow s'arrête sans modifier les horaires corrigés manuellement.
 - **Mise à jour automatique** : Si les données officielles sont à jour, téléchargement GTFS et régénération du fichier `static_schedule.json`.
 
-### Scripts de vérification
+### Scripts disponibles
 
 ```bash
+# Régénérer les horaires statiques depuis GTFS officiel
+python3 generate_static_json.py
+
 # Vérifier si les données officielles sont à jour
 python3 scripts/check_gtfs_update.py
-
-# Comparer les horaires avec une liste officielle (PDF)
-python3 scripts/verify_schedule.py user_schedule.txt
 ```
+
+> **Note** : Les données GTFS sont téléchargées automatiquement depuis [opendata.clermontmetropole.eu](https://opendata.clermontmetropole.eu/explore/dataset/gtfs-smtc).
 
 Vous pouvez aussi déclencher la mise à jour manuellement depuis [GitHub Actions](https://github.com/nickdesi/BusTrainGerzat/actions).
 
