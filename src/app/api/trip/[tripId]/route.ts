@@ -75,10 +75,8 @@ export async function GET(
                 const stopTimeUpdates = tripUpdate.stopTimeUpdate || [];
                 if (stopTimeUpdates.length === 0) continue;
 
-                // Determine direction from first stop
-                const firstStopId = stopTimeUpdates[0].stopId as string;
-                const firstStop = stopsById.get(firstStopId);
-                const direction = firstStop?.direction ?? 0;
+                // Determine direction from trip update (reliable)
+                const direction = tripUpdate.trip.directionId ?? 0;
 
                 // Build headsign based on direction
                 const headsign = direction === 0
@@ -129,7 +127,7 @@ export async function GET(
 
                     return {
                         stopId,
-                        stopName: stopInfo?.name || stopId,
+                        stopName: stopInfo?.stopName || stopId,
                         sequence: stu.stopSequence || index + 1,
                         scheduledArrival,
                         scheduledDeparture,

@@ -203,8 +203,12 @@ export async function GET() {
                             }
                         }
 
-                        // Apply Snap to Route if shape is available
-                        const directionKey = `direction${nextStop.direction}` as keyof typeof lineE1Data.shapes;
+                        // Apply Snap to Route using Trip Direction
+                        // Use directionId from the trip update (reliable per recent audit)
+                        const directionId = tripUpdate.trip.directionId ?? 0;
+                        const directionKey = String(directionId) as keyof typeof lineE1Data.shapes;
+
+
                         const shape = lineE1Data.shapes[directionKey];
 
                         if (shape && Array.isArray(shape)) {
@@ -225,7 +229,7 @@ export async function GET() {
 
                         const delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
 
-                        const headsign = nextStop.direction === 0
+                        const headsign = directionId === 0
                             ? "AUBIÈRE Pl. des Ramacles"
                             : "GERZAT Champfleuri";
 
@@ -237,9 +241,9 @@ export async function GET() {
                             tripId: tripUpdate.trip.tripId as string,
                             lat,
                             lon,
-                            direction: nextStop.direction,
+                            direction: directionId,
                             nextStop: nextStopId,
-                            nextStopName: nextStop.name,
+                            nextStopName: nextStop.stopName,
                             headsign,
                             bearing,
                             delay: delay,
