@@ -7128,22 +7128,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_0515",
-    "arrival": 1766808900,
-    "departure": 1766808900,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_0548",
-    "arrival": 1766810880,
-    "departure": 1766810880,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_055700",
     "arrival": 1766811420,
     "departure": 1766811420,
@@ -7168,14 +7152,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_0628",
-    "arrival": 1766813280,
-    "departure": 1766813280,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03AR.GC_055700",
     "arrival": 1766814360,
     "departure": 1766814360,
@@ -7187,14 +7163,6 @@
     "tripId": "925_1000002_03GC.AR_065400",
     "arrival": 1766814840,
     "departure": 1766814840,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_0658",
-    "arrival": 1766815080,
-    "departure": 1766815080,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
     "direction": 0,
     "date": "20251227"
@@ -7248,14 +7216,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_0830",
-    "arrival": 1766820600,
-    "departure": 1766820600,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03AR.GC_075600",
     "arrival": 1766821620,
     "departure": 1766821620,
@@ -7272,14 +7232,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_0901",
-    "arrival": 1766822460,
-    "departure": 1766822460,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03AR.GC_083000",
     "arrival": 1766823660,
     "departure": 1766823660,
@@ -7288,26 +7240,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_0931",
-    "arrival": 1766824260,
-    "departure": 1766824260,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_094000",
     "arrival": 1766824800,
     "departure": 1766824800,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_0949",
-    "arrival": 1766825340,
-    "departure": 1766825340,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -7328,14 +7264,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1007",
-    "arrival": 1766826420,
-    "departure": 1766826420,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03AR.GC_093100",
     "arrival": 1766827440,
     "departure": 1766827440,
@@ -7344,34 +7272,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1025",
-    "arrival": 1766827500,
-    "departure": 1766827500,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_103700",
     "arrival": 1766828220,
     "departure": 1766828220,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1042",
-    "arrival": 1766828520,
-    "departure": 1766828520,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1059",
-    "arrival": 1766829540,
-    "departure": 1766829540,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -7392,30 +7296,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1114",
-    "arrival": 1766830440,
-    "departure": 1766830440,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1118",
-    "arrival": 1766830680,
-    "departure": 1766830680,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1133",
-    "arrival": 1766831580,
-    "departure": 1766831580,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03AR.GC_104200",
     "arrival": 1766831760,
     "departure": 1766831760,
@@ -7424,41 +7304,9 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1143",
-    "arrival": 1766832180,
-    "departure": 1766832180,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_114600",
     "arrival": 1766832360,
     "departure": 1766832360,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1154",
-    "arrival": 1766832840,
-    "departure": 1766832840,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1157",
-    "arrival": 1766833020,
-    "departure": 1766833020,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1209",
-    "arrival": 1766833740,
-    "departure": 1766833740,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
     "direction": 0,
     "date": "20251227"
@@ -7480,22 +7328,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1219",
-    "arrival": 1766834340,
-    "departure": 1766834340,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1233",
-    "arrival": 1766835180,
-    "departure": 1766835180,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_123700",
     "arrival": 1766835420,
     "departure": 1766835420,
@@ -7512,26 +7344,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1244",
-    "arrival": 1766835840,
-    "departure": 1766835840,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_124900",
     "arrival": 1766836140,
     "departure": 1766836140,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1258",
-    "arrival": 1766836680,
-    "departure": 1766836680,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -7541,14 +7357,6 @@
     "departure": 1766836980,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1309",
-    "arrival": 1766837340,
-    "departure": 1766837340,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -7568,14 +7376,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1322",
-    "arrival": 1766838120,
-    "departure": 1766838120,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_133700",
     "arrival": 1766839020,
     "departure": 1766839020,
@@ -7592,26 +7392,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1346",
-    "arrival": 1766839560,
-    "departure": 1766839560,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_134900",
     "arrival": 1766839740,
     "departure": 1766839740,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1400",
-    "arrival": 1766840400,
-    "departure": 1766840400,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -7640,14 +7424,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1423",
-    "arrival": 1766841780,
-    "departure": 1766841780,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_143800",
     "arrival": 1766842680,
     "departure": 1766842680,
@@ -7664,26 +7440,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1448",
-    "arrival": 1766843280,
-    "departure": 1766843280,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_145200",
     "arrival": 1766843520,
     "departure": 1766843520,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1502",
-    "arrival": 1766844120,
-    "departure": 1766844120,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -7693,14 +7453,6 @@
     "departure": 1766844480,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1514",
-    "arrival": 1766844840,
-    "departure": 1766844840,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -7720,14 +7472,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1526",
-    "arrival": 1766845560,
-    "departure": 1766845560,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_154100",
     "arrival": 1766846460,
     "departure": 1766846460,
@@ -7744,25 +7488,9 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1551",
-    "arrival": 1766847060,
-    "departure": 1766847060,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_155500",
     "arrival": 1766847300,
     "departure": 1766847300,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1603",
-    "arrival": 1766847780,
-    "departure": 1766847780,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
     "direction": 0,
     "date": "20251227"
@@ -7773,14 +7501,6 @@
     "departure": 1766848200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1616",
-    "arrival": 1766848560,
-    "departure": 1766848560,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -7800,14 +7520,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1628",
-    "arrival": 1766849280,
-    "departure": 1766849280,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_163300",
     "arrival": 1766849580,
     "departure": 1766849580,
@@ -7821,14 +7533,6 @@
     "departure": 1766849760,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1641",
-    "arrival": 1766850060,
-    "departure": 1766850060,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -7848,14 +7552,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1653",
-    "arrival": 1766850780,
-    "departure": 1766850780,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_165800",
     "arrival": 1766851080,
     "departure": 1766851080,
@@ -7869,14 +7565,6 @@
     "departure": 1766851200,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1706",
-    "arrival": 1766851560,
-    "departure": 1766851560,
-    "headsign": "Les Vignes",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -7896,14 +7584,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1719",
-    "arrival": 1766852340,
-    "departure": 1766852340,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_172300",
     "arrival": 1766852580,
     "departure": 1766852580,
@@ -7917,14 +7597,6 @@
     "departure": 1766852820,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1733",
-    "arrival": 1766853180,
-    "departure": 1766853180,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -7944,14 +7616,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1746",
-    "arrival": 1766853960,
-    "departure": 1766853960,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_175000",
     "arrival": 1766854200,
     "departure": 1766854200,
@@ -7968,26 +7632,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1759",
-    "arrival": 1766854740,
-    "departure": 1766854740,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_180300",
     "arrival": 1766854980,
     "departure": 1766854980,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1813",
-    "arrival": 1766855580,
-    "departure": 1766855580,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -7997,14 +7645,6 @@
     "departure": 1766855940,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1826",
-    "arrival": 1766856360,
-    "departure": 1766856360,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251227"
   },
   {
@@ -8020,22 +7660,6 @@
     "arrival": 1766856840,
     "departure": 1766856840,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1838",
-    "arrival": 1766857080,
-    "departure": 1766857080,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_1850",
-    "arrival": 1766857800,
-    "departure": 1766857800,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -8056,14 +7680,6 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1915",
-    "arrival": 1766859300,
-    "departure": 1766859300,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03AR.GC_182600",
     "arrival": 1766859840,
     "departure": 1766859840,
@@ -8072,26 +7688,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_1935",
-    "arrival": 1766860500,
-    "departure": 1766860500,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "925_1000002_03GC.AR_193800",
     "arrival": 1766860680,
     "departure": 1766860680,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_2000",
-    "arrival": 1766862000,
-    "departure": 1766862000,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -8104,42 +7704,10 @@
     "date": "20251227"
   },
   {
-    "tripId": "MANUAL_20251227_0_2020",
-    "arrival": 1766863200,
-    "departure": 1766863200,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_2024",
-    "arrival": 1766863440,
-    "departure": 1766863440,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
     "tripId": "1132_1000001_03GC.AR_203000",
     "arrival": 1766863800,
     "departure": 1766863800,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_2044",
-    "arrival": 1766864640,
-    "departure": 1766864640,
-    "headsign": "Les Vignes",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_2110",
-    "arrival": 1766866200,
-    "departure": 1766866200,
-    "headsign": "Les Vignes",
     "direction": 0,
     "date": "20251227"
   },
@@ -8155,14 +7723,6 @@
     "tripId": "1132_1000001_03GC.AR_212500",
     "arrival": 1766867100,
     "departure": 1766867100,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251227"
-  },
-  {
-    "tripId": "MANUAL_20251227_0_2144",
-    "arrival": 1766868240,
-    "departure": 1766868240,
     "headsign": "AUBI\u00c8RE Pl. des Ramacles",
     "direction": 0,
     "date": "20251227"
