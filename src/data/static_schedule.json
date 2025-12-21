@@ -640,14 +640,6 @@
     "date": "20251221"
   },
   {
-    "tripId": "MANUAL_20251221_0_2030",
-    "arrival": 1766345400,
-    "departure": 1766345400,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20251221"
-  },
-  {
     "tripId": "1115_1000003_03GC.AR_204800",
     "arrival": 1766346480,
     "departure": 1766346480,
@@ -8821,14 +8813,6 @@
     "departure": 1766949600,
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
-    "date": "20251228"
-  },
-  {
-    "tripId": "MANUAL_20251228_0_2030",
-    "arrival": 1766950200,
-    "departure": 1766950200,
-    "headsign": "AUBI\u00c8RE Pl. des Ramacles",
-    "direction": 0,
     "date": "20251228"
   },
   {
