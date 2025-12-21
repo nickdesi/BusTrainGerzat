@@ -75,13 +75,29 @@ interface SncfApiResponse {
 }
 
 // --- BUS LOGIC ---
+// GTFS-RT Schedule Relationship enum values
+enum ScheduleRelationship {
+    SCHEDULED = 0,
+    ADDED = 1,        // Extra trip added (replacement)
+    UNSCHEDULED = 2,  // Trip running without schedule / DUPLICATED in newer specs
+    CANCELED = 3      // Trip canceled
+}
+
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
         const now = Math.floor(Date.now() / 1000);
 
         // 1. Fetch Real-time Data
-        const realtimeUpdates: Record<string, { arrival?: { time?: number; delay?: number }; departure?: { time?: number; delay?: number }; delay: number; isCancelled: boolean; scheduleRelationship?: number }> = {};
-        // Store ADDED trips (SR=1) as replacement trips that should be shown even if not in static schedule
+        // Key format: tripId_startDate for precise matching
+        const realtimeUpdates: Record<string, {
+            arrival?: { time?: number; delay?: number };
+            departure?: { time?: number; delay?: number };
+            delay: number;
+            isCancelled: boolean;
+            startDate?: string;
+        }> = {};
+
+        // Store ADDED/DUPLICATED trips as replacement trips (not in static schedule)
         const addedTrips: BusUpdate[] = [];
 
         try {
@@ -99,23 +115,25 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     if (entity.tripUpdate) {
                         const tripUpdate = entity.tripUpdate;
                         if (tripUpdate.trip.routeId === targetRouteId) {
-                            const scheduleRelationship = tripUpdate.trip.scheduleRelationship ?? 0;
-                            const isTripCancelled = scheduleRelationship === 3; // CANCELED
-                            const isTripAdded = scheduleRelationship === 1; // ADDED (replacement trip)
+                            const scheduleRelationship = tripUpdate.trip.scheduleRelationship ?? ScheduleRelationship.SCHEDULED;
+                            const startDate = tripUpdate.trip.startDate as string | undefined;
+                            const directionId = tripUpdate.trip.directionId ?? 0;
+
+                            const isTripCancelled = scheduleRelationship === ScheduleRelationship.CANCELED;
+                            // ADDED or UNSCHEDULED/DUPLICATED = treat as replacement trips
+                            const isTripAdded = scheduleRelationship === ScheduleRelationship.ADDED ||
+                                scheduleRelationship === ScheduleRelationship.UNSCHEDULED;
 
                             tripUpdate.stopTimeUpdate?.forEach((stopTimeUpdate) => {
                                 if (stopTimeUpdate.stopId && targetStopIds.has(stopTimeUpdate.stopId)) {
-                                    const isStopCancelled = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED
+                                    const isStopSkipped = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED
                                     const arrivalTime = stopTimeUpdate.arrival?.time;
                                     const arrivalDelay = stopTimeUpdate.arrival?.delay;
                                     const departureTime = stopTimeUpdate.departure?.time;
                                     const departureDelay = stopTimeUpdate.departure?.delay;
 
-                                    // For ADDED trips, create a new entry directly (not in static schedule)
+                                    // For ADDED/DUPLICATED trips, create a new entry directly
                                     if (isTripAdded && arrivalTime) {
-                                        // Determine direction based on headsign or stop sequence
-                                        // For now, assume direction based on trip headsign if available
-                                        const direction = tripUpdate.trip.directionId ?? 0;
                                         addedTrips.push({
                                             tripId: tripUpdate.trip.tripId as string,
                                             arrival: Number(arrivalTime),
@@ -123,17 +141,18 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                             delay: Number(arrivalDelay || departureDelay || 0),
                                             isRealtime: true,
                                             isCancelled: false,
-                                            headsign: direction === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
-                                            direction: direction
+                                            headsign: directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
+                                            direction: directionId
                                         });
                                     } else {
                                         // Regular update for existing static schedule trips
+                                        // Use tripId as key (startDate used for validation during merge)
                                         realtimeUpdates[tripUpdate.trip.tripId as string] = {
                                             arrival: arrivalTime != null ? { time: Number(arrivalTime), delay: arrivalDelay ?? 0 } : undefined,
                                             departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
                                             delay: Number(arrivalDelay || departureDelay || 0),
-                                            isCancelled: isTripCancelled || isStopCancelled,
-                                            scheduleRelationship: scheduleRelationship
+                                            isCancelled: isTripCancelled || isStopSkipped,
+                                            startDate: startDate
                                         };
                                     }
                                 }
@@ -184,10 +203,24 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 const isCancelled = rt?.isCancelled || false;
 
                 if (rt) {
-                    // CRITICAL FIX: Only apply RT update if the static time is close to the RT time (e.g. within 4 hours)
-                    // This prevents applying "Today's" RT update to "Tomorrow's" static schedule entry for the same tripId.
-                    const rtTime = rt.arrival?.time || rt.departure?.time || 0;
-                    if (rtTime && Math.abs(rtTime - item.arrival) < 14400) { // 4 hours window
+                    // Validate RT data matches this static entry
+                    // 1. Check startDate if available (most reliable)
+                    // 2. Fallback to time proximity check (within 4 hours)
+                    const rtStartDate = rt.startDate;
+                    const staticDate = item.date; // Format: YYYYMMDD
+
+                    let shouldApplyRT = false;
+
+                    if (rtStartDate && staticDate) {
+                        // Strict date matching when startDate is available
+                        shouldApplyRT = rtStartDate === staticDate;
+                    } else {
+                        // Fallback: time proximity check
+                        const rtTime = rt.arrival?.time || rt.departure?.time || 0;
+                        shouldApplyRT = rtTime > 0 && Math.abs(rtTime - item.arrival) < 14400; // 4 hours window
+                    }
+
+                    if (shouldApplyRT) {
                         isRealtime = true;
 
                         if (rt.arrival?.time) {
