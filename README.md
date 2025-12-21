@@ -225,6 +225,9 @@ Les horaires de bus T2C sont vérifiés **automatiquement chaque lundi** à 7h00
 # Régénérer les horaires statiques depuis GTFS officiel
 python3 generate_static_json.py
 
+# Extraire les données géographiques (tracé, arrêts) pour la carte live
+python3 extract_lineE1_data.py
+
 # Vérifier si les données officielles sont à jour
 python3 scripts/check_gtfs_update.py
 ```
