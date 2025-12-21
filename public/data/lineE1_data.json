@@ -1,860 +1,756 @@
 {
-  "routeId": "3",
-  "routeName": "E1",
-  "routeLongName": "E1",
-  "routeColor": "fdc300",
+  "route": {
+    "routeId": "3",
+    "routeShortName": "E1",
+    "routeLongName": "E1",
+    "routeColor": "fdc300"
+  },
   "stops": [
     {
-      "stopId": "PATUR",
-      "name": "Patural",
-      "lat": 45.82764667,
-      "lon": 3.150878008,
-      "sequence": 1,
-      "direction": 0
-    },
-    {
-      "stopId": "VGNEB",
-      "name": "Les Vignes",
-      "lat": 45.80249281,
-      "lon": 3.107210415,
-      "sequence": 1,
-      "direction": 0
-    },
-    {
-      "stopId": "GECHR",
-      "name": "GERZAT Champfleuri",
-      "lat": 45.83522816,
-      "lon": 3.147872704,
-      "sequence": 1,
-      "direction": 0
-    },
-    {
-      "stopId": "MARTR",
-      "name": "Martyrs",
-      "lat": 45.82305619,
-      "lon": 3.146151568,
-      "sequence": 2,
-      "direction": 0
-    },
-    {
-      "stopId": "FONTA",
-      "name": "Fontcimagne",
-      "lat": 45.7976621,
-      "lon": 3.104372808,
-      "sequence": 2,
-      "direction": 0
-    },
-    {
-      "stopId": "LIMAR",
-      "name": "Limagne",
-      "lat": 45.83106937,
-      "lon": 3.145368608,
-      "sequence": 2,
-      "direction": 0
-    },
-    {
-      "stopId": "CHABR",
-      "name": "Chabesses",
-      "lat": 45.81768959,
-      "lon": 3.142984388,
-      "sequence": 3,
-      "direction": 0
-    },
-    {
-      "stopId": "PRUNA",
-      "name": "Pruniers",
-      "lat": 45.79474788,
-      "lon": 3.101605398,
-      "sequence": 3,
-      "direction": 0
-    },
-    {
-      "stopId": "BOURR",
-      "name": "Bourly",
-      "lat": 45.82844293,
-      "lon": 3.146514008,
-      "sequence": 3,
-      "direction": 0
-    },
-    {
-      "stopId": "ESPLA",
-      "name": "Esplanade",
-      "lat": 45.77739366,
-      "lon": 3.095655459,
-      "sequence": 4,
-      "direction": 0
-    },
-    {
-      "stopId": "CHFOA",
-      "name": "Champfleuri Forest",
-      "lat": 45.7933,
-      "lon": 3.100520018,
-      "sequence": 4,
-      "direction": 0
-    },
-    {
-      "stopId": "PASCR",
-      "name": "Pascal",
-      "lat": 45.8287544,
-      "lon": 3.148945588,
-      "sequence": 4,
-      "direction": 0
-    },
-    {
-      "stopId": "BALLA",
-      "name": "Ballainvilliers",
-      "lat": 45.77528807,
-      "lon": 3.086767458,
-      "sequence": 5,
-      "direction": 0
-    },
-    {
-      "stopId": "CATAA",
-      "name": "Cataroux",
-      "lat": 45.78911424,
-      "lon": 3.098359126,
-      "sequence": 5,
-      "direction": 0
-    },
-    {
-      "stopId": "GEROR",
-      "name": "GERZAT Rochefort",
-      "lat": 45.83102639,
-      "lon": 3.151327048,
-      "sequence": 5,
-      "direction": 0
-    },
-    {
-      "stopId": "CLFOA",
-      "name": "Clos Four",
-      "lat": 45.78684396,
-      "lon": 3.098280474,
-      "sequence": 6,
-      "direction": 0
-    },
-    {
-      "stopId": "PRMAB",
-      "name": "1er Mai",
-      "lat": 45.78464233,
-      "lon": 3.100539018,
-      "sequence": 7,
-      "direction": 0
-    },
-    {
-      "stopId": "PEGUR",
-      "name": "Les Pègues",
-      "lat": 45.82415595,
-      "lon": 3.149603768,
-      "sequence": 7,
-      "direction": 0
-    },
-    {
-      "stopId": "DEPAA",
-      "name": "Deux Patriotes",
-      "lat": 45.78098523,
-      "lon": 3.103805838,
-      "sequence": 8,
-      "direction": 0
-    },
-    {
-      "stopId": "GASNA",
-      "name": "Gare SNCF",
-      "lat": 45.77871435,
-      "lon": 3.099523204,
-      "sequence": 9,
-      "direction": 0
-    },
-    {
-      "stopId": "ELJAR",
-      "name": "Elie Jaloustre",
-      "lat": 45.82235057,
-      "lon": 3.145433408,
-      "sequence": 9,
-      "direction": 0
-    },
-    {
-      "stopId": "JUFER",
-      "name": "Jules Ferry",
-      "lat": 45.82052254,
-      "lon": 3.144402808,
-      "sequence": 10,
-      "direction": 0
-    },
-    {
-      "stopId": "DESAA",
-      "name": "Delille Salford",
-      "lat": 45.77960104,
-      "lon": 3.092544096,
-      "sequence": 11,
-      "direction": 0
-    },
-    {
-      "stopId": "MIHOA",
-      "name": "Michel de l'Hospital",
-      "lat": 45.77768548,
-      "lon": 3.090140837,
-      "sequence": 12,
-      "direction": 0
-    },
-    {
-      "stopId": "GAMBR",
-      "name": "Gambetta",
-      "lat": 45.81520024,
-      "lon": 3.143835698,
-      "sequence": 12,
-      "direction": 0
-    },
-    {
-      "stopId": "RHONR",
-      "name": "Rhonez",
-      "lat": 45.81415336,
-      "lon": 3.140513618,
-      "sequence": 13,
-      "direction": 0
-    },
-    {
-      "stopId": "LECOA",
-      "name": "Lecoq",
-      "lat": 45.77132858,
-      "lon": 3.086880638,
-      "sequence": 14,
-      "direction": 0
-    },
-    {
-      "stopId": "BRUGR",
-      "name": "Brugeron",
-      "lat": 45.80847544,
-      "lon": 3.129199258,
-      "sequence": 14,
-      "direction": 0
-    },
-    {
-      "stopId": "UCACB",
-      "name": "UCA - Campus Centre",
-      "lat": 45.77130232,
-      "lon": 3.088917754,
-      "sequence": 15,
-      "direction": 0
-    },
-    {
-      "stopId": "ILIAA",
-      "name": "Iliane",
-      "lat": 45.80780498,
-      "lon": 3.126024788,
-      "sequence": 15,
-      "direction": 0
-    },
-    {
-      "stopId": "BAISA",
-      "name": "Barrière d'Issoire",
-      "lat": 45.7728358,
-      "lon": 3.092892478,
-      "sequence": 16,
-      "direction": 0
-    },
-    {
-      "stopId": "SARDA",
-      "name": "Victorien Sardou",
-      "lat": 45.80778298,
-      "lon": 3.122743857,
-      "sequence": 16,
-      "direction": 0
-    },
-    {
-      "stopId": "COBLA",
-      "name": "Côte Blatin",
-      "lat": 45.77067451,
-      "lon": 3.094521258,
-      "sequence": 17,
-      "direction": 0
-    },
-    {
-      "stopId": "VIVIA",
-      "name": "Viviani",
-      "lat": 45.80722736,
-      "lon": 3.118554807,
-      "sequence": 17,
-      "direction": 0
-    },
-    {
-      "stopId": "NESOA",
-      "name": "Neuf Soleils",
-      "lat": 45.76638117,
-      "lon": 3.096107624,
-      "sequence": 18,
-      "direction": 0
-    },
-    {
-      "stopId": "ROUVA",
-      "name": "Rouvier",
-      "lat": 45.80645452,
-      "lon": 3.114530015,
-      "sequence": 18,
-      "direction": 0
-    },
-    {
-      "stopId": "VIGEA",
-      "name": "Dr Vigenaud",
-      "lat": 45.76359239,
-      "lon": 3.098717218,
-      "sequence": 19,
-      "direction": 0
-    },
-    {
-      "stopId": "LECLA",
-      "name": "Camille et Edmond Leclanché",
-      "lat": 45.80648035,
-      "lon": 3.110786733,
-      "sequence": 19,
-      "direction": 0
-    },
-    {
-      "stopId": "PUGEA",
-      "name": "Puget",
-      "lat": 45.76118839,
-      "lon": 3.100303564,
-      "sequence": 20,
-      "direction": 0
-    },
-    {
-      "stopId": "DIDEA",
-      "name": "Diderot",
-      "lat": 45.80466445,
-      "lon": 3.109256068,
-      "sequence": 20,
-      "direction": 0
-    },
-    {
-      "stopId": "CHPLA",
-      "name": "Chaptal",
-      "lat": 45.75925645,
-      "lon": 3.101266502,
-      "sequence": 21,
-      "direction": 0
-    },
-    {
-      "stopId": "LMASA",
-      "name": "Le Mas",
-      "lat": 45.75539568,
-      "lon": 3.104053356,
-      "sequence": 22,
-      "direction": 0
-    },
-    {
-      "stopId": "CASAA",
-      "name": "Casati",
-      "lat": 45.75232035,
-      "lon": 3.107750454,
-      "sequence": 23,
-      "direction": 0
-    },
-    {
-      "stopId": "CHPVA",
-      "name": "Champvoisin",
-      "lat": 45.7522764,
-      "lon": 3.110217439,
-      "sequence": 24,
-      "direction": 0
-    },
-    {
-      "stopId": "MAMIA",
-      "name": "Marcel Michelin",
-      "lat": 45.75364892,
-      "lon": 3.113411267,
-      "sequence": 25,
-      "direction": 0
-    },
-    {
-      "stopId": "ARTIA",
-      "name": "Artière",
-      "lat": 45.75309035,
-      "lon": 3.117413301,
-      "sequence": 26,
-      "direction": 0
-    },
-    {
-      "stopId": "JOCUA",
-      "name": "Joliot Curie",
-      "lat": 45.75159262,
-      "lon": 3.116723762,
-      "sequence": 27,
-      "direction": 0
-    },
-    {
-      "stopId": "COJCA",
-      "name": "Collège Joliot Curie",
-      "lat": 45.752036,
-      "lon": 3.119330018,
-      "sequence": 27,
-      "direction": 0
-    },
-    {
-      "stopId": "AUPRA",
-      "name": "AUBIÈRE Pl. des Ramacles",
-      "lat": 45.74954669,
-      "lon": 3.112042568,
-      "sequence": 28,
-      "direction": 0
-    },
-    {
-      "stopId": "PEUPA",
-      "name": "Peuplier",
-      "lat": 45.7484237,
-      "lon": 3.110497458,
-      "sequence": 29,
-      "direction": 0
-    },
-    {
-      "stopId": "PRATA",
-      "name": "Prat",
-      "lat": 45.74591377,
-      "lon": 3.109151428,
-      "sequence": 30,
-      "direction": 0
-    },
-    {
-      "stopId": "BEZOA",
-      "name": "La Bezou",
-      "lat": 45.74349653,
-      "lon": 3.107408468,
-      "sequence": 31,
-      "direction": 0
-    },
-    {
-      "stopId": "SAVEA",
-      "name": "St Verny",
-      "lat": 45.73945623,
-      "lon": 3.106182658,
-      "sequence": 32,
-      "direction": 0
-    },
-    {
-      "stopId": "GAZEA",
-      "name": "ROMAGNAT La Gazelle",
-      "lat": 45.73793646,
-      "lon": 3.104760908,
-      "sequence": 33,
-      "direction": 0
-    },
-    {
-      "stopId": "GAZER",
-      "name": "ROMAGNAT La Gazelle",
-      "lat": 45.7379975,
-      "lon": 3.105044428,
-      "sequence": 1,
-      "direction": 1
-    },
-    {
-      "stopId": "AUPRR",
-      "name": "AUBIÈRE Pl. des Ramacles",
-      "lat": 45.74997274,
-      "lon": 3.112883901,
-      "sequence": 1,
-      "direction": 1
-    },
-    {
       "stopId": "BALLR",
-      "name": "Ballainvilliers",
+      "stopName": "Ballainvilliers",
       "lat": 45.77525183,
       "lon": 3.086805538,
-      "sequence": 1,
-      "direction": 1
+      "sequence": 1
     },
     {
       "stopId": "VGNES",
-      "name": "Les Vignes",
+      "stopName": "Les Vignes",
       "lat": 45.80189226,
       "lon": 3.106785898,
-      "sequence": 1,
-      "direction": 1
+      "sequence": 1
+    },
+    {
+      "stopId": "GAZER",
+      "stopName": "ROMAGNAT La Gazelle",
+      "lat": 45.7379975,
+      "lon": 3.105044428,
+      "sequence": 1
+    },
+    {
+      "stopId": "GECHR",
+      "stopName": "GERZAT Champfleuri",
+      "lat": 45.83522816,
+      "lon": 3.147872704,
+      "sequence": 1
+    },
+    {
+      "stopId": "PATUR",
+      "stopName": "Patural",
+      "lat": 45.82764667,
+      "lon": 3.150878008,
+      "sequence": 1
+    },
+    {
+      "stopId": "AUPRR",
+      "stopName": "AUBIÈRE Pl. des Ramacles",
+      "lat": 45.74997274,
+      "lon": 3.112883901,
+      "sequence": 1
+    },
+    {
+      "stopId": "VGNEB",
+      "stopName": "Les Vignes",
+      "lat": 45.80249281,
+      "lon": 3.107210415,
+      "sequence": 1
     },
     {
       "stopId": "SAVER",
-      "name": "St Verny",
+      "stopName": "St Verny",
       "lat": 45.73921386,
       "lon": 3.106102178,
-      "sequence": 2,
-      "direction": 1
-    },
-    {
-      "stopId": "JOCUR",
-      "name": "Joliot Curie",
-      "lat": 45.75184525,
-      "lon": 3.117467183,
-      "sequence": 2,
-      "direction": 1
-    },
-    {
-      "stopId": "ESPLR",
-      "name": "Esplanade",
-      "lat": 45.77759854,
-      "lon": 3.095079488,
-      "sequence": 2,
-      "direction": 1
+      "sequence": 2
     },
     {
       "stopId": "DIDER",
-      "name": "Diderot",
+      "stopName": "Diderot",
       "lat": 45.80541008,
       "lon": 3.109420898,
-      "sequence": 2,
-      "direction": 1
+      "sequence": 2
     },
     {
-      "stopId": "BEZOR",
-      "name": "La Bezou",
-      "lat": 45.74394325,
-      "lon": 3.107864468,
-      "sequence": 3,
-      "direction": 1
+      "stopId": "JOCUR",
+      "stopName": "Joliot Curie",
+      "lat": 45.75184525,
+      "lon": 3.117467183,
+      "sequence": 2
     },
     {
-      "stopId": "ARTIR",
-      "name": "Artière",
-      "lat": 45.75405946,
-      "lon": 3.116488809,
-      "sequence": 3,
-      "direction": 1
+      "stopId": "ESPLR",
+      "stopName": "Esplanade",
+      "lat": 45.77759854,
+      "lon": 3.095079488,
+      "sequence": 2
     },
     {
-      "stopId": "LECLR",
-      "name": "Camille et Edmond Leclanché",
-      "lat": 45.80647902,
-      "lon": 3.110979686,
-      "sequence": 3,
-      "direction": 1
+      "stopId": "MARTR",
+      "stopName": "Martyrs",
+      "lat": 45.82305619,
+      "lon": 3.146151568,
+      "sequence": 2
+    },
+    {
+      "stopId": "FONTA",
+      "stopName": "Fontcimagne",
+      "lat": 45.7976621,
+      "lon": 3.104372808,
+      "sequence": 2
+    },
+    {
+      "stopId": "LIMAR",
+      "stopName": "Limagne",
+      "lat": 45.83106937,
+      "lon": 3.145368608,
+      "sequence": 2
+    },
+    {
+      "stopId": "BOURR",
+      "stopName": "Bourly",
+      "lat": 45.82844293,
+      "lon": 3.146514008,
+      "sequence": 3
     },
     {
       "stopId": "CHABA",
-      "name": "Chabesses",
+      "stopName": "Chabesses",
       "lat": 45.817949,
       "lon": 3.143194068,
-      "sequence": 3,
-      "direction": 1
+      "sequence": 3
+    },
+    {
+      "stopId": "BEZOR",
+      "stopName": "La Bezou",
+      "lat": 45.74394325,
+      "lon": 3.107864468,
+      "sequence": 3
+    },
+    {
+      "stopId": "LECLR",
+      "stopName": "Camille et Edmond Leclanché",
+      "lat": 45.80647902,
+      "lon": 3.110979686,
+      "sequence": 3
+    },
+    {
+      "stopId": "PRUNA",
+      "stopName": "Pruniers",
+      "lat": 45.79474788,
+      "lon": 3.101605398,
+      "sequence": 3
+    },
+    {
+      "stopId": "CHABR",
+      "stopName": "Chabesses",
+      "lat": 45.81768959,
+      "lon": 3.142984388,
+      "sequence": 3
+    },
+    {
+      "stopId": "ARTIR",
+      "stopName": "Artière",
+      "lat": 45.75405946,
+      "lon": 3.116488809,
+      "sequence": 3
+    },
+    {
+      "stopId": "PASCR",
+      "stopName": "Pascal",
+      "lat": 45.8287544,
+      "lon": 3.148945588,
+      "sequence": 4
     },
     {
       "stopId": "PRATR",
-      "name": "Prat",
+      "stopName": "Prat",
       "lat": 45.74578889,
       "lon": 3.108995468,
-      "sequence": 4,
-      "direction": 1
+      "sequence": 4
     },
     {
-      "stopId": "MAMIR",
-      "name": "Marcel Michelin",
-      "lat": 45.75371323,
-      "lon": 3.113219388,
-      "sequence": 4,
-      "direction": 1
-    },
-    {
-      "stopId": "ROUVR",
-      "name": "Rouvier",
-      "lat": 45.80638219,
-      "lon": 3.114580468,
-      "sequence": 4,
-      "direction": 1
+      "stopId": "CHFOA",
+      "stopName": "Champfleuri Forest",
+      "lat": 45.7933,
+      "lon": 3.100520018,
+      "sequence": 4
     },
     {
       "stopId": "ELJAA",
-      "name": "Elie Jaloustre",
+      "stopName": "Elie Jaloustre",
       "lat": 45.8226212,
       "lon": 3.145334438,
-      "sequence": 4,
-      "direction": 1
+      "sequence": 4
     },
     {
-      "stopId": "PEUPR",
-      "name": "Peuplier",
-      "lat": 45.74843314,
-      "lon": 3.110433338,
-      "sequence": 5,
-      "direction": 1
+      "stopId": "ESPLA",
+      "stopName": "Esplanade",
+      "lat": 45.77739366,
+      "lon": 3.095655459,
+      "sequence": 4
     },
     {
-      "stopId": "CHPVR",
-      "name": "Champvoisin",
-      "lat": 45.75233982,
-      "lon": 3.110154069,
-      "sequence": 5,
-      "direction": 1
+      "stopId": "ROUVR",
+      "stopName": "Rouvier",
+      "lat": 45.80638219,
+      "lon": 3.114580468,
+      "sequence": 4
     },
     {
-      "stopId": "VIVIR",
-      "name": "Viviani",
-      "lat": 45.80713001,
-      "lon": 3.118321855,
-      "sequence": 5,
-      "direction": 1
+      "stopId": "MAMIR",
+      "stopName": "Marcel Michelin",
+      "lat": 45.75371323,
+      "lon": 3.113219388,
+      "sequence": 4
+    },
+    {
+      "stopId": "GEROR",
+      "stopName": "GERZAT Rochefort",
+      "lat": 45.83102639,
+      "lon": 3.151327048,
+      "sequence": 5
+    },
+    {
+      "stopId": "CATAA",
+      "stopName": "Cataroux",
+      "lat": 45.78911424,
+      "lon": 3.098359126,
+      "sequence": 5
     },
     {
       "stopId": "PATUA",
-      "name": "Patural",
+      "stopName": "Patural",
       "lat": 45.82800615,
       "lon": 3.150934808,
-      "sequence": 5,
-      "direction": 1
+      "sequence": 5
+    },
+    {
+      "stopId": "BALLA",
+      "stopName": "Ballainvilliers",
+      "lat": 45.77528807,
+      "lon": 3.086767458,
+      "sequence": 5
+    },
+    {
+      "stopId": "CHPVR",
+      "stopName": "Champvoisin",
+      "lat": 45.75233982,
+      "lon": 3.110154069,
+      "sequence": 5
+    },
+    {
+      "stopId": "PEUPR",
+      "stopName": "Peuplier",
+      "lat": 45.74843314,
+      "lon": 3.110433338,
+      "sequence": 5
+    },
+    {
+      "stopId": "VIVIR",
+      "stopName": "Viviani",
+      "lat": 45.80713001,
+      "lon": 3.118321855,
+      "sequence": 5
+    },
+    {
+      "stopId": "CLFOA",
+      "stopName": "Clos Four",
+      "lat": 45.78684396,
+      "lon": 3.098280474,
+      "sequence": 6
     },
     {
       "stopId": "CASAR",
-      "name": "Casati",
+      "stopName": "Casati",
       "lat": 45.75249198,
       "lon": 3.107650058,
-      "sequence": 6,
-      "direction": 1
+      "sequence": 6
     },
     {
       "stopId": "SARDR",
-      "name": "Victorien Sardou",
+      "stopName": "Victorien Sardou",
       "lat": 45.80767924,
       "lon": 3.122137728,
-      "sequence": 6,
-      "direction": 1
+      "sequence": 6
     },
     {
-      "stopId": "LMASR",
-      "name": "Le Mas",
-      "lat": 45.75536799,
-      "lon": 3.104155793,
-      "sequence": 7,
-      "direction": 1
+      "stopId": "PRMAB",
+      "stopName": "1er Mai",
+      "lat": 45.78464233,
+      "lon": 3.100539018,
+      "sequence": 7
+    },
+    {
+      "stopId": "PEGUR",
+      "stopName": "Les Pègues",
+      "lat": 45.82415595,
+      "lon": 3.149603768,
+      "sequence": 7
     },
     {
       "stopId": "ILIAR",
-      "name": "Iliane",
+      "stopName": "Iliane",
       "lat": 45.80772122,
       "lon": 3.126422398,
-      "sequence": 7,
-      "direction": 1
+      "sequence": 7
     },
     {
-      "stopId": "CHPLR",
-      "name": "Chaptal",
-      "lat": 45.75843263,
-      "lon": 3.102013418,
-      "sequence": 8,
-      "direction": 1
+      "stopId": "LMASR",
+      "stopName": "Le Mas",
+      "lat": 45.75536799,
+      "lon": 3.104155793,
+      "sequence": 7
+    },
+    {
+      "stopId": "DEPAA",
+      "stopName": "Deux Patriotes",
+      "lat": 45.78098523,
+      "lon": 3.103805838,
+      "sequence": 8
     },
     {
       "stopId": "BRUGA",
-      "name": "Brugeron",
+      "stopName": "Brugeron",
       "lat": 45.80870798,
       "lon": 3.129395588,
-      "sequence": 8,
-      "direction": 1
+      "sequence": 8
+    },
+    {
+      "stopId": "CHPLR",
+      "stopName": "Chaptal",
+      "lat": 45.75843263,
+      "lon": 3.102013418,
+      "sequence": 8
     },
     {
       "stopId": "PUGER",
-      "name": "Puget",
+      "stopName": "Puget",
       "lat": 45.76107912,
       "lon": 3.100494878,
-      "sequence": 9,
-      "direction": 1
+      "sequence": 9
+    },
+    {
+      "stopId": "GASNA",
+      "stopName": "Gare SNCF",
+      "lat": 45.77871435,
+      "lon": 3.099523204,
+      "sequence": 9
     },
     {
       "stopId": "RHONA",
-      "name": "Rhonez",
+      "stopName": "Rhonez",
       "lat": 45.81411738,
       "lon": 3.140513088,
-      "sequence": 9,
-      "direction": 1
+      "sequence": 9
+    },
+    {
+      "stopId": "ELJAR",
+      "stopName": "Elie Jaloustre",
+      "lat": 45.82235057,
+      "lon": 3.145433408,
+      "sequence": 9
     },
     {
       "stopId": "VIGER",
-      "name": "Dr Vigenaud",
+      "stopName": "Dr Vigenaud",
       "lat": 45.76399014,
       "lon": 3.098439918,
-      "sequence": 10,
-      "direction": 1
+      "sequence": 10
+    },
+    {
+      "stopId": "JUFER",
+      "stopName": "Jules Ferry",
+      "lat": 45.82052254,
+      "lon": 3.144402808,
+      "sequence": 10
     },
     {
       "stopId": "GAMBA",
-      "name": "Gambetta",
+      "stopName": "Gambetta",
       "lat": 45.81526276,
       "lon": 3.143900958,
-      "sequence": 10,
-      "direction": 1
+      "sequence": 10
+    },
+    {
+      "stopId": "DESAA",
+      "stopName": "Delille Salford",
+      "lat": 45.77960104,
+      "lon": 3.092544096,
+      "sequence": 11
     },
     {
       "stopId": "NESOR",
-      "name": "Neuf Soleils",
+      "stopName": "Neuf Soleils",
       "lat": 45.76728141,
       "lon": 3.096030068,
-      "sequence": 11,
-      "direction": 1
+      "sequence": 11
+    },
+    {
+      "stopId": "MIHOA",
+      "stopName": "Michel de l'Hospital",
+      "lat": 45.77768548,
+      "lon": 3.090140837,
+      "sequence": 12
     },
     {
       "stopId": "COBLR",
-      "name": "Côte Blatin",
+      "stopName": "Côte Blatin",
       "lat": 45.77108921,
       "lon": 3.094398398,
-      "sequence": 12,
-      "direction": 1
+      "sequence": 12
+    },
+    {
+      "stopId": "GAMBR",
+      "stopName": "Gambetta",
+      "lat": 45.81520024,
+      "lon": 3.143835698,
+      "sequence": 12
     },
     {
       "stopId": "JUFEA",
-      "name": "Jules Ferry",
+      "stopName": "Jules Ferry",
       "lat": 45.82047737,
       "lon": 3.144427888,
-      "sequence": 12,
-      "direction": 1
+      "sequence": 12
+    },
+    {
+      "stopId": "RHONR",
+      "stopName": "Rhonez",
+      "lat": 45.81415336,
+      "lon": 3.140513618,
+      "sequence": 13
     },
     {
       "stopId": "BAISR",
-      "name": "Barrière d'Issoire",
+      "stopName": "Barrière d'Issoire",
       "lat": 45.77285515,
       "lon": 3.09297325,
-      "sequence": 13,
-      "direction": 1
-    },
-    {
-      "stopId": "UCACS",
-      "name": "UCA - Campus Centre",
-      "lat": 45.77120037,
-      "lon": 3.088563092,
-      "sequence": 14,
-      "direction": 1
+      "sequence": 13
     },
     {
       "stopId": "PEGUA",
-      "name": "Les Pègues",
+      "stopName": "Les Pègues",
       "lat": 45.82410188,
       "lon": 3.149615838,
-      "sequence": 14,
-      "direction": 1
+      "sequence": 14
+    },
+    {
+      "stopId": "UCACS",
+      "stopName": "UCA - Campus Centre",
+      "lat": 45.77120037,
+      "lon": 3.088563092,
+      "sequence": 14
+    },
+    {
+      "stopId": "LECOA",
+      "stopName": "Lecoq",
+      "lat": 45.77132858,
+      "lon": 3.086880638,
+      "sequence": 14
+    },
+    {
+      "stopId": "BRUGR",
+      "stopName": "Brugeron",
+      "lat": 45.80847544,
+      "lon": 3.129199258,
+      "sequence": 14
+    },
+    {
+      "stopId": "ILIAA",
+      "stopName": "Iliane",
+      "lat": 45.80780498,
+      "lon": 3.126024788,
+      "sequence": 15
     },
     {
       "stopId": "LECOR",
-      "name": "Lecoq",
+      "stopName": "Lecoq",
       "lat": 45.77181421,
       "lon": 3.086912968,
-      "sequence": 15,
-      "direction": 1
+      "sequence": 15
+    },
+    {
+      "stopId": "UCACB",
+      "stopName": "UCA - Campus Centre",
+      "lat": 45.77130232,
+      "lon": 3.088917754,
+      "sequence": 15
+    },
+    {
+      "stopId": "BAISA",
+      "stopName": "Barrière d'Issoire",
+      "lat": 45.7728358,
+      "lon": 3.092892478,
+      "sequence": 16
     },
     {
       "stopId": "GEROA",
-      "name": "GERZAT Rochefort",
+      "stopName": "GERZAT Rochefort",
       "lat": 45.83073925,
       "lon": 3.151219828,
-      "sequence": 16,
-      "direction": 1
+      "sequence": 16
+    },
+    {
+      "stopId": "SARDA",
+      "stopName": "Victorien Sardou",
+      "lat": 45.80778298,
+      "lon": 3.122743857,
+      "sequence": 16
     },
     {
       "stopId": "MIHOR",
-      "name": "Michel de l'Hospital",
+      "stopName": "Michel de l'Hospital",
       "lat": 45.7777833,
       "lon": 3.090350268,
-      "sequence": 17,
-      "direction": 1
+      "sequence": 17
+    },
+    {
+      "stopId": "VIVIA",
+      "stopName": "Viviani",
+      "lat": 45.80722736,
+      "lon": 3.118554807,
+      "sequence": 17
+    },
+    {
+      "stopId": "COBLA",
+      "stopName": "Côte Blatin",
+      "lat": 45.77067451,
+      "lon": 3.094521258,
+      "sequence": 17
     },
     {
       "stopId": "PASCA",
-      "name": "Pascal",
+      "stopName": "Pascal",
       "lat": 45.82887856,
       "lon": 3.148489548,
-      "sequence": 17,
-      "direction": 1
+      "sequence": 17
     },
     {
-      "stopId": "DESAR",
-      "name": "Delille Salford",
-      "lat": 45.77959868,
-      "lon": 3.091995308,
-      "sequence": 18,
-      "direction": 1
+      "stopId": "NESOA",
+      "stopName": "Neuf Soleils",
+      "lat": 45.76638117,
+      "lon": 3.096107624,
+      "sequence": 18
     },
     {
       "stopId": "BOURA",
-      "name": "Bourly",
+      "stopName": "Bourly",
       "lat": 45.82903389,
       "lon": 3.145660418,
-      "sequence": 18,
-      "direction": 1
+      "sequence": 18
+    },
+    {
+      "stopId": "DESAR",
+      "stopName": "Delille Salford",
+      "lat": 45.77959868,
+      "lon": 3.091995308,
+      "sequence": 18
+    },
+    {
+      "stopId": "ROUVA",
+      "stopName": "Rouvier",
+      "lat": 45.80645452,
+      "lon": 3.114530015,
+      "sequence": 18
     },
     {
       "stopId": "LIMAA",
-      "name": "Limagne",
+      "stopName": "Limagne",
       "lat": 45.83147374,
       "lon": 3.145438908,
-      "sequence": 19,
-      "direction": 1
+      "sequence": 19
     },
     {
-      "stopId": "GASNR",
-      "name": "Gare SNCF",
-      "lat": 45.77869565,
-      "lon": 3.099507111,
-      "sequence": 20,
-      "direction": 1
+      "stopId": "LECLA",
+      "stopName": "Camille et Edmond Leclanché",
+      "lat": 45.80648035,
+      "lon": 3.110786733,
+      "sequence": 19
+    },
+    {
+      "stopId": "VIGEA",
+      "stopName": "Dr Vigenaud",
+      "lat": 45.76359239,
+      "lon": 3.098717218,
+      "sequence": 19
+    },
+    {
+      "stopId": "PUGEA",
+      "stopName": "Puget",
+      "lat": 45.76118839,
+      "lon": 3.100303564,
+      "sequence": 20
     },
     {
       "stopId": "GECHA",
-      "name": "GERZAT Champfleuri",
+      "stopName": "GERZAT Champfleuri",
       "lat": 45.83525058,
       "lon": 3.14800145,
-      "sequence": 20,
-      "direction": 1
+      "sequence": 20
+    },
+    {
+      "stopId": "GASNR",
+      "stopName": "Gare SNCF",
+      "lat": 45.77869565,
+      "lon": 3.099507111,
+      "sequence": 20
+    },
+    {
+      "stopId": "DIDEA",
+      "stopName": "Diderot",
+      "lat": 45.80466445,
+      "lon": 3.109256068,
+      "sequence": 20
+    },
+    {
+      "stopId": "CHPLA",
+      "stopName": "Chaptal",
+      "lat": 45.75925645,
+      "lon": 3.101266502,
+      "sequence": 21
     },
     {
       "stopId": "DEPAR",
-      "name": "Deux Patriotes",
+      "stopName": "Deux Patriotes",
       "lat": 45.78081605,
       "lon": 3.103546298,
-      "sequence": 21,
-      "direction": 1
+      "sequence": 21
+    },
+    {
+      "stopId": "LMASA",
+      "stopName": "Le Mas",
+      "lat": 45.75539568,
+      "lon": 3.104053356,
+      "sequence": 22
     },
     {
       "stopId": "PRMAS",
-      "name": "1er Mai",
+      "stopName": "1er Mai",
       "lat": 45.78458424,
       "lon": 3.101142628,
-      "sequence": 22,
-      "direction": 1
+      "sequence": 22
+    },
+    {
+      "stopId": "CASAA",
+      "stopName": "Casati",
+      "lat": 45.75232035,
+      "lon": 3.107750454,
+      "sequence": 23
     },
     {
       "stopId": "CLFOR",
-      "name": "Clos Four",
+      "stopName": "Clos Four",
       "lat": 45.78747208,
       "lon": 3.098482507,
-      "sequence": 23,
-      "direction": 1
+      "sequence": 23
     },
     {
       "stopId": "CATAR",
-      "name": "Cataroux",
+      "stopName": "Cataroux",
       "lat": 45.78932371,
       "lon": 3.098525423,
-      "sequence": 24,
-      "direction": 1
+      "sequence": 24
+    },
+    {
+      "stopId": "CHPVA",
+      "stopName": "Champvoisin",
+      "lat": 45.7522764,
+      "lon": 3.110217439,
+      "sequence": 24
     },
     {
       "stopId": "CHFOR",
-      "name": "Champfleuri Forest",
+      "stopName": "Champfleuri Forest",
       "lat": 45.79311,
       "lon": 3.100580018,
-      "sequence": 25,
-      "direction": 1
+      "sequence": 25
+    },
+    {
+      "stopId": "MAMIA",
+      "stopName": "Marcel Michelin",
+      "lat": 45.75364892,
+      "lon": 3.113411267,
+      "sequence": 25
     },
     {
       "stopId": "PRUNR",
-      "name": "Pruniers",
+      "stopName": "Pruniers",
       "lat": 45.79522162,
       "lon": 3.102062158,
-      "sequence": 26,
-      "direction": 1
+      "sequence": 26
+    },
+    {
+      "stopId": "ARTIA",
+      "stopName": "Artière",
+      "lat": 45.75309035,
+      "lon": 3.117413301,
+      "sequence": 26
+    },
+    {
+      "stopId": "JOCUA",
+      "stopName": "Joliot Curie",
+      "lat": 45.75159262,
+      "lon": 3.116723762,
+      "sequence": 27
     },
     {
       "stopId": "FONTR",
-      "name": "Fontcimagne",
+      "stopName": "Fontcimagne",
       "lat": 45.79785764,
       "lon": 3.104722818,
-      "sequence": 27,
-      "direction": 1
+      "sequence": 27
+    },
+    {
+      "stopId": "COJCA",
+      "stopName": "Collège Joliot Curie",
+      "lat": 45.752036,
+      "lon": 3.119330018,
+      "sequence": 27
+    },
+    {
+      "stopId": "AUPRA",
+      "stopName": "AUBIÈRE Pl. des Ramacles",
+      "lat": 45.74954669,
+      "lon": 3.112042568,
+      "sequence": 28
+    },
+    {
+      "stopId": "PEUPA",
+      "stopName": "Peuplier",
+      "lat": 45.7484237,
+      "lon": 3.110497458,
+      "sequence": 29
+    },
+    {
+      "stopId": "PRATA",
+      "stopName": "Prat",
+      "lat": 45.74591377,
+      "lon": 3.109151428,
+      "sequence": 30
+    },
+    {
+      "stopId": "BEZOA",
+      "stopName": "La Bezou",
+      "lat": 45.74349653,
+      "lon": 3.107408468,
+      "sequence": 31
+    },
+    {
+      "stopId": "SAVEA",
+      "stopName": "St Verny",
+      "lat": 45.73945623,
+      "lon": 3.106182658,
+      "sequence": 32
+    },
+    {
+      "stopId": "GAZEA",
+      "stopName": "ROMAGNAT La Gazelle",
+      "lat": 45.73793646,
+      "lon": 3.104760908,
+      "sequence": 33
     }
   ],
   "shapes": {
-    "direction0": [
+    "0": [
       [
         45.83522,
         3.147890018
@@ -7740,350 +7636,1542 @@
         3.116726925
       ],
       [
-        45.75154504,
-        3.116614571
+        45.75154503,
+        3.116614548
       ],
       [
-        45.75150747,
-        3.116497694
+        45.75150745,
+        3.116497647
       ],
       [
-        45.7514699,
-        3.116380817
+        45.75146988,
+        3.116380747
       ],
       [
-        45.75143233,
-        3.116263941
+        45.7514323,
+        3.116263846
       ],
       [
-        45.75139477,
-        3.116147064
+        45.75139473,
+        3.116146946
       ],
       [
-        45.75135681,
-        3.116030447
+        45.75135676,
+        3.116030306
       ],
       [
-        45.75131811,
-        3.11591433
+        45.75131805,
+        3.115914166
       ],
       [
-        45.7512794,
-        3.115798214
+        45.75127934,
+        3.115798027
       ],
       [
-        45.75124069,
-        3.115682098
+        45.75124062,
+        3.115681887
       ],
       [
-        45.75120662,
-        3.115563167
+        45.75120655,
+        3.115562927
       ],
       [
-        45.75116508,
-        3.115449215
+        45.75116498,
+        3.115448965
       ],
       [
-        45.75112476,
-        3.115334282
+        45.75112466,
+        3.115334001
       ],
       [
-        45.75108504,
-        3.115218882
+        45.75108493,
+        3.115218583
       ],
       [
-        45.75104229,
-        3.115105731
+        45.75104216,
+        3.115105416
       ],
       [
-        45.7509875,
-        3.115003759
+        45.75098733,
+        3.115003453
       ],
       [
-        45.75092232,
-        3.114915367
+        45.7509221,
+        3.114915088
       ],
       [
-        45.75085559,
-        3.11482902
+        45.75085536,
+        3.114828724
       ],
       [
-        45.75078891,
-        3.114742605
+        45.75078867,
+        3.114742291
       ],
       [
-        45.75072233,
-        3.114656043
+        45.75072207,
+        3.114655711
       ],
       [
-        45.75065841,
-        3.114565503
+        45.75065816,
+        3.114565134
       ],
       [
-        45.75059942,
-        3.114468864
+        45.7505992,
+        3.114468421
       ],
       [
-        45.75054728,
-        3.114364032
+        45.75054706,
+        3.114363554
       ],
       [
-        45.75049871,
-        3.114255816
+        45.75049854,
+        3.11425527
       ],
       [
-        45.75046248,
-        3.11413808
+        45.75046231,
+        3.114137511
       ],
       [
-        45.75044058,
-        3.114013477
+        45.75044047,
+        3.114012846
       ],
       [
         45.75044,
-        3.113884968
+        3.113884294
       ],
       [
-        45.75042911,
-        3.113757554
+        45.75042906,
+        3.113756858
       ],
       [
-        45.75041993,
-        3.113629622
+        45.75041982,
+        3.113628916
       ],
       [
-        45.75039867,
-        3.113504689
+        45.75039849,
+        3.113503981
       ],
       [
-        45.75036722,
-        3.11338445
+        45.7503669,
+        3.113383818
       ],
       [
-        45.75031622,
-        3.113278493
+        45.75031591,
+        3.113277822
       ],
       [
-        45.75026229,
-        3.113176401
+        45.75026186,
+        3.113175835
       ],
       [
-        45.75019647,
-        3.113088646
+        45.75019603,
+        3.113088063
       ],
       [
-        45.75013066,
-        3.113000892
+        45.75013021,
+        3.113000291
       ],
       [
-        45.75006853,
-        3.112907813
+        45.75006809,
+        3.112907156
       ],
       [
-        45.75000744,
-        3.112813619
+        45.75000712,
+        3.112812809
       ],
       [
-        45.74996154,
-        3.11270309
+        45.74996115,
+        3.112702309
       ],
       [
-        45.74990921,
-        3.112598436
+        45.74990881,
+        3.112597635
       ],
       [
-        45.74985688,
-        3.112493783
+        45.74985647,
+        3.11249296
       ],
       [
-        45.74978244,
-        3.112431237
+        45.74978176,
+        3.112430895
       ],
       [
-        45.74972649,
-        3.112331224
+        45.74972603,
+        3.112330384
       ],
       [
-        45.74967139,
-        3.112229511
+        45.74967093,
+        3.11222865
       ],
       [
-        45.74961296,
-        3.112131804
+        45.74961243,
+        3.112130979
       ],
       [
-        45.74955,
-        3.112040018
+        45.74954948,
+        3.112039152
+      ],
+      [
+        45.74948918,
+        3.11193672
+      ],
+      [
+        45.74943979,
+        3.111829991
+      ],
+      [
+        45.74934799,
+        3.111810411
+      ],
+      [
+        45.74926611,
+        3.111744902
+      ],
+      [
+        45.74918579,
+        3.111675811
+      ],
+      [
+        45.74911849,
+        3.111584268
+      ],
+      [
+        45.74905953,
+        3.111479959
+      ],
+      [
+        45.74899929,
+        3.111377221
+      ],
+      [
+        45.74893642,
+        3.111277681
+      ],
+      [
+        45.74887355,
+        3.11117814
+      ],
+      [
+        45.74881068,
+        3.1110786
+      ],
+      [
+        45.74875013,
+        3.110976258
+      ],
+      [
+        45.7486863,
+        3.110878381
+      ],
+      [
+        45.74862333,
+        3.110778964
+      ],
+      [
+        45.74856037,
+        3.110679548
+      ],
+      [
+        45.74849798,
+        3.110579416
+      ],
+      [
+        45.74843764,
+        3.110476773
+      ],
+      [
+        45.74837192,
+        3.110386405
+      ],
+      [
+        45.74830666,
+        3.110295347
+      ],
+      [
+        45.7482431,
+        3.110202493
+      ],
+      [
+        45.7481706,
+        3.110123403
+      ],
+      [
+        45.74809681,
+        3.110046832
+      ],
+      [
+        45.74801788,
+        3.109982108
+      ],
+      [
+        45.74793658,
+        3.109922984
+      ],
+      [
+        45.74785529,
+        3.10986386
+      ],
+      [
+        45.74777399,
+        3.109804737
+      ],
+      [
+        45.7476927,
+        3.109745614
+      ],
+      [
+        45.7476114,
+        3.109686491
+      ],
+      [
+        45.74753011,
+        3.109627368
+      ],
+      [
+        45.7474468,
+        3.109575114
+      ],
+      [
+        45.74736498,
+        3.1095175
+      ],
+      [
+        45.74728523,
+        3.109454373
+      ],
+      [
+        45.74720563,
+        3.109390943
+      ],
+      [
+        45.7471222,
+        3.109338249
+      ],
+      [
+        45.74703877,
+        3.109285554
+      ],
+      [
+        45.74698554,
+        3.109182212
+      ],
+      [
+        45.74692485,
+        3.109094312
+      ],
+      [
+        45.74684269,
+        3.10913319
+      ],
+      [
+        45.74675902,
+        3.109174136
+      ],
+      [
+        45.74668861,
+        3.109254494
+      ],
+      [
+        45.74660065,
+        3.10928905
+      ],
+      [
+        45.74651269,
+        3.109323605
+      ],
+      [
+        45.74642473,
+        3.10935816
+      ],
+      [
+        45.74633507,
+        3.109365089
+      ],
+      [
+        45.74625379,
+        3.109320018
+      ],
+      [
+        45.74616498,
+        3.109295722
+      ],
+      [
+        45.74607964,
+        3.109249799
+      ],
+      [
+        45.74599297,
+        3.109212612
+      ],
+      [
+        45.74591578,
+        3.109146502
+      ],
+      [
+        45.74583729,
+        3.10907958
+      ],
+      [
+        45.74575995,
+        3.109009961
+      ],
+      [
+        45.745686,
+        3.108933172
+      ],
+      [
+        45.74561206,
+        3.108856384
+      ],
+      [
+        45.74553811,
+        3.108779595
+      ],
+      [
+        45.74546239,
+        3.108706584
+      ],
+      [
+        45.74538307,
+        3.108642064
+      ],
+      [
+        45.74529996,
+        3.108587685
+      ],
+      [
+        45.745216,
+        3.108536016
+      ],
+      [
+        45.74512888,
+        3.108497563
+      ],
+      [
+        45.74504033,
+        3.108465038
+      ],
+      [
+        45.74495179,
+        3.108432512
+      ],
+      [
+        45.74486325,
+        3.108399987
+      ],
+      [
+        45.74477471,
+        3.108367461
+      ],
+      [
+        45.74468619,
+        3.108334837
+      ],
+      [
+        45.74459776,
+        3.108301677
+      ],
+      [
+        45.74450991,
+        3.108265762
+      ],
+      [
+        45.74442313,
+        3.108224658
+      ],
+      [
+        45.74433668,
+        3.108182304
+      ],
+      [
+        45.74425195,
+        3.108133252
+      ],
+      [
+        45.74416722,
+        3.108084199
+      ],
+      [
+        45.74408857,
+        3.108017903
+      ],
+      [
+        45.74401048,
+        3.10795
+      ],
+      [
+        45.74393239,
+        3.107882097
+      ],
+      [
+        45.74385502,
+        3.107812536
+      ],
+      [
+        45.74377767,
+        3.107742924
+      ],
+      [
+        45.74370262,
+        3.10766872
+      ],
+      [
+        45.74363307,
+        3.107584107
+      ],
+      [
+        45.74356245,
+        3.107501204
+      ],
+      [
+        45.74349058,
+        3.1074206
+      ],
+      [
+        45.74342051,
+        3.107338439
+      ],
+      [
+        45.74335047,
+        3.107256216
+      ],
+      [
+        45.74328042,
+        3.107173992
+      ],
+      [
+        45.74320452,
+        3.107103787
+      ],
+      [
+        45.74312569,
+        3.107039917
+      ],
+      [
+        45.74304441,
+        3.106982543
+      ],
+      [
+        45.74296296,
+        3.106925688
+      ],
+      [
+        45.7428797,
+        3.106874448
+      ],
+      [
+        45.7427948,
+        3.10682947
+      ],
+      [
+        45.74270804,
+        3.10679203
+      ],
+      [
+        45.74262017,
+        3.10676008
+      ],
+      [
+        45.74252979,
+        3.106750018
+      ],
+      [
+        45.74243912,
+        3.106750018
+      ],
+      [
+        45.74234859,
+        3.106756802
+      ],
+      [
+        45.74225882,
+        3.106773225
+      ],
+      [
+        45.7421696,
+        3.10679625
+      ],
+      [
+        45.74208038,
+        3.106819274
+      ],
+      [
+        45.74199117,
+        3.106842394
+      ],
+      [
+        45.74190208,
+        3.106866381
+      ],
+      [
+        45.74181298,
+        3.106890369
+      ],
+      [
+        45.74172373,
+        3.106912975
+      ],
+      [
+        45.74163379,
+        3.106929328
+      ],
+      [
+        45.74154331,
+        3.106937242
+      ],
+      [
+        45.74145278,
+        3.106944419
+      ],
+      [
+        45.74136222,
+        3.106950018
+      ],
+      [
+        45.74127156,
+        3.106950018
+      ],
+      [
+        45.74118124,
+        3.106940194
+      ],
+      [
+        45.74109109,
+        3.106926471
+      ],
+      [
+        45.74100119,
+        3.106909616
+      ],
+      [
+        45.74091155,
+        3.106890406
+      ],
+      [
+        45.74082225,
+        3.106868079
+      ],
+      [
+        45.74073294,
+        3.106845752
+      ],
+      [
+        45.74064411,
+        3.106820308
+      ],
+      [
+        45.74055642,
+        3.106787423
+      ],
+      [
+        45.74046872,
+        3.106754539
+      ],
+      [
+        45.74038191,
+        3.106717389
+      ],
+      [
+        45.7402958,
+        3.106676866
+      ],
+      [
+        45.74020969,
+        3.106636343
+      ],
+      [
+        45.74012358,
+        3.10659582
+      ],
+      [
+        45.74003747,
+        3.106555298
+      ],
+      [
+        45.73995136,
+        3.106514775
+      ],
+      [
+        45.739866,
+        3.106471216
+      ],
+      [
+        45.73978106,
+        3.106425917
+      ],
+      [
+        45.73969557,
+        3.106382803
+      ],
+      [
+        45.73961,
+        3.106340017
+      ],
+      [
+        45.7395245,
+        3.10629696
+      ],
+      [
+        45.73944,
+        3.106250018
+      ],
+      [
+        45.73944141,
+        3.106240125
+      ],
+      [
+        45.73935961,
+        3.106206732
+      ],
+      [
+        45.73927261,
+        3.106159886
+      ],
+      [
+        45.73918561,
+        3.106113039
+      ],
+      [
+        45.73910173,
+        3.106055829
+      ],
+      [
+        45.73901748,
+        3.105999695
+      ],
+      [
+        45.73893479,
+        3.105939608
+      ],
+      [
+        45.73885523,
+        3.105870895
+      ],
+      [
+        45.73877566,
+        3.105802181
+      ],
+      [
+        45.73869914,
+        3.105726947
+      ],
+      [
+        45.73862407,
+        3.105648608
+      ],
+      [
+        45.73854899,
+        3.105570269
+      ],
+      [
+        45.73847505,
+        3.105489784
+      ],
+      [
+        45.73840183,
+        3.105407947
+      ],
+      [
+        45.73832907,
+        3.105325286
+      ],
+      [
+        45.73825744,
+        3.10524063
+      ],
+      [
+        45.73819534,
+        3.105143712
+      ],
+      [
+        45.73814389,
+        3.105035849
+      ],
+      [
+        45.73808397,
+        3.1049345
+      ],
+      [
+        45.73802653,
+        3.104830076
+      ],
+      [
+        45.73795,
+        3.104760018
       ]
     ],
-    "direction1": [
+    "1": [
       [
-        45.75002,
-        3.112830018
+        45.73805,
+        3.104980018
       ],
       [
-        45.75008063,
-        3.11292596
+        45.73811081,
+        3.105084518
       ],
       [
-        45.75014382,
-        3.113018436
+        45.73818096,
+        3.105166365
       ],
       [
-        45.75020996,
-        3.113106636
+        45.73825378,
+        3.105236298
       ],
       [
-        45.75027611,
-        3.113194836
+        45.73832731,
+        3.105323198
       ],
       [
-        45.75032688,
-        3.113301594
+        45.73840197,
+        3.105408097
       ],
       [
-        45.75037506,
-        3.113410248
+        45.73847713,
+        3.105492102
       ],
       [
-        45.75040378,
-        3.113532701
+        45.73855311,
+        3.105574565
       ],
       [
-        45.75042208,
-        3.113659088
+        45.73863017,
+        3.10565498
       ],
       [
-        45.75043195,
-        3.11378755
+        45.73870724,
+        3.105735395
+      ],
+      [
+        45.73878635,
+        3.105811412
+      ],
+      [
+        45.73886802,
+        3.105881946
+      ],
+      [
+        45.73894969,
+        3.105952481
+      ],
+      [
+        45.7390357,
+        3.106011079
+      ],
+      [
+        45.73912184,
+        3.10606975
+      ],
+      [
+        45.73921,
+        3.106120018
+      ],
+      [
+        45.73929321,
+        3.106169944
+      ],
+      [
+        45.73937741,
+        3.106216317
+      ],
+      [
+        45.73946178,
+        3.106262116
+      ],
+      [
+        45.7395461,
+        3.106308065
+      ],
+      [
+        45.73963128,
+        3.106350658
+      ],
+      [
+        45.73971647,
+        3.106393251
+      ],
+      [
+        45.73980142,
+        3.106436774
+      ],
+      [
+        45.73988597,
+        3.106481868
+      ],
+      [
+        45.73997122,
+        3.106524122
+      ],
+      [
+        45.74005694,
+        3.106564461
+      ],
+      [
+        45.74014267,
+        3.106604801
+      ],
+      [
+        45.74022839,
+        3.106645141
+      ],
+      [
+        45.74031411,
+        3.106685481
+      ],
+      [
+        45.74039983,
+        3.106725821
+      ],
+      [
+        45.74048658,
+        3.106761233
+      ],
+      [
+        45.74057387,
+        3.106793969
+      ],
+      [
+        45.74066117,
+        3.106826706
+      ],
+      [
+        45.74074991,
+        3.106849995
+      ],
+      [
+        45.74083882,
+        3.106872221
+      ],
+      [
+        45.74092772,
+        3.106894447
+      ],
+      [
+        45.74101706,
+        3.106912591
+      ],
+      [
+        45.74110655,
+        3.10692937
+      ],
+      [
+        45.74119634,
+        3.106942352
+      ],
+      [
+        45.74128633,
+        3.106950018
+      ],
+      [
+        45.74137659,
+        3.106950018
+      ],
+      [
+        45.74146672,
+        3.106943347
+      ],
+      [
+        45.74155683,
+        3.106936115
+      ],
+      [
+        45.74164683,
+        3.106926958
+      ],
+      [
+        45.74173636,
+        3.106910679
+      ],
+      [
+        45.74182509,
+        3.106887109
+      ],
+      [
+        45.74191378,
+        3.10686323
+      ],
+      [
+        45.74200248,
+        3.106839378
+      ],
+      [
+        45.7420913,
+        3.106816457
+      ],
+      [
+        45.74218012,
+        3.106793536
+      ],
+      [
+        45.74226893,
+        3.106770616
+      ],
+      [
+        45.74235844,
+        3.106755981
+      ],
+      [
+        45.74244858,
+        3.106750018
+      ],
+      [
+        45.74253881,
+        3.106750996
+      ],
+      [
+        45.74262854,
+        3.106763124
+      ],
+      [
+        45.74271601,
+        3.10679493
+      ],
+      [
+        45.74280225,
+        3.106832857
+      ],
+      [
+        45.7428865,
+        3.106878635
+      ],
+      [
+        45.74296939,
+        3.106929644
+      ],
+      [
+        45.74305032,
+        3.106986714
+      ],
+      [
+        45.74313123,
+        3.10704383
+      ],
+      [
+        45.74320951,
+        3.107107943
+      ],
+      [
+        45.74328469,
+        3.107178652
+      ],
+      [
+        45.74335475,
+        3.10725992
+      ],
+      [
+        45.7434248,
+        3.10734119
+      ],
+      [
+        45.74349486,
+        3.107422459
+      ],
+      [
+        45.7435648,
+        3.107503948
+      ],
+      [
+        45.74363443,
+        3.107585929
+      ],
+      [
+        45.74370316,
+        3.107669346
+      ],
+      [
+        45.74377728,
+        3.10774257
+      ],
+      [
+        45.74385364,
+        3.107811294
+      ],
+      [
+        45.74393,
+        3.107880018
+      ],
+      [
+        45.74400416,
+        3.10795128
+      ],
+      [
+        45.74408438,
+        3.108017549
+      ],
+      [
+        45.74416493,
+        3.108082869
+      ],
+      [
+        45.74425081,
+        3.108132592
+      ],
+      [
+        45.7443367,
+        3.108182315
+      ],
+      [
+        45.74442434,
+        3.108225229
+      ],
+      [
+        45.7445123,
+        3.108266894
+      ],
+      [
+        45.7446014,
+        3.108303044
+      ],
+      [
+        45.74469104,
+        3.108336657
+      ],
+      [
+        45.74478078,
+        3.108369691
+      ],
+      [
+        45.74487053,
+        3.10840266
+      ],
+      [
+        45.74496028,
+        3.10843563
+      ],
+      [
+        45.74505003,
+        3.1084686
+      ],
+      [
+        45.74513978,
+        3.10850157
+      ],
+      [
+        45.74522749,
+        3.108543088
+      ],
+      [
+        45.7453126,
+        3.108595462
+      ],
+      [
+        45.74539667,
+        3.108651132
+      ],
+      [
+        45.74547619,
+        3.108718855
+      ],
+      [
+        45.74555227,
+        3.108794302
+      ],
+      [
+        45.74562723,
+        3.10887214
+      ],
+      [
+        45.74570218,
+        3.108949978
+      ],
+      [
+        45.74578,
+        3.109020018
+      ],
+      [
+        45.74585469,
+        3.109094707
+      ],
+      [
+        45.74593128,
+        3.109165355
+      ],
+      [
+        45.74600505,
+        3.109241323
+      ],
+      [
+        45.74607366,
+        3.109327088
+      ],
+      [
+        45.74614301,
+        3.109411623
+      ],
+      [
+        45.74623138,
+        3.109434814
+      ],
+      [
+        45.74631677,
+        3.109408734
+      ],
+      [
+        45.74639527,
+        3.109363109
+      ],
+      [
+        45.74648397,
+        3.109334886
+      ],
+      [
+        45.74657188,
+        3.109300349
+      ],
+      [
+        45.74665979,
+        3.109265813
+      ],
+      [
+        45.74674786,
+        3.109267963
+      ],
+      [
+        45.74683794,
+        3.109280018
+      ],
+      [
+        45.74692652,
+        3.109251321
+      ],
+      [
+        45.74701571,
+        3.109275731
+      ],
+      [
+        45.74710004,
+        3.10932425
+      ],
+      [
+        45.74718342,
+        3.109376916
+      ],
+      [
+        45.74726421,
+        3.109436857
+      ],
+      [
+        45.74734308,
+        3.109502172
+      ],
+      [
+        45.74742495,
+        3.109559483
+      ],
+      [
+        45.7475076,
+        3.109613815
+      ],
+      [
+        45.74758954,
+        3.10967059
+      ],
+      [
+        45.74767079,
+        3.10972968
+      ],
+      [
+        45.74775204,
+        3.109788771
+      ],
+      [
+        45.74783329,
+        3.109847862
+      ],
+      [
+        45.74791454,
+        3.109906953
+      ],
+      [
+        45.74799579,
+        3.109966044
+      ],
+      [
+        45.74807647,
+        3.110026487
+      ],
+      [
+        45.74815083,
+        3.110101828
+      ],
+      [
+        45.74822329,
+        3.110180875
+      ],
+      [
+        45.74828882,
+        3.110270366
+      ],
+      [
+        45.74835394,
+        3.110361526
+      ],
+      [
+        45.74842042,
+        3.110450643
+      ],
+      [
+        45.74848123,
+        3.1105507
+      ],
+      [
+        45.74854211,
+        3.11065072
+      ],
+      [
+        45.74860437,
+        3.110749028
+      ],
+      [
+        45.74866664,
+        3.110847336
+      ],
+      [
+        45.74873127,
+        3.110942294
+      ],
+      [
+        45.74878965,
+        3.111045296
+      ],
+      [
+        45.74885182,
+        3.111143727
+      ],
+      [
+        45.74891398,
+        3.111242157
+      ],
+      [
+        45.74897615,
+        3.111340588
+      ],
+      [
+        45.74903718,
+        3.111440408
+      ],
+      [
+        45.74909548,
+        3.111543554
+      ],
+      [
+        45.74915493,
+        3.111644943
+      ],
+      [
+        45.74923232,
+        3.111717871
+      ],
+      [
+        45.74931329,
+        3.11178265
+      ],
+      [
+        45.74938483,
+        3.111863475
+      ],
+      [
+        45.74946377,
+        3.111926903
+      ],
+      [
+        45.74953398,
+        3.112008424
+      ],
+      [
+        45.74959666,
+        3.11210619
+      ],
+      [
+        45.74965826,
+        3.112205269
+      ],
+      [
+        45.74971506,
+        3.112310118
+      ],
+      [
+        45.74977185,
+        3.112414966
+      ],
+      [
+        45.74981218,
+        3.112533597
+      ],
+      [
+        45.74987307,
+        3.112633638
+      ],
+      [
+        45.74993397,
+        3.112733679
+      ],
+      [
+        45.75000601,
+        3.11281603
+      ],
+      [
+        45.75006916,
+        3.112908679
+      ],
+      [
+        45.75013193,
+        3.113002587
+      ],
+      [
+        45.75019837,
+        3.113091183
+      ],
+      [
+        45.75026482,
+        3.113179779
+      ],
+      [
+        45.7503186,
+        3.113283655
+      ],
+      [
+        45.75037014,
+        3.11339056
+      ],
+      [
+        45.75040049,
+        3.113512929
+      ],
+      [
+        45.75042067,
+        3.113639446
+      ],
+      [
+        45.7504299,
+        3.113768614
       ],
       [
         45.75044,
-        3.113915901
+        3.113897319
       ],
       [
-        45.7504457,
-        3.114044204
+        45.75044278,
+        3.114026691
       ],
       [
-        45.75047156,
-        3.114167594
+        45.75046666,
+        3.114151645
       ],
       [
-        45.75051079,
-        3.114283755
+        45.75050437,
+        3.11426963
       ],
       [
-        45.75056075,
-        3.114391507
+        45.75055413,
+        3.114378275
       ],
       [
-        45.75061334,
-        3.114496692
+        45.75060696,
+        3.114483933
       ],
       [
-        45.75067557,
-        3.114590282
+        45.75066814,
+        3.114579547
       ],
       [
-        45.75074071,
-        3.114679938
+        45.75073319,
+        3.114670167
       ],
       [
-        45.75080763,
-        3.11476694
+        45.75080042,
+        3.114757559
       ],
       [
-        45.75087469,
-        3.114853732
+        45.75086776,
+        3.114844765
       ],
       [
-        45.75094175,
-        3.114940518
+        45.75093512,
+        3.11493194
       ],
       [
-        45.7510039,
-        3.115033824
+        45.75099865,
+        3.115024204
       ],
       [
-        45.75105575,
-        3.11513939
+        45.75105172,
+        3.115129305
       ],
       [
-        45.75109776,
-        3.115253863
+        45.7510942,
+        3.115244071
       ],
       [
-        45.75113682,
-        3.115370461
+        45.75113367,
+        3.115361023
       ],
       [
-        45.7511788,
-        3.115484907
+        45.75117548,
+        3.115476255
       ],
       [
-        45.75121756,
-        3.115601476
+        45.7512151,
+        3.115592874
       ],
       [
-        45.75125334,
-        3.115720045
+        45.75125072,
+        3.11571218
       ],
       [
-        45.75129225,
-        3.11583675
+        45.7512898,
+        3.11582941
       ],
       [
-        45.75133115,
-        3.115953456
+        45.75132888,
+        3.11594664
       ],
       [
-        45.75137005,
-        3.116070163
+        45.75136795,
+        3.11606387
       ],
       [
-        45.75140781,
-        3.116187632
+        45.75140594,
+        3.116181827
       ],
       [
-        45.75144556,
-        3.116305102
+        45.75144387,
+        3.116299825
       ],
       [
-        45.75148332,
-        3.116422572
+        45.7514818,
+        3.116417822
       ],
       [
-        45.75152108,
-        3.116540042
+        45.75151972,
+        3.11653582
       ],
       [
-        45.75155963,
-        3.116656968
+        45.75155833,
+        3.116653347
       ],
       [
-        45.75160071,
-        3.116772139
+        45.75159964,
+        3.116769006
       ],
       [
-        45.75163961,
-        3.116888845
+        45.75163874,
+        3.116886223
       ],
       [
-        45.75167572,
-        3.117007369
+        45.75167507,
+        3.117005239
       ],
       [
-        45.75171198,
-        3.117125787
+        45.75171145,
+        3.117124223
       ],
       [
-        45.75175187,
-        3.117241815
+        45.75175151,
+        3.117240772
       ],
       [
-        45.75179175,
-        3.117357842
+        45.75179157,
+        3.117357321
       ],
       [
         45.75182888,
@@ -14949,7 +16037,6 @@
         45.8352523,
         3.147997671
       ]
-    ],
-    "branches": []
+    ]
   }
 }
