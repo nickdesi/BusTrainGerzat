@@ -19,7 +19,7 @@ export default function StopMarker({ stop, isTerminus, routeColor }: StopMarkerP
         >
             <Popup>
                 <div className="text-white">
-                    <div className="font-bold text-lg mb-1">{stop.name}</div>
+                    <div className="font-bold text-lg mb-1">{stop.stopName}</div>
                     {isTerminus && (
                         <span className="inline-block px-2 py-0.5 rounded bg-green-500/20 text-green-400 text-xs border border-green-500/50">
                             Terminus

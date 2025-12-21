@@ -26,7 +26,7 @@ const Polyline = dynamic(
 const ZoomHandlerComponent = dynamic(
     () => import('react-leaflet').then((mod) => {
         const { useMapEvents } = mod;
-         
+
         return function ZoomHandler({ setZoom }: { setZoom: (z: number) => void }) {
             useMapEvents({
                 zoomend: (e) => {
@@ -75,7 +75,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         ];
 
         lineData.stops.forEach(stop => {
-            if (MAIN_TERMINI.includes(stop.name)) {
+            if (MAIN_TERMINI.includes(stop.stopName)) {
                 ids.add(stop.stopId);
             }
         });
@@ -152,7 +152,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         );
     }
 
-    const routeColor = lineData?.routeColor ? `#${lineData.routeColor}` : '#fdc300';
+    const routeColor = lineData?.route?.routeColor ? `#${lineData.route.routeColor}` : '#fdc300';
 
     return (
         <div className="relative h-full w-full">
@@ -170,17 +170,17 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 />
 
                 {/* Route shapes */}
-                {lineData?.shapes.direction0 && (
+                {lineData?.shapes['0'] && (
                     <Polyline
-                        positions={lineData.shapes.direction0 as [number, number][]}
+                        positions={lineData.shapes['0'] as [number, number][]}
                         color={routeColor}
                         weight={5}
                         opacity={0.8}
                     />
                 )}
-                {lineData?.shapes.direction1 && (
+                {lineData?.shapes['1'] && (
                     <Polyline
-                        positions={lineData.shapes.direction1 as [number, number][]}
+                        positions={lineData.shapes['1'] as [number, number][]}
                         color={routeColor}
                         weight={5}
                         opacity={0.8}
@@ -224,7 +224,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             <div className="absolute top-16 right-4 bg-gray-900/90 backdrop-blur-sm rounded-lg p-3 z-[1001] border border-gray-700">
                 <div className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                     <MapPin className="w-4 h-4" style={{ color: routeColor }} />
-                    Ligne {lineData?.routeName}
+                    Ligne {lineData?.route?.routeShortName}
                 </div>
                 <div className="space-y-1 text-xs">
                     {/* Direction colors */}

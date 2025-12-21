@@ -2,22 +2,23 @@ import { useQuery } from '@tanstack/react-query';
 
 export interface Stop {
     stopId: string;
-    name: string;
+    stopName: string;
     lat: number;
     lon: number;
     sequence: number;
-    direction: number;
 }
 
 export interface LineE1Data {
-    routeId: string;
-    routeName: string;
-    routeLongName: string;
-    routeColor: string;
+    route: {
+        routeId: string;
+        routeShortName: string;
+        routeLongName: string;
+        routeColor: string;
+    };
     stops: Stop[];
     shapes: {
-        direction0: [number, number][];
-        direction1: [number, number][];
+        "0": [number, number][];
+        "1": [number, number][];
         branches?: [number, number][][];
     };
 }
