@@ -33,6 +33,7 @@ interface StaticScheduleItem {
     headsign: string;
     direction: number;
     date: string;
+    stopId?: string; // Added for precise matching
 }
 
 
@@ -223,56 +224,62 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         const combinedUpdates = todaySchedule
             .filter((item: StaticScheduleItem) => item.arrival > now - 600)
             .map((item: StaticScheduleItem) => {
-                const rt = realtimeUpdates[item.tripId];
+                const rtTrip = realtimeUpdates.get(item.tripId);
                 let arrival = item.arrival;
                 let departure = item.departure;
                 let delay = 0;
                 let isRealtime = false;
-                const isCancelled = rt?.isCancelled || false;
 
-                if (rt) {
+                // Trip-level cancellation status
+                let isCancelled = rtTrip?.tripCancelled || false;
+
+                if (rtTrip) {
                     // Validate RT data matches this static entry
-                    // 1. Check startDate if available (most reliable)
-                    // 2. Fallback to time proximity check (within 4 hours)
-                    const rtStartDate = rt.startDate;
-                    const staticDate = item.date; // Format: YYYYMMDD
-
+                    const rtStartDate = rtTrip.startDate;
+                    const staticDate = item.date;
                     let shouldApplyRT = false;
 
                     if (rtStartDate && staticDate) {
-                        // Strict date matching when startDate is available
                         shouldApplyRT = rtStartDate === staticDate;
                     } else {
-                        // Fallback: time proximity check
-                        const rtTime = rt.arrival?.time || rt.departure?.time || 0;
-                        shouldApplyRT = rtTime > 0 && Math.abs(rtTime - item.arrival) < 14400; // 4 hours window
+                        // Fallback: check timestamp of ANY available stop update for this trip
+                        // to ensure it's not a stale or future false match (e.g. next day same tripId?)
+                        const firstStopUpdate = rtTrip.stops.values().next().value;
+                        const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
+                        shouldApplyRT = rtTime > 0 && Math.abs(rtTime - item.arrival) < 43200; // 12h window (relaxed)
                     }
 
                     if (shouldApplyRT) {
-                        isRealtime = true;
+                        const stopId = item.stopId;
+                        // Strict Matching: ONLY apply update if we have data for THIS exact stopId
+                        const rtStop = stopId ? rtTrip.stops.get(stopId) : undefined;
 
-                        if (rt.arrival?.time) {
-                            arrival = Number(rt.arrival.time);
-                        } else if (rt.departure?.time) {
-                            arrival = Number(rt.departure.time);
-                        }
+                        if (rtStop) {
+                            isRealtime = true;
 
-                        // Also update departure!
-                        if (rt.departure?.time) {
-                            departure = Number(rt.departure.time);
-                        } else {
-                            // If no specific departure in RT, assume departure = arrival (standard for bus stops)
-                            // But better to maintain the original dwell time difference if possible?
-                            // For simplicity, sync departure to arrival + original dwell.
-                            // Or just set equal if we treat it as a point.
-                            // Let's set it to arrival if missing, to ensure sort order is correct.
-                            if (rt.arrival?.time) {
-                                const dwell = item.departure - item.arrival;
-                                departure = Number(rt.arrival.time) + (dwell > 0 ? dwell : 0);
+                            if (rtStop.arrival?.time) {
+                                arrival = Number(rtStop.arrival.time);
+                            } else if (rtStop.departure?.time) {
+                                arrival = Number(rtStop.departure.time);
                             }
-                        }
 
-                        delay = rt.delay || 0;
+                            if (rtStop.departure?.time) {
+                                departure = Number(rtStop.departure.time);
+                            } else if (rtStop.arrival?.time) {
+                                const dwell = item.departure - item.arrival;
+                                departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
+                            }
+
+                            delay = rtStop.delay;
+                            if (rtStop.isSkipped) isCancelled = true;
+
+                        } else {
+                            // Trip exists in RT but no update for this stop.
+                            // If the global trip is NOT cancelled, it means the bus missed/passed this stop 
+                            // or the feed doesn't have it.
+                            // We do NOT set isRealtime=true to indicate we are falling back to static time.
+                            // Unless the trip is cancelled, then isCancelled takes precedence.
+                        }
                     }
                 }
 
