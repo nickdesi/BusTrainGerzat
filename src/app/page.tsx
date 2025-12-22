@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { RefreshCw, Bus, Train, Filter, WifiOff, Map, Eye, EyeOff } from 'lucide-react';
+import { RefreshCw, Bus, Train, Filter, WifiOff, Eye, EyeOff, PlaneTakeoff } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
@@ -82,24 +82,6 @@ export default function Home() {
     return result;
   }, [departures, filter, searchQuery]);
 
-  const filteredArrivals = useMemo(() => {
-    let result = arrivals;
-
-    // Type filter
-    if (filter === 'bus') result = result.filter(a => a.type === 'BUS');
-    else if (filter === 'train') result = result.filter(a => a.type === 'TER');
-
-    // Search filter
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      result = result.filter(a =>
-        a.line.toLowerCase().includes(q) ||
-        (a.provenance && a.provenance.toLowerCase().includes(q))
-      );
-    }
-    return result;
-  }, [arrivals, filter, searchQuery]);
-
   return (
     <main id="main-content" className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a] text-gray-100 font-sans">
       <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
@@ -125,11 +107,12 @@ export default function Home() {
         <header className="mb-8 border-b-2 border-yellow-500/30 pb-6 relative">
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             <div className="text-center lg:text-left">
-              <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-yellow-500 uppercase mb-2 font-mono text-glow">
-                GERZAT
+              <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-yellow-500 uppercase mb-2 font-mono text-glow flex items-center gap-3 justify-center lg:justify-start">
+                <PlaneTakeoff className="w-8 h-8 md:w-12 md:h-12" />
+                DÉPARTS
               </h1>
               <p className="text-sm md:text-base text-yellow-500/80 uppercase tracking-[0.5em] font-medium pl-1">
-                Départs & Arrivées
+                Gare de Gerzat
               </p>
             </div>
             <div className="flex flex-col gap-4 items-end">
@@ -216,15 +199,6 @@ export default function Home() {
               <span className="uppercase">{isColorblindMode ? 'Daltonien' : 'Daltonien'}</span>
             </button>
 
-            {/* Carte Live Button */}
-            <Link
-              href="/carte"
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-yellow-600 hover:bg-yellow-500 text-black text-xs font-bold transition-all hover:scale-105 active:scale-95"
-            >
-              <Map className="w-3 h-3" />
-              <span>CARTE LIVE</span>
-            </Link>
-
             {/* Refresh Button */}
             <button
               onClick={refetch}
@@ -257,31 +231,6 @@ export default function Home() {
           <DeparturesList
             departures={filteredDepartures}
             loading={isLoading}
-            favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
-          />
-        </div>
-
-        {/* Arrivals Board */}
-        <div className="mt-8 bg-[#1a1a1a] rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">
-          <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 md:px-6 py-3 border-b-4 border-black">
-            <h2 className="text-lg md:text-xl font-black text-white uppercase tracking-widest flex items-center gap-3 font-mono">
-              <div className="w-3 h-3 bg-white rounded-full animate-pulse" aria-hidden="true"></div>
-              Tableau des Arrivées
-              {filter !== 'all' && <span className="text-sm font-normal opacity-70">({filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'})</span>}
-            </h2>
-          </div>
-          <DeparturesBoard
-            departures={filteredArrivals}
-            loading={isLoading}
-            boardType="arrivals"
-            favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
-          />
-          <DeparturesList
-            departures={filteredArrivals}
-            loading={isLoading}
-            boardType="arrivals"
             favorites={favorites.map(f => f.id)}
             onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
           />
