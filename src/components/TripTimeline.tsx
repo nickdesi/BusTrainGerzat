@@ -75,8 +75,21 @@ const TripTimeline = memo(function TripTimeline({
                     const isTerminus = isFirst || isLast;
                     const isPassed = stop.status === 'passed';
                     const isCurrent = stop.status === 'current';
-                    // Only show bus "in transit" if current time > departure time of this stop
-                    const hasDeparted = isCurrent && nowUnix > stop.predictedDeparture;
+                    // Only show bus "in transit" if current time >= departure time of this stop
+                    const hasDeparted = isCurrent && nowUnix >= stop.predictedDeparture;
+
+                    // Calculate bus progress between current stop and next stop
+                    let busProgress = 0; // 0% = at current stop, 100% = at next stop
+                    if (hasDeparted && !isLast) {
+                        const nextStop = stops[index + 1];
+                        const departureTime = stop.predictedDeparture;
+                        const arrivalTime = nextStop.predictedArrival;
+                        const totalDuration = arrivalTime - departureTime;
+                        if (totalDuration > 0) {
+                            const elapsed = nowUnix - departureTime;
+                            busProgress = Math.min(Math.max(elapsed / totalDuration, 0), 1);
+                        }
+                    }
 
                     return (
                         <div
@@ -114,8 +127,8 @@ const TripTimeline = memo(function TripTimeline({
                                         {/* Bus position indicator - show between current stop and next */}
                                         {hasDeparted && (
                                             <div
-                                                className="absolute left-1/2 -translate-x-1/2 z-20"
-                                                style={{ top: '30%' }}
+                                                className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000"
+                                                style={{ top: `${busProgress * 80}%` }}
                                             >
                                                 <div className="relative">
                                                     <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-50 animate-ping" />
