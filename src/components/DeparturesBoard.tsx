@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { ArrowRight, Bus, Train, RefreshCw, ChevronRight } from 'lucide-react';
+import { ArrowRight, Bus, Train, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
@@ -77,8 +77,8 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                     key={entry.id}
                                     onClick={() => entry.type === 'BUS' && entry.tripId && setSelectedTrip({ tripId: entry.tripId, line: entry.line })}
                                     className={`flip-enter transition-colors ${entry.type === 'BUS' && entry.tripId
-                                            ? 'cursor-pointer hover:bg-yellow-900/20'
-                                            : 'hover:bg-gray-800/50'
+                                        ? 'cursor-pointer hover:bg-yellow-900/20'
+                                        : 'hover:bg-gray-800/50'
                                         } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
                                     title={entry.type === 'BUS' ? 'Cliquez pour voir le détail du trajet' : undefined}
                                 >
@@ -181,8 +181,10 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                         <div className="flex flex-col items-center justify-center gap-2">
                                             <div className="flex items-center gap-3">
                                                 <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
-                                                {entry.isRealtime && (
-                                                    <div className="w-3 h-3 rounded-full bg-green-500 shadow-[0_0_10px_#22c55e] animate-pulse"></div>
+                                                {entry.isRealtime ? (
+                                                    <Wifi className="w-4 h-4 text-green-500 animate-pulse" strokeWidth={3} />
+                                                ) : (
+                                                    <WifiOff className="w-3 h-3 text-gray-700/50" />
                                                 )}
                                             </div>
                                             {showPrediction && (
