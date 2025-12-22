@@ -9,6 +9,18 @@
   - Le fichier `data-source.ts` filtre maintenant les horaires par date exacte (format YYYYMMDD)
   - Résout le problème des bus affichés à 10:49, 11:51 (départs) et 10:13, 11:15 (arrivées) qui n'existaient pas
 
+## [3.0.2] - 2025-12-22
+
+### 🐛 Correctifs
+
+- **Bus "Annulés" en Doublon** : Correction d'un bug d'affichage où les bus en circulation étaient masqués par leur version théorique "Annulée".
+  - Implémentation d'une déduplication intelligente : si un bus "Ajouté" (temps réel) existe dans un créneau de 20 min, la version "Annulée" correspondante est masquée.
+  - Résout l'affichage "Tout est annulé" alors que les bus circulent normalement.
+- **Carte Live** : Correction des bus invisibles ("Added trips").
+  - Les bus ajoutés utilisaient des IDs d'arrêts incompatibles avec la carte.
+  - Ajout d'une logique de fallback : mapping par séquence d'arrêt si l'ID est introuvable.
+  - Les bus en temps réel s'affichent maintenant correctement sur le tracé.
+
 ## [3.0.0] - 2025-12-20
 
 ### 🚌 Migration Ligne E1

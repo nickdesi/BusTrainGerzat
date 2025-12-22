@@ -121,29 +121,40 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                             const isTripAdded = scheduleRelationship === ScheduleRelationship.ADDED ||
                                 scheduleRelationship === ScheduleRelationship.UNSCHEDULED;
 
-                            tripUpdate.stopTimeUpdate?.forEach((stopTimeUpdate) => {
-                                if (stopTimeUpdate.stopId && targetStopIds.has(stopTimeUpdate.stopId)) {
-                                    const isStopSkipped = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED
-                                    const arrivalTime = stopTimeUpdate.arrival?.time;
-                                    const arrivalDelay = stopTimeUpdate.arrival?.delay;
-                                    const departureTime = stopTimeUpdate.departure?.time;
-                                    const departureDelay = stopTimeUpdate.departure?.delay;
+                            const stops = tripUpdate.stopTimeUpdate || [];
 
-                                    // For ADDED/DUPLICATED trips, create a new entry directly
-                                    if (isTripAdded && arrivalTime) {
-                                        addedTrips.push({
-                                            tripId: tripUpdate.trip.tripId as string,
-                                            arrival: Number(arrivalTime),
-                                            departure: Number(departureTime || arrivalTime),
-                                            delay: Number(arrivalDelay || departureDelay || 0),
-                                            isRealtime: true,
-                                            isCancelled: false,
-                                            headsign: directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
-                                            direction: directionId
-                                        });
-                                    } else {
+                            // For ADDED trips: T2C uses different stop_ids, so we take first/last stop
+                            // based on direction to get Gerzat departure/arrival times
+                            if (isTripAdded && stops.length > 0) {
+                                // Direction 0 = leaving Gerzat (first stop is Gerzat)
+                                // Direction 1 = arriving at Gerzat (last stop is Gerzat)
+                                const gerzatStop = directionId === 0 ? stops[0] : stops[stops.length - 1];
+                                const arrivalTime = gerzatStop.arrival?.time || gerzatStop.departure?.time;
+                                const arrivalDelay = gerzatStop.arrival?.delay || gerzatStop.departure?.delay;
+
+                                if (arrivalTime) {
+                                    addedTrips.push({
+                                        tripId: tripUpdate.trip.tripId as string,
+                                        arrival: Number(arrivalTime),
+                                        departure: Number(arrivalTime),
+                                        delay: Number(arrivalDelay || 0),
+                                        isRealtime: true,
+                                        isCancelled: false,
+                                        headsign: directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
+                                        direction: directionId
+                                    });
+                                }
+                            } else {
+                                // For SCHEDULED or CANCELED trips: filter by known Gerzat stop_ids
+                                stops.forEach((stopTimeUpdate) => {
+                                    if (stopTimeUpdate.stopId && targetStopIds.has(stopTimeUpdate.stopId)) {
+                                        const isStopSkipped = stopTimeUpdate.scheduleRelationship === 1; // SKIPPED
+                                        const arrivalTime = stopTimeUpdate.arrival?.time;
+                                        const arrivalDelay = stopTimeUpdate.arrival?.delay;
+                                        const departureTime = stopTimeUpdate.departure?.time;
+                                        const departureDelay = stopTimeUpdate.departure?.delay;
+
                                         // Regular update for existing static schedule trips
-                                        // Use tripId as key (startDate used for validation during merge)
                                         realtimeUpdates[tripUpdate.trip.tripId as string] = {
                                             arrival: arrivalTime != null ? { time: Number(arrivalTime), delay: arrivalDelay ?? 0 } : undefined,
                                             departure: departureTime != null ? { time: Number(departureTime), delay: departureDelay ?? 0 } : undefined,
@@ -152,8 +163,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                             startDate: startDate
                                         };
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
                     }
                 });
@@ -244,8 +255,30 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         // Add ADDED trips (replacement trips from GTFS-RT)
         combinedUpdates.push(...addedTrips);
 
-        combinedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
-        const nextBuses = combinedUpdates.filter((u: BusUpdate) => u.arrival > now - 60).slice(0, 20);
+        // Deduplicate: Remove CANCELLED trips if there is an ADDED/Realtime trip 
+        // in the same direction within a short time window (e.g., 20 mins).
+        // This prevents showing "Annulé" + "En temps réel" for the same actual service.
+        const cleanedUpdates: BusUpdate[] = [];
+        const nonCancelled = combinedUpdates.filter(u => !u.isCancelled);
+
+        combinedUpdates.forEach(u => {
+            if (u.isCancelled) {
+                // Check for replacement
+                const replacement = nonCancelled.find(nc =>
+                    nc.direction === u.direction &&
+                    Math.abs(nc.arrival - u.arrival) < 20 * 60 // 20 min window
+                );
+                // Only keep cancelled if NO replacement found
+                if (!replacement) {
+                    cleanedUpdates.push(u);
+                }
+            } else {
+                cleanedUpdates.push(u);
+            }
+        });
+
+        cleanedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
+        const nextBuses = cleanedUpdates.filter((u: BusUpdate) => u.arrival > now - 60).slice(0, 20);
 
         return { updates: nextBuses, timestamp: now };
     } catch (error) {

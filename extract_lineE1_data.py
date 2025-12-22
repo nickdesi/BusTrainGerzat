@@ -131,12 +131,66 @@ def main():
     
     # Sort by sequence
     e1_stops.sort(key=lambda x: x['sequence'])
+
+    # --- NEW: Extract Canonical Stops by Direction ---
+    # Find longest trip for each direction to serve as canonical sequence
+    trip_counts = {} # trip_id -> stop_count
+    trip_direction_map = {} # trip_id -> direction_id
+
+    # We need to re-read stop_times to count stops per trip accurately
+    with open(f'{GTFS_DIR}/stop_times.txt', 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            tid = row['trip_id']
+            if tid in trip_shapes: # Only consider E1 trips
+                trip_counts[tid] = trip_counts.get(tid, 0) + 1
     
+    longest_trip_0 = None
+    max_stops_0 = 0
+    longest_trip_1 = None
+    max_stops_1 = 0
+
+    for tid, count in trip_counts.items():
+        direction = trip_directions.get(tid, '0')
+        if direction == '0':
+            if count > max_stops_0:
+                max_stops_0 = count
+                longest_trip_0 = tid
+        else:
+            if count > max_stops_1:
+                max_stops_1 = count
+                longest_trip_1 = tid
+                
+    print(f"✅ Canonical Trip Dir 0: {longest_trip_0} ({max_stops_0} stops)")
+    print(f"✅ Canonical Trip Dir 1: {longest_trip_1} ({max_stops_1} stops)")
+
+    # Extract stops for canonical trips
+    canonical_stops = {'0': [], '1': []}
+
+    with open(f'{GTFS_DIR}/stop_times.txt', 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        stops_list_0 = []
+        stops_list_1 = []
+        
+        for row in reader:
+            tid = row['trip_id']
+            if tid == longest_trip_0:
+                stops_list_0.append({'seq': int(row['stop_sequence']), 'id': row['stop_id']})
+            elif tid == longest_trip_1:
+                stops_list_1.append({'seq': int(row['stop_sequence']), 'id': row['stop_id']})
+        
+        stops_list_0.sort(key=lambda x: x['seq'])
+        stops_list_1.sort(key=lambda x: x['seq'])
+        
+        canonical_stops['0'] = [s['id'] for s in stops_list_0]
+        canonical_stops['1'] = [s['id'] for s in stops_list_1]
+
     # Build output
     output = {
         'route': line_e1,
         'stops': e1_stops,
-        'shapes': shapes_by_direction
+        'shapes': shapes_by_direction,
+        'canonicalStops': canonical_stops
     }
     
     # Write output

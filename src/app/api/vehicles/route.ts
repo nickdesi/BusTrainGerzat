@@ -113,7 +113,30 @@ export async function GET() {
                         if (!nextStopUpdate) return;
 
                         const nextStopId = nextStopUpdate.stopId as string;
-                        const nextStop = stopsById.get(nextStopId);
+                        let nextStop = stopsById.get(nextStopId);
+
+                        // Fallback: If stop ID not found (e.g. Added Trip with different IDs),
+                        // try to map by sequence using canonical stops
+                        if (!nextStop) {
+                            const directionId = tripUpdate.trip.directionId ?? 0;
+                            const currentSeq = nextStopUpdate.stopSequence;
+
+                            // Check if lineE1Data has canonicalStops (added via script)
+                            // @ts-ignore
+                            const canonicalStops = lineE1Data.canonicalStops as Record<string, string[]> | undefined;
+
+                            if (canonicalStops) {
+                                const canonicalList = canonicalStops[String(directionId)];
+                                if (canonicalList && currentSeq && currentSeq <= canonicalList.length) {
+                                    // Sequence is 1-based usually
+                                    const mappedId = canonicalList[currentSeq - 1]; // Try exact match
+                                    if (mappedId) {
+                                        nextStop = stopsById.get(mappedId);
+                                    }
+                                }
+                            }
+                        }
+
                         if (!nextStop) return;
 
                         // Calculate estimated position
