@@ -112,8 +112,8 @@ export default function Home() {
                 <Image src="/icon-512.png" alt="Logo" width={48} height={48} className="w-8 h-8 md:w-12 md:h-12" />
                 DÉPARTS
               </h1>
-              <p className="text-sm md:text-base text-yellow-500/80 uppercase tracking-[0.5em] font-medium pl-1">
-                Hub Multimodal
+              <p className="text-sm md:text-base text-yellow-500/80 uppercase tracking-widest font-medium pl-1 mt-1">
+                Gare / Champfleuri <span className="text-[10px] opacity-70 normal-case tracking-normal block md:inline">(Express : Patural)</span>
               </p>
             </div>
             <div className="flex flex-col gap-4 items-end">
