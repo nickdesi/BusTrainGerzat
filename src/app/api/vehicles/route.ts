@@ -29,12 +29,17 @@ interface StaticTrip {
 const stopsById = new Map(lineE1Data.stops.map(s => [s.stopId, s]));
 
 /**
- * Convert seconds-from-midnight to Unix timestamp for today
+ * Convert seconds-from-midnight (Paris time) to Unix timestamp for today
+ * GTFS times are in local Paris time, server may be in UTC
  */
 function secondsToUnix(secondsFromMidnight: number): number {
     const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000;
-    return midnight + secondsFromMidnight;
+    const parisDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' });
+    const [, month] = parisDateStr.split('-').map(Number);
+    const isDST = month >= 4 && month <= 10;
+    const offset = isDST ? '+02:00' : '+01:00';
+    const correctMidnight = new Date(`${parisDateStr}T00:00:00${offset}`);
+    return Math.floor(correctMidnight.getTime() / 1000) + secondsFromMidnight;
 }
 
 /**

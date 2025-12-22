@@ -43,12 +43,26 @@ const staticTripsById = new Map<string, StaticTrip>(
 );
 
 /**
- * Convert seconds-from-midnight to Unix timestamp for today
+ * Convert seconds-from-midnight (Paris time) to Unix timestamp for today
+ * GTFS times are in local Paris time, server may be in UTC
  */
 function secondsToUnix(secondsFromMidnight: number): number {
+    // Get current time in Paris
     const now = new Date();
-    const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime() / 1000;
-    return midnight + secondsFromMidnight;
+    // Create today's date string in Paris timezone
+    const parisDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' }); // YYYY-MM-DD
+    // Parse as Paris midnight (the string is date-only, so we need to create midnight in Paris)
+    const [year, month, day] = parisDateStr.split('-').map(Number);
+    // Create a Date at midnight Paris time
+    // Paris is UTC+1 in winter, UTC+2 in summer
+    // We use a trick: create a date string with explicit timezone
+    const parisMidnight = new Date(`${parisDateStr}T00:00:00+01:00`); // Winter time
+    // Check if we're in DST (rough check: April to October)
+    const isDST = month >= 4 && month <= 10;
+    const offset = isDST ? '+02:00' : '+01:00';
+    const correctMidnight = new Date(`${parisDateStr}T00:00:00${offset}`);
+
+    return Math.floor(correctMidnight.getTime() / 1000) + secondsFromMidnight;
 }
 
 export async function GET(
