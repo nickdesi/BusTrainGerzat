@@ -1,6 +1,6 @@
 'use client';
 
-import { memo } from 'react';
+import { memo, useState, useEffect } from 'react';
 import { Loader2, Wifi, Clock, Accessibility, Bus } from 'lucide-react';
 import { StopTimeDetail } from '@/hooks/useTripDetails';
 
@@ -32,8 +32,15 @@ const TripTimeline = memo(function TripTimeline({
     routeColor = '#fdc300',
     currentTime
 }: TripTimelineProps) {
-    // Use provided timestamp or fallback (only at mount time)
-    const nowUnix = currentTime ?? Math.floor(Date.now() / 1000);
+    // Real-time clock for bus position - updates every second
+    const [nowUnix, setNowUnix] = useState(() => currentTime ?? Math.floor(Date.now() / 1000));
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setNowUnix(Math.floor(Date.now() / 1000));
+        }, 1000);
+        return () => clearInterval(interval);
+    }, []);
 
     if (isLoading) {
         return (
