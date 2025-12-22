@@ -146,7 +146,8 @@ for date_str in dates:
                 'departure': timestamp, # Using arrival as departure for simplicity if same
                 'headsign': trip['trip_headsign'],
                 'direction': int(trip['direction_id']),
-                'date': date_str
+                'date': date_str,
+                'stopId': stop_time['stop_id']
             })
 
 # Sort
