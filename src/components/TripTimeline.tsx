@@ -1,7 +1,7 @@
 'use client';
 
 import { memo } from 'react';
-import { Loader2, Wifi, Clock, Accessibility } from 'lucide-react';
+import { Loader2, Wifi, Clock, Accessibility, Bus } from 'lucide-react';
 import { StopTimeDetail } from '@/hooks/useTripDetails';
 
 interface TripTimelineProps {
@@ -99,10 +99,26 @@ const TripTimeline = memo(function TripTimeline({
 
                                 {/* Vertical Line (not after last item) */}
                                 {!isLast && (
-                                    <div
-                                        className={`w-0.5 h-12 ${isPassed ? 'bg-gray-600' : ''}`}
-                                        style={{ backgroundColor: isPassed ? undefined : routeColor }}
-                                    />
+                                    <div className="relative">
+                                        <div
+                                            className={`w-0.5 h-12 ${isPassed ? 'bg-gray-600' : ''}`}
+                                            style={{ backgroundColor: isPassed ? undefined : routeColor }}
+                                        />
+                                        {/* Bus position indicator - show between current stop and next */}
+                                        {isCurrent && (
+                                            <div
+                                                className="absolute left-1/2 -translate-x-1/2 z-20"
+                                                style={{ top: '30%' }}
+                                            >
+                                                <div className="relative">
+                                                    <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-50 animate-ping" />
+                                                    <div className="relative bg-green-500 rounded-full p-1 shadow-lg shadow-green-500/50">
+                                                        <Bus className="w-3 h-3 text-white" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
                                 )}
                             </div>
 
