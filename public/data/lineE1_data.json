@@ -7,17 +7,17 @@
   },
   "stops": [
     {
+      "stopId": "VGNES",
+      "stopName": "Les Vignes",
+      "lat": 45.80189226,
+      "lon": 3.106785898,
+      "sequence": 1
+    },
+    {
       "stopId": "GECHR",
       "stopName": "GERZAT Champfleuri",
       "lat": 45.83522816,
       "lon": 3.147872704,
-      "sequence": 1
-    },
-    {
-      "stopId": "BALLR",
-      "stopName": "Ballainvilliers",
-      "lat": 45.77525183,
-      "lon": 3.086805538,
       "sequence": 1
     },
     {
@@ -28,13 +28,6 @@
       "sequence": 1
     },
     {
-      "stopId": "AUPRR",
-      "stopName": "AUBIÈRE Pl. des Ramacles",
-      "lat": 45.74997274,
-      "lon": 3.112883901,
-      "sequence": 1
-    },
-    {
       "stopId": "VGNEB",
       "stopName": "Les Vignes",
       "lat": 45.80249281,
@@ -42,10 +35,10 @@
       "sequence": 1
     },
     {
-      "stopId": "VGNES",
-      "stopName": "Les Vignes",
-      "lat": 45.80189226,
-      "lon": 3.106785898,
+      "stopId": "AUPRR",
+      "stopName": "AUBIÈRE Pl. des Ramacles",
+      "lat": 45.74997274,
+      "lon": 3.112883901,
       "sequence": 1
     },
     {
@@ -56,10 +49,31 @@
       "sequence": 1
     },
     {
+      "stopId": "BALLR",
+      "stopName": "Ballainvilliers",
+      "lat": 45.77525183,
+      "lon": 3.086805538,
+      "sequence": 1
+    },
+    {
+      "stopId": "SAVER",
+      "stopName": "St Verny",
+      "lat": 45.73921386,
+      "lon": 3.106102178,
+      "sequence": 2
+    },
+    {
       "stopId": "ESPLR",
       "stopName": "Esplanade",
       "lat": 45.77759854,
       "lon": 3.095079488,
+      "sequence": 2
+    },
+    {
+      "stopId": "FONTA",
+      "stopName": "Fontcimagne",
+      "lat": 45.7976621,
+      "lon": 3.104372808,
       "sequence": 2
     },
     {
@@ -77,13 +91,6 @@
       "sequence": 2
     },
     {
-      "stopId": "LIMAR",
-      "stopName": "Limagne",
-      "lat": 45.83106937,
-      "lon": 3.145368608,
-      "sequence": 2
-    },
-    {
       "stopId": "MARTR",
       "stopName": "Martyrs",
       "lat": 45.82305619,
@@ -91,45 +98,17 @@
       "sequence": 2
     },
     {
-      "stopId": "FONTA",
-      "stopName": "Fontcimagne",
-      "lat": 45.7976621,
-      "lon": 3.104372808,
+      "stopId": "LIMAR",
+      "stopName": "Limagne",
+      "lat": 45.83106937,
+      "lon": 3.145368608,
       "sequence": 2
     },
     {
-      "stopId": "SAVER",
-      "stopName": "St Verny",
-      "lat": 45.73921386,
-      "lon": 3.106102178,
-      "sequence": 2
-    },
-    {
-      "stopId": "BOURR",
-      "stopName": "Bourly",
-      "lat": 45.82844293,
-      "lon": 3.146514008,
-      "sequence": 3
-    },
-    {
-      "stopId": "BEZOR",
-      "stopName": "La Bezou",
-      "lat": 45.74394325,
-      "lon": 3.107864468,
-      "sequence": 3
-    },
-    {
-      "stopId": "PRUNA",
-      "stopName": "Pruniers",
-      "lat": 45.79474788,
-      "lon": 3.101605398,
-      "sequence": 3
-    },
-    {
-      "stopId": "CHABA",
-      "stopName": "Chabesses",
-      "lat": 45.817949,
-      "lon": 3.143194068,
+      "stopId": "ARTIR",
+      "stopName": "Artière",
+      "lat": 45.75405946,
+      "lon": 3.116488809,
       "sequence": 3
     },
     {
@@ -147,45 +126,38 @@
       "sequence": 3
     },
     {
-      "stopId": "ARTIR",
-      "stopName": "Artière",
-      "lat": 45.75405946,
-      "lon": 3.116488809,
+      "stopId": "BOURR",
+      "stopName": "Bourly",
+      "lat": 45.82844293,
+      "lon": 3.146514008,
       "sequence": 3
     },
     {
-      "stopId": "ROUVR",
-      "stopName": "Rouvier",
-      "lat": 45.80638219,
-      "lon": 3.114580468,
-      "sequence": 4
+      "stopId": "BEZOR",
+      "stopName": "La Bezou",
+      "lat": 45.74394325,
+      "lon": 3.107864468,
+      "sequence": 3
+    },
+    {
+      "stopId": "CHABA",
+      "stopName": "Chabesses",
+      "lat": 45.817949,
+      "lon": 3.143194068,
+      "sequence": 3
+    },
+    {
+      "stopId": "PRUNA",
+      "stopName": "Pruniers",
+      "lat": 45.79474788,
+      "lon": 3.101605398,
+      "sequence": 3
     },
     {
       "stopId": "PASCR",
       "stopName": "Pascal",
       "lat": 45.8287544,
       "lon": 3.148945588,
-      "sequence": 4
-    },
-    {
-      "stopId": "MAMIR",
-      "stopName": "Marcel Michelin",
-      "lat": 45.75371323,
-      "lon": 3.113219388,
-      "sequence": 4
-    },
-    {
-      "stopId": "ESPLA",
-      "stopName": "Esplanade",
-      "lat": 45.77739366,
-      "lon": 3.095655459,
-      "sequence": 4
-    },
-    {
-      "stopId": "CHFOA",
-      "stopName": "Champfleuri Forest",
-      "lat": 45.7933,
-      "lon": 3.100520018,
       "sequence": 4
     },
     {
@@ -196,39 +168,39 @@
       "sequence": 4
     },
     {
+      "stopId": "CHFOA",
+      "stopName": "Champfleuri Forest",
+      "lat": 45.7933,
+      "lon": 3.100520018,
+      "sequence": 4
+    },
+    {
+      "stopId": "ESPLA",
+      "stopName": "Esplanade",
+      "lat": 45.77739366,
+      "lon": 3.095655459,
+      "sequence": 4
+    },
+    {
+      "stopId": "ROUVR",
+      "stopName": "Rouvier",
+      "lat": 45.80638219,
+      "lon": 3.114580468,
+      "sequence": 4
+    },
+    {
+      "stopId": "MAMIR",
+      "stopName": "Marcel Michelin",
+      "lat": 45.75371323,
+      "lon": 3.113219388,
+      "sequence": 4
+    },
+    {
       "stopId": "ELJAA",
       "stopName": "Elie Jaloustre",
       "lat": 45.8226212,
       "lon": 3.145334438,
       "sequence": 4
-    },
-    {
-      "stopId": "CHPVR",
-      "stopName": "Champvoisin",
-      "lat": 45.75233982,
-      "lon": 3.110154069,
-      "sequence": 5
-    },
-    {
-      "stopId": "CATAA",
-      "stopName": "Cataroux",
-      "lat": 45.78911424,
-      "lon": 3.098359126,
-      "sequence": 5
-    },
-    {
-      "stopId": "VIVIR",
-      "stopName": "Viviani",
-      "lat": 45.80713001,
-      "lon": 3.118321855,
-      "sequence": 5
-    },
-    {
-      "stopId": "BALLA",
-      "stopName": "Ballainvilliers",
-      "lat": 45.77528807,
-      "lon": 3.086767458,
-      "sequence": 5
     },
     {
       "stopId": "PATUA",
@@ -245,6 +217,34 @@
       "sequence": 5
     },
     {
+      "stopId": "BALLA",
+      "stopName": "Ballainvilliers",
+      "lat": 45.77528807,
+      "lon": 3.086767458,
+      "sequence": 5
+    },
+    {
+      "stopId": "CHPVR",
+      "stopName": "Champvoisin",
+      "lat": 45.75233982,
+      "lon": 3.110154069,
+      "sequence": 5
+    },
+    {
+      "stopId": "VIVIR",
+      "stopName": "Viviani",
+      "lat": 45.80713001,
+      "lon": 3.118321855,
+      "sequence": 5
+    },
+    {
+      "stopId": "CATAA",
+      "stopName": "Cataroux",
+      "lat": 45.78911424,
+      "lon": 3.098359126,
+      "sequence": 5
+    },
+    {
       "stopId": "GEROR",
       "stopName": "GERZAT Rochefort",
       "lat": 45.83102639,
@@ -252,10 +252,10 @@
       "sequence": 5
     },
     {
-      "stopId": "CLFOA",
-      "stopName": "Clos Four",
-      "lat": 45.78684396,
-      "lon": 3.098280474,
+      "stopId": "CASAR",
+      "stopName": "Casati",
+      "lat": 45.75249198,
+      "lon": 3.107650058,
       "sequence": 6
     },
     {
@@ -266,11 +266,25 @@
       "sequence": 6
     },
     {
-      "stopId": "CASAR",
-      "stopName": "Casati",
-      "lat": 45.75249198,
-      "lon": 3.107650058,
+      "stopId": "CLFOA",
+      "stopName": "Clos Four",
+      "lat": 45.78684396,
+      "lon": 3.098280474,
       "sequence": 6
+    },
+    {
+      "stopId": "PRMAB",
+      "stopName": "1er Mai",
+      "lat": 45.78464233,
+      "lon": 3.100539018,
+      "sequence": 7
+    },
+    {
+      "stopId": "PEGUR",
+      "stopName": "Les Pègues",
+      "lat": 45.82415595,
+      "lon": 3.149603768,
+      "sequence": 7
     },
     {
       "stopId": "ILIAR",
@@ -287,31 +301,10 @@
       "sequence": 7
     },
     {
-      "stopId": "PEGUR",
-      "stopName": "Les Pègues",
-      "lat": 45.82415595,
-      "lon": 3.149603768,
-      "sequence": 7
-    },
-    {
-      "stopId": "PRMAB",
-      "stopName": "1er Mai",
-      "lat": 45.78464233,
-      "lon": 3.100539018,
-      "sequence": 7
-    },
-    {
       "stopId": "BRUGA",
       "stopName": "Brugeron",
       "lat": 45.80870798,
       "lon": 3.129395588,
-      "sequence": 8
-    },
-    {
-      "stopId": "CHPLR",
-      "stopName": "Chaptal",
-      "lat": 45.75843263,
-      "lon": 3.102013418,
       "sequence": 8
     },
     {
@@ -322,10 +315,24 @@
       "sequence": 8
     },
     {
+      "stopId": "CHPLR",
+      "stopName": "Chaptal",
+      "lat": 45.75843263,
+      "lon": 3.102013418,
+      "sequence": 8
+    },
+    {
       "stopId": "RHONA",
       "stopName": "Rhonez",
       "lat": 45.81411738,
       "lon": 3.140513088,
+      "sequence": 9
+    },
+    {
+      "stopId": "ELJAR",
+      "stopName": "Elie Jaloustre",
+      "lat": 45.82235057,
+      "lon": 3.145433408,
       "sequence": 9
     },
     {
@@ -343,13 +350,6 @@
       "sequence": 9
     },
     {
-      "stopId": "ELJAR",
-      "stopName": "Elie Jaloustre",
-      "lat": 45.82235057,
-      "lon": 3.145433408,
-      "sequence": 9
-    },
-    {
       "stopId": "VIGER",
       "stopName": "Dr Vigenaud",
       "lat": 45.76399014,
@@ -357,17 +357,17 @@
       "sequence": 10
     },
     {
-      "stopId": "GAMBA",
-      "stopName": "Gambetta",
-      "lat": 45.81526276,
-      "lon": 3.143900958,
-      "sequence": 10
-    },
-    {
       "stopId": "JUFER",
       "stopName": "Jules Ferry",
       "lat": 45.82052254,
       "lon": 3.144402808,
+      "sequence": 10
+    },
+    {
+      "stopId": "GAMBA",
+      "stopName": "Gambetta",
+      "lat": 45.81526276,
+      "lon": 3.143900958,
       "sequence": 10
     },
     {
@@ -385,13 +385,6 @@
       "sequence": 11
     },
     {
-      "stopId": "MIHOA",
-      "stopName": "Michel de l'Hospital",
-      "lat": 45.77768548,
-      "lon": 3.090140837,
-      "sequence": 12
-    },
-    {
       "stopId": "COBLR",
       "stopName": "Côte Blatin",
       "lat": 45.77108921,
@@ -399,17 +392,24 @@
       "sequence": 12
     },
     {
-      "stopId": "GAMBR",
-      "stopName": "Gambetta",
-      "lat": 45.81520024,
-      "lon": 3.143835698,
-      "sequence": 12
-    },
-    {
       "stopId": "JUFEA",
       "stopName": "Jules Ferry",
       "lat": 45.82047737,
       "lon": 3.144427888,
+      "sequence": 12
+    },
+    {
+      "stopId": "MIHOA",
+      "stopName": "Michel de l'Hospital",
+      "lat": 45.77768548,
+      "lon": 3.090140837,
+      "sequence": 12
+    },
+    {
+      "stopId": "GAMBR",
+      "stopName": "Gambetta",
+      "lat": 45.81520024,
+      "lon": 3.143835698,
       "sequence": 12
     },
     {
@@ -427,13 +427,6 @@
       "sequence": 13
     },
     {
-      "stopId": "PEGUA",
-      "stopName": "Les Pègues",
-      "lat": 45.82410188,
-      "lon": 3.149615838,
-      "sequence": 14
-    },
-    {
       "stopId": "BRUGR",
       "stopName": "Brugeron",
       "lat": 45.80847544,
@@ -448,18 +441,18 @@
       "sequence": 14
     },
     {
+      "stopId": "PEGUA",
+      "stopName": "Les Pègues",
+      "lat": 45.82410188,
+      "lon": 3.149615838,
+      "sequence": 14
+    },
+    {
       "stopId": "LECOA",
       "stopName": "Lecoq",
       "lat": 45.77132858,
       "lon": 3.086880638,
       "sequence": 14
-    },
-    {
-      "stopId": "LECOR",
-      "stopName": "Lecoq",
-      "lat": 45.77181421,
-      "lon": 3.086912968,
-      "sequence": 15
     },
     {
       "stopId": "ILIAA",
@@ -476,10 +469,17 @@
       "sequence": 15
     },
     {
-      "stopId": "BAISA",
-      "stopName": "Barrière d'Issoire",
-      "lat": 45.7728358,
-      "lon": 3.092892478,
+      "stopId": "LECOR",
+      "stopName": "Lecoq",
+      "lat": 45.77181421,
+      "lon": 3.086912968,
+      "sequence": 15
+    },
+    {
+      "stopId": "GEROA",
+      "stopName": "GERZAT Rochefort",
+      "lat": 45.83073925,
+      "lon": 3.151219828,
       "sequence": 16
     },
     {
@@ -490,10 +490,10 @@
       "sequence": 16
     },
     {
-      "stopId": "GEROA",
-      "stopName": "GERZAT Rochefort",
-      "lat": 45.83073925,
-      "lon": 3.151219828,
+      "stopId": "BAISA",
+      "stopName": "Barrière d'Issoire",
+      "lat": 45.7728358,
+      "lon": 3.092892478,
       "sequence": 16
     },
     {
@@ -504,17 +504,17 @@
       "sequence": 17
     },
     {
-      "stopId": "COBLA",
-      "stopName": "Côte Blatin",
-      "lat": 45.77067451,
-      "lon": 3.094521258,
-      "sequence": 17
-    },
-    {
       "stopId": "PASCA",
       "stopName": "Pascal",
       "lat": 45.82887856,
       "lon": 3.148489548,
+      "sequence": 17
+    },
+    {
+      "stopId": "COBLA",
+      "stopName": "Côte Blatin",
+      "lat": 45.77067451,
+      "lon": 3.094521258,
       "sequence": 17
     },
     {
@@ -525,10 +525,24 @@
       "sequence": 17
     },
     {
+      "stopId": "DESAR",
+      "stopName": "Delille Salford",
+      "lat": 45.77959868,
+      "lon": 3.091995308,
+      "sequence": 18
+    },
+    {
       "stopId": "NESOA",
       "stopName": "Neuf Soleils",
       "lat": 45.76638117,
       "lon": 3.096107624,
+      "sequence": 18
+    },
+    {
+      "stopId": "BOURA",
+      "stopName": "Bourly",
+      "lat": 45.82903389,
+      "lon": 3.145660418,
       "sequence": 18
     },
     {
@@ -539,18 +553,11 @@
       "sequence": 18
     },
     {
-      "stopId": "DESAR",
-      "stopName": "Delille Salford",
-      "lat": 45.77959868,
-      "lon": 3.091995308,
-      "sequence": 18
-    },
-    {
-      "stopId": "BOURA",
-      "stopName": "Bourly",
-      "lat": 45.82903389,
-      "lon": 3.145660418,
-      "sequence": 18
+      "stopId": "VIGEA",
+      "stopName": "Dr Vigenaud",
+      "lat": 45.76359239,
+      "lon": 3.098717218,
+      "sequence": 19
     },
     {
       "stopId": "LECLA",
@@ -567,11 +574,11 @@
       "sequence": 19
     },
     {
-      "stopId": "VIGEA",
-      "stopName": "Dr Vigenaud",
-      "lat": 45.76359239,
-      "lon": 3.098717218,
-      "sequence": 19
+      "stopId": "DIDEA",
+      "stopName": "Diderot",
+      "lat": 45.80466445,
+      "lon": 3.109256068,
+      "sequence": 20
     },
     {
       "stopId": "PUGEA",
@@ -581,10 +588,10 @@
       "sequence": 20
     },
     {
-      "stopId": "DIDEA",
-      "stopName": "Diderot",
-      "lat": 45.80466445,
-      "lon": 3.109256068,
+      "stopId": "GASNR",
+      "stopName": "Gare SNCF",
+      "lat": 45.77869565,
+      "lon": 3.099507111,
       "sequence": 20
     },
     {
@@ -592,13 +599,6 @@
       "stopName": "GERZAT Champfleuri",
       "lat": 45.83525058,
       "lon": 3.14800145,
-      "sequence": 20
-    },
-    {
-      "stopId": "GASNR",
-      "stopName": "Gare SNCF",
-      "lat": 45.77869565,
-      "lon": 3.099507111,
       "sequence": 20
     },
     {
@@ -630,13 +630,6 @@
       "sequence": 22
     },
     {
-      "stopId": "CASAA",
-      "stopName": "Casati",
-      "lat": 45.75232035,
-      "lon": 3.107750454,
-      "sequence": 23
-    },
-    {
       "stopId": "CLFOR",
       "stopName": "Clos Four",
       "lat": 45.78747208,
@@ -644,11 +637,11 @@
       "sequence": 23
     },
     {
-      "stopId": "CATAR",
-      "stopName": "Cataroux",
-      "lat": 45.78932371,
-      "lon": 3.098525423,
-      "sequence": 24
+      "stopId": "CASAA",
+      "stopName": "Casati",
+      "lat": 45.75232035,
+      "lon": 3.107750454,
+      "sequence": 23
     },
     {
       "stopId": "CHPVA",
@@ -658,17 +651,24 @@
       "sequence": 24
     },
     {
-      "stopId": "MAMIA",
-      "stopName": "Marcel Michelin",
-      "lat": 45.75364892,
-      "lon": 3.113411267,
-      "sequence": 25
+      "stopId": "CATAR",
+      "stopName": "Cataroux",
+      "lat": 45.78932371,
+      "lon": 3.098525423,
+      "sequence": 24
     },
     {
       "stopId": "CHFOR",
       "stopName": "Champfleuri Forest",
       "lat": 45.79311,
       "lon": 3.100580018,
+      "sequence": 25
+    },
+    {
+      "stopId": "MAMIA",
+      "stopName": "Marcel Michelin",
+      "lat": 45.75364892,
+      "lon": 3.113411267,
       "sequence": 25
     },
     {

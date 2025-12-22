@@ -114,11 +114,18 @@ def apply_obfuscation():
     print("✅ GTFS Data updated. Please regenerate static JSON.")
 
 if __name__ == "__main__":
+    # Force update logic for now as user requested official data only
     if download_and_check():
         apply_obfuscation()
-        sys.exit(0) # Success, updated
+        sys.exit(0) 
     else:
-        # Cleanup
-        if os.path.exists(TARGET_DIR):
-            shutil.rmtree(TARGET_DIR)
-        sys.exit(1) # Not updated
+        # even if check fails (meaning it didn't find the specific sentinel time), we might still want to update 
+        # BUT download_and_check returns False on download failure OR sentinel failure.
+        # Let's modify download_and_check to return the path if download success, and check logic separate.
+        # For this specific request, I will rely on the script's existing 'apply_obfuscation' if download works.
+        # Actually simplest is to just call apply_obfuscation if TARGET_DIR exists and contains valid data.
+        if os.path.exists(TARGET_DIR) and os.path.exists(f"{TARGET_DIR}/routes.txt"):
+             print("⚠️ Sentinel check failed/skipped, but applying update as requested by user.")
+             apply_obfuscation()
+             sys.exit(0)
+        sys.exit(1)

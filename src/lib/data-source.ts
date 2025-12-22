@@ -106,7 +106,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 const buffer = await response.arrayBuffer();
                 const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
                 const targetRouteId = '3'; // Line E1 (formerly Line 20)
-                const targetStopIds = new Set(['GECHR', 'GECHA', 'GECH']); // Gerzat Champfleuri stops
+                // Add Patural IDs (PATUR, PATUA, PATU) to capture RT data for express trips
+                const targetStopIds = new Set(['GECHR', 'GECHA', 'GECH', 'PATUR', 'PATUA', 'PATU']);
 
                 feed.entity.forEach((entity) => {
                     if (entity.tripUpdate) {
@@ -116,15 +117,28 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                             const startDate = tripUpdate.trip.startDate as string | undefined;
                             const directionId = tripUpdate.trip.directionId ?? 0;
 
-                            const isTripCancelled = scheduleRelationship === ScheduleRelationship.CANCELED;
-                            // ADDED or UNSCHEDULED/DUPLICATED = treat as replacement trips
+                            // 1. Get Stops first
+                            const stops = tripUpdate.stopTimeUpdate || [];
+
+                            // 2. Define isTripAdded which was missing/obscured
                             const isTripAdded = scheduleRelationship === ScheduleRelationship.ADDED ||
                                 scheduleRelationship === ScheduleRelationship.UNSCHEDULED;
 
-                            const stops = tripUpdate.stopTimeUpdate || [];
+                            // 3. Check for Ghost Cancellation (Cancel + Valid Stops)
+                            let isTripCancelled = scheduleRelationship === ScheduleRelationship.CANCELED;
 
-                            // For ADDED trips: T2C uses different stop_ids, so we take first/last stop
-                            // based on direction to get Gerzat departure/arrival times
+                            // WORKAROUND: T2C Feed sometimes marks ALL trips as CANCELED but provides valid stop updates
+                            if (isTripCancelled) {
+                                const hasValidStopUpdates = stops.some(s => s.scheduleRelationship !== 1); // 1=SKIPPED
+                                if (hasValidStopUpdates) {
+                                    // If we have > 5 stops, override cancellation
+                                    if (stops.length > 5) {
+                                        isTripCancelled = false;
+                                    }
+                                }
+                            }
+
+                            // Continue with logic...
                             if (isTripAdded && stops.length > 0) {
                                 // Direction 0 = leaving Gerzat (first stop is Gerzat)
                                 // Direction 1 = arriving at Gerzat (last stop is Gerzat)
@@ -176,20 +190,31 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         // 2. Merge with Static Schedule
         // Get today's date in YYYYMMDD format to filter schedules
         // FIX: Force Europe/Paris timezone to avoid server time issues (e.g. UTC shifting date)
-        const formatter = new Intl.DateTimeFormat('fr-FR', {
-            timeZone: 'Europe/Paris',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
+        // FIX: Force Europe/Paris timezone to avoid server time issues (e.g. UTC shifting date)
+        let todayDateStr = '';
+        try {
+            const formatter = new Intl.DateTimeFormat('fr-FR', {
+                timeZone: 'Europe/Paris',
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
 
-        // Format: "DD/MM/YYYY" -> "YYYYMMDD"
-        const parts = formatter.formatToParts(new Date());
-        const year = parts.find(p => p.type === 'year')?.value;
-        const month = parts.find(p => p.type === 'month')?.value;
-        const day = parts.find(p => p.type === 'day')?.value;
+            // Format: "DD/MM/YYYY" -> "YYYYMMDD"
+            const parts = formatter.formatToParts(new Date());
+            const year = parts.find(p => p.type === 'year')?.value;
+            const month = parts.find(p => p.type === 'month')?.value;
+            const day = parts.find(p => p.type === 'day')?.value;
 
-        const todayDateStr = `${year}${month}${day}`;
+            todayDateStr = `${year}${month}${day}`;
+        } catch (e) {
+            console.error('Date formatting error (fallback to system time):', e);
+            // Fallback to system time (safer than crashing)
+            const today = new Date();
+            todayDateStr = today.getFullYear().toString() +
+                (today.getMonth() + 1).toString().padStart(2, '0') +
+                today.getDate().toString().padStart(2, '0');
+        }
 
         // Filter static schedule to only include today's entries
         const todaySchedule = (staticSchedule as StaticScheduleItem[])

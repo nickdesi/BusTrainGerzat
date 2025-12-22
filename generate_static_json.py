@@ -8,8 +8,9 @@ from zoneinfo import ZoneInfo
 PARIS_TZ = ZoneInfo('Europe/Paris')
 
 # Target line and stop by NAME (more resilient to ID changes)
-TARGET_ROUTE_NAMES = ['E1', '20']  # E1 is the new name, 20 was the old name
-TARGET_STOP_NAME = 'GERZAT Champfleuri'
+TARGET_ROUTE_NAMES = ['E1']  # E1 is the new name
+TARGET_STOP_NAMES = ['GERZAT Champfleuri', 'Patural']
+TARGET_MAIN_STOP = 'GERZAT Champfleuri'
 
 # Generate for today and next 7 days
 start_date = datetime.now(PARIS_TZ)
@@ -32,15 +33,19 @@ if not target_route_ids:
 
 # Find stop_id by name
 target_stop_ids = set()
+main_stop_ids = set() # specifically for Gerzat Champfleuri
 with open('gtfs_data/stops.txt', 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
-        if TARGET_STOP_NAME.lower() in row['stop_name'].lower():
-            target_stop_ids.add(row['stop_id'])
-            print(f"✅ Found stop: {row['stop_name']} -> stop_id={row['stop_id']}")
+        for target_name in TARGET_STOP_NAMES:
+            if target_name.lower() in row['stop_name'].lower():
+                target_stop_ids.add(row['stop_id'])
+                if TARGET_MAIN_STOP.lower() in row['stop_name'].lower():
+                    main_stop_ids.add(row['stop_id'])
+                print(f"✅ Found stop: {row['stop_name']} -> stop_id={row['stop_id']}")
 
 if not target_stop_ids:
-    print(f"❌ Error: Could not find stop with name containing '{TARGET_STOP_NAME}'")
+    print(f"❌ Error: Could not find any target stops")
     sys.exit(1)
 
 # Load calendar
@@ -107,8 +112,26 @@ for date_str in dates:
                 active_services.discard(exc['service_id'])
     
     # Filter trips
+    # We might have multiple stop_times for the same trip (if it stops at both Patural and Champfleuri)
+    # We want to prefer Champfleuri if present, otherwise Patural.
+    
+    trip_events = {} # trip_id -> {stop_id, arrival, departure}
+    
     for stop_time in trip_stops:
         trip_id = stop_time['trip_id']
+        stop_id = stop_time['stop_id']
+        
+        # If we already have an event for this trip, check if we should overwrite it
+        if trip_id in trip_events:
+            existing_stop = trip_events[trip_id]['stop_id']
+            # If current is main stop and existing is NOT, overwrite
+            if stop_id in main_stop_ids and existing_stop not in main_stop_ids:
+                 trip_events[trip_id] = stop_time
+            # Else keep existing (Main > Secondary, or First encountered if both same priority - simplistic)
+        else:
+            trip_events[trip_id] = stop_time
+
+    for trip_id, stop_time in trip_events.items():
         trip = trips[trip_id]
         if trip['service_id'] in active_services:
             # Convert time to timestamp

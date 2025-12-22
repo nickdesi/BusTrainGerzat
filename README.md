@@ -215,9 +215,8 @@ flowchart LR
 
 Les horaires de bus T2C sont vérifiés **automatiquement chaque lundi** à 7h00 (heure de Paris) via GitHub Actions :
 
-- **Vérification sentinelle** : Le script vérifie d'abord si les données officielles contiennent les nouveaux horaires (ex: départ de 05h53).
-- **Protection des corrections manuelles** : Si les données officielles sont encore obsolètes, le workflow s'arrête sans modifier les horaires corrigés manuellement.
-- **Mise à jour automatique** : Si les données officielles sont à jour, téléchargement GTFS et régénération du fichier `static_schedule.json`.
+- **Mise à jour automatique** : Le script force désormais la synchronisation avec les dernières données officielles disponibles sur le portail Open Data.
+- **Source unique** : Aucune correction manuelle n'est appliquée, l'application reflète fidèlement les données GTFS fournies par Clermont Métropole.
 
 ### Scripts disponibles
 
