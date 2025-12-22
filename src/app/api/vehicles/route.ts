@@ -1,6 +1,38 @@
-import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
-import { NextResponse } from 'next/server';
-import lineE1Data from '../../../../public/data/lineE1_data.json';
+import staticSchedule from '@/data/static_schedule.json';
+
+// Simple types for static schedule lookup
+interface StaticScheduleItem {
+    tripId: string;
+    stopId?: string;
+    arrival: number;
+}
+
+// ... existing code ...
+
+const delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
+
+// FIX: Strict Delay Calculation for Live Map
+// If API reports 0 delay, cross-check with static schedule
+if (delay === 0) {
+    const currentStopId = nextStopId;
+    // Find matching static entry
+    const staticEntry = (staticSchedule as StaticScheduleItem[]).find(s =>
+        s.tripId === tripUpdate.trip.tripId && s.stopId === currentStopId
+    );
+
+    if (staticEntry) {
+        const estimatedArrival = Number(nextStopUpdate.arrival?.time || 0);
+        if (estimatedArrival > 0) {
+            const calculatedDelay = estimatedArrival - staticEntry.arrival;
+            // If difference is significant (> 60s), use calculated delay
+            if (Math.abs(calculatedDelay) >= 60) {
+                // We can't easily mutate 'const delay', so we'll use the calculated value in the push
+                // or better, just mute the variable above if possible? 
+                // calculatedDelay will be used below.
+            }
+        }
+    }
+}
 
 export const dynamic = 'force-dynamic';
 
@@ -258,7 +290,25 @@ export async function GET() {
                             }
                         }
 
-                        const delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
+                        let delay = nextStopUpdate.arrival?.delay || nextStopUpdate.departure?.delay || 0;
+
+                        // FIX: Strict Delay Calculation for Live Map
+                        // If API reports 0 delay, cross-check with static schedule to detect hidden delays
+                        if (delay === 0) {
+                            const tm = Number(nextStopUpdate.arrival?.time || 0);
+                            if (tm > 0) {
+                                // Find matching static entry
+                                const staticEntry = (staticSchedule as StaticScheduleItem[]).find(s =>
+                                    s.tripId === tripUpdate.trip.tripId && s.stopId === nextStopId
+                                );
+                                if (staticEntry) {
+                                    const diff = tm - staticEntry.arrival;
+                                    if (Math.abs(diff) >= 60) {
+                                        delay = diff;
+                                    }
+                                }
+                            }
+                        }
 
                         // Get terminus ETA (last stop in the trip)
                         const lastStopUpdate = stopTimeUpdates[stopTimeUpdates.length - 1];
