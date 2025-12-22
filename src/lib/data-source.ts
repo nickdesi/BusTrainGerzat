@@ -35,9 +35,6 @@ interface StaticScheduleItem {
     date: string;
 }
 
-interface ProcessedScheduleItem extends StaticScheduleItem {
-    originalArrival: number;
-}
 
 // SNCF API types
 interface SncfLink {
@@ -166,35 +163,19 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         }
 
         // 2. Merge with Static Schedule
+        // Get today's date in YYYYMMDD format to filter schedules
         const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const todayMidnight = Math.floor(today.getTime() / 1000);
+        const todayDateStr = today.getFullYear().toString() +
+            (today.getMonth() + 1).toString().padStart(2, '0') +
+            today.getDate().toString().padStart(2, '0');
 
-        const scheduleDateStr = (staticSchedule as StaticScheduleItem[])[0]?.date || "20251126";
-        const sYear = parseInt(scheduleDateStr.substring(0, 4));
-        const sMonth = parseInt(scheduleDateStr.substring(4, 6)) - 1;
-        const sDay = parseInt(scheduleDateStr.substring(6, 8));
-        const scheduleDate = new Date(sYear, sMonth, sDay);
-        scheduleDate.setHours(0, 0, 0, 0);
-        const scheduleMidnight = Math.floor(scheduleDate.getTime() / 1000);
+        // Filter static schedule to only include today's entries
+        const todaySchedule = (staticSchedule as StaticScheduleItem[])
+            .filter((item: StaticScheduleItem) => item.date === todayDateStr);
 
-        const timeOffset = todayMidnight - scheduleMidnight;
-
-        const combinedUpdates = (staticSchedule as StaticScheduleItem[])
+        const combinedUpdates = todaySchedule
+            .filter((item: StaticScheduleItem) => item.arrival > now - 600)
             .map((item: StaticScheduleItem) => {
-                // Calculate static timestamps for this item
-                const staticArrival = item.arrival + timeOffset;
-                const staticDeparture = item.departure + timeOffset;
-
-                return {
-                    ...item,
-                    originalArrival: item.arrival, // Keep original for debug/ref
-                    arrival: staticArrival,
-                    departure: staticDeparture
-                };
-            })
-            .filter((item: ProcessedScheduleItem) => item.arrival > now - 600)
-            .map((item: ProcessedScheduleItem) => {
                 const rt = realtimeUpdates[item.tripId];
                 let arrival = item.arrival;
                 let departure = item.departure;

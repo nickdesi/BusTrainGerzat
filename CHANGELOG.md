@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.1] - 2025-12-22
+
+### 🐛 Correctifs
+
+- **Horaires Fantômes** : Correction critique du filtrage des horaires par date.
+  - Les horaires du dimanche (vers Romagnat La Gazelle) n'apparaissent plus les jours de semaine
+  - Le fichier `data-source.ts` filtre maintenant les horaires par date exacte (format YYYYMMDD)
+  - Résout le problème des bus affichés à 10:49, 11:51 (départs) et 10:13, 11:15 (arrivées) qui n'existaient pas
+
 ## [3.0.0] - 2025-12-20
 
 ### 🚌 Migration Ligne E1
