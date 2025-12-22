@@ -39,6 +39,9 @@ function mapBusDeparture(bus: BusUpdate): UnifiedEntry {
  * Map a bus update to a unified arrival entry
  */
 function mapBusArrival(bus: BusUpdate): UnifiedEntry {
+    // Express trips have headsign "Patural", standard trips have "GERZAT Champfleuri"
+    const isExpress = bus.headsign.toUpperCase().includes('PATURAL');
+
     return {
         id: `bus-${bus.tripId}-${bus.arrival}`,
         tripId: bus.tripId,
@@ -47,12 +50,12 @@ function mapBusArrival(bus: BusUpdate): UnifiedEntry {
         arrivalTime: bus.arrival,
         departureTime: bus.departure || bus.arrival,
         line: 'E1',
-        destination: 'GERZAT Champfleuri',
-        provenance: normalizeText('Aubière / Romagnat'),
+        destination: normalizeText(bus.headsign), // Use actual headsign (Patural or GERZAT Champfleuri)
+        provenance: isExpress ? 'Ballainvilliers' : 'Aubière Romagnat',
         delay: bus.delay,
         isRealtime: bus.isRealtime,
         isCancelled: bus.isCancelled || false,
-        platform: 'Champfleuri',
+        platform: isExpress ? 'Patural' : 'Champfleuri',
     };
 }
 
