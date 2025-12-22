@@ -21,6 +21,7 @@ export interface TripDetails {
     stops: StopTimeDetail[];
     timestamp: number;
     isRealtime: boolean;
+    origin: string;
 }
 
 async function fetchTripDetails(tripId: string): Promise<TripDetails> {

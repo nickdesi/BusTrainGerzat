@@ -13,6 +13,7 @@ export interface VehiclePosition {
     progress: number;
     estimatedArrival: number;
     terminusEta: number; // ETA at terminus
+    origin: string;
 }
 
 interface VehiclesResponse {

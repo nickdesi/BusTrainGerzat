@@ -65,11 +65,16 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                         <span>Ligne E1</span>
                     </div>
 
-                    {/* Direction indicator */}
-                    <div className="bg-green-500/20 border border-green-500/30 rounded px-2 py-1 mb-2 text-center">
-                        <span className="text-green-400 font-medium text-sm">
-                            → {vehicle.headsign}
-                        </span>
+                    {/* Origin & Direction indicator */}
+                    <div className="flex flex-col gap-1 mb-2">
+                        <div className="text-xs text-gray-400 text-center">
+                            Depuis {vehicle.origin}
+                        </div>
+                        <div className="bg-green-500/20 border border-green-500/30 rounded px-2 py-1 text-center">
+                            <span className="text-green-400 font-medium text-sm">
+                                → {vehicle.headsign}
+                            </span>
+                        </div>
                     </div>
 
                     <div className="space-y-2">

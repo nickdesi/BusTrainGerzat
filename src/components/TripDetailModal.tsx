@@ -58,9 +58,10 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                                 Ligne {lineName}
                             </h2>
                             {tripData && (
-                                <p className="text-sm text-gray-400">
-                                    → {tripData.headsign}
-                                </p>
+                                <div className="text-sm text-gray-400">
+                                    <span className="block text-xs uppercase tracking-wider text-gray-500">De {tripData.origin}</span>
+                                    <span className="block font-medium text-white text-base">→ {tripData.headsign}</span>
+                                </div>
                             )}
                         </div>
                     </div>

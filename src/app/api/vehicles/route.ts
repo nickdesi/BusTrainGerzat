@@ -17,6 +17,7 @@ interface EstimatedVehicle {
     progress: number;
     estimatedArrival: number;
     terminusEta: number;
+    origin: string;
 }
 
 interface StaticTrip {
@@ -133,10 +134,14 @@ export async function GET() {
                 { lat: nextStopInfo.lat, lon: nextStopInfo.lon }
             );
 
-            // Get headsign from last stop
             const lastStop = trip.stops[trip.stops.length - 1];
             const lastStopInfo = stopsById.get(lastStop.stopId);
             const headsign = lastStopInfo?.stopName || trip.headsign;
+
+            // Get origin from first stop
+            const firstStop = trip.stops[0];
+            const firstStopInfo = stopsById.get(firstStop.stopId);
+            const origin = firstStopInfo?.stopName || 'Inconnu';
 
             // Overall progress
             const overallProgress = nextStopIdx / trip.stops.length;
@@ -153,7 +158,8 @@ export async function GET() {
                 delay: 0, // No RT data = theoretical
                 progress: overallProgress,
                 estimatedArrival: nextTime,
-                terminusEta: lastStopTime
+                terminusEta: lastStopTime,
+                origin
             });
         }
 

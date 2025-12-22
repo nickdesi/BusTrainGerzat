@@ -26,6 +26,7 @@ interface TripDetailsResponse {
     stops: StopTimeDetail[];
     timestamp: number;
     isRealtime: boolean;
+    origin: string;
 }
 
 interface StaticTrip {
@@ -52,11 +53,12 @@ function secondsToUnix(secondsFromMidnight: number): number {
     // Create today's date string in Paris timezone
     const parisDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' }); // YYYY-MM-DD
     // Parse as Paris midnight (the string is date-only, so we need to create midnight in Paris)
-    const [year, month, day] = parisDateStr.split('-').map(Number);
+    // Parse as Paris midnight (the string is date-only, so we need to create midnight in Paris)
+    const [, month] = parisDateStr.split('-').map(Number);
     // Create a Date at midnight Paris time
     // Paris is UTC+1 in winter, UTC+2 in summer
     // We use a trick: create a date string with explicit timezone
-    const parisMidnight = new Date(`${parisDateStr}T00:00:00+01:00`); // Winter time
+    // Winter time
     // Check if we're in DST (rough check: April to October)
     const isDST = month >= 4 && month <= 10;
     const offset = isDST ? '+02:00' : '+01:00';
@@ -82,7 +84,7 @@ export async function GET(
         const staticTrip = staticTripsById.get(tripId);
 
         // Fetch GTFS-RT data
-        let rtStopUpdates: Map<string, { delay: number; predictedTime: number }> = new Map();
+        const rtStopUpdates: Map<string, { delay: number; predictedTime: number }> = new Map();
         let hasRealTimeData = false;
 
         try {
@@ -178,11 +180,17 @@ export async function GET(
             const lastStopInfo = stopsById.get(lastStop?.stopId);
             const headsign = lastStopInfo?.stopName || staticTrip.headsign;
 
+            // Get origin from first stop
+            const firstStop = staticTrip.stops[0];
+            const firstStopInfo = stopsById.get(firstStop?.stopId);
+            const origin = firstStopInfo?.stopName || 'Inconnu';
+
             return NextResponse.json({
                 tripId,
                 routeId: LINE_E1_ROUTE_ID,
                 direction: staticTrip.direction,
                 headsign,
+                origin,
                 stops,
                 timestamp: now,
                 isRealtime: hasRealTimeData,
