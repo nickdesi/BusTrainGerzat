@@ -99,10 +99,18 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                         </div>
 
                         {/* Terminus ETA */}
-                        <div className="bg-white/5 rounded p-2 border border-white/10">
-                            <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Terminus ({vehicle.headsign})</div>
-                            <div className="font-medium text-yellow-400">
-                                ETA: {new Date(vehicle.terminusEta * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                        <div className="bg-gradient-to-r from-yellow-900/30 to-yellow-800/20 rounded-lg p-3 border border-yellow-500/30">
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-wider">Terminus</div>
+                                    <div className="text-sm font-medium text-white truncate max-w-[150px]">{vehicle.headsign}</div>
+                                </div>
+                                <div className="text-right">
+                                    <div className="text-[10px] text-gray-500 uppercase tracking-wider">Arrivée</div>
+                                    <div className="text-xl font-bold text-yellow-400 tabular-nums">
+                                        {new Date(vehicle.terminusEta * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
