@@ -9,6 +9,7 @@ export interface BusUpdate {
     isCancelled: boolean;
     headsign: string;
     direction: number;
+    origin: string; // First stop name from GTFS (e.g., Ballainvilliers for Express)
 }
 
 interface BusDataResponse {

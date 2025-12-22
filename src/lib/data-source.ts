@@ -1,5 +1,7 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import staticSchedule from '@/data/static_schedule.json';
+import e1StopTimes from '../../public/data/e1_stop_times.json';
+import lineE1Data from '../../public/data/lineE1_data.json';
 
 // --- Types ---
 export interface BusUpdate {
@@ -11,6 +13,24 @@ export interface BusUpdate {
     isCancelled: boolean;
     headsign: string;
     direction: number;
+    origin: string; // First stop name (e.g., Ballainvilliers for Express)
+}
+
+// --- GTFS Lookups ---
+// Create stopId -> stopName lookup from lineE1Data
+const stopNameById = new Map<string, string>(
+    lineE1Data.stops.map((s: { stopId: string; stopName: string }) => [s.stopId, s.stopName])
+);
+
+// Create tripId -> origin (first stop name) lookup from e1_stop_times
+interface E1Trip { tripId: string; stops: { stopId: string; sequence: number }[] }
+const tripOrigins = new Map<string, string>();
+for (const trip of e1StopTimes as E1Trip[]) {
+    if (trip.stops && trip.stops.length > 0) {
+        const firstStopId = trip.stops[0].stopId;
+        const originName = stopNameById.get(firstStopId) || firstStopId;
+        tripOrigins.set(trip.tripId, originName);
+    }
 }
 
 export interface TrainUpdate {
@@ -156,7 +176,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                         isRealtime: true,
                                         isCancelled: false,
                                         headsign: directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
-                                        direction: directionId
+                                        direction: directionId,
+                                        origin: tripOrigins.get(tripId) || 'Inconnu'
                                     });
                                 }
                             } else {
@@ -344,7 +365,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     isRealtime: isRealtime,
                     isCancelled: isCancelled,
                     headsign: item.headsign,
-                    direction: item.direction
+                    direction: item.direction,
+                    origin: tripOrigins.get(item.tripId) || 'Inconnu'
                 };
             })
             .filter((item): item is BusUpdate => item !== null); // Filter out nulls

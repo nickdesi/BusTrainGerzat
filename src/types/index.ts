@@ -7,6 +7,7 @@ export interface Update {
     isCancelled: boolean;
     headsign: string;
     direction: number;
+    origin: string; // First stop name from GTFS
 }
 
 export interface TrainUpdate {

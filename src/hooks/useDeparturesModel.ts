@@ -51,7 +51,7 @@ function mapBusArrival(bus: BusUpdate): UnifiedEntry {
         departureTime: bus.departure || bus.arrival,
         line: 'E1',
         destination: normalizeText(bus.headsign), // Use actual headsign (Patural or GERZAT Champfleuri)
-        provenance: isExpress ? 'Ballainvilliers' : 'Aubière Romagnat',
+        provenance: bus.origin, // Use origin from GTFS data (e.g., Ballainvilliers for Express)
         delay: bus.delay,
         isRealtime: bus.isRealtime,
         isCancelled: bus.isCancelled || false,
