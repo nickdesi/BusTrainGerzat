@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { PlaneTakeoff, PlaneLanding, Map } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Map } from 'lucide-react';
 
 interface NavItem {
     href: string;
@@ -11,8 +11,8 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-    { href: '/', label: 'Départs', icon: <PlaneTakeoff size={24} /> },
-    { href: '/arrivees', label: 'Arrivées', icon: <PlaneLanding size={24} /> },
+    { href: '/', label: 'Départs', icon: <ArrowUpRight size={24} /> },
+    { href: '/arrivees', label: 'Arrivées', icon: <ArrowDownLeft size={24} /> },
     { href: '/carte', label: 'Carte', icon: <Map size={24} /> },
 ];
 
@@ -29,8 +29,8 @@ export default function BottomNav() {
                             key={item.href}
                             href={item.href}
                             className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive
-                                    ? 'text-yellow-400'
-                                    : 'text-gray-400 hover:text-white'
+                                ? 'text-yellow-400'
+                                : 'text-gray-400 hover:text-white'
                                 }`}
                         >
                             {item.icon}

@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { RefreshCw, Bus, Train, Filter, WifiOff, Eye, EyeOff, PlaneTakeoff } from 'lucide-react';
+import Image from 'next/image';
+import { RefreshCw, Bus, Train, Filter, WifiOff, Eye, EyeOff } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
@@ -108,11 +109,11 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             <div className="text-center lg:text-left">
               <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-yellow-500 uppercase mb-2 font-mono text-glow flex items-center gap-3 justify-center lg:justify-start">
-                <PlaneTakeoff className="w-8 h-8 md:w-12 md:h-12" />
+                <Image src="/icon-512.png" alt="Logo" width={48} height={48} className="w-8 h-8 md:w-12 md:h-12" />
                 DÉPARTS
               </h1>
               <p className="text-sm md:text-base text-yellow-500/80 uppercase tracking-[0.5em] font-medium pl-1">
-                Gare de Gerzat
+                Hub Multimodal
               </p>
             </div>
             <div className="flex flex-col gap-4 items-end">
