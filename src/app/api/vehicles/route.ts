@@ -77,10 +77,18 @@ export async function GET() {
                         if (tripUpdate.trip.routeId !== LINE_E1_ROUTE_ID) return;
 
                         // Check for trip-level cancellation
-                        if (tripUpdate.trip.scheduleRelationship === 3) return; // CANCELED
-
                         const stopTimeUpdates = tripUpdate.stopTimeUpdate || [];
                         if (stopTimeUpdates.length === 0) return;
+
+                        // Check for trip-level cancellation
+                        if (tripUpdate.trip.scheduleRelationship === 3) { // CANCELED
+                            // Ghost Cancellation Check:
+                            // If we have valid updates (not SKIPPED) and enough stops, treat as ACTIVE
+                            const hasValidUpdates = stopTimeUpdates.some(s => s.scheduleRelationship !== 1);
+                            if (!hasValidUpdates || stopTimeUpdates.length < 5) {
+                                return; // Confirm cancellation
+                            }
+                        }
 
                         // Find the next stop (first stop with arrival time in the future)
                         let nextStopUpdate = null;
