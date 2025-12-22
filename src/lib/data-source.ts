@@ -129,6 +129,18 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             if (response.ok) {
                 const buffer = await response.arrayBuffer();
                 const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
+
+                // Check for stale data (older than 5 minutes)
+                if (feed.header && feed.header.timestamp) {
+                    const feedTime = Number(feed.header.timestamp);
+                    const age = now - feedTime;
+                    if (age > 300) { // 5 minutes
+                        console.warn(`[getBusData] Stale GTFS-RT feed ignored. Age: ${age}s`);
+                        // Return empty updates to force fallback to static schedule
+                        throw new Error('Stale GTFS-RT data');
+                    }
+                }
+
                 const targetRouteId = '3'; // Line E1 (formerly Line 20)
                 // Add Patural IDs (PATUR, PATUA, PATU) to capture RT data for express trips
                 const targetStopIds = new Set(['GECHR', 'GECHA', 'GECH', 'PATUR', 'PATUA', 'PATU']);
