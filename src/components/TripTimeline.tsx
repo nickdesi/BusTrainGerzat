@@ -9,6 +9,7 @@ interface TripTimelineProps {
     isLoading?: boolean;
     isRealtime?: boolean;
     routeColor?: string;
+    currentTime?: number; // Unix timestamp for current time
 }
 
 function formatTime(timestamp: number): string {
@@ -28,8 +29,12 @@ const TripTimeline = memo(function TripTimeline({
     stops,
     isLoading = false,
     isRealtime = false,
-    routeColor = '#fdc300'
+    routeColor = '#fdc300',
+    currentTime
 }: TripTimelineProps) {
+    // Use provided timestamp or fallback (only at mount time)
+    const nowUnix = currentTime ?? Math.floor(Date.now() / 1000);
+
     if (isLoading) {
         return (
             <div className="flex items-center justify-center py-12">
@@ -70,6 +75,8 @@ const TripTimeline = memo(function TripTimeline({
                     const isTerminus = isFirst || isLast;
                     const isPassed = stop.status === 'passed';
                     const isCurrent = stop.status === 'current';
+                    // Only show bus "in transit" if current time > departure time of this stop
+                    const hasDeparted = isCurrent && nowUnix > stop.predictedDeparture;
 
                     return (
                         <div
@@ -105,7 +112,7 @@ const TripTimeline = memo(function TripTimeline({
                                             style={{ backgroundColor: isPassed ? undefined : routeColor }}
                                         />
                                         {/* Bus position indicator - show between current stop and next */}
-                                        {isCurrent && (
+                                        {hasDeparted && (
                                             <div
                                                 className="absolute left-1/2 -translate-x-1/2 z-20"
                                                 style={{ top: '30%' }}
