@@ -96,26 +96,22 @@ Le système de gestion des données bus suit une architecture robuste qui combin
 flowchart TD
     subgraph Sources["📡 Sources de Données"]
         GTFS_STATIC["GTFS Statique<br/>(static_schedule.json)"]
+        E1_STOP_TIMES["Stop Times E1<br/>(e1_stop_times.json)"]
         GTFS_RT["GTFS-RT Trip Updates<br/>(transport.data.gouv.fr)"]
     end
 
-    subgraph Processing["⚙️ Traitement (data-source.ts)"]
+    subgraph Processing["⚙️ Traitement (API Routes)"]
         FETCH["Fetch GTFS-RT"]
-        PARSE["Parse Protobuf"]
-        FILTER["Filtre Route E1<br/>+ Arrêts Gerzat"]
-        CLASSIFY["Classification<br/>Schedule Relationship"]
+        CHECK_DATA{"Données RT<br/>disponibles ?"}
+        USE_RT["Utiliser RT"]
+        USE_STATIC["Fallback Statique<br/>(e1_stop_times.json)"]
     end
 
     subgraph Classification["📊 Types de Trajets"]
         SCHEDULED["SCHEDULED (0)<br/>Trajet normal"]
         ADDED["ADDED (1)<br/>Trajet de remplacement"]
+        NO_DATA["NO_DATA (2)<br/>Pas de prédiction"]
         CANCELED["CANCELED (3)<br/>Trajet annulé"]
-    end
-
-    subgraph Merge["🔗 Fusion Données"]
-        MATCH["Matching TripId + StartDate"]
-        APPLY_RT["Appliquer Temps Réel"]
-        ADD_NEW["Ajouter Trajets ADDED"]
     end
 
     subgraph Output["📤 Résultat Final"]
@@ -123,13 +119,11 @@ flowchart TD
         DISPLAY["Affichage UI"]
     end
 
-    GTFS_STATIC --> MATCH
-    GTFS_RT --> FETCH --> PARSE --> FILTER --> CLASSIFY
-    CLASSIFY --> SCHEDULED --> MATCH
-    CLASSIFY --> ADDED --> ADD_NEW
-    CLASSIFY --> CANCELED --> MATCH
-    MATCH --> APPLY_RT --> COMBINE
-    ADD_NEW --> COMBINE
+    GTFS_STATIC --> COMBINE
+    E1_STOP_TIMES --> USE_STATIC
+    GTFS_RT --> FETCH --> CHECK_DATA
+    CHECK_DATA -->|"Oui (arrival.time)"| USE_RT --> COMBINE
+    CHECK_DATA -->|"Non (NO_DATA)"| USE_STATIC --> COMBINE
     COMBINE --> DISPLAY
 ```
 
@@ -165,12 +159,22 @@ flowchart LR
 
 #### Gestion des Schedule Relationships
 
+**TripDescriptor (niveau trajet) :**
+
 | Code | Nom | Description | Traitement |
 |------|-----|-------------|------------|
 | `0` | SCHEDULED | Trajet planifié normal | Mis à jour avec données RT |
-| `1` | ADDED | Trajet ajouté (remplacement) | Créé dynamiquement, affiché même sans horaire statique |
+| `1` | ADDED | Trajet ajouté (remplacement) | Créé dynamiquement |
 | `2` | UNSCHEDULED | Trajet sans horaire fixe | Traité comme ADDED |
 | `3` | CANCELED | Trajet annulé | Marqué "ANNULÉ" en rouge |
+
+**StopTimeUpdate (niveau arrêt) :**
+
+| Code | Nom | Description | Traitement |
+|------|-----|-------------|------------|
+| `0` | SCHEDULED | Arrêt planifié | Utilise temps RT |
+| `1` | SKIPPED | Arrêt sauté | Non affiché |
+| `2` | NO_DATA | Pas de prédiction | **Fallback sur horaire statique** |
 
 ## 📦 Installation
 
