@@ -20,6 +20,9 @@
   - Les bus ajoutés utilisaient des IDs d'arrêts incompatibles avec la carte.
   - Ajout d'une logique de fallback : mapping par séquence d'arrêt si l'ID est introuvable.
   - Les bus en temps réel s'affichent maintenant correctement sur le tracé.
+- **Fuseau Horaire** : Force l'utilisation de l'heure de Paris ("Europe/Paris").
+  - Garantit que les horaires affichés correspondent toujours à la date locale, quel que soit le pays/serveur d'hébergement.
+  - Corrige les décalages potentiels en début/fin de journée.
 
 ## [3.0.0] - 2025-12-20
 

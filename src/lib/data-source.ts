@@ -175,10 +175,21 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         // 2. Merge with Static Schedule
         // Get today's date in YYYYMMDD format to filter schedules
-        const today = new Date();
-        const todayDateStr = today.getFullYear().toString() +
-            (today.getMonth() + 1).toString().padStart(2, '0') +
-            today.getDate().toString().padStart(2, '0');
+        // FIX: Force Europe/Paris timezone to avoid server time issues (e.g. UTC shifting date)
+        const formatter = new Intl.DateTimeFormat('fr-FR', {
+            timeZone: 'Europe/Paris',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+
+        // Format: "DD/MM/YYYY" -> "YYYYMMDD"
+        const parts = formatter.formatToParts(new Date());
+        const year = parts.find(p => p.type === 'year')?.value;
+        const month = parts.find(p => p.type === 'month')?.value;
+        const day = parts.find(p => p.type === 'day')?.value;
+
+        const todayDateStr = `${year}${month}${day}`;
 
         // Filter static schedule to only include today's entries
         const todaySchedule = (staticSchedule as StaticScheduleItem[])
