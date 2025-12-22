@@ -25,6 +25,8 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Temps réel & Théorique** : Affichage précis des prochains passages avec distinction claire par badges de couleur.
 - **Indicateurs de Retard** : Visualisation immédiate de l'état du trafic (À l'heure, En avance, Retard).
 - **Directions Claires** : Séparation distincte entre les départs (Vers Aubière/Romagnat) et les arrivées (Terminus Gerzat).
+- **Vue Unifiée (Gerzat)** : Intégration automatique des bus Express ("Patural") et Standard ("Champfleuri") dans un seul tableau.
+- **Fiabilité Stricte** : Calcul mathématique du retard (`Réel - Théorique`) pour ignorer les erreurs de l'API officielle (ex: retard annoncé à 0 minute alors que le bus est décalé de 5 minutes).
 
 ### 🚆 Trains TER (Gare de Gerzat)
 
