@@ -1,5 +1,5 @@
 import { memo, useState } from 'react';
-import { ArrowRight, RefreshCw, ChevronRight } from 'lucide-react';
+import { ArrowRight, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
@@ -86,8 +86,10 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
                 </span>
                 <div className="flex items-center gap-2">
                     <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
-                    {entry.isRealtime && (
-                        <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_#22c55e] animate-pulse"></div>
+                    {entry.isRealtime ? (
+                        <Wifi className="w-4 h-4 text-green-500 animate-pulse" strokeWidth={3} />
+                    ) : (
+                        <WifiOff className="w-3 h-3 text-gray-700/50" />
                     )}
                     {isClickable && (
                         <ChevronRight className="w-4 h-4 text-gray-500" />
