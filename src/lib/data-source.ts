@@ -278,6 +278,16 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                             }
 
                             delay = rtStop.delay;
+
+                            // FIX: If API reports 0 delay but time matches shifted schedule (e.g. 12:05 -> 12:10),
+                            // manually calculate delay to alert user (show "RETARD 5 min" instead of "A L'HEURE")
+                            if (delay === 0) {
+                                const calculatedDelay = arrival - item.arrival;
+                                if (Math.abs(calculatedDelay) >= 60) {
+                                    delay = calculatedDelay;
+                                }
+                            }
+
                             if (rtStop.isSkipped) isCancelled = true;
 
                         } else {
