@@ -176,11 +176,11 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                         tripEntry.stops.set(stopTimeUpdate.stopId, {
                                             arrival: stopTimeUpdate.arrival ? {
                                                 time: Number(stopTimeUpdate.arrival.time),
-                                                delay: stopTimeUpdate.arrival.delay
+                                                delay: stopTimeUpdate.arrival.delay ?? 0
                                             } : undefined,
                                             departure: stopTimeUpdate.departure ? {
                                                 time: Number(stopTimeUpdate.departure.time),
-                                                delay: stopTimeUpdate.departure.delay
+                                                delay: stopTimeUpdate.departure.delay ?? 0
                                             } : undefined,
                                             delay: Number(stopTimeUpdate.arrival?.delay || stopTimeUpdate.departure?.delay || 0),
                                             isSkipped: stopTimeUpdate.scheduleRelationship === 1
