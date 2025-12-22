@@ -74,10 +74,10 @@ export default function Arrivees() {
                         <div className="text-center lg:text-left">
                             <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-blue-400 uppercase mb-2 font-mono text-glow flex items-center gap-3 justify-center lg:justify-start">
                                 <Image src="/icon-512.png" alt="Logo" width={48} height={48} className="w-8 h-8 md:w-12 md:h-12" />
-                                ARRIVÉES
+                                ARRIVÉES • GERZAT
                             </h1>
                             <p className="text-sm md:text-base text-blue-400/80 uppercase tracking-widest font-medium pl-1 mt-1">
-                                Gare / Champfleuri <span className="text-[10px] opacity-70 normal-case tracking-normal block md:inline">(Express : Patural)</span>
+                                Gare SNCF • Bus Champfleuri / Patural (Express)
                             </p>
                         </div>
                         <div className="flex flex-col gap-4 items-end">
