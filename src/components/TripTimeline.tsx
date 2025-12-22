@@ -77,10 +77,10 @@ const TripTimeline = memo(function TripTimeline({
                             className={`relative flex items-start gap-4 ${isPassed ? 'opacity-50' : ''}`}
                         >
                             {/* Vertical Line + Circle */}
-                            <div className="flex flex-col items-center">
+                            <div className="flex flex-col items-center w-5">
                                 {/* Circle */}
                                 <div
-                                    className={`relative z-10 flex items-center justify-center rounded-full border-3 ${isTerminus ? 'w-5 h-5' : 'w-3.5 h-3.5'
+                                    className={`relative z-10 flex items-center justify-center rounded-full border-3 ${isTerminus ? 'w-5 h-5' : 'w-3 h-3'
                                         } ${isCurrent
                                             ? 'bg-green-500 border-green-400 shadow-[0_0_12px_rgba(34,197,94,0.6)]'
                                             : isPassed
