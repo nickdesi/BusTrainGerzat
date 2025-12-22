@@ -116,13 +116,15 @@ export async function GET(
                     const stopId = stu.stopId as string;
                     const stopInfo = stopsById.get(stopId);
 
-                    const scheduledArrival = Number(stu.arrival?.time || stu.departure?.time || 0);
-                    const scheduledDeparture = Number(stu.departure?.time || stu.arrival?.time || 0);
-                    const delay = stu.arrival?.delay || stu.departure?.delay || 0;
+                    // RT provides PREDICTED times (arrival.time / departure.time) and delay
+                    // Scheduled = Predicted - Delay
+                    const delay = Number(stu.arrival?.delay || stu.departure?.delay || 0);
+                    const predictedArrival = Number(stu.arrival?.time || stu.departure?.time || 0);
+                    const predictedDeparture = Number(stu.departure?.time || stu.arrival?.time || 0);
 
-                    // Predicted times = scheduled + delay
-                    const predictedArrival = scheduledArrival;
-                    const predictedDeparture = scheduledDeparture;
+                    // Calculate scheduled time by subtracting delay from predicted
+                    const scheduledArrival = predictedArrival > 0 ? predictedArrival - delay : 0;
+                    const scheduledDeparture = predictedDeparture > 0 ? predictedDeparture - delay : 0;
 
                     // Determine status
                     let status: 'passed' | 'current' | 'upcoming';
