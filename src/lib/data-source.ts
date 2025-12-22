@@ -258,8 +258,27 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
                     if (shouldApplyRT) {
                         const stopId = item.stopId;
-                        // Strict Matching: ONLY apply update if we have data for THIS exact stopId
-                        const rtStop = stopId ? rtTrip.stops.get(stopId) : undefined;
+                        // Strict -> Fuzzy Matching: Check exact ID, then aliases
+                        // RT feed might send GECH instead of GECHR
+                        let rtStop = stopId ? rtTrip.stops.get(stopId) : undefined;
+
+                        if (!rtStop && stopId) {
+                            // Aliases Map
+                            const aliases: Record<string, string[]> = {
+                                'GECHR': ['GECH', 'GECHA'],
+                                'GECHA': ['GECH', 'GECHR'],
+                                'PATUR': ['PATU', 'PATUA'],
+                                'PATUA': ['PATU', 'PATUR']
+                            };
+
+                            const possibleAliases = aliases[stopId];
+                            if (possibleAliases) {
+                                for (const alias of possibleAliases) {
+                                    rtStop = rtTrip.stops.get(alias);
+                                    if (rtStop) break;
+                                }
+                            }
+                        }
 
                         if (rtStop) {
                             isRealtime = true;
