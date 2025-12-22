@@ -112,7 +112,7 @@ const TripTimeline = memo(function TripTimeline({
                                     {/* Stop Name */}
                                     <div className="flex items-center gap-2">
                                         <span className={`font-medium ${isCurrent ? 'text-green-400' :
-                                                isPassed ? 'text-gray-500' : 'text-white'
+                                            isPassed ? 'text-gray-500' : 'text-white'
                                             } ${isTerminus ? 'font-bold' : ''}`}>
                                             {stop.stopName}
                                         </span>
@@ -128,23 +128,45 @@ const TripTimeline = memo(function TripTimeline({
 
                                     {/* Times */}
                                     <div className="flex items-center gap-2 text-sm">
-                                        {isRealtime && stop.delay !== 0 && !isPassed && (
-                                            <>
-                                                <span className="text-gray-500 line-through">
-                                                    {formatTime(stop.scheduledArrival - stop.delay)}
-                                                </span>
-                                                <Wifi className="w-3 h-3 text-green-400" />
-                                            </>
-                                        )}
-                                        <span className={`font-mono ${isPassed ? 'text-gray-500' : 'text-yellow-500'
-                                            }`}>
-                                            {formatTime(stop.predictedArrival)}
-                                        </span>
-                                        {stop.delay > 0 && !isPassed && (
-                                            <span className="text-orange-400 font-medium text-xs">
-                                                {formatDelay(stop.delay)}
-                                            </span>
-                                        )}
+                                        {(() => {
+                                            // Calculate both displayed times
+                                            const scheduledTime = formatTime(stop.scheduledArrival);
+                                            const predictedTime = formatTime(stop.predictedArrival);
+                                            const delayText = formatDelay(stop.delay);
+
+                                            // Only show strikethrough if times VISUALLY differ
+                                            const showStrikethrough = isRealtime &&
+                                                stop.delay !== 0 &&
+                                                !isPassed &&
+                                                scheduledTime !== predictedTime;
+
+                                            return (
+                                                <>
+                                                    {showStrikethrough && (
+                                                        <>
+                                                            <span className="text-gray-500 line-through">
+                                                                {scheduledTime}
+                                                            </span>
+                                                            <Wifi className="w-3 h-3 text-green-400" />
+                                                        </>
+                                                    )}
+                                                    {/* Show Wifi icon without strikethrough if delay exists but times look same */}
+                                                    {isRealtime && !showStrikethrough && !isPassed && (
+                                                        <Wifi className="w-3 h-3 text-green-400" />
+                                                    )}
+                                                    <span className={`font-mono ${isPassed ? 'text-gray-500' : 'text-yellow-500'
+                                                        }`}>
+                                                        {predictedTime}
+                                                    </span>
+                                                    {/* Only show delay badge if it's significant and visible */}
+                                                    {stop.delay > 0 && !isPassed && delayText && showStrikethrough && (
+                                                        <span className="text-orange-400 font-medium text-xs">
+                                                            {delayText}
+                                                        </span>
+                                                    )}
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
                             </div>
