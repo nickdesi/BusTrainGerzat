@@ -124,11 +124,19 @@ for date_str in dates:
         # If we already have an event for this trip, check if we should overwrite it
         if trip_id in trip_events:
             existing_stop = trip_events[trip_id]['stop_id']
-            # If current is main stop and existing is NOT, overwrite
+            # If current is main stop (Champfleuri) and existing is NOT, overwrite
             if stop_id in main_stop_ids and existing_stop not in main_stop_ids:
                  trip_events[trip_id] = stop_time
-            # Else keep existing (Main > Secondary, or First encountered if both same priority - simplistic)
+            # Else keep existing
         else:
+            # STRICT RULE: For Patural (not main stop), ONLY keep Express trips
+            # Express Outbound: Destination 'Ballainvilliers'
+            # Express Inbound: Destination 'Patural' (or 'Le Patural')
+            if stop_id not in main_stop_ids:
+                trip_headsign = trips[trip_id]['trip_headsign'].upper()
+                if 'BALLAINVILLIERS' not in trip_headsign and 'PATURAL' not in trip_headsign:
+                    continue 
+
             trip_events[trip_id] = stop_time
 
     for trip_id, stop_time in trip_events.items():

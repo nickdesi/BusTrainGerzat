@@ -318,6 +318,24 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     }
                 }
 
+                // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
+                // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
+                const paturalIds = new Set(['PATUR', 'PATUA', 'PATU']);
+                const stopIdUpper = item.stopId?.toUpperCase() || '';
+
+                if (paturalIds.has(stopIdUpper)) {
+                    // If direction is NOT 0 (0 = usually Outbound/South towards Aubière/Ballainvilliers), skip
+                    // Also ideally check headsign, but direction is a strong proxy.
+                    if (item.direction === 1) { // Inbound
+                        const headsignUpper = item.headsign.toUpperCase();
+                        if (!headsignUpper.includes('PATURAL')) {
+                            return null; // Not Express Inbound, skip
+                        }
+                    }
+                    // Optional: Check headsign if known to be unrelated to Ballainvilliers? 
+                    // For now, Direction 0 at Patural implies leaving Gerzat, which matches the criteria.
+                }
+
                 return {
                     tripId: item.tripId,
                     arrival: arrival,
@@ -328,7 +346,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     headsign: item.headsign,
                     direction: item.direction
                 };
-            });
+            })
+            .filter((item): item is BusUpdate => item !== null); // Filter out nulls
 
         // Add ADDED trips (replacement trips from GTFS-RT)
         combinedUpdates.push(...addedTrips);
