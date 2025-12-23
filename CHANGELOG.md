@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.1.0] - 2025-12-23
+
+### 🛡️ Intégrité des Données (Critical)
+
+- **Configuration Dynamique** : Suppression définitive des IDs codés en dur (`Route=3`, `Stops=GECHR...`).
+  - Le script `generate_static_json.py` génère désormais `src/data/gtfs_config.json`.
+  - Toutes les APIs TypeScript et scripts Python consomment ce fichier.
+  - Garantie de fonctionnement même si T2C change les IDs internes.
+- **Scripts d'Extraction** : `extract_lineE1_data.py` utilise maintenant la recherche par nom ("E1") au lieu de l'ID `'3'`.
+
+### 🔧 Refactoring
+
+- **data-source.ts** : Migration vers le service centralisé `gtfs-rt.ts`.
+  - Suppression de la duplication de logique de fetch/decode.
+  - Uniformisation de la détection des "Ghost Cancellations".
+
 ## [3.0.4] - 2025-12-23
 
 ### 🔧 Refactoring

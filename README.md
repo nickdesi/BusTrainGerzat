@@ -102,6 +102,7 @@ Le système de gestion des données bus suit une architecture robuste qui combin
 ```mermaid
 flowchart TD
     subgraph Sources["📡 Sources de Données"]
+        GTFS_CONFIG["Config Dynamique<br/>(gtfs_config.json)"]
         GTFS_STATIC["GTFS Statique<br/>(static_schedule.json)"]
         E1_STOP_TIMES["Stop Times E1<br/>(e1_stop_times.json)"]
         GTFS_RT["GTFS-RT Trip Updates<br/>(transport.data.gouv.fr)"]
