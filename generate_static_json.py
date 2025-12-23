@@ -44,6 +44,8 @@ print(f"✅ Exported gtfs_config.json with route IDs: {list(target_route_ids)}")
 # Find stop_id by name
 target_stop_ids = set()
 main_stop_ids = set() # specifically for Gerzat Champfleuri
+patural_stop_ids = set() # specifically for Patural
+
 with open('gtfs_data/stops.txt', 'r', encoding='utf-8-sig') as f:
     reader = csv.DictReader(f)
     for row in reader:
@@ -52,11 +54,23 @@ with open('gtfs_data/stops.txt', 'r', encoding='utf-8-sig') as f:
                 target_stop_ids.add(row['stop_id'])
                 if TARGET_MAIN_STOP.lower() in row['stop_name'].lower():
                     main_stop_ids.add(row['stop_id'])
+                if 'patural' in row['stop_name'].lower():
+                    patural_stop_ids.add(row['stop_id'])
                 print(f"✅ Found stop: {row['stop_name']} -> stop_id={row['stop_id']}")
 
 if not target_stop_ids:
     print(f"❌ Error: Could not find any target stops")
     sys.exit(1)
+
+# Update config with stop IDs
+gtfs_config['stopIds'] = {
+    'all': list(target_stop_ids),
+    'champfleuri': list(main_stop_ids),
+    'patural': list(patural_stop_ids)
+}
+with open('src/data/gtfs_config.json', 'w') as f:
+    json.dump(gtfs_config, f, indent=2)
+print(f"✅ Updated gtfs_config.json with Stop IDs")
 
 # Load calendar
 services = {}
