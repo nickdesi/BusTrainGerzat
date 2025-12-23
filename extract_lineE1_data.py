@@ -10,25 +10,14 @@ import os
 
 GTFS_DIR = 'gtfs_data'
 OUTPUT_FILE = 'public/data/lineE1_data.json'
-LINE_E1_ROUTE_ID = '3'  # Route ID for Line E1
+TARGET_ROUTE_NAME = 'E1'
 
 def main():
-    # Read stops
-    stops = {}
-    with open(f'{GTFS_DIR}/stops.txt', 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            stops[row['stop_id']] = {
-                'stopId': row['stop_id'],
-                'stopName': row['stop_name'],
-                'lat': float(row['stop_lat']),
-                'lon': float(row['stop_lon'])
-            }
-    
-    print(f"✅ Loaded {len(stops)} stops")
-    
     # Read routes to find Line E1
     routes = {}
+    found_route_id = None
+    line_e1 = None
+
     with open(f'{GTFS_DIR}/routes.txt', 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
         for row in reader:
@@ -38,13 +27,30 @@ def main():
                 'routeLongName': row['route_long_name'],
                 'routeColor': row.get('route_color', 'E1B000')
             }
-    
-    line_e1 = routes.get(LINE_E1_ROUTE_ID)
-    if line_e1:
-        print(f"✅ Found Line E1: {line_e1['routeShortName']} - {line_e1['routeLongName']}")
+            if row['route_short_name'] == TARGET_ROUTE_NAME:
+                found_route_id = row['route_id']
+                line_e1 = routes[row['route_id']]
+
+    if found_route_id:
+        print(f"✅ Found Line {TARGET_ROUTE_NAME}: {line_e1['routeShortName']} - {line_e1['routeLongName']} (ID: {found_route_id})")
+        LINE_E1_ROUTE_ID = found_route_id
     else:
-        print(f"❌ Line E1 (route_id={LINE_E1_ROUTE_ID}) not found!")
+        print(f"❌ Line {TARGET_ROUTE_NAME} not found!")
         return
+
+    # Read stops
+    stops = {}
+    with open(f'{GTFS_DIR}/stops.txt', 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            stops[row['stop_id']] = {
+                'stopId': row['stop_id'],
+                'stopName': row['stop_name'],
+                'lat': float(row['stop_lat']), # Assuming valid float
+                'lon': float(row['stop_lon'])
+            }
+    
+    print(f"✅ Loaded {len(stops)} stops")
     
     # Read trips to find shape_ids for Line E1
     trips_by_shape = {}  # shape_id -> [trip_ids]
