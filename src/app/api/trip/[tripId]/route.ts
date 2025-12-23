@@ -127,11 +127,15 @@ export async function GET(
 
         // Build response - prefer static + RT overlay
         if (staticTrip) {
-            // Find current stop based on time
+            // Find current stop based on PREDICTED time (RT if available, else scheduled)
+            // This ensures stops are correctly marked as "passed" when bus is early
             let currentStopIndex = 0;
             for (let i = 0; i < staticTrip.stops.length; i++) {
-                const scheduledUnix = secondsToUnix(staticTrip.stops[i].arrivalTime);
-                if (scheduledUnix > now) {
+                const stopId = staticTrip.stops[i].stopId;
+                const rtData = rtStopUpdates.get(stopId);
+                // Use predicted time if RT available, otherwise scheduled
+                const predictedTime = rtData?.predictedTime || secondsToUnix(staticTrip.stops[i].arrivalTime);
+                if (predictedTime > now) {
                     currentStopIndex = i;
                     break;
                 }

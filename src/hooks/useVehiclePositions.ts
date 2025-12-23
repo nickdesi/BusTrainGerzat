@@ -14,6 +14,7 @@ export interface VehiclePosition {
     estimatedArrival: number;
     terminusEta: number; // ETA at terminus
     origin: string;
+    isRealtime: boolean; // True if position is from GPS, false if interpolated
 }
 
 interface VehiclesResponse {

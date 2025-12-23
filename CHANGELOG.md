@@ -1,5 +1,23 @@
 # Changelog
 
+## [3.0.3] - 2025-12-23
+
+### ✨ Améliorations
+
+- **Intégration GTFS-RT complète** : Refonte de l'API `/api/vehicles` pour utiliser les positions GPS réelles.
+  - Priorité 1 : Positions GPS via GTFS-RT Vehicle Positions
+  - Priorité 2 : Interpolation avec temps prédits via GTFS-RT Trip Updates
+  - Priorité 3 : Fallback sur interpolation théorique si aucune donnée RT
+  - Nouveau champ `isRealtime` pour indiquer la source de la position
+
+### 🐛 Correctifs
+
+- **Arrêts passés non grisés** : L'API `/api/trip/[tripId]` utilisait les horaires théoriques au lieu des temps prédits pour déterminer les arrêts passés.
+  - Un bus en avance de 10 min affichait les arrêts comme "à venir" alors qu'ils étaient passés.
+  - Correction : utilisation de `predictedTime` depuis GTFS-RT Trip Updates.
+- **Position du bus incorrecte** : Sur la carte live, les bus en avance/retard étaient affichés à une position basée sur l'horaire théorique.
+  - Maintenant les positions GPS réelles sont utilisées quand disponibles.
+
 ## [3.0.1] - 2025-12-22
 
 ### 🐛 Correctifs

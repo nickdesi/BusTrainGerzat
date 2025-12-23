@@ -3,7 +3,7 @@
 Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
 
 [![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gerzatlive.desimone.fr)
-[![version](https://img.shields.io/badge/version-2.6.1-blue)](https://github.com/nickdesi/BusTrainGerzat)
+[![version](https://img.shields.io/badge/version-3.0.3-blue)](https://github.com/nickdesi/BusTrainGerzat)
 [![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
 <div align="center">
@@ -39,12 +39,12 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 
 ### 🗺️ Carte Live (Ligne E1)
 
-- **Position en temps réel** : Visualisation des bus sur une carte interactive avec le tracé de la ligne.
-- **Estimation intelligente** : Positions estimées à partir des données GTFS-RT Trip Updates avec "Snap to Route".
+- **Position GPS temps réel** : Affichage des positions réelles des bus via GTFS-RT Vehicle Positions.
+- **Fallback intelligent** : Si GPS indisponible, interpolation avec les temps prédits (GTFS-RT Trip Updates).
 - **Direction affichée** : 🟢 Vert = Vers Gerzat / 🔵 Bleu = Vers Aubière/Romagnat.
 - **ETA au terminus** : Heure d'arrivée estimée au terminus pour chaque bus.
 - **Prochain arrêt** : Nom de l'arrêt suivant et heure d'arrivée estimée.
-- **Indicateur de retard** : Retard affiché en temps réel dans le popup.
+- **Indicateur de retard** : Retard/avance affiché en temps réel dans le popup.
 
 ### ✨ Expérience Utilisateur (UX/UI & Accessibilité)
 
@@ -157,6 +157,45 @@ flowchart LR
     TIME_CHECK -->|Oui| APPLY
     TIME_CHECK -->|Non| SKIP
 ```
+
+#### Positions Véhicules (Carte Live)
+
+L'API `/api/vehicles` utilise un système de priorité à 3 niveaux pour afficher la position la plus précise possible :
+
+```mermaid
+flowchart TD
+    subgraph Sources["📡 Sources GTFS-RT"]
+        VP["Vehicle Positions<br/>(GPS réel)"]
+        TU["Trip Updates<br/>(temps prédits)"]
+        STATIC["Static Schedule<br/>(horaires théoriques)"]
+    end
+
+    subgraph Priority["🎯 Priorité de Résolution"]
+        P1{"GPS<br/>disponible ?"}
+        P2{"RT Delay<br/>disponible ?"}
+        P3["Interpolation<br/>Théorique"]
+    end
+
+    subgraph Position["📍 Position Finale"]
+        GPS_POS["Position GPS<br/>✅ Précision max"]
+        RT_POS["Interpolation RT<br/>⚡ Ajustée au retard"]
+        STATIC_POS["Interpolation Static<br/>📅 Horaire théorique"]
+    end
+
+    VP --> P1
+    P1 -->|Oui| GPS_POS
+    P1 -->|Non| P2
+    TU --> P2
+    P2 -->|Oui| RT_POS
+    P2 -->|Non| P3
+    STATIC --> P3 --> STATIC_POS
+```
+
+| Priorité | Source | Précision | Cas d'usage |
+|----------|--------|-----------|-------------|
+| 1 | GTFS-RT Vehicle Positions | GPS réel | Bus équipés GPS transmettant en temps réel |
+| 2 | GTFS-RT Trip Updates | Interpolation ajustée | GPS non dispo, mais retard/avance connu |
+| 3 | Static Schedule | Interpolation théorique | Aucune donnée temps réel |
 
 #### Gestion des Schedule Relationships
 
