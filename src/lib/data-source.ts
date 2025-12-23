@@ -1,4 +1,4 @@
-import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
+import { fetchTripUpdates } from '@/lib/gtfs-rt';
 import staticSchedule from '@/data/static_schedule.json';
 import gtfsConfig from '@/data/gtfs_config.json';
 import e1StopTimes from '../../public/data/e1_stop_times.json';
@@ -94,20 +94,14 @@ interface SncfApiResponse {
 }
 
 // --- BUS LOGIC ---
-// GTFS-RT Schedule Relationship enum values
-enum ScheduleRelationship {
-    SCHEDULED = 0,
-    ADDED = 1,        // Extra trip added (replacement)
-    UNSCHEDULED = 2,  // Trip running without schedule / DUPLICATED in newer specs
-    CANCELED = 3      // Trip canceled
-}
 
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
         const now = Math.floor(Date.now() / 1000);
 
-        // 1. Fetch Real-time Data
-        // Map<tripId, { tripCancelled: boolean, startDate?: string, stops: Map<stopId, UpdateData> }>
+        // 1. Fetch Real-time Data using shared service
+        // Map<tripId, RTTripUpdate>
+        const rtUpdates = await fetchTripUpdates();
         const realtimeUpdates = new Map<string, {
             tripCancelled: boolean;
             startDate?: string;
@@ -119,116 +113,72 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             }>
         }>();
 
-        // Store ADDED/DUPLICATED trips as replacement trips (not in static schedule)
         const addedTrips: BusUpdate[] = [];
 
-        try {
-            const response = await fetch('https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update', {
-                cache: 'no-store',
-            });
+        // Dynamic Route Route IDs already handled by gtfs-rt.ts
+        // Stop IDs used here for filtering legacy updates
+        const targetStopIds = new Set([...gtfsConfig.stopIds.champfleuri, ...gtfsConfig.stopIds.patural]);
 
-            if (response.ok) {
-                const buffer = await response.arrayBuffer();
-                const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
+        for (const [tripId, update] of rtUpdates) {
+            // 1. Handle Added Trips
+            if (update.isAdded) {
+                const stops = Array.from(update.stopUpdates.values());
+                if (stops.length > 0) {
+                    // Direction 0 = leaving Gerzat (first stop is Gerzat estimate)
+                    // Direction 1 = arriving at Gerzat (last stop is Gerzat estimate)
+                    const gerzatStop = update.directionId === 0 ? stops[0] : stops[stops.length - 1];
 
-                // Check for stale data (older than 5 minutes)
-                if (feed.header && feed.header.timestamp) {
-                    const feedTime = Number(feed.header.timestamp);
-                    const age = now - feedTime;
-                    if (age > 300) { // 5 minutes
-                        console.warn(`[getBusData] Stale GTFS-RT feed ignored. Age: ${age}s`);
-                        // Return empty updates to force fallback to static schedule
-                        throw new Error('Stale GTFS-RT data');
+                    // Convert to milliseconds-based structure if needed, or keeping it as unix timestamp (seconds)
+                    // BusUpdate expects simple numbers. 'arrival' in BusUpdate is unix timestamp.
+                    // RTStopUpdate.predictedTime is unix timestamp (seconds).
+                    const arrivalTime = gerzatStop.predictedTime;
+                    const arrivalDelay = gerzatStop.delay;
+
+                    if (arrivalTime) {
+                        addedTrips.push({
+                            tripId: tripId,
+                            arrival: arrivalTime,
+                            departure: arrivalTime,
+                            delay: arrivalDelay || 0,
+                            isRealtime: true,
+                            isCancelled: false,
+                            headsign: update.directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
+                            direction: update.directionId,
+                            origin: tripOrigins.get(tripId) || 'Inconnu'
+                        });
+                    }
+                }
+            } else {
+                // 2. Handle Scheduled/Cancelled Trips
+                // Convert RTTripUpdate to local legacy structure for "Merge with Static" phase
+
+                // We need to convert checks to the structure expected by Step 2.
+                // Step 2 expects: Map<tripId, { tripCancelled, startDate, stops: Map<stopId, {arrival, departure, delay, isSkipped}> }>
+
+                const stopsMap = new Map<string, {
+                    arrival?: { time?: number; delay?: number };
+                    departure?: { time?: number; delay?: number };
+                    delay: number;
+                    isSkipped: boolean;
+                }>();
+
+                for (const [stopId, stopUpd] of update.stopUpdates) {
+                    if (targetStopIds.has(stopId)) {
+                        stopsMap.set(stopId, {
+                            arrival: stopUpd.predictedArrival ? { time: stopUpd.predictedArrival, delay: stopUpd.delay } : undefined,
+                            departure: stopUpd.predictedDeparture ? { time: stopUpd.predictedDeparture, delay: stopUpd.delay } : undefined,
+                            delay: stopUpd.delay,
+                            isSkipped: stopUpd.isSkipped
+                        });
                     }
                 }
 
-                // Dynamic Route ID from gtfs_config.json (generated by Python script)
-                const targetRouteIds = new Set(gtfsConfig.routeIds);
-                // Add Patural IDs (PATUR, PATUA, PATU) to capture RT data for express trips
-                const targetStopIds = new Set([...gtfsConfig.stopIds.champfleuri, ...gtfsConfig.stopIds.patural]);
-
-                feed.entity.forEach((entity) => {
-                    if (entity.tripUpdate) {
-                        const tripUpdate = entity.tripUpdate;
-                        if (tripUpdate.trip.routeId && targetRouteIds.has(tripUpdate.trip.routeId)) {
-                            const tripId = tripUpdate.trip.tripId as string;
-                            const scheduleRelationship = tripUpdate.trip.scheduleRelationship ?? ScheduleRelationship.SCHEDULED;
-                            const startDate = tripUpdate.trip.startDate as string | undefined;
-                            const directionId = tripUpdate.trip.directionId ?? 0;
-
-                            // 1. Get Stops
-                            const stops = tripUpdate.stopTimeUpdate || [];
-
-                            // 2. Define isTripAdded
-                            const isTripAdded = scheduleRelationship === ScheduleRelationship.ADDED ||
-                                scheduleRelationship === ScheduleRelationship.UNSCHEDULED;
-
-                            // 3. Check for Ghost Cancellation (Cancel + Valid Stops)
-                            let isTripCancelled = scheduleRelationship === ScheduleRelationship.CANCELED;
-                            if (isTripCancelled) {
-                                const hasValidStopUpdates = stops.some(s => s.scheduleRelationship !== 1);
-                                if (hasValidStopUpdates && stops.length > 5) {
-                                    isTripCancelled = false;
-                                }
-                            }
-
-                            if (isTripAdded && stops.length > 0) {
-                                // For ADDED trips: T2C uses different stop_ids, so we take first/last stop
-                                // based on direction to get Gerzat departure/arrival times
-                                // Direction 0 = leaving Gerzat (first stop is Gerzat)
-                                // Direction 1 = arriving at Gerzat (last stop is Gerzat)
-                                const gerzatStop = directionId === 0 ? stops[0] : stops[stops.length - 1];
-                                const arrivalTime = gerzatStop.arrival?.time || gerzatStop.departure?.time;
-                                const arrivalDelay = gerzatStop.arrival?.delay || gerzatStop.departure?.delay;
-
-                                if (arrivalTime) {
-                                    addedTrips.push({
-                                        tripId: tripId,
-                                        arrival: Number(arrivalTime),
-                                        departure: Number(arrivalTime),
-                                        delay: Number(arrivalDelay || 0),
-                                        isRealtime: true,
-                                        isCancelled: false,
-                                        headsign: directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
-                                        direction: directionId,
-                                        origin: tripOrigins.get(tripId) || 'Inconnu'
-                                    });
-                                }
-                            } else {
-                                // For SCHEDULED or CANCELED trips: filter by known Gerzat stop_ids
-                                // Store updates per stopId to avoid overwriting Champfleuri with Patural data
-                                if (!realtimeUpdates.has(tripId)) {
-                                    realtimeUpdates.set(tripId, {
-                                        tripCancelled: isTripCancelled,
-                                        startDate: startDate,
-                                        stops: new Map()
-                                    });
-                                }
-                                const tripEntry = realtimeUpdates.get(tripId)!;
-
-                                stops.forEach((stopTimeUpdate) => {
-                                    if (stopTimeUpdate.stopId && targetStopIds.has(stopTimeUpdate.stopId)) {
-                                        tripEntry.stops.set(stopTimeUpdate.stopId, {
-                                            arrival: stopTimeUpdate.arrival ? {
-                                                time: Number(stopTimeUpdate.arrival.time),
-                                                delay: stopTimeUpdate.arrival.delay ?? 0
-                                            } : undefined,
-                                            departure: stopTimeUpdate.departure ? {
-                                                time: Number(stopTimeUpdate.departure.time),
-                                                delay: stopTimeUpdate.departure.delay ?? 0
-                                            } : undefined,
-                                            delay: Number(stopTimeUpdate.arrival?.delay || stopTimeUpdate.departure?.delay || 0),
-                                            isSkipped: stopTimeUpdate.scheduleRelationship === 1
-                                        });
-                                    }
-                                });
-                            }
-                        }
-                    }
+                realtimeUpdates.set(tripId, {
+                    tripCancelled: update.isCancelled,
+                    startDate: update.startDate,
+                    stops: stopsMap
                 });
             }
-        } catch (e) {
-            console.error('Bus RT fetch error:', e);
         }
 
         // 2. Merge with Static Schedule
@@ -298,19 +248,27 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                         let rtStop = stopId ? rtTrip.stops.get(stopId) : undefined;
 
                         if (!rtStop && stopId) {
-                            // Try finding by Stop Name (less fragile than alias map)
-                            const stopName = stopNameById.get(stopId);
-                            if (stopName) {
-                                // Find any RT stop that matches this name or is a known variant
-                                for (const [rtStopId, rtStopData] of rtTrip.stops) {
-                                    // Check if both IDs belong to same group in config
-                                    const isChampfleuri = gtfsConfig.stopIds.champfleuri.includes(stopId) && gtfsConfig.stopIds.champfleuri.includes(rtStopId);
-                                    const isPatural = gtfsConfig.stopIds.patural.includes(stopId) && gtfsConfig.stopIds.patural.includes(rtStopId);
+                            // Use shared utility for robust alias/group matching
+                            // We need to convert our local legacy map-of-stops back to Map<string, RTStopUpdate> 
+                            // This is silly. We should have used the original RTTripUpdate structure if possible.
+                            // But for now, to minimize refactor risk:
+                            // We don't have the original RTStopUpdate objects here, we have the simplified Objects.
+                            // The shared `findStopUpdate` expects Map<string, RTStopUpdate>.
+                            // Re-implementing simplified logic here is safer than converting types back and forth.
 
-                                    if (isChampfleuri || isPatural) {
-                                        rtStop = rtStopData;
-                                        break;
-                                    }
+                            // 2. Group match (Champfleuri or Patural)
+                            const isChampfleuri = gtfsConfig.stopIds.champfleuri.includes(stopId);
+                            const isPatural = gtfsConfig.stopIds.patural.includes(stopId);
+
+                            if (isChampfleuri) {
+                                for (const id of gtfsConfig.stopIds.champfleuri) {
+                                    rtStop = rtTrip.stops.get(id);
+                                    if (rtStop) break;
+                                }
+                            } else if (isPatural) {
+                                for (const id of gtfsConfig.stopIds.patural) {
+                                    rtStop = rtTrip.stops.get(id);
+                                    if (rtStop) break;
                                 }
                             }
                         }
