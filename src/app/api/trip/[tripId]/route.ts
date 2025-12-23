@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { fetchTripUpdates, LINE_E1_ROUTE_ID } from '@/lib/gtfs-rt';
+import { fetchTripUpdates, LINE_E1_ROUTE_IDS } from '@/lib/gtfs-rt';
 import lineE1Data from '../../../../../public/data/lineE1_data.json';
 import e1StopTimes from '../../../../../public/data/e1_stop_times.json';
 
@@ -89,7 +89,7 @@ export async function GET(
         let hasRealTimeData = false;
 
         const rtStopUpdates: Map<string, { delay: number; predictedTime: number }> = new Map();
-        if (tripRtData && tripRtData.routeId === LINE_E1_ROUTE_ID) {
+        if (tripRtData && LINE_E1_ROUTE_IDS.has(tripRtData.routeId)) {
             hasRealTimeData = tripRtData.stopUpdates.size > 0;
             for (const [stopId, stopData] of tripRtData.stopUpdates) {
                 if (stopData.predictedTime) {
@@ -164,7 +164,7 @@ export async function GET(
 
             return NextResponse.json({
                 tripId,
-                routeId: LINE_E1_ROUTE_ID,
+                routeId: Array.from(LINE_E1_ROUTE_IDS)[0],
                 direction: staticTrip.direction,
                 headsign,
                 origin,

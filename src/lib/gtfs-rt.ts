@@ -5,7 +5,8 @@
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 
 // --- Constants ---
-export const LINE_E1_ROUTE_ID = '3';
+import gtfsConfig from '@/data/gtfs_config.json';
+export const LINE_E1_ROUTE_IDS = new Set(gtfsConfig.routeIds);
 const GTFS_RT_TRIP_UPDATE_URL = 'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update';
 const GTFS_RT_VEHICLE_POSITION_URL = 'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-vehicle-position';
 
@@ -75,7 +76,10 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
         for (const entity of feed.entity) {
             if (!entity.tripUpdate) continue;
             const tu = entity.tripUpdate;
-            if (tu.trip.routeId !== LINE_E1_ROUTE_ID) continue;
+            if (!tu.trip.routeId || !LINE_E1_ROUTE_IDS.has(tu.trip.routeId)) continue;
+
+            // Allow multiple route IDs, normalize to the first one for internal consistency if needed
+            // or just keep original. Let's keep usage of config generic.
 
             const tripId = tu.trip.tripId as string;
             const scheduleRelationship = tu.trip.scheduleRelationship ?? ScheduleRelationship.SCHEDULED;
@@ -108,7 +112,7 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
 
             updates.set(tripId, {
                 tripId,
-                routeId: LINE_E1_ROUTE_ID,
+                routeId: tu.trip.routeId || gtfsConfig.routeIds[0],
                 directionId: tu.trip.directionId ?? 0,
                 startDate: tu.trip.startDate as string | undefined,
                 isCancelled,
@@ -138,13 +142,13 @@ export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosi
         for (const entity of feed.entity) {
             if (!entity.vehicle) continue;
             const v = entity.vehicle;
-            if (v.trip?.routeId !== LINE_E1_ROUTE_ID) continue;
+            if (!v.trip?.routeId || !LINE_E1_ROUTE_IDS.has(v.trip.routeId)) continue;
 
             const tripId = v.trip?.tripId;
             if (tripId && v.position) {
                 positions.set(tripId, {
                     tripId,
-                    routeId: LINE_E1_ROUTE_ID,
+                    routeId: v.trip.routeId,
                     lat: v.position.latitude,
                     lon: v.position.longitude,
                     bearing: v.position.bearing || 0,
@@ -158,27 +162,29 @@ export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosi
     return positions;
 }
 
-// --- Utility: Stop ID Aliasing ---
-const STOP_ALIASES: Record<string, string[]> = {
-    'GECHR': ['GECH', 'GECHA'],
-    'GECHA': ['GECH', 'GECHR'],
-    'PATUR': ['PATU', 'PATUA'],
-    'PATUA': ['PATU', 'PATUR']
-};
-
 /**
- * Find RT stop update using aliases if exact match not found
+ * Find RT stop update using dynamic stop groups (Champfleuri/Patural)
  */
 export function findStopUpdate(stopUpdates: Map<string, RTStopUpdate>, stopId: string): RTStopUpdate | undefined {
+    // 1. Exact match
     let rtStop = stopUpdates.get(stopId);
     if (rtStop) return rtStop;
 
-    const aliases = STOP_ALIASES[stopId];
-    if (aliases) {
-        for (const alias of aliases) {
-            rtStop = stopUpdates.get(alias);
+    // 2. Group match (Champfleuri or Patural)
+    const isChampfleuri = gtfsConfig.stopIds.champfleuri.includes(stopId);
+    const isPatural = gtfsConfig.stopIds.patural.includes(stopId);
+
+    if (isChampfleuri) {
+        for (const id of gtfsConfig.stopIds.champfleuri) {
+            rtStop = stopUpdates.get(id);
+            if (rtStop) return rtStop;
+        }
+    } else if (isPatural) {
+        for (const id of gtfsConfig.stopIds.patural) {
+            rtStop = stopUpdates.get(id);
             if (rtStop) return rtStop;
         }
     }
+
     return undefined;
 }
