@@ -9,6 +9,9 @@
   - Priorité 2 : Interpolation avec temps prédits via GTFS-RT Trip Updates
   - Priorité 3 : Fallback sur interpolation théorique si aucune donnée RT
   - Nouveau champ `isRealtime` pour indiquer la source de la position
+- **Snap-to-Route** : Les bus restent maintenant sur la ligne jaune de la carte.
+  - L'interpolation suit le tracé GTFS (shapes) au lieu de couper en ligne droite
+  - Algorithme de recherche optimisé (échantillonnage puis raffinement)
 
 ### 🐛 Correctifs
 
