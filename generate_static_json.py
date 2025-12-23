@@ -31,6 +31,16 @@ if not target_route_ids:
     print(f"❌ Error: Could not find route with names {TARGET_ROUTE_NAMES}")
     sys.exit(1)
 
+# Export route config for TypeScript consumption
+gtfs_config = {
+    'routeIds': list(target_route_ids),
+    'routeNames': TARGET_ROUTE_NAMES,
+    'generatedAt': datetime.now(PARIS_TZ).isoformat()
+}
+with open('src/data/gtfs_config.json', 'w') as f:
+    json.dump(gtfs_config, f, indent=2)
+print(f"✅ Exported gtfs_config.json with route IDs: {list(target_route_ids)}")
+
 # Find stop_id by name
 target_stop_ids = set()
 main_stop_ids = set() # specifically for Gerzat Champfleuri
