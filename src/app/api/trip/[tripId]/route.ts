@@ -1,5 +1,5 @@
-import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import { NextResponse } from 'next/server';
+import { fetchTripUpdates, LINE_E1_ROUTE_ID } from '@/lib/gtfs-rt';
 import lineE1Data from '../../../../../public/data/lineE1_data.json';
 import e1StopTimes from '../../../../../public/data/e1_stop_times.json';
 
@@ -36,7 +36,7 @@ interface StaticTrip {
     stops: { stopId: string; sequence: number; arrivalTime: number; departureTime: number }[];
 }
 
-const LINE_E1_ROUTE_ID = '3';
+
 
 // Create lookup map from static data
 const staticTripsById = new Map<string, StaticTrip>(
@@ -83,46 +83,19 @@ export async function GET(
         // First, try to get static data for this trip
         const staticTrip = staticTripsById.get(tripId);
 
-        // Fetch GTFS-RT data
-        const rtStopUpdates: Map<string, { delay: number; predictedTime: number }> = new Map();
+        // Fetch GTFS-RT data using centralized service
+        const rtTripUpdates = await fetchTripUpdates();
+        const tripRtData = rtTripUpdates.get(tripId);
         let hasRealTimeData = false;
 
-        try {
-            const response = await fetch(
-                'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update',
-                { cache: 'no-store' }
-            );
-
-            if (response.ok) {
-                const buffer = await response.arrayBuffer();
-                const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(
-                    new Uint8Array(buffer)
-                );
-
-                // Find this trip in the feed
-                for (const entity of feed.entity) {
-                    if (entity.tripUpdate && entity.tripUpdate.trip.tripId === tripId) {
-                        const tripUpdate = entity.tripUpdate;
-                        if (tripUpdate.trip.routeId !== LINE_E1_ROUTE_ID) continue;
-
-                        const stopTimeUpdates = tripUpdate.stopTimeUpdate || [];
-                        for (const stu of stopTimeUpdates) {
-                            const stopId = stu.stopId as string;
-                            const predictedTime = Number(stu.arrival?.time || stu.departure?.time || 0);
-                            const delay = Number(stu.arrival?.delay || stu.departure?.delay || 0);
-
-                            // Only use RT if we have actual time data (not scheduleRelationship=2 NO_DATA)
-                            if (predictedTime > 0) {
-                                hasRealTimeData = true;
-                                rtStopUpdates.set(stopId, { delay, predictedTime });
-                            }
-                        }
-                        break;
-                    }
+        const rtStopUpdates: Map<string, { delay: number; predictedTime: number }> = new Map();
+        if (tripRtData && tripRtData.routeId === LINE_E1_ROUTE_ID) {
+            hasRealTimeData = tripRtData.stopUpdates.size > 0;
+            for (const [stopId, stopData] of tripRtData.stopUpdates) {
+                if (stopData.predictedTime) {
+                    rtStopUpdates.set(stopId, { delay: stopData.delay, predictedTime: stopData.predictedTime });
                 }
             }
-        } catch (e) {
-            console.warn('RT fetch failed, using static only:', e);
         }
 
         // Build response - prefer static + RT overlay

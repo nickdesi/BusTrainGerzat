@@ -81,6 +81,12 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 | `useFavorites` | Gestion des favoris (localStorage) |
 | `useDelayNotifications` | Notifications push retards |
 
+### 🧩 Services de données
+
+| Service | Responsabilité |
+|---------|----------------|
+| `gtfs-rt.ts` | Service centralisé GTFS-RT (fetch, decode, types) |
+
 ### 📡 Sources de données
 
 | Transport | API | Source |
@@ -102,7 +108,8 @@ flowchart TD
     end
 
     subgraph Processing["⚙️ Traitement (API Routes)"]
-        FETCH["Fetch GTFS-RT"]
+        GTFS_SERVICE["gtfs-rt.ts<br/>(service centralisé)"]
+        FETCH["Fetch & Decode"]
         CHECK_DATA{"Données RT<br/>disponibles ?"}
         USE_RT["Utiliser RT"]
         USE_STATIC["Fallback Statique<br/>(e1_stop_times.json)"]
@@ -122,7 +129,7 @@ flowchart TD
 
     GTFS_STATIC --> COMBINE
     E1_STOP_TIMES --> USE_STATIC
-    GTFS_RT --> FETCH --> CHECK_DATA
+    GTFS_RT --> GTFS_SERVICE --> FETCH --> CHECK_DATA
     CHECK_DATA -->|"Oui (arrival.time)"| USE_RT --> COMBINE
     CHECK_DATA -->|"Non (NO_DATA)"| USE_STATIC --> COMBINE
     COMBINE --> DISPLAY

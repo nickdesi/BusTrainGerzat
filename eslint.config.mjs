@@ -12,6 +12,10 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Utility scripts (not part of Next.js app)
+    "scripts/**",
+    "debug_pipeline.js",
+    "test_date_format.js",
   ]),
 ]);
 

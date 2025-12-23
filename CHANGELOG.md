@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.4] - 2025-12-23
+
+### 🔧 Refactoring
+
+- **Service GTFS-RT centralisé** : Création de `src/lib/gtfs-rt.ts` pour éliminer la duplication de code.
+  - `fetchTripUpdates()` et `fetchVehiclePositions()` mutualisés
+  - Types partagés : `RTStopUpdate`, `RTTripUpdate`, `RTVehiclePosition`
+  - ~110 lignes de code dupliqué supprimées des API routes
+- **API refactorisées** : `api/vehicles` et `api/trip/[tripId]` utilisent maintenant le service centralisé.
+- **ESLint** : Scripts utilitaires (`scripts/`, `debug_pipeline.js`) exclus du linting TypeScript.
+
 ## [3.0.3] - 2025-12-23
 
 ### ✨ Améliorations

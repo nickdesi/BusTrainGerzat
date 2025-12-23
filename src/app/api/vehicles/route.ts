@@ -1,11 +1,9 @@
 import { NextResponse } from 'next/server';
-import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
+import { fetchTripUpdates, fetchVehiclePositions } from '@/lib/gtfs-rt';
 import lineE1Data from '../../../../public/data/lineE1_data.json';
 import e1StopTimes from '../../../../public/data/e1_stop_times.json';
 
 export const dynamic = 'force-dynamic';
-
-const LINE_E1_ROUTE_ID = '3';
 
 interface EstimatedVehicle {
     tripId: string;
@@ -21,7 +19,7 @@ interface EstimatedVehicle {
     estimatedArrival: number;
     terminusEta: number;
     origin: string;
-    isRealtime: boolean; // New field to indicate if position is from GPS
+    isRealtime: boolean;
 }
 
 interface StaticTrip {
@@ -29,20 +27,6 @@ interface StaticTrip {
     headsign: string;
     direction: number;
     stops: { stopId: string; sequence: number; arrivalTime: number; departureTime: number }[];
-}
-
-interface RTVehiclePosition {
-    tripId: string;
-    lat: number;
-    lon: number;
-    bearing: number;
-    timestamp: number;
-}
-
-interface RTTripUpdate {
-    tripId: string;
-    delay: number;
-    stopUpdates: Map<string, { predictedTime: number; delay: number }>;
 }
 
 const stopsById = new Map(lineE1Data.stops.map(s => [s.stopId, s]));
@@ -250,87 +234,7 @@ function calculateBearing(from: { lat: number; lon: number }, to: { lat: number;
     return ((Math.atan2(y, x) * 180 / Math.PI) + 360) % 360;
 }
 
-/**
- * Fetch GTFS-RT Vehicle Positions
- */
-async function fetchRTVehiclePositions(): Promise<Map<string, RTVehiclePosition>> {
-    const positions = new Map<string, RTVehiclePosition>();
-    try {
-        const response = await fetch(
-            'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-vehicle-position',
-            { cache: 'no-store' }
-        );
-        if (response.ok) {
-            const buffer = await response.arrayBuffer();
-            const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 
-            for (const entity of feed.entity) {
-                if (entity.vehicle && entity.vehicle.trip?.routeId === LINE_E1_ROUTE_ID) {
-                    const v = entity.vehicle;
-                    const tripId = v.trip?.tripId;
-                    if (tripId && v.position) {
-                        positions.set(tripId, {
-                            tripId,
-                            lat: v.position.latitude,
-                            lon: v.position.longitude,
-                            bearing: v.position.bearing || 0,
-                            timestamp: Number(v.timestamp) || 0
-                        });
-                    }
-                }
-            }
-        }
-    } catch (e) {
-        console.warn('RT vehicle positions fetch failed:', e);
-    }
-    return positions;
-}
-
-/**
- * Fetch GTFS-RT Trip Updates (for delays)
- */
-async function fetchRTTripUpdates(): Promise<Map<string, RTTripUpdate>> {
-    const updates = new Map<string, RTTripUpdate>();
-    try {
-        const response = await fetch(
-            'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update',
-            { cache: 'no-store' }
-        );
-        if (response.ok) {
-            const buffer = await response.arrayBuffer();
-            const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
-
-            for (const entity of feed.entity) {
-                if (entity.tripUpdate && entity.tripUpdate.trip?.routeId === LINE_E1_ROUTE_ID) {
-                    const tu = entity.tripUpdate;
-                    const tripId = tu.trip.tripId;
-                    if (!tripId) continue;
-
-                    const stopUpdates = new Map<string, { predictedTime: number; delay: number }>();
-                    let tripDelay = 0;
-
-                    for (const stu of tu.stopTimeUpdate || []) {
-                        const stopId = stu.stopId as string;
-                        const predictedTime = Number(stu.arrival?.time || stu.departure?.time || 0);
-                        const delay = Number(stu.arrival?.delay || stu.departure?.delay || 0);
-
-                        if (predictedTime > 0) {
-                            stopUpdates.set(stopId, { predictedTime, delay });
-                            tripDelay = delay; // Use last known delay
-                        }
-                    }
-
-                    if (stopUpdates.size > 0) {
-                        updates.set(tripId, { tripId, delay: tripDelay, stopUpdates });
-                    }
-                }
-            }
-        }
-    } catch (e) {
-        console.warn('RT trip updates fetch failed:', e);
-    }
-    return updates;
-}
 
 export async function GET() {
     try {
@@ -339,8 +243,8 @@ export async function GET() {
 
         // Fetch GTFS-RT data in parallel
         const [rtPositions, rtUpdates] = await Promise.all([
-            fetchRTVehiclePositions(),
-            fetchRTTripUpdates()
+            fetchVehiclePositions(),
+            fetchTripUpdates()
         ]);
 
         const processedTripIds = new Set<string>();
@@ -390,7 +294,7 @@ export async function GET() {
                 nextStopName: nextStopInfo?.stopName || nextStop.stopId,
                 headsign: lastStopInfo?.stopName || staticTrip.headsign,
                 bearing: rtPos.bearing,
-                delay: rtUpdate?.delay || 0,
+                delay: rtUpdate?.tripDelay || 0,
                 progress: nextStopIdx / staticTrip.stops.length,
                 estimatedArrival: nextTime,
                 terminusEta: terminusTime,
@@ -475,7 +379,7 @@ export async function GET() {
                 nextStopName: nextStopInfo.stopName,
                 headsign: lastStopInfo?.stopName || staticTrip.headsign,
                 bearing,
-                delay: rtUpdate.delay,
+                delay: rtUpdate.tripDelay,
                 progress: nextStopIdx / staticTrip.stops.length,
                 estimatedArrival: nextTime,
                 terminusEta: terminusTime,
