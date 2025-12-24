@@ -126,9 +126,9 @@ const TripTimeline = memo(function TripTimeline({
 
                                 {/* Vertical Line (not after last item) */}
                                 {!isLast && (
-                                    <div className="relative">
+                                    <div className="relative h-full min-h-12">
                                         <div
-                                            className={`w-0.5 h-12 ${isPassed ? 'bg-gray-600' : ''}`}
+                                            className={`w-0.5 absolute inset-y-0 ${isPassed ? 'bg-gray-600' : ''}`}
                                             style={{ backgroundColor: isPassed ? undefined : routeColor }}
                                         />
                                         {/* Bus position indicator - show between current stop and next */}
@@ -175,7 +175,9 @@ const TripTimeline = memo(function TripTimeline({
                                             // Calculate both displayed times
                                             const scheduledTime = formatTime(stop.scheduledArrival);
                                             const predictedTime = formatTime(stop.predictedArrival);
-                                            const delayText = formatDelay(stop.delay);
+                                            // Calculate delay from actual time difference for consistency
+                                            const calculatedDelay = stop.predictedArrival - stop.scheduledArrival;
+                                            const delayText = formatDelay(calculatedDelay);
 
                                             // Only show strikethrough if times VISUALLY differ
                                             const showStrikethrough = isRealtime &&
@@ -202,7 +204,7 @@ const TripTimeline = memo(function TripTimeline({
                                                         {predictedTime}
                                                     </span>
                                                     {/* Only show delay badge if it's significant and visible */}
-                                                    {stop.delay > 0 && !isPassed && delayText && showStrikethrough && (
+                                                    {calculatedDelay > 0 && !isPassed && delayText && showStrikethrough && (
                                                         <span className="text-orange-400 font-medium text-xs">
                                                             {delayText}
                                                         </span>

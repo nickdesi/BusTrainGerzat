@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.1.1] - 2024-12-24
+
+### 🐛 Correctifs
+
+- **Timeline Visual Fix** : Correction de la ligne verticale coupée/non droite dans les détails de trajet.
+  - Utilisation d'une hauteur flexible au lieu de `h-12` fixe.
+- **Calcul du Retard** : Le badge "+Xmin" correspond maintenant exactement à la différence entre l'heure prévue et l'heure prédit.
+  - Avant : utilisait le champ `delay` brut du flux GTFS-RT (parfois incohérent).
+  - Après : calcule `predictedArrival - scheduledArrival`.
+- **Terminus incohérent** : Le terminus ne peut plus afficher une heure antérieure à l'arrêt précédent.
+  - Propagation du dernier retard connu aux arrêts sans données RT.
+  - Garantie de cohérence chronologique des temps.
+
 ## [3.1.0] - 2024-12-24
 
 ### 🛡️ Intégrité des Données (Critical)

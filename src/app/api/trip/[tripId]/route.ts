@@ -117,6 +117,11 @@ export async function GET(
                 }
             }
 
+            // Build stops with delay propagation
+            // Track last known delay to propagate to stops without RT data
+            let lastKnownDelay = 0;
+            let lastPredictedArrival = 0;
+
             const stops: StopTimeDetail[] = staticTrip.stops.map((stop, index) => {
                 const stopInfo = stopsById.get(stop.stopId);
                 const scheduledArrival = secondsToUnix(stop.arrivalTime);
@@ -124,9 +129,24 @@ export async function GET(
 
                 // Check for RT overlay
                 const rtData = rtStopUpdates.get(stop.stopId);
-                const delay = rtData?.delay || 0;
-                const predictedArrival = rtData?.predictedTime || scheduledArrival;
-                const predictedDeparture = rtData ? predictedArrival : scheduledDeparture;
+
+                // Use RT delay if available, otherwise propagate last known delay
+                const delay = rtData?.delay ?? lastKnownDelay;
+                if (rtData?.delay !== undefined) {
+                    lastKnownDelay = rtData.delay;
+                }
+
+                // Calculate predicted time: use RT time if available, otherwise schedule + propagated delay
+                let predictedArrival = rtData?.predictedTime || (scheduledArrival + delay);
+
+                // Ensure chronological consistency: predicted arrival must be >= previous stop
+                if (index > 0 && predictedArrival < lastPredictedArrival) {
+                    // Add minimum travel time (e.g., 30 seconds between stops)
+                    predictedArrival = lastPredictedArrival + 30;
+                }
+                lastPredictedArrival = predictedArrival;
+
+                const predictedDeparture = rtData ? predictedArrival : (scheduledDeparture + delay);
 
                 // Determine status
                 let status: 'passed' | 'current' | 'upcoming';
