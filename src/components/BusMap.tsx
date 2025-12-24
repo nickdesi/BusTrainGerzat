@@ -51,12 +51,12 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const { data: lineData, isLoading: lineLoading, error: lineError } = useLineE1Data();
     const { data: vehicleData, isLoading: vehiclesLoading, isFetching } = useVehiclePositions();
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
-    const [isDarkMode, setIsDarkMode] = useState(true);
+    const [isDarkMode, setIsDarkMode] = useState(false); // Default to OSM classic (light)
 
-    // Map tile URLs
+    // Map tile URLs - OpenStreetMap classic as default
     const TILE_URLS = {
-        dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
-        light: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+        light: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        dark: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
     };
 
     // Leaflet CSS is imported in globals.css
@@ -165,7 +165,10 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             >
                 <ZoomHandlerComponent setZoom={setCurrentZoom} />
                 <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                    attribution={isDarkMode
+                        ? '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                        : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }
                     url={isDarkMode ? TILE_URLS.dark : TILE_URLS.light}
                 />
 
