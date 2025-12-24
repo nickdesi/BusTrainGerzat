@@ -22,11 +22,15 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "🚉 Gerzat Live - Hub Multimodal",
-  description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne E1) et les trains TER à Gerzat.",
+  metadataBase: new URL('https://gerzatlive.desimone.fr'),
+  title: "🚉 Gerzat Live - Bus T2C & TER SNCF",
+  description: "Suivez en temps réel les horaires des bus T2C (ligne E1) et des trains TER à la gare de Gerzat. Hub multimodal complet pour vos déplacements.",
   applicationName: "Gerzat Live",
   authors: [{ name: "Nicolas De Simone" }],
-  keywords: ["bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER", "ligne E1"],
+  keywords: [
+    "bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER",
+    "ligne E1", "Champfleuri", "Patural", "transports Clermont-Ferrand", "gare Gerzat"
+  ],
   manifest: "/manifest.json",
   icons: {
     icon: "/icon-512.png",
@@ -44,14 +48,23 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     url: "https://gerzatlive.desimone.fr",
-    title: "🚉 Gerzat Live - Hub Multimodal",
-    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne E1) et les trains TER à Gerzat.",
+    title: "🚉 Gerzat Live - Horaires Temps Réel Bus & Trains",
+    description: "Le hub multimodal indispensable pour les habitants de Gerzat : bus T2C (Ligne E1 Express) et trains TER SNCF en direct.",
     siteName: "Gerzat Live",
+    images: [
+      {
+        url: "/icon-512.png",
+        width: 512,
+        height: 512,
+        alt: "Gerzat Live App Icon",
+      },
+    ],
   },
   twitter: {
-    card: "summary_large_image",
-    title: "🚉 Gerzat Live - Hub Multimodal",
-    description: "Application Next.js pour suivre en temps réel les bus T2C (uniquement ligne E1) et les trains TER à Gerzat.",
+    card: "summary",
+    title: "🚉 Gerzat Live - Horaires Temps Réel Bus & Trains",
+    description: "Suivez vos bus T2C et trains TER à Gerzat en temps réel.",
+    images: ["/icon-512.png"],
   },
 };
 

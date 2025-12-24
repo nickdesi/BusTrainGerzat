@@ -16,7 +16,7 @@ import { useColorblind } from '@/context/ColorblindContext';
 import { TransportFilter } from '@/types';
 import { Github } from 'lucide-react';
 
-const APP_VERSION = '3.0.0';
+const APP_VERSION = '3.1.0';
 
 export default function Arrivees() {
     const { arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();

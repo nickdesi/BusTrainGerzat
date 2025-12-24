@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.0] - 2025-12-23
+## [3.1.0] - 2024-12-24
 
 ### 🛡️ Intégrité des Données (Critical)
 
@@ -9,6 +9,13 @@
   - Toutes les APIs TypeScript et scripts Python consomment ce fichier.
   - Garantie de fonctionnement même si T2C change les IDs internes.
 - **Scripts d'Extraction** : `extract_lineE1_data.py` utilise maintenant la recherche par nom ("E1") au lieu de l'ID `'3'`.
+
+### 🔍 SEO & Métadonnées
+
+- **Optimisation SEO** : Audit complet pour s'assurer qu'aucune référence à l'ancienne "Ligne 20" ne persiste (remplacées par "Ligne E1").
+- **Métadonnées Dynamiques** : Ajout de métadonnées spécifiques par page (`Arrivées`, `Carte Live`) pour un meilleur indexage.
+- **Accessibilité** : Amélioration des balises `alt` sur les images et logos.
+- **Versionning** : Synchronisation de `v3.1.0` sur l'ensemble du projet (Page d'accueil, Arrivées, README).
 
 ### 🔧 Refactoring
 

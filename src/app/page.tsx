@@ -16,7 +16,7 @@ import { useColorblind } from '@/context/ColorblindContext';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 
-const APP_VERSION = '2.5.0';
+const APP_VERSION = '3.1.0';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
@@ -109,7 +109,7 @@ export default function Home() {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
             <div className="text-center lg:text-left">
               <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-yellow-500 uppercase mb-2 font-mono text-glow flex items-center gap-3 justify-center lg:justify-start">
-                <Image src="/icon-512.png" alt="Logo" width={48} height={48} className="w-8 h-8 md:w-12 md:h-12" />
+                <Image src="/icon-512.png" alt="Logo Gerzat Live" width={48} height={48} className="w-8 h-8 md:w-12 md:h-12" />
                 DÉPARTS • GERZAT
               </h1>
               <p className="text-sm md:text-base text-yellow-500/80 uppercase tracking-widest font-medium pl-1 mt-1">
