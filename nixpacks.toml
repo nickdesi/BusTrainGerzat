@@ -3,7 +3,7 @@ providers = ["node"]
 
 [phases.setup]
 # Force Node.js 22 (LTS) to match local environment and package.json
-nixPkgs = ["nodejs_22", "npm"]
+nixPkgs = ["nodejs_22"]
 
 [phases.install]
 cmds = ["npm ci"]
