@@ -16,7 +16,7 @@ import { useColorblind } from '@/context/ColorblindContext';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.2.0';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
@@ -26,7 +26,6 @@ export default function Home() {
   const { isColorblindMode, toggleColorblindMode } = useColorblind();
 
   // Smart Alert Logic: Check if any favorited trip has a predicted delay
-  // eslint-disable-next-line react-hooks/preserve-manual-memoization
   const smartAlert = useMemo(() => {
     if (favorites.length === 0) return null;
 

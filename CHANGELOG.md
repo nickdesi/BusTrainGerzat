@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.2.0] - 2025-12-27
+
+### ⚡ Performance & Core Update (Major)
+
+- **Upgrade Stack Technique** : Passage à la dernière stack technique stable.
+  - **Next.js 16.1.1** : Dernière version du framework React.
+  - **React 19.2.3** : Moteur de rendu optimisé.
+  - **Tailwind CSS 4.0.0** : Nouvelle version du moteur CSS.
+  - **Node.js v22.12.0** : Support de la dernière version LTS.
+- **ESLint/Config** : Refonte de la configuration de linting pour le support "Flat Config" (ESLint 9).
+
 ## [3.1.1] - 2024-12-24
 
 ### 🐛 Correctifs
