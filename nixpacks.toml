@@ -1,0 +1,15 @@
+# Explicitly use the Node.js provider
+providers = ["node"]
+
+[phases.setup]
+# Force Node.js 22 (LTS) to match local environment and package.json
+nixPkgs = ["nodejs-22_x", "npm"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "npm start"
