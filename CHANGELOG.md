@@ -12,6 +12,10 @@
   - Architecture plus propre séparant le marketing de l'utilitaire.
   - Navigation simplifiée.
 
+### 🐛 Correctifs
+
+- **Contenu Landing Page** : Correction des références à l'ancienne "Ligne 20". La page d'accueil mentionne désormais exclusivement la **Ligne E1** et les arrêts **Champfleuri / Gare de Gerzat**.
+
 ### ⚡ Performance
 
 - **Optimisation des requêtes API** : Activation du cache serveur Next.js pour le GTFS-RT.
