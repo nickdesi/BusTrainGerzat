@@ -15,6 +15,7 @@
 ### 🐛 Correctifs
 
 - **Contenu Landing Page** : Correction des références à l'ancienne "Ligne 20". La page d'accueil mentionne désormais exclusivement la **Ligne E1** et les arrêts **Champfleuri / Gare de Gerzat**.
+- **PWA Launch** : Mise à jour du `manifest.json` pour pointer vers `/app`. L'application s'ouvre désormais directement sur le tableau de bord au lieu de la landing page.
 
 ### ⚡ Performance
 
