@@ -98,7 +98,7 @@ export default function LandingPage() {
                                     Située au carrefour des échanges, la <strong>Gare de Gerzat</strong> est un point névralgique pour les navetteurs vers Clermont-Ferrand et Riom.
                                 </p>
                                 <p>
-                                    Que vous preniez le <strong>TER SNCF</strong> ou la ligne de <strong>Bus T2C (E1, 20, 24)</strong>, Gerzat Live centralise toutes les informations.
+                                    Que vous preniez le <strong>TER SNCF</strong> ou la ligne de <strong>Bus T2C (Ligne E1)</strong>, Gerzat Live centralise toutes les informations.
                                     Fini, jongler entre plusieurs applications.
                                 </p>
                                 <ul className="list-disc pl-5 space-y-2 mt-4 text-gray-300">
@@ -119,7 +119,7 @@ export default function LandingPage() {
                                 <div className="flex items-center gap-8">
                                     <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 w-32">
                                         <Bus className="w-8 h-8 text-red-500" />
-                                        <span className="font-mono font-bold">BUS 20</span>
+                                        <span className="font-mono font-bold">BUS E1</span>
                                         <span className="text-green-400 text-sm font-mono">14:02</span>
                                     </div>
                                     <div className="flex flex-col items-center gap-2 p-4 rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 w-32">
@@ -136,10 +136,10 @@ export default function LandingPage() {
                     </div>
                 </div>
 
-            </main>
+            </main >
 
             {/* Footer */}
-            <footer className="border-t border-white/5 py-12 relative z-10 bg-black">
+            < footer className="border-t border-white/5 py-12 relative z-10 bg-black" >
                 <div className="max-w-7xl mx-auto px-6 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-6">
                     <div>
                         <p className="font-bold text-lg mb-2">GERZAT<span className="text-yellow-500">LIVE</span></p>
@@ -154,8 +154,8 @@ export default function LandingPage() {
                         <Link href="mailto:contact@desimone.fr" className="hover:text-white transition-colors">Contact</Link>
                     </div>
                 </div>
-            </footer>
-        </div>
+            </footer >
+        </div >
     );
 }
 
