@@ -1,6 +1,16 @@
 # Changelog
 
-## [3.2.1] - 2025-12-30
+## [3.3.0] - 2025-12-30
+
+### 🚀 Nouvelle Landing Page
+
+- **Refonte de l'Accueil** : Création d'une page de présentation moderne à la racine (`/`).
+  - Hero Section impactante avec animations.
+  - Mise en avant des fonctionnalités clés (Temps réel, IA, Accessibilité).
+  - Meilleur référencement SEO.
+- **Séparation de l'App** : Le tableau de bord est désormais accessible via `/app`.
+  - Architecture plus propre séparant le marketing de l'utilitaire.
+  - Navigation simplifiée.
 
 ### ⚡ Performance
 

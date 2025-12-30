@@ -11,9 +11,9 @@ interface NavItem {
 }
 
 const navItems: NavItem[] = [
-    { href: '/', label: 'Départs', icon: <ArrowUpRight size={24} /> },
-    { href: '/arrivees', label: 'Arrivées', icon: <ArrowDownLeft size={24} /> },
-    { href: '/carte', label: 'Carte', icon: <Map size={24} /> },
+    { href: '/app', label: 'Départs', icon: <ArrowUpRight size={24} /> },
+    { href: '/app/arrivees', label: 'Arrivées', icon: <ArrowDownLeft size={24} /> },
+    { href: '/app/carte', label: 'Carte', icon: <Map size={24} /> },
 ];
 
 export default function BottomNav() {
