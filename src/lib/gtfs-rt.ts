@@ -57,7 +57,7 @@ enum ScheduleRelationship {
 export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
     const updates = new Map<string, RTTripUpdate>();
     try {
-        const response = await fetch(GTFS_RT_TRIP_UPDATE_URL, { cache: 'no-store' });
+        const response = await fetch(GTFS_RT_TRIP_UPDATE_URL, { next: { revalidate: 15 } });
         if (!response.ok) return updates;
 
         const buffer = await response.arrayBuffer();
@@ -133,7 +133,7 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
 export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosition>> {
     const positions = new Map<string, RTVehiclePosition>();
     try {
-        const response = await fetch(GTFS_RT_VEHICLE_POSITION_URL, { cache: 'no-store' });
+        const response = await fetch(GTFS_RT_VEHICLE_POSITION_URL, { next: { revalidate: 15 } });
         if (!response.ok) return positions;
 
         const buffer = await response.arrayBuffer();

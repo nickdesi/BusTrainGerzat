@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.2.1] - 2025-12-30
+
+### ⚡ Performance
+
+- **Optimisation des requêtes API** : Activation du cache serveur Next.js pour le GTFS-RT.
+  - `gtfs-rt.ts` : Remplacement de `cache: 'no-store'` par `next: { revalidate: 15 }`.
+  - Réduit les appels à l'API T2C externe de N×4/min (par utilisateur) à **4/min total**.
+  - Améliore la scalabilité et évite le rate-limiting.
+
 ## [3.2.0] - 2025-12-27
 
 ### ⚡ Performance & Core Update (Major)
