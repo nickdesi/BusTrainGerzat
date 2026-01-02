@@ -3,6 +3,7 @@
  * Eliminates duplication across data-source.ts, api/trip, and api/vehicles
  */
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
+import { gtfsLogger } from './logger';
 
 // --- Constants ---
 import gtfsConfig from '@/data/gtfs_config.json';
@@ -68,7 +69,7 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
         if (feed.header?.timestamp) {
             const age = now - Number(feed.header.timestamp);
             if (age > 300) { // 5 minutes
-                console.warn(`[fetchTripUpdates] Stale feed ignored. Age: ${age}s`);
+                gtfsLogger.warn('Stale feed ignored', { age, maxAge: 300 });
                 return updates;
             }
         }
@@ -122,7 +123,7 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
             });
         }
     } catch (e) {
-        console.error('[fetchTripUpdates] Error:', e);
+        gtfsLogger.error('Failed to fetch trip updates', {}, e as Error);
     }
     return updates;
 }
@@ -157,7 +158,7 @@ export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosi
             }
         }
     } catch (e) {
-        console.error('[fetchVehiclePositions] Error:', e);
+        gtfsLogger.error('Failed to fetch vehicle positions', {}, e as Error);
     }
     return positions;
 }

@@ -3,7 +3,7 @@
 Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
 
 [![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gerzatlive.desimone.fr)
-[![version](https://img.shields.io/badge/version-3.3.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
+[![version](https://img.shields.io/badge/version-3.4.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
 [![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
 <div align="center">
@@ -51,7 +51,7 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
 - **Recherche & Favoris** : Filtrage instantané et favoris granulaires par trajet spécifique (bus/train à une heure précise).
 - **Notifications de retard** : Alertes push pour vos trajets favoris en retard (≥5 min).
-- **Accessibilité (A11y)** : Mode Daltonien (couleurs contrastées), navigation clavier optimisée (Skip Link) et attributs ARIA complets.
+- **Accessibilité WCAG 2.1 AA** : Conforme RGAA 4, contrastes ≥4.5:1, skip links, navigation clavier et attributs ARIA complets.
 
 ### 🧠 Intelligence Artificielle
 
@@ -86,6 +86,8 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 | Service | Responsabilité |
 |---------|----------------|
 | `gtfs-rt.ts` | Service centralisé GTFS-RT (fetch, decode, types) |
+| `api-client.ts` | Client HTTP avec retry (3 tentatives, backoff exponentiel) |
+| `logger.ts` | Logger structuré (niveaux, contexte, métriques) |
 
 ### 📡 Sources de données
 

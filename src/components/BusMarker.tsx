@@ -1,7 +1,19 @@
+'use client';
+
 import { useMemo, memo } from 'react';
-import { Marker, Popup } from 'react-leaflet';
+import dynamic from 'next/dynamic';
 import { VehiclePosition } from '@/hooks/useVehiclePositions';
 import { Bus } from 'lucide-react';
+
+// Dynamically import react-leaflet components to avoid SSR/hydration issues
+const Marker = dynamic(
+    () => import('react-leaflet').then((mod) => mod.Marker),
+    { ssr: false }
+);
+const Popup = dynamic(
+    () => import('react-leaflet').then((mod) => mod.Popup),
+    { ssr: false }
+);
 
 interface BusMarkerProps {
     vehicle: VehiclePosition;

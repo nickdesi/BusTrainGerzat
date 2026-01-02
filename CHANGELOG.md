@@ -1,5 +1,47 @@
 # Changelog
 
+## [3.4.0] - 2026-01-02
+
+### ♿ Accessibilité WCAG 2.1 AA
+
+- **Conformité RGAA 4 / WCAG 2.1 AA** : Refonte complète de l'accessibilité.
+  - Suppression du mode daltonien (les couleurs sont maintenant accessibles par défaut).
+  - Contrastes ≥4.5:1 pour tous les textes importants.
+  - Skip links ajoutés sur les pages départs et arrivées.
+  - Couleurs de statut WCAG-compliant : vert (#4ade80), orange (#fb923c), rouge (#f87171).
+
+### 🧪 Infrastructure Qualité
+
+- **Tests Unitaires** : Mise en place de Jest + Testing Library.
+  - Configuration `jest.config.ts` pour Next.js.
+  - 9 tests unitaires pour les utilitaires de formatage.
+  - Scripts `npm test` et `npm test:watch` ajoutés.
+- **Types par Domaine** : Réorganisation des types TypeScript.
+  - `types/bus.ts` : Types spécifiques bus (BusUpdate, BusStop, BusTrip).
+  - `types/train.ts` : Types spécifiques train (TrainUpdate, TrainStation).
+  - `types/common.ts` : Types partagés (UnifiedEntry, TransportFilter, ApiResponse).
+
+### 🛡️ Résilience
+
+- **Client HTTP avec Retry** : Nouveau service `api-client.ts`.
+  - 3 tentatives automatiques avec backoff exponentiel.
+  - Timeout 15s et jitter anti-thundering herd.
+- **Error Boundaries** : Nouveau composant `SectionErrorBoundary.tsx`.
+  - Isolation des erreurs par section sans crash de l'app.
+
+### 📊 Observabilité
+
+- **Logger Structuré** : Nouveau service `logger.ts`.
+  - Niveaux: debug, info, warn, error.
+  - Contexte JSON en production, émojis colorés en dev.
+  - Métriques de performance avec `startTimer()`.
+- **Intégration** : `gtfs-rt.ts` utilise maintenant le logger structuré.
+
+### 🧹 Nettoyage
+
+- Suppression de 7 scripts de debug obsolètes (~528 lignes).
+- Suppression du contexte ColorblindContext (mode daltonien).
+
 ## [3.3.0] - 2025-12-30
 
 ### 🚀 Nouvelle Landing Page

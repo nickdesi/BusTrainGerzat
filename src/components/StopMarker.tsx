@@ -1,5 +1,17 @@
-import { CircleMarker, Popup } from 'react-leaflet';
+'use client';
+
+import dynamic from 'next/dynamic';
 import { Stop } from '@/hooks/useLineE1Data';
+
+// Dynamically import react-leaflet components to avoid SSR/hydration issues
+const CircleMarker = dynamic(
+    () => import('react-leaflet').then((mod) => mod.CircleMarker),
+    { ssr: false }
+);
+const Popup = dynamic(
+    () => import('react-leaflet').then((mod) => mod.Popup),
+    { ssr: false }
+);
 
 interface StopMarkerProps {
     stop: Stop;

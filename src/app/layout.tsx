@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Outfit } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "@/components/QueryProvider";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
@@ -12,6 +12,11 @@ const geistSans = Geist({
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
 });
 
@@ -76,7 +81,8 @@ export default function RootLayout({
   return (
     <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${outfit.variable} antialiased`}
+        suppressHydrationWarning
       >
         <a
           href="#main-content"
@@ -91,6 +97,6 @@ export default function RootLayout({
         </QueryProvider>
         <ServiceWorkerRegistration />
       </body>
-    </html>
+    </html >
   );
 }

@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { RefreshCw, Bus, Train, Filter, WifiOff, Eye, EyeOff } from 'lucide-react';
+import { RefreshCw, Bus, Train, Filter, WifiOff } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
@@ -12,7 +12,6 @@ import SearchWidget from '@/components/SearchWidget';
 import { useDepartures } from '@/hooks/useDepartures';
 import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useFavorites } from '@/hooks/useFavorites';
-import { useColorblind } from '@/context/ColorblindContext';
 import { TransportFilter } from '@/types';
 import { Github } from 'lucide-react';
 
@@ -23,7 +22,6 @@ export default function Arrivees() {
     const [filter, setFilter] = useState<TransportFilter>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const { favorites, toggleFavorite } = useFavorites();
-    const { isColorblindMode, toggleColorblindMode } = useColorblind();
 
     // Enable delay notifications (only for arrivals on this page)
     useDelayNotifications([], arrivals, favorites.map(f => f.id));
@@ -49,6 +47,13 @@ export default function Arrivees() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a] text-gray-100 font-sans">
+            {/* Skip Link for accessibility */}
+            <a
+                href="#arrivals-board"
+                className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-blue-500 focus:text-white focus:rounded-lg focus:font-bold"
+            >
+                Aller au tableau des arrivées
+            </a>
             <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
 
                 {/* Error Banner */}
@@ -131,20 +136,6 @@ export default function Arrivees() {
                             </div>
                         </div>
 
-                        {/* Colorblind Toggle */}
-                        <button
-                            onClick={toggleColorblindMode}
-                            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg border text-xs font-bold transition-all hover:scale-105 active:scale-95 ${isColorblindMode
-                                ? 'bg-blue-100 border-blue-500 text-black shadow-[0_0_10px_rgba(59,130,246,0.3)]'
-                                : 'bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700 hover:text-blue-500 hover:border-gray-600'
-                                }`}
-                            title={isColorblindMode ? "Désactiver mode daltonien" : "Activer mode daltonien"}
-                            aria-pressed={isColorblindMode}
-                        >
-                            {isColorblindMode ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                            <span className="uppercase">{isColorblindMode ? 'Daltonien' : 'Daltonien'}</span>
-                        </button>
-
                         {/* Refresh Button */}
                         <button
                             onClick={refetch}
@@ -160,7 +151,7 @@ export default function Arrivees() {
 
 
                 {/* Arrivals Board */}
-                <div className="bg-[#1a1a1a] rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">
+                <div id="arrivals-board" className="bg-[#1a1a1a] rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">
                     <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 md:px-6 py-3 border-b-4 border-black">
                         <h2 className="text-lg md:text-xl font-black text-white uppercase tracking-widest flex items-center gap-3 font-mono">
                             <div className="w-3 h-3 bg-white rounded-full animate-pulse" aria-hidden="true"></div>

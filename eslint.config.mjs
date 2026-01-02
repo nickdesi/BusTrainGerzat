@@ -3,6 +3,7 @@ import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import reactHooks from "eslint-plugin-react-hooks";
+import security from "eslint-plugin-security";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -24,6 +25,7 @@ const eslintConfig = [
       "test_date_format.js",
     ],
   },
+  security.configs.recommended,
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     plugins: {

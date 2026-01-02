@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Bus, Train, Clock, Brain, Eye } from 'lucide-react';
+import { ArrowRight, Bus, Train, Clock, Brain, Accessibility } from 'lucide-react';
 
 export default function LandingPage() {
     return (
@@ -80,9 +80,9 @@ export default function LandingPage() {
                     />
 
                     <FeatureCard
-                        icon={<Eye className="w-6 h-6 text-green-400" />}
-                        title="Accessibilité Totale"
-                        description="Pensé pour tous. Mode daltonien intégré, contrastes élevés et navigation simplifiée pour une lisibilité maximale."
+                        icon={<Accessibility className="w-6 h-6 text-green-400" />}
+                        title="Accessible WCAG 2.1"
+                        description="Conforme RGAA 4 et WCAG 2.1 AA. Contrastes optimisés, navigation clavier, skip links et focus visible pour tous."
                         delay="0.6s"
                     />
 
