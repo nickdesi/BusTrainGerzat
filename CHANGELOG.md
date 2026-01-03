@@ -25,6 +25,8 @@
 - **Fix Deprecation Warning** : Résolution de l'avertissement `whatwg-encoding` au déploiement.
   - Surcharge de la version de `jsdom` (force ^27.4.0) dans `package.json`.
   - Suppression de la dépendance transitive obsolète.
+- **Node.js Deployment Update** : Passage à Node.js **22.12.0** sur Coolify.
+  - Configuration explicite dans `nixpacks.toml` pour supporter les dernières dépendances.
 
 ### 🧪 Infrastructure Qualité
 

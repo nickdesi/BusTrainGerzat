@@ -1,9 +1,12 @@
 # Explicitly use the Node.js provider
 providers = ["node"]
 
+[variables]
+NODE_VERSION = "22.12.0"
+
 [phases.setup]
-# Force Node.js 22 (LTS) to match local environment and package.json
-nixPkgs = ["nodejs_22"]
+# Use the provider's Node version instead of forcing nixPkgs
+# nixPkgs = ["nodejs_22"]
 
 [phases.install]
 cmds = ["npm ci"]
