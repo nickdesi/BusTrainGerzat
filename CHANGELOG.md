@@ -16,6 +16,7 @@
 - **Légende Carte Dynamique** : La légende est maintenant repliable sur mobile.
   - Gain de place significatif sur petits écrans.
   - Bouton HUD circulaire pour afficher/masquer.
+- **Interaction Carte** : Correction d'un bug où la légende masquée bloquait les clics sur les bus (ajout de `pointer-events-none`).
 - **Support Notch/Barre** : Ajout de la classe `safe-area-bottom`.
   - Évite que le menu du bas ne soit coupé par la barre de navigation système (iPhone).
 - **Viewport** : Ajout de `user-scalable=no` pour une expérience "app-like" plus stable.

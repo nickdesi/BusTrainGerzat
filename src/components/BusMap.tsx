@@ -220,11 +220,11 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </MapContainer>
 
             {/* Legend - HUD Style - Responsive */}
-            <div className="absolute top-20 right-4 z-[1001] flex flex-col items-end gap-2">
+            <div className="absolute top-20 right-4 z-[1001] flex flex-col items-end gap-2 pointer-events-none">
                 {/* Mobile Toggle Button */}
                 <button
                     onClick={() => setIsLegendOpen(!isLegendOpen)}
-                    className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-lg text-yellow-500"
+                    className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-lg text-yellow-500 pointer-events-auto"
                     aria-label={isLegendOpen ? "Masquer la légende" : "Afficher la légende"}
                 >
                     <Info className="w-5 h-5" />
@@ -233,7 +233,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 {/* Legend Content */}
                 <div className={`
                     w-64 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 origin-top-right
-                    ${isLegendOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none md:opacity-100 md:scale-100 md:translate-y-0 md:pointer-events-auto'}
+                    ${isLegendOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none md:opacity-100 md:scale-100 md:translate-y-0 md:pointer-events-auto'}
                 `}>
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between bg-white/5">
@@ -300,8 +300,8 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </div>
 
             {/* Status indicator - HUD Style */}
-            <div className="absolute top-4 right-4 z-[1000]">
-                <div className="flex items-center gap-3 bg-black/80 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-4 py-1.5 shadow-lg">
+            <div className="absolute top-4 right-4 z-[1000] pointer-events-none">
+                <div className="flex items-center gap-3 bg-black/80 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-4 py-1.5 shadow-lg pointer-events-auto">
                     <div className={`relative flex h-3 w-3`}>
                         <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isFetching ? 'bg-yellow-400' : 'bg-green-400'}`}></span>
                         <span className={`relative inline-flex rounded-full h-3 w-3 ${isFetching ? 'bg-yellow-500' : 'bg-green-500'}`}></span>
