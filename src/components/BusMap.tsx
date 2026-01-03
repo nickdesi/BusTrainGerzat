@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLineE1Data, Stop } from '@/hooks/useLineE1Data';
 import { useVehiclePositions, VehiclePosition } from '@/hooks/useVehiclePositions';
-import { Loader2, Sun, Moon, AlertCircle } from 'lucide-react';
+import { Loader2, Sun, Moon, AlertCircle, Info, X } from 'lucide-react';
 import StopMarker from './StopMarker';
 import BusMarker from './BusMarker';
 
@@ -52,6 +52,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const { data: vehicleData, isLoading: vehiclesLoading, isFetching } = useVehiclePositions();
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
     const [isDarkMode, setIsDarkMode] = useState(false); // Default to OSM classic (light)
+    const [isLegendOpen, setIsLegendOpen] = useState(false); // Mobile legend toggle
 
     // Map tile URLs - OpenStreetMap classic as default
     // Map tile URLs - OpenStreetMap classic as default
@@ -218,21 +219,43 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 {vehicleMarkers}
             </MapContainer>
 
-            {/* Legend - HUD Style */}
-            <div className="absolute top-20 right-4 w-64 pointer-events-none z-[1001]">
-                <div className="bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden pointer-events-auto shadow-2xl">
+            {/* Legend - HUD Style - Responsive */}
+            <div className="absolute top-20 right-4 z-[1001] flex flex-col items-end gap-2">
+                {/* Mobile Toggle Button */}
+                <button
+                    onClick={() => setIsLegendOpen(!isLegendOpen)}
+                    className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-lg text-yellow-500"
+                    aria-label={isLegendOpen ? "Masquer la légende" : "Afficher la légende"}
+                >
+                    <Info className="w-5 h-5" />
+                </button>
+
+                {/* Legend Content */}
+                <div className={`
+                    w-64 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 origin-top-right
+                    ${isLegendOpen ? 'opacity-100 scale-100 translate-y-0' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none md:opacity-100 md:scale-100 md:translate-y-0 md:pointer-events-auto'}
+                `}>
                     {/* Header */}
                     <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between bg-white/5">
                         <div className="flex items-center gap-2">
                             <span className="text-xs font-bold font-display uppercase tracking-widest text-yellow-500">STATUT LIGNE</span>
                         </div>
-                        <button
-                            onClick={() => setIsDarkMode(!isDarkMode)}
-                            className="w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors"
-                            aria-label={isDarkMode ? 'Mode clair' : 'Mode sombre'}
-                        >
-                            {isDarkMode ? <Sun className="w-3.5 h-3.5 text-yellow-500" /> : <Moon className="w-3.5 h-3.5 text-gray-400" />}
-                        </button>
+                        <div className="flex items-center gap-2">
+                            <button
+                                onClick={() => setIsDarkMode(!isDarkMode)}
+                                className="w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors"
+                                aria-label={isDarkMode ? 'Mode clair' : 'Mode sombre'}
+                            >
+                                {isDarkMode ? <Sun className="w-3.5 h-3.5 text-yellow-500" /> : <Moon className="w-3.5 h-3.5 text-gray-400" />}
+                            </button>
+                            {/* Mobile Close Button */}
+                            <button
+                                onClick={() => setIsLegendOpen(false)}
+                                className="md:hidden w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors text-gray-400"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                            </button>
+                        </div>
                     </div>
 
                     {/* Content */}

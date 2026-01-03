@@ -9,6 +9,16 @@
   - Contrastes ≥4.5:1 pour tous les textes importants.
   - Skip links ajoutés sur les pages départs et arrivées.
   - Couleurs de statut WCAG-compliant : vert (#4ade80), orange (#fb923c), rouge (#f87171).
+  - **Targets Tactiles (WCAG AAA)** : Agrandissement des zones de clic à 44px (Boutons Fermer, Favoris, Recherche).
+
+### 📱 Optimisation Mobile
+
+- **Légende Carte Dynamique** : La légende est maintenant repliable sur mobile.
+  - Gain de place significatif sur petits écrans.
+  - Bouton HUD circulaire pour afficher/masquer.
+- **Support Notch/Barre** : Ajout de la classe `safe-area-bottom`.
+  - Évite que le menu du bas ne soit coupé par la barre de navigation système (iPhone).
+- **Viewport** : Ajout de `user-scalable=no` pour une expérience "app-like" plus stable.
 
 ### 🧪 Infrastructure Qualité
 

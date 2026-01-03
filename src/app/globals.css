@@ -27,6 +27,11 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Safe area utilities for modern mobile devices */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 /* Text glow effect for headers */
 .text-glow {
   text-shadow: 0 0 30px rgba(250, 204, 21, 0.3), 0 0 60px rgba(250, 204, 21, 0.1);

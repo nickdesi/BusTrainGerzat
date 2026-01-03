@@ -67,7 +67,7 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-2 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors"
+                        className="w-11 h-11 flex items-center justify-center rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors"
                         aria-label="Fermer"
                     >
                         <X className="w-5 h-5" />

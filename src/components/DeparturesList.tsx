@@ -53,7 +53,7 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
                                 e.stopPropagation();
                                 onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
                             }}
-                            className={`p-1 transition-all active:scale-95 ${isFav ? 'text-yellow-400' : 'text-gray-600'}`}
+                            className={`w-10 h-10 flex items-center justify-center rounded-full transition-all active:scale-95 ${isFav ? 'text-yellow-400 bg-yellow-900/20' : 'text-gray-600 hover:bg-white/5'}`}
                             title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
