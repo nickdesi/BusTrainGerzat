@@ -23,6 +23,9 @@
 - **Boutons Accessibles** : Agrandissement des zones de clic.
   - Bouton fermer popup carte : 44x44px (WCAG conformant).
   - Bouton fermer légende mobile : 40x40px.
+- **Animations Carte Fluides** : Les marqueurs de bus se déplacent maintenant en douceur.
+  - Transition CSS `transform 1.5s` pour un mouvement fluide.
+  - Pattern `useRef` + `eventHandlers` pour intégration native Leaflet.
 - **Support Notch/Barre** : Ajout de la classe `safe-area-bottom`.
   - Évite que le menu du bas ne soit coupé par la barre de navigation système (iPhone).
 - **Viewport** : Ajout de `user-scalable=no` pour une expérience "app-like" plus stable.

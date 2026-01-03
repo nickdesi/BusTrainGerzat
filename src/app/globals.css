@@ -173,6 +173,11 @@ body {
   border: none !important;
 }
 
+/* Smooth position transition for bus markers */
+.leaflet-marker-icon.bus-marker {
+  transition: transform 1.5s cubic-bezier(0.25, 0.1, 0.25, 1) !important;
+}
+
 .bus-icon-container {
   position: relative;
   width: 40px;

@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, memo } from 'react';
+import { useMemo, memo, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { VehiclePosition } from '@/hooks/useVehiclePositions';
 import { Bus } from 'lucide-react';
@@ -20,6 +20,10 @@ interface BusMarkerProps {
 }
 
 const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
+    // Ref to access native Leaflet marker for smooth position updates
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const markerRef = useRef<any>(null);
+
     // Determine bus color based on direction
     // direction 0 = From Gerzat towards Aubière/Romagnat (blue)
     // direction 1 = Towards Gerzat (green)
@@ -63,12 +67,28 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
         });
     }, [vehicle.bearing, iconColor, pulseClass]);
 
+    // Update marker position smoothly when vehicle data changes
+    useEffect(() => {
+        if (markerRef.current) {
+            // Use native Leaflet setLatLng for smooth CSS-transitioned update
+            markerRef.current.setLatLng([vehicle.lat, vehicle.lon]);
+        }
+    }, [vehicle.lat, vehicle.lon]);
+
+    // Capture marker reference on mount
+    const eventHandlers = useMemo(() => ({
+        add: (e: { target: unknown }) => {
+            markerRef.current = e.target;
+        },
+    }), []);
+
     if (!busIcon) return null;
 
     return (
         <Marker
             position={[vehicle.lat, vehicle.lon]}
             icon={busIcon}
+            eventHandlers={eventHandlers}
         >
             <Popup>
                 <div className="p-1">
