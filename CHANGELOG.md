@@ -20,6 +20,12 @@
   - Évite que le menu du bas ne soit coupé par la barre de navigation système (iPhone).
 - **Viewport** : Ajout de `user-scalable=no` pour une expérience "app-like" plus stable.
 
+### 🔧 Maintenance
+
+- **Fix Deprecation Warning** : Résolution de l'avertissement `whatwg-encoding` au déploiement.
+  - Surcharge de la version de `jsdom` (force ^27.4.0) dans `package.json`.
+  - Suppression de la dépendance transitive obsolète.
+
 ### 🧪 Infrastructure Qualité
 
 - **Tests Unitaires** : Mise en place de Jest + Testing Library.

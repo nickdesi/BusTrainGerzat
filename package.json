@@ -43,6 +43,7 @@
   },
   "overrides": {
     "glob": "^10.4.5",
-    "inflight": "^1.0.6"
+    "inflight": "^1.0.6",
+    "jsdom": "^27.4.0"
   }
 }
