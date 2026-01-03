@@ -262,15 +262,22 @@ body {
 
 .leaflet-popup-close-button {
   color: rgba(255, 255, 255, 0.6) !important;
-  padding: 8px !important;
-  font-size: 20px !important;
-  z-index: 10;
+  width: 44px !important;
+  height: 44px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
+  font-size: 24px !important;
+  z-index: 100 !important;
+  top: 4px !important;
+  right: 4px !important;
 }
 
 .leaflet-popup-close-button:hover {
   color: white !important;
   background: rgba(255, 255, 255, 0.1) !important;
-  border-radius: 0 12px 0 12px;
+  border-radius: 50% !important;
 }
 
 /* Remove default marker shadow */

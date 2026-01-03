@@ -82,13 +82,16 @@ const TripTimeline = memo(function TripTimeline({
                     const isTerminus = isFirst || isLast;
                     const isPassed = stop.status === 'passed';
                     const isCurrent = stop.status === 'current';
-                    // Only show bus "in transit" if current time >= departure time of this stop
-                    const hasDeparted = isCurrent && nowUnix >= stop.predictedDeparture;
 
-                    // Calculate bus progress between current stop and next stop
-                    let busProgress = 0; // 0% = at current stop, 100% = at next stop
-                    if (hasDeparted && !isLast) {
+                    // Show bus indicator on the segment LEADING TO the current stop
+                    // i.e., on the line below the PREVIOUS stop (which is now 'passed')
+                    const isNextStopCurrent = !isLast && stops[index + 1]?.status === 'current';
+
+                    // Calculate bus progress TOWARDS the next stop (current)
+                    let busProgress = 0;
+                    if (isNextStopCurrent && isPassed) {
                         const nextStop = stops[index + 1];
+                        // Progress from this stop's departure to next stop's arrival
                         const departureTime = stop.predictedDeparture;
                         const arrivalTime = nextStop.predictedArrival;
                         const totalDuration = arrivalTime - departureTime;
@@ -131,8 +134,8 @@ const TripTimeline = memo(function TripTimeline({
                                             className={`w-0.5 absolute inset-y-0 ${isPassed ? 'bg-gray-600' : ''}`}
                                             style={{ backgroundColor: isPassed ? undefined : routeColor }}
                                         />
-                                        {/* Bus position indicator - show between current stop and next */}
-                                        {hasDeparted && (
+                                        {/* Bus position indicator - show BEFORE current stop */}
+                                        {isNextStopCurrent && (
                                             <div
                                                 className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000"
                                                 style={{ top: `${busProgress * 80}%` }}

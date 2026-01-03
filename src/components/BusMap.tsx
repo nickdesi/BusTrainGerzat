@@ -251,9 +251,9 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                             {/* Mobile Close Button */}
                             <button
                                 onClick={() => setIsLegendOpen(false)}
-                                className="md:hidden w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors text-gray-400"
+                                className="md:hidden w-10 h-10 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors text-gray-400 border border-white/5"
                             >
-                                <X className="w-3.5 h-3.5" />
+                                <X className="w-5 h-5" />
                             </button>
                         </div>
                     </div>

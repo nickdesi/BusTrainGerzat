@@ -17,6 +17,12 @@
   - Gain de place significatif sur petits écrans.
   - Bouton HUD circulaire pour afficher/masquer.
 - **Interaction Carte** : Correction d'un bug où la légende masquée bloquait les clics sur les bus (ajout de `pointer-events-none`).
+- **Bus Indicateur Timeline** : L'icône du bus s'affiche maintenant correctement sur la timeline du trajet.
+  - Le bus apparaît sur le segment AVANT l'arrêt "En cours" (au lieu d'après).
+  - Animation fluide en temps réel basée sur le temps de trajet.
+- **Boutons Accessibles** : Agrandissement des zones de clic.
+  - Bouton fermer popup carte : 44x44px (WCAG conformant).
+  - Bouton fermer légende mobile : 40x40px.
 - **Support Notch/Barre** : Ajout de la classe `safe-area-bottom`.
   - Évite que le menu du bas ne soit coupé par la barre de navigation système (iPhone).
 - **Viewport** : Ajout de `user-scalable=no` pour une expérience "app-like" plus stable.
