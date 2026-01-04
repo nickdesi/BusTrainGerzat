@@ -104,17 +104,17 @@ const TripTimeline = memo(function TripTimeline({
                     return (
                         <div
                             key={stop.stopId}
-                            className={`relative flex items-start gap-4 ${isPassed ? 'opacity-50' : ''}`}
+                            className={`relative flex items-start gap-4 pr-3 ${isPassed ? 'opacity-50' : ''}`}
                         >
                             {/* Vertical Line + Circle */}
-                            <div className="flex flex-col items-center w-5">
+                            <div className="flex flex-col items-center w-6 flex-shrink-0">
                                 {/* Circle */}
                                 <div
-                                    className={`relative z-10 flex items-center justify-center rounded-full border-3 ${isTerminus ? 'w-5 h-5' : 'w-3 h-3'
+                                    className={`relative z-10 flex items-center justify-center rounded-full border-[3px] box-content ${isTerminus ? 'w-4 h-4' : 'w-2.5 h-2.5'
                                         } ${isCurrent
                                             ? 'bg-green-500 border-green-400 shadow-[0_0_12px_rgba(34,197,94,0.6)]'
                                             : isPassed
-                                                ? 'bg-gray-600 border-gray-500'
+                                                ? 'bg-gray-700 border-gray-600'
                                                 : 'border-2'
                                         }`}
                                     style={{
@@ -129,9 +129,9 @@ const TripTimeline = memo(function TripTimeline({
 
                                 {/* Vertical Line (not after last item) */}
                                 {!isLast && (
-                                    <div className="relative h-full min-h-12">
+                                    <div className="relative h-full min-h-16">
                                         <div
-                                            className={`w-0.5 absolute inset-y-0 ${isPassed ? 'bg-gray-600' : ''}`}
+                                            className={`w-1 absolute inset-y-0 left-1/2 -translate-x-1/2 ${isPassed ? 'bg-gray-700' : ''}`}
                                             style={{ backgroundColor: isPassed ? undefined : routeColor }}
                                         />
                                         {/* Bus position indicator - show BEFORE current stop */}
@@ -140,10 +140,10 @@ const TripTimeline = memo(function TripTimeline({
                                                 className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000"
                                                 style={{ top: `${busProgress * 80}%` }}
                                             >
-                                                <div className="relative">
-                                                    <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-50 animate-ping" />
-                                                    <div className="relative bg-green-500 rounded-full p-1 shadow-lg shadow-green-500/50">
-                                                        <Bus className="w-3 h-3 text-white" />
+                                                <div className="relative flex items-center justify-center w-8 h-8">
+                                                    <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-60 animate-pulse" />
+                                                    <div className="relative flex items-center justify-center w-7 h-7 bg-green-600 rounded-full shadow-lg shadow-green-900/50 border-2 border-green-400">
+                                                        <Bus className="w-4 h-4 text-white" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -153,23 +153,25 @@ const TripTimeline = memo(function TripTimeline({
                             </div>
 
                             {/* Stop Info */}
-                            <div className={`flex-1 pb-4 ${isLast ? 'pb-0' : ''}`}>
-                                <div className="flex items-center justify-between">
+                            <div className={`flex-1 min-w-0 pb-6 ${isLast ? 'pb-0' : ''}`}>
+                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
                                     {/* Stop Name */}
-                                    <div className="flex items-center gap-2">
-                                        <span className={`font-medium ${isCurrent ? 'text-green-400' :
-                                            isPassed ? 'text-gray-500' : 'text-white'
+                                    <div className="flex items-start gap-2 max-w-full">
+                                        <span className={`font-medium text-base leading-tight break-words ${isCurrent ? 'text-green-400' :
+                                            isPassed ? 'text-gray-500' : 'text-gray-100'
                                             } ${isTerminus ? 'font-bold' : ''}`}>
                                             {stop.stopName}
                                         </span>
-                                        {stop.isAccessible && (
-                                            <Accessibility className="w-4 h-4 text-blue-400" />
-                                        )}
-                                        {isCurrent && (
-                                            <span className="px-1.5 py-0.5 text-[10px] font-bold bg-green-500/20 text-green-400 rounded uppercase">
-                                                En cours
-                                            </span>
-                                        )}
+                                        <div className="flex items-center gap-1 flex-shrink-0 mt-0.5">
+                                            {stop.isAccessible && (
+                                                <Accessibility className="w-3.5 h-3.5 text-blue-400" />
+                                            )}
+                                            {isCurrent && (
+                                                <span className="px-1.5 py-0.5 text-[9px] font-bold bg-green-500/20 text-green-400 rounded uppercase tracking-wider border border-green-500/30">
+                                                    En cours
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
 
                                     {/* Times */}

@@ -1,4 +1,4 @@
-import { memo, useState } from 'react';
+import { memo, useState, useMemo } from 'react';
 import { ArrowRight, Bus, Train, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
@@ -22,16 +22,18 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 
     // Sort departures: Favorites first, then by time
-    const sortedDepartures = [...departures].sort((a, b) => {
-        const idA = a.id;
-        const idB = b.id;
-        const isFavA = favorites.includes(idA);
-        const isFavB = favorites.includes(idB);
+    const sortedDepartures = useMemo(() => {
+        return [...departures].sort((a, b) => {
+            const idA = a.id;
+            const idB = b.id;
+            const isFavA = favorites.includes(idA);
+            const isFavB = favorites.includes(idB);
 
-        if (isFavA && !isFavB) return -1;
-        if (!isFavA && isFavB) return 1;
-        return 0; // Maintain existing sort (by time)
-    });
+            if (isFavA && !isFavB) return -1;
+            if (!isFavA && isFavB) return 1;
+            return 0; // Maintain existing sort (by time)
+        });
+    }, [departures, favorites]);
 
     return (
         <div className="hidden md:block overflow-x-auto bg-[#151515]">

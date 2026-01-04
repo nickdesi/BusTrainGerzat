@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.4.1] - 2026-01-04
+
+### ⚡ Performance & Assets
+
+- **Optimisation Image** : Suppression de `plan_ligne_e1.png` (665KB) non utilisé, allégeant le build final.
+- **DeparturesBoard** : Utilisation de `useMemo` pour le tri des départs afin d'éviter les recalcules inutiles à chaque rendu (optimisation React Render).
+
+### 🐛 Interface & UI
+
+- **TripTimeline (Détails Trajet)** :
+  - **Icône Bus** : Agrandissement significatif de l'indicateur de bus avec effet "pulse" vert pour une meilleure visibilité.
+  - **Layout** : Correction des problèmes de coupure à droite (padding ajouté).
+  - **Texte** : Meilleure gestion des retours à la ligne pour les noms d'arrêts longs sur mobile.
+
 ## [3.4.0] - 2026-01-02
 
 ### ♿ Accessibilité WCAG 2.1 AA
