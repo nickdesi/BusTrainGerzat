@@ -70,8 +70,8 @@ Cette application expose un serveur **MCP (Model Context Protocol)** permettant 
 
 ### Outils Disponibles
 
-- `get_bus_positions` : Récupère les positions GPS, le cap et le retard de tous les bus en circulation.
-- `get_departures` : Liste les prochains départs (Bus & Train) au hub de Gerzat.
+- `get_bus_positions` : Récupère les positions GPS et le cap de tous les bus en circulation sur la ligne E1.
+- `get_departures` : Liste les prochains départs. Argument optionnel : `type` ("BUS", "TRAIN", ou "ALL").
 - `get_line_status` : Donne un résumé de l'état du trafic (nombre de véhicules, retard moyen).
 
 ### Utilisation
