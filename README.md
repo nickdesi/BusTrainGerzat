@@ -108,6 +108,20 @@ npx tsx src/mcp-server/index.ts
 | `api-client.ts` | Client HTTP avec retry (3 tentatives, backoff exponentiel) |
 | `logger.ts` | Logger structuré (niveaux, contexte, métriques) |
 
+### 📂 Structure du Projet
+
+```text
+src/
+├── app/              # Routes Next.js (App Router)
+├── components/       # Composants React UI
+├── hooks/            # Hooks personnalisés (useBusData...)
+├── lib/              # Client API, Config, Logger
+├── mcp-server/       # Serveur Model Context Protocol (IA)
+├── services/         # Logique métier (Bus, Train) - Refactorisé
+├── types/            # Définitions TypeScript partagées
+└── utils/            # Fonctions utilitaires (formatters...)
+```
+
 ### 📡 Sources de données
 
 | Transport | API | Source |
