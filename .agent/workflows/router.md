@@ -27,6 +27,11 @@ Based on the answer, start the corresponding workflow:
 | "Build a React widget/artifact" | `web-artifacts-builder` |
 | "Check for security", "Audit code" | `security-audit` |
 | "Clean up code", "Refactor" | `code-refactor` |
+| "Debug an issue", "Fix an error", "Find root cause" | `debugging-workflow` |
+| "Plan complex task", "Multi-agent work" | `parallel-orchestrator` |
+| "Check environment", "Verify setup" | `setup-check` |
+| "Release version", "Publish app", "Bump version" | `release-manager` |
+| "Check speed", "Optimize bundle", "Audit performance" | `performance-audit` |
 
 ## 3. Fallback
 

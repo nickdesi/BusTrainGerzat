@@ -64,6 +64,25 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Mises à jour Silencieuses** : Rafraîchissement instantané des horaires et statuts sans clignotement.
 - **Cache Intelligent** : Stratégie network-first via Service Worker pour une PWA ultra-rapide.
 
+## 🤖 Serveur MCP (IA & Automatisation)
+
+Cette application expose un serveur **MCP (Model Context Protocol)** permettant aux agents IA (Claude Desktop, etc.) d'interagir directement avec les données de transport temps réel.
+
+### Outils Disponibles
+
+- `get_bus_positions` : Récupère les positions GPS, le cap et le retard de tous les bus en circulation.
+- `get_departures` : Liste les prochains départs (Bus & Train) au hub de Gerzat.
+- `get_line_status` : Donne un résumé de l'état du trafic (nombre de véhicules, retard moyen).
+
+### Utilisation
+
+```bash
+# Lancer le serveur MCP (stdio transport)
+npm run mcp
+# ou
+npx tsx src/mcp-server/index.ts
+```
+
 ## 🛠 Architecture Technique
 
 - **Framework** : Next.js 16 (App Router)

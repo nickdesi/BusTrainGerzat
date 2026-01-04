@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.5.0] - 2026-01-04
+
+### 🤖 Interface IA (MCP)
+
+- **Nouveau Serveur MCP** : Implémentation du *Model Context Protocol* pour permettre aux agents IA de requêter l'application.
+  - **Tools** : `get_bus_positions`, `get_departures`, `get_line_status`.
+  - **Architecture** : Serveur TypeScript léger utilisant les services existants (`gtfs-rt`, `data-source`).
+  - **Commande** : `npm run mcp` pour lancer le serveur sur stdio.
+
+### 🛠 Maintenance
+
+- **Setup Check** : Nouveau script `.agent/scripts/check-env.sh` pour vérifier l'environnement de dev.
+- **Dépendances** : Ménage dans `package.json` (ajout `zod`, `tsx`, `tsconfig-paths`, `@modelcontextprotocol/sdk`).
+
 ## [3.4.1] - 2026-01-04
 
 ### ⚡ Performance & Assets
