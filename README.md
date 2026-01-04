@@ -53,11 +53,6 @@ Application Next.js pour suivre en temps réel les bus T2C et les trains TER à 
 - **Notifications de retard** : Alertes push pour vos trajets favoris en retard (≥5 min).
 - **Accessibilité WCAG 2.1 AA** : Conforme RGAA 4, contrastes ≥4.5:1, skip links, navigation clavier et attributs ARIA complets.
 
-### 🧠 Intelligence Artificielle
-
-- **Prédictions de Retard** : Badges "IA" indiquant les risques de retard basés sur l'historique (heures de pointe, sorties scolaires).
-- **Alertes Intelligentes** : Bannière dynamique avertissant des perturbations probables sur vos trajets favoris dès l'ouverture.
-
 ### ⚡ Performance & Temps Réel
 
 - **Server-Sent Events (SSE)** : Flux de données continu sans rechargement (plus de polling API).
