@@ -76,19 +76,15 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         const updates: TrainUpdate[] = [];
         const debugInfo: Record<string, unknown> = {};
 
-        if (baseScheduleRes.ok) {
-            const baseScheduleData = await baseScheduleRes.json();
-            const realtimeTrainIds = new Set<string>();
+        // Prioritize realtime data, use base_schedule only for missing trains
+        const baseScheduleData = baseScheduleRes.ok ? await baseScheduleRes.json() as SncfApiResponse : null;
+        const realtimeData = realtimeRes.ok ? await realtimeRes.json() as SncfApiResponse : null;
 
-            if (realtimeRes.ok) {
-                const realtimeData = await realtimeRes.json() as SncfApiResponse;
-                realtimeData.departures?.forEach((dep: SncfDeparture) => {
-                    const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
-                    if (vehicleJourneyId) realtimeTrainIds.add(vehicleJourneyId);
-                });
-            }
+        const processedTripIds = new Set<string>();
 
-            (baseScheduleData as SncfApiResponse).departures?.forEach((dep: SncfDeparture) => {
+        // First, process realtime data (these have actual delays/status)
+        if (realtimeData?.departures) {
+            for (const dep of realtimeData.departures) {
                 const stopDateTime = dep.stop_date_time;
                 const displayInfo = dep.display_informations;
                 const departureTime = parseSncfDateTime(stopDateTime.departure_date_time);
@@ -99,17 +95,17 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
                 let origin = 'Inconnu';
                 const originLink = displayInfo.links?.find((l: SncfLink) => l.rel === 'origins');
                 if (originLink) {
-                    const originData = (baseScheduleData as SncfApiResponse).origins?.find((o: SncfOrigin) => o.id === originLink.id);
+                    const originData = realtimeData.origins?.find((o: SncfOrigin) => o.id === originLink.id);
                     if (originData) origin = originData.name;
                 }
 
                 const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
-                const isInRealtime = vehicleJourneyId ? realtimeTrainIds.has(vehicleJourneyId) : true;
+                if (vehicleJourneyId) processedTripIds.add(vehicleJourneyId);
+
                 const isCancelled =
                     stopDateTime.data_freshness === 'deleted' ||
                     displayInfo.physical_mode === 'Cancelled' ||
-                    dep.display_informations?.commercial_mode === 'Supprimé' ||
-                    (!isInRealtime && realtimeTrainIds.size > 0);
+                    dep.display_informations?.commercial_mode === 'Supprimé';
 
                 updates.push({
                     tripId: vehicleJourneyId || '',
@@ -119,10 +115,47 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
                     arrival: { time: arrivalTime.toString(), delay },
                     departure: { time: departureTime.toString(), delay },
                     delay,
-                    isRealtime: isInRealtime && stopDateTime.data_freshness === 'realtime',
+                    isRealtime: true,
                     isCancelled
                 });
-            });
+            }
+        }
+
+        // Then, add trains from base_schedule that are NOT in realtime (likely cancelled)
+        if (baseScheduleData?.departures) {
+            for (const dep of baseScheduleData.departures) {
+                const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                
+                // Skip if already processed from realtime
+                if (vehicleJourneyId && processedTripIds.has(vehicleJourneyId)) continue;
+
+                const stopDateTime = dep.stop_date_time;
+                const displayInfo = dep.display_informations;
+                const departureTime = parseSncfDateTime(stopDateTime.departure_date_time);
+                const arrivalTime = parseSncfDateTime(stopDateTime.arrival_date_time);
+
+                let origin = 'Inconnu';
+                const originLink = displayInfo.links?.find((l: SncfLink) => l.rel === 'origins');
+                if (originLink) {
+                    const originData = baseScheduleData.origins?.find((o: SncfOrigin) => o.id === originLink.id);
+                    if (originData) origin = originData.name;
+                }
+
+                // Train in base_schedule but not in realtime = likely cancelled or not confirmed
+                const isCancelled = processedTripIds.size > 0; // If we have realtime data, missing trains are cancelled
+
+                updates.push({
+                    tripId: vehicleJourneyId || '',
+                    trainNumber: displayInfo.trip_short_name || displayInfo.headsign || 'Inconnu',
+                    direction: displayInfo.direction?.replace(/ \([^)]+\)$/, '') || 'Inconnu',
+                    origin: origin,
+                    arrival: { time: arrivalTime.toString(), delay: 0 },
+                    departure: { time: departureTime.toString(), delay: 0 },
+                    delay: 0,
+                    isRealtime: false,
+                    isCancelled
+                });
+            }
         }
 
         const futureUpdates = updates
