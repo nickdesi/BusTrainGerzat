@@ -74,16 +74,21 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
 
         const authHeader = `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`;
 
-        const [baseScheduleRes, realtimeRes] = await Promise.all([
-            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, {
-                headers: { 'Authorization': authHeader },
-                cache: 'no-store'
-            }),
-            fetch(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, {
-                headers: { 'Authorization': authHeader },
-                cache: 'no-store'
-            })
-        ]);
+        // Helper for fetch with retry on 429
+        const fetchWithRetry = async (url: string, maxRetries = 3): Promise<Response> => {
+            for (let attempt = 0; attempt < maxRetries; attempt++) {
+                const res = await fetch(url, { headers: { 'Authorization': authHeader }, cache: 'no-store' });
+                if (res.status !== 429) return res;
+                // Exponential backoff: 500ms, 1000ms, 2000ms
+                await new Promise(r => setTimeout(r, 500 * Math.pow(2, attempt)));
+            }
+            return fetch(url, { headers: { 'Authorization': authHeader }, cache: 'no-store' });
+        };
+
+        // Sequential calls with delay to avoid per-second rate limit
+        const realtimeRes = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`);
+        await new Promise(r => setTimeout(r, 300)); // 300ms delay between calls
+        const baseScheduleRes = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`);
 
         // If rate limited, return cached data if available
         if (baseScheduleRes.status === 429 || realtimeRes.status === 429) {
