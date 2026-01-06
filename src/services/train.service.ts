@@ -51,11 +51,23 @@ function parseSncfDateTime(dateTimeStr: string): number {
     return Math.floor(new Date(year, month, day, hour, minute, second).getTime() / 1000);
 }
 
+// --- Cache to avoid SNCF API rate limiting (429) ---
+const CACHE_TTL_MS = 30000; // 30 seconds cache
+let cachedResponse: { updates: TrainUpdate[], timestamp: number, debug?: Record<string, unknown> } | null = null;
+let cacheExpiry = 0;
+
 // --- Service ---
 
 export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestamp: number, error?: string, debug?: Record<string, unknown> }> {
     try {
         const now = Math.floor(Date.now() / 1000);
+        const nowMs = Date.now();
+
+        // Return cached response if still valid
+        if (cachedResponse && nowMs < cacheExpiry) {
+            return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true } };
+        }
+
         if (!SNCF_API_KEY) {
             return { updates: [], timestamp: now, error: 'SNCF_API_KEY_MISSING' };
         }
@@ -73,12 +85,26 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
             })
         ]);
 
+        // If rate limited, return cached data if available
+        if (baseScheduleRes.status === 429 || realtimeRes.status === 429) {
+            if (cachedResponse) {
+                return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } };
+            }
+            return { updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { baseScheduleStatus: baseScheduleRes.status, realtimeStatus: realtimeRes.status } };
+        }
+
         const updates: TrainUpdate[] = [];
         const debugInfo: Record<string, unknown> = {};
 
         // Prioritize realtime data, use base_schedule only for missing trains
         const baseScheduleData = baseScheduleRes.ok ? await baseScheduleRes.json() as SncfApiResponse : null;
         const realtimeData = realtimeRes.ok ? await realtimeRes.json() as SncfApiResponse : null;
+
+        // Debug info
+        debugInfo['baseScheduleStatus'] = baseScheduleRes.status;
+        debugInfo['realtimeStatus'] = realtimeRes.status;
+        debugInfo['baseScheduleCount'] = baseScheduleData?.departures?.length ?? 0;
+        debugInfo['realtimeCount'] = realtimeData?.departures?.length ?? 0;
 
         const processedTripIds = new Set<string>();
 
@@ -125,7 +151,7 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         if (baseScheduleData?.departures) {
             for (const dep of baseScheduleData.departures) {
                 const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
-                
+
                 // Skip if already processed from realtime
                 if (vehicleJourneyId && processedTripIds.has(vehicleJourneyId)) continue;
 
@@ -162,7 +188,12 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
             .filter(u => Number(u.departure.time) > now - 60)
             .sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
 
-        return { updates: futureUpdates, timestamp: now, debug: debugInfo };
+        // Update cache
+        const result = { updates: futureUpdates, timestamp: now, debug: debugInfo };
+        cachedResponse = result;
+        cacheExpiry = Date.now() + CACHE_TTL_MS;
+
+        return result;
     } catch (e) {
         console.error('getTrainData error:', e);
         return { updates: [], timestamp: Math.floor(Date.now() / 1000), error: 'FETCH_FAILED' };
