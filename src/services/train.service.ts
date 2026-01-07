@@ -52,7 +52,9 @@ function parseSncfDateTime(dateTimeStr: string): number {
 }
 
 // --- Cache to avoid SNCF API rate limiting (429) ---
-const CACHE_TTL_MS = 30000; // 30 seconds cache
+// SNCF API has a 5000 req/day limit. At 2 min cache with 2 calls per refresh:
+// (24*60*60)/120 * 2 = 1440 calls/day - safely under the limit
+const CACHE_TTL_MS = 120000; // 2 minutes cache
 let cachedResponse: { updates: TrainUpdate[], timestamp: number, debug?: Record<string, unknown> } | null = null;
 let cacheExpiry = 0;
 

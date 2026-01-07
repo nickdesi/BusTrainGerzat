@@ -30,14 +30,14 @@ export async function GET(request: Request) {
 
             await sendUpdate();
 
-            // Then send updates every 30 seconds
+            // Then send updates every 2 minutes (matches server cache TTL)
             const interval = setInterval(async () => {
                 if (request.signal.aborted) {
                     clearInterval(interval);
                     return;
                 }
                 await sendUpdate();
-            }, 30000);
+            }, 120000);
 
             // Cleanup when closed
             request.signal.addEventListener('abort', () => {
