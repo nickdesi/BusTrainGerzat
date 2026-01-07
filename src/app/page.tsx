@@ -32,7 +32,7 @@ export default function LandingPage() {
                 <div className="flex flex-col items-center text-center py-20 md:py-32">
                     <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20 text-yellow-500 text-xs font-bold uppercase tracking-widest mb-6 animate-fade-in-up">
                         <span className="w-2 h-2 rounded-full bg-yellow-500 animate-pulse"></span>
-                        Version 3.2.0 Disponible
+                        Version 3.5.0 Disponible
                     </div>
 
                     <h1 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-6 bg-gradient-to-b from-white to-white/40 bg-clip-text text-transparent animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
