@@ -9,7 +9,7 @@ import gtfsConfig from '@/data/gtfs_config.json';
 // --- CRITICAL: Protect JSON-RPC Transport ---
 // MCP uses stdout for protocol messages. Any application log written to stdout
 // will break the client parser. We redirect console.log to stderr.
-const originalLog = console.log;
+// originalLog deleted
 console.log = console.error;
 
 // Initialize Server
