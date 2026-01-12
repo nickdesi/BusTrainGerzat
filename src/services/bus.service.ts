@@ -151,14 +151,31 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 today.getDate().toString().padStart(2, '0');
         }
 
-        // Filter static schedule to only include today's entries
+        // Build fuzzy tripId lookup: T2C's static GTFS and GTFS-RT use different service_ids
+        // Static: 1132_1000001_03GC.AR_183100, RT: 1132_1000005_03GC.AR_183100
+        // We match on the pattern after the service_id: "03GC.AR_183100"
+        const extractTripPattern = (tripId: string) => tripId.split('_').slice(2).join('_');
+        const rtByPattern = new Map<string, typeof realtimeUpdates extends Map<string, infer V> ? V : never>();
+        for (const [tripId, update] of realtimeUpdates) {
+            const pattern = extractTripPattern(tripId);
+            if (!rtByPattern.has(pattern)) {
+                rtByPattern.set(pattern, update);
+            }
+        }
+
         const todaySchedule = (staticSchedule as StaticScheduleItem[])
             .filter((item: StaticScheduleItem) => item.date === todayDateStr);
 
         const combinedUpdates = todaySchedule
             .filter((item: StaticScheduleItem) => item.arrival > now - 600)
             .map((item: StaticScheduleItem) => {
-                const rtTrip = realtimeUpdates.get(item.tripId);
+                // Try exact match first, then fuzzy pattern match
+                let rtTrip = realtimeUpdates.get(item.tripId);
+                if (!rtTrip) {
+                    const pattern = extractTripPattern(item.tripId);
+                    rtTrip = rtByPattern.get(pattern);
+                }
+
                 let arrival = item.arrival;
                 let departure = item.departure;
                 let delay = 0;
