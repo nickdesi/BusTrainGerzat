@@ -14,6 +14,7 @@ import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useFavorites } from '@/hooks/useFavorites';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
+import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
 
 const APP_VERSION = '3.2.0';
 
@@ -107,6 +108,9 @@ export default function Home() {
             </button>
           </div>
         )}
+
+        {/* Data Freshness Warning */}
+        <DataFreshnessWarning />
 
         {/* Airport-style Header */}
         <header className="mb-8 border-b-2 border-yellow-500/30 pb-6 relative">
