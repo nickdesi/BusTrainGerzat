@@ -1,5 +1,6 @@
 'use client';
 
+import { memo } from 'react';
 import dynamic from 'next/dynamic';
 import { Stop } from '@/hooks/useLineE1Data';
 
@@ -19,7 +20,7 @@ interface StopMarkerProps {
     routeColor: string;
 }
 
-export default function StopMarker({ stop, isTerminus, routeColor }: StopMarkerProps) {
+const StopMarker = memo(function StopMarker({ stop, isTerminus, routeColor }: StopMarkerProps) {
     return (
         <CircleMarker
             center={[stop.lat, stop.lon]}
@@ -41,4 +42,6 @@ export default function StopMarker({ stop, isTerminus, routeColor }: StopMarkerP
             </Popup>
         </CircleMarker>
     );
-}
+});
+
+export default StopMarker;
