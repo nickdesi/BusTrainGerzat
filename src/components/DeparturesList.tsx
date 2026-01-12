@@ -29,7 +29,8 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
     return (
         <div
             onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
-            className={`p-4 flip-enter ${isClickable ? 'cursor-pointer active:bg-yellow-900/30' : ''} ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'}`}
+            className={`p-4 flip-enter ${isClickable ? 'cursor-pointer active:bg-yellow-900/30' : ''} ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+            title={entry.isCancelled ? 'Train supprimé' : undefined}
         >
             <div className="flex items-start justify-between mb-3">
                 {entry.type === 'TER' ? (

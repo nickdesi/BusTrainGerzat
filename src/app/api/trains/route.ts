@@ -8,5 +8,7 @@ export async function GET() {
     if (data.error) {
         return NextResponse.json(data, { status: 500 });
     }
-    return NextResponse.json(data);
+    return NextResponse.json(data, {
+        headers: { 'Cache-Control': 'public, max-age=120, stale-while-revalidate=60' }
+    });
 }

@@ -18,6 +18,7 @@ export interface TrainUpdate {
     trainNumber: string;
     direction: string;
     origin: string;
+    platform?: string; // Platform number if available from API
     arrival: { time: string; delay: number };
     departure: { time: string; delay: number };
     delay: number;

@@ -26,7 +26,7 @@ const StatusDisplay = memo(function StatusDisplay({ delay, isRealtime, isCancell
     }
 
     if (!isRealtime) {
-        return <SplitFlapDisplay text="THÉORIQUE" size="xs" color="text-gray-400" />;
+        return <span title="Information théorique - non confirmée en temps réel"><SplitFlapDisplay text="THÉORIQUE" size="xs" color="text-gray-400" /></span>;
     }
 
     const minutes = Math.floor(Math.abs(delay) / 60);

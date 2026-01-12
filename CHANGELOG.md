@@ -1,5 +1,27 @@
 # Changelog
 
+## [3.6.0] - 2026-01-12
+
+### 🚆 Amélioration Données Train
+
+- **Smart Reconciliation** : Nouvelle logique de réconciliation entre horaires théoriques et temps réel.
+  - Les trains manquants du flux temps réel ne sont plus cachés.
+  - Inférence intelligente : si un train est dans la fenêtre temporelle du flux RT mais absent → Annulé.
+  - Si hors fenêtre → Affiché comme "Théorique" (icône WiFi barré).
+- **Validation Zod** : Ajout de schémas Zod pour valider les réponses de l'API SNCF.
+- **Cache-Control** : Ajout de l'en-tête `Cache-Control: max-age=120, stale-while-revalidate=60` sur `/api/trains`.
+
+### 🎨 UI/UX
+
+- **Trains Annulés** : Style visuel amélioré avec opacité réduite (60%) et tooltip "Train supprimé".
+- **Tooltip Théorique** : Explication "Information théorique - non confirmée en temps réel" au survol.
+- **Type Platform** : Ajout du champ `platform` au type `TrainUpdate` (préparation future).
+
+### 🛡️ Qualité Code
+
+- **Audit Multi-Expert** : Code audité par 4 personas (Train Data, UI/UX, Performance, Security).
+- **Grade Global** : A- (aucune vulnérabilité critique détectée).
+
 ## [3.5.0] - 2026-01-04
 
 ### 🤖 Interface IA (MCP)

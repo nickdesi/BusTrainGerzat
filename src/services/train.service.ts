@@ -1,45 +1,52 @@
 import { TrainUpdate } from '@/types/transport';
+import { z } from 'zod';
 
 const SNCF_API_KEY = process.env.SNCF_API_KEY;
 const GERZAT_STOP_AREA = 'stop_area:SNCF:87734046';
 
-// --- SNCF API Types ---
+// --- SNCF API Types with Zod Validation ---
 
-interface SncfLink {
-    type?: string;
-    rel?: string;
-    id?: string;
-}
+const SncfLinkSchema = z.object({
+    type: z.string().optional(),
+    rel: z.string().optional(),
+    id: z.string().optional()
+});
 
-interface SncfDeparture {
-    stop_date_time: {
-        departure_date_time: string;
-        arrival_date_time: string;
-        base_departure_date_time: string;
-        data_freshness?: string;
-    };
-    display_informations: {
-        trip_short_name?: string;
-        headsign?: string;
-        direction?: string;
-        physical_mode?: string;
-        commercial_mode?: string;
-        links?: SncfLink[];
-    };
-    links?: SncfLink[];
-}
+const SncfDepartureSchema = z.object({
+    stop_date_time: z.object({
+        departure_date_time: z.string(),
+        arrival_date_time: z.string(),
+        base_departure_date_time: z.string(),
+        data_freshness: z.string().optional()
+    }),
+    display_informations: z.object({
+        trip_short_name: z.string().optional(),
+        headsign: z.string().optional(),
+        direction: z.string().optional(),
+        physical_mode: z.string().optional(),
+        commercial_mode: z.string().optional(),
+        links: z.array(SncfLinkSchema).optional()
+    }),
+    links: z.array(SncfLinkSchema).optional(),
+    stop_point: z.object({
+        label: z.string().optional()
+    }).optional()
+});
 
-interface SncfOrigin {
-    id: string;
-    name: string;
-}
+const SncfOriginSchema = z.object({
+    id: z.string(),
+    name: z.string()
+});
 
-interface SncfApiResponse {
-    departures?: SncfDeparture[];
-    origins?: SncfOrigin[];
-}
+const SncfApiResponseSchema = z.object({
+    departures: z.array(SncfDepartureSchema).optional(),
+    origins: z.array(SncfOriginSchema).optional()
+});
 
-// --- Helpers ---
+type SncfLink = z.infer<typeof SncfLinkSchema>;
+type SncfDeparture = z.infer<typeof SncfDepartureSchema>;
+type SncfOrigin = z.infer<typeof SncfOriginSchema>;
+// SncfApiResponse type is inferred directly in safeParse usage
 
 // --- Helpers ---
 
@@ -132,12 +139,13 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
 
         const authHeader = `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`;
 
+        // 1. Fetch BOTH Base Schedule (Theory) and Realtime Data
         // Sequential calls with delay to avoid per-second rate limit
         const realtimeRes = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, authHeader);
-        await new Promise(r => setTimeout(r, 300)); // 300ms delay between calls
+        await new Promise(r => setTimeout(r, 300));
         const baseScheduleRes = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, authHeader);
 
-        // If rate limited, return cached data if available
+        // Handle Rate Limits
         if (baseScheduleRes.status === 429 || realtimeRes.status === 429) {
             if (cachedResponse) {
                 return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } };
@@ -145,52 +153,132 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
             return { updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { baseScheduleStatus: baseScheduleRes.status, realtimeStatus: realtimeRes.status } };
         }
 
-        const updates: TrainUpdate[] = [];
-        const debugInfo: Record<string, unknown> = {};
+        // Parse and validate API responses with Zod
+        const baseDataRaw = baseScheduleRes.ok ? await baseScheduleRes.json() : null;
+        const realtimeDataRaw = realtimeRes.ok ? await realtimeRes.json() : null;
 
-        // Prioritize realtime data, use base_schedule only for missing trains
-        const baseScheduleData = baseScheduleRes.ok ? await baseScheduleRes.json() as SncfApiResponse : null;
-        const realtimeData = realtimeRes.ok ? await realtimeRes.json() as SncfApiResponse : null;
+        const baseResult = baseDataRaw ? SncfApiResponseSchema.safeParse(baseDataRaw) : null;
+        const realtimeResult = realtimeDataRaw ? SncfApiResponseSchema.safeParse(realtimeDataRaw) : null;
 
-        // Debug info
-        debugInfo['baseScheduleStatus'] = baseScheduleRes.status;
-        debugInfo['realtimeStatus'] = realtimeRes.status;
-        debugInfo['baseScheduleCount'] = baseScheduleData?.departures?.length ?? 0;
-        debugInfo['realtimeCount'] = realtimeData?.departures?.length ?? 0;
+        const baseData = baseResult?.success ? baseResult.data : null;
+        const realtimeData = realtimeResult?.success ? realtimeResult.data : null;
 
-        const processedTripIds = new Set<string>();
+        const debugInfo: Record<string, unknown> = {
+            baseCount: baseData?.departures?.length ?? 0,
+            realtimeCount: realtimeData?.departures?.length ?? 0
+        };
 
-        // 1. Process Realtime Data
+        // 2. Index Realtime Data for Fast Lookup and Window Calculation
+        const realtimeMap = new Map<string, SncfDeparture>();
+        let minRealtimeTime = Infinity;
+        let maxRealtimeTime = -Infinity;
+
         if (realtimeData?.departures) {
             for (const dep of realtimeData.departures) {
-                const update = processSncfDeparture(dep, realtimeData.origins, true);
-                if (update.tripId) processedTripIds.add(update.tripId);
-                updates.push(update);
+                const depTime = parseSncfDateTime(dep.stop_date_time.departure_date_time);
+
+                // Track time window of realtime data
+                if (depTime < minRealtimeTime) minRealtimeTime = depTime;
+                if (depTime > maxRealtimeTime) maxRealtimeTime = depTime;
+
+                // Index by vehicle_journey_id
+                const journeyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                if (journeyId) {
+                    realtimeMap.set(journeyId, dep);
+                }
             }
         }
 
-        // 2. Process Missing Trains from Base Schedule (likely cancelled or not matching realtime filter)
-        if (baseScheduleData?.departures) {
-            for (const dep of baseScheduleData.departures) {
-                const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+        const updates: TrainUpdate[] = [];
+        const processedTripIds = new Set<string>();
 
-                // Skip if already processed from realtime
-                if (vehicleJourneyId && processedTripIds.has(vehicleJourneyId)) continue;
+        // 3. Reconcile: Iterate over Base Schedule (The Truth of what SHOULD exist)
+        if (baseData?.departures) {
+            for (const baseDep of baseData.departures) {
+                const journeyId = baseDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                if (!journeyId) continue;
 
-                // Process as non-realtime
-                const update = processSncfDeparture(dep, baseScheduleData.origins, false);
+                // Processed ID tracking
+                processedTripIds.add(journeyId);
 
-                // If we have ANY realtime data, and this train is missing from it, mark as cancelled
-                // (Unless realtime API returned empty but success, which implies no trains at all?)
-                // Conservative approach: if realtime returned departures, and this one is missing, it's likely cancelled.
-                if (processedTripIds.size > 0) {
-                    update.isCancelled = true;
+                const realtimeDep = realtimeMap.get(journeyId);
+                const baseTime = parseSncfDateTime(baseDep.stop_date_time.base_departure_date_time); // Use base time for comparison
+
+                let finalDep = baseDep;
+                let isRealtime = false;
+                let isCancelled = false;
+                let delay = 0;
+
+                // Scenario A: Train exists in Realtime -> Use Realtime data
+                if (realtimeDep) {
+                    finalDep = realtimeDep;
+                    isRealtime = true;
+                    // Check explicit cancellation in realtime data
+                    isCancelled =
+                        realtimeDep.stop_date_time.data_freshness === 'deleted' ||
+                        realtimeDep.display_informations.commercial_mode === 'Supprimé' ||
+                        realtimeDep.display_informations.physical_mode === 'Cancelled';
+
+                    const time = parseSncfDateTime(realtimeDep.stop_date_time.departure_date_time);
+                    const base = parseSncfDateTime(realtimeDep.stop_date_time.base_departure_date_time);
+                    delay = time - base;
+                }
+                // Scenario B: Train MISSING from Realtime -> Infer Status
+                else {
+                    // Check if explicit cancellation in Base (rare but possible)
+                    if (baseDep.stop_date_time.data_freshness === 'deleted' || baseDep.display_informations.commercial_mode === 'Supprimé') {
+                        isCancelled = true;
+                    }
+                    // INFERENCE LOGIC:
+                    // If we have a valid realtime window, and this train enters that window but is missing -> It's likely cancelled.
+                    // If it's outside the window (e.g. earlier morning trains that scroll off, or later trains not yet loaded) -> It's likely just "No Data" / Theoretical.
+                    else if (minRealtimeTime !== Infinity && maxRealtimeTime !== -Infinity) {
+                        if (baseTime >= minRealtimeTime && baseTime <= maxRealtimeTime) {
+                            isCancelled = true; // Was supposed to be here, but is gone. Deleted.
+                        } else {
+                            // Outside window (e.g. 07:36 train when Realtime starts at 08:30)
+                            // Treat as valid theoretical train
+                            isCancelled = false;
+                        }
+                    } else {
+                        // No realtime data at all? Default to theoretical.
+                        isCancelled = false;
+                    }
                 }
 
-                updates.push(update);
+                const processed = processSncfDeparture(finalDep, baseData.origins, isRealtime);
+                processed.isCancelled = isCancelled;
+                processed.delay = delay;
+
+                // If theoretical (no realtime match and not cancelled), explicitly mark as not realtime
+                // This will show the "offline" or "theoretical" icon in UI
+                if (!isRealtime && !isCancelled) {
+                    processed.isRealtime = false;
+                }
+
+                updates.push(processed);
             }
         }
 
+        // 4. Add any "extra" trains from Realtime that weren't in Base Schedule (e.g. added trains)
+        if (realtimeData?.departures) {
+            for (const rtDep of realtimeData.departures) {
+                const journeyId = rtDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                if (journeyId && !processedTripIds.has(journeyId)) {
+                    // This is an unexpected extra train
+                    const processed = processSncfDeparture(rtDep, realtimeData.origins, true);
+                    // Check explicit cancellation
+                    processed.isCancelled =
+                        rtDep.stop_date_time.data_freshness === 'deleted' ||
+                        rtDep.display_informations.commercial_mode === 'Supprimé' ||
+                        rtDep.display_informations.physical_mode === 'Cancelled';
+
+                    updates.push(processed);
+                }
+            }
+        }
+
+        // Filter past trains (keep recent past 60s)
         const futureUpdates = updates
             .filter(u => Number(u.departure.time) > now - 60)
             .sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
