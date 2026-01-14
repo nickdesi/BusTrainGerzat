@@ -159,6 +159,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 zoom={MAP_ZOOM}
                 className="h-full w-full z-0"
                 scrollWheelZoom={true}
+                preferCanvas={true}
             >
                 <ZoomHandlerComponent setZoom={setCurrentZoom} />
                 <TileLayer
@@ -285,14 +286,22 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
                         <div className="h-px bg-white/10 w-full"></div>
 
-                        <div className="grid grid-cols-2 gap-2">
-                            <div className="px-2 py-1.5 rounded border border-white/5 bg-white/5 flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-                                <span className="text-[10px] uppercase text-gray-400">Normal</span>
-                            </div>
-                            <div className="px-2 py-1.5 rounded border border-white/5 bg-white/5 flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></div>
-                                <span className="text-[10px] uppercase text-gray-400">Retard</span>
+                        {/* Pulse color legend */}
+                        <div className="space-y-1.5">
+                            <span className="text-[10px] uppercase text-gray-500 font-mono tracking-wider">État du bus</span>
+                            <div className="grid grid-cols-3 gap-1.5">
+                                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded border border-white/5 bg-white/5">
+                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+                                    <span className="text-[9px] uppercase text-gray-400">À l&apos;heure</span>
+                                </div>
+                                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded border border-white/5 bg-white/5">
+                                    <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]"></div>
+                                    <span className="text-[9px] uppercase text-gray-400">5-10 min</span>
+                                </div>
+                                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded border border-white/5 bg-white/5">
+                                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
+                                    <span className="text-[9px] uppercase text-gray-400">&gt;10 min</span>
+                                </div>
                             </div>
                         </div>
                     </div>
