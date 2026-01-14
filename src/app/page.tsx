@@ -155,7 +155,7 @@ export default function LandingPage() {
                             <div className="relative z-10">
                                 <Brain className="w-10 h-10 text-purple-400 mb-6" />
                                 <h3 className="text-2xl font-display font-bold mb-2">Prédictions par IA</h3>
-                                <p className="text-gray-400 text-sm">Notre algorithme anticipe les retards avant qu'ils ne soient officiels sur les apps classiques.</p>
+                                <p className="text-gray-400 text-sm">Notre algorithme anticipe les retards avant qu&apos;ils ne soient officiels sur les apps classiques.</p>
                             </div>
                         </div>
 

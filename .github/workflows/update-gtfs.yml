@@ -28,7 +28,7 @@ jobs:
         id: sentinel_check
         run: |
           echo "🔍 Checking if official GTFS contains new schedule..."
-          if python3 scripts/check_gtfs_update.py; then
+          if python3 .agent/skills/transport-data/scripts/check_gtfs_update.py; then
             echo "is_updated=true" >> $GITHUB_OUTPUT
             echo "✅ Official data IS up-to-date. Proceeding with update."
           else
@@ -50,7 +50,7 @@ jobs:
         if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
           echo "🔄 Generating static schedule..."
-          python3 generate_static_json.py
+          python3 .agent/skills/transport-data/scripts/generate_static_json.py
           echo "✅ Static schedule generated"
 
       - name: Validate schedule

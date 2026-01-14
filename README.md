@@ -132,37 +132,37 @@ Le système de gestion des données bus suit une architecture robuste qui combin
 ```mermaid
 flowchart TD
     subgraph Sources["📡 Sources de Données"]
-        GTFS_CONFIG["Config Dynamique<br/>(gtfs_config.json)"]
-        GTFS_STATIC["GTFS Statique<br/>(static_schedule.json)"]
-        E1_STOP_TIMES["Stop Times E1<br/>(e1_stop_times.json)"]
-        GTFS_RT["GTFS-RT Trip Updates<br/>(transport.data.gouv.fr)"]
+        GTFS_CONFIG["Config Dynamique - gtfs_config.json"]
+        GTFS_STATIC["GTFS Statique - static_schedule.json"]
+        E1_STOP_TIMES["Stop Times E1 - e1_stop_times.json"]
+        GTFS_RT["GTFS-RT Trip Updates"]
     end
 
-    subgraph Processing["⚙️ Traitement (API Routes)"]
-        GTFS_SERVICE["gtfs-rt.ts<br/>(service centralisé)"]
-        FETCH["Fetch & Decode"]
-        CHECK_DATA{"Données RT<br/>disponibles ?"}
+    subgraph Processing["⚙️ Traitement API Routes"]
+        GTFS_SERVICE["gtfs-rt.ts - service centralisé"]
+        FETCH["Fetch et Decode"]
+        CHECK_DATA{"Données RT disponibles ?"}
         USE_RT["Utiliser RT"]
-        USE_STATIC["Fallback Statique<br/>(e1_stop_times.json)"]
+        USE_STATIC["Fallback Statique"]
     end
 
     subgraph Classification["📊 Types de Trajets"]
-        SCHEDULED["SCHEDULED (0)<br/>Trajet normal"]
-        ADDED["ADDED (1)<br/>Trajet de remplacement"]
-        NO_DATA["NO_DATA (2)<br/>Pas de prédiction"]
-        CANCELED["CANCELED (3)<br/>Trajet annulé"]
+        SCHEDULED["SCHEDULED 0 - Trajet normal"]
+        ADDED["ADDED 1 - Trajet de remplacement"]
+        NO_DATA["NO_DATA 2 - Pas de prédiction"]
+        CANCELED["CANCELED 3 - Trajet annulé"]
     end
 
     subgraph Output["📤 Résultat Final"]
-        COMBINE["Combiner & Trier"]
+        COMBINE["Combiner et Trier"]
         DISPLAY["Affichage UI"]
     end
 
     GTFS_STATIC --> COMBINE
     E1_STOP_TIMES --> USE_STATIC
     GTFS_RT --> GTFS_SERVICE --> FETCH --> CHECK_DATA
-    CHECK_DATA -->|"Oui (arrival.time)"| USE_RT --> COMBINE
-    CHECK_DATA -->|"Non (NO_DATA)"| USE_STATIC --> COMBINE
+    CHECK_DATA -->|Oui| USE_RT --> COMBINE
+    CHECK_DATA -->|Non| USE_STATIC --> COMBINE
     COMBINE --> DISPLAY
 ```
 
@@ -171,18 +171,18 @@ flowchart TD
 ```mermaid
 flowchart LR
     subgraph Input["Entrée"]
-        STATIC["Horaire Statique<br/>(tripId, date)"]
-        RT["Données RT<br/>(tripId, startDate)"]
+        STATIC["Horaire Statique - tripId date"]
+        RT["Données RT - tripId startDate"]
     end
 
     subgraph Validation["Validation"]
-        CHECK_DATE{"startDate<br/>disponible ?"}
-        DATE_MATCH{"Dates<br/>correspondent ?"}
-        TIME_CHECK{"Fenêtre<br/>4h ?"}
+        CHECK_DATE{"startDate disponible ?"}
+        DATE_MATCH{"Dates correspondent ?"}
+        TIME_CHECK{"Fenêtre 4h ?"}
     end
 
     subgraph Result["Résultat"]
-        APPLY["✅ Appliquer RT<br/>(retard, annulation)"]
+        APPLY["✅ Appliquer RT"]
         SKIP["⏭️ Ignorer RT"]
     end
 
@@ -203,21 +203,21 @@ L'API `/api/vehicles` utilise un système de priorité à 3 niveaux pour affiche
 ```mermaid
 flowchart TD
     subgraph Sources["📡 Sources GTFS-RT"]
-        VP["Vehicle Positions<br/>(GPS réel)"]
-        TU["Trip Updates<br/>(temps prédits)"]
-        STATIC["Static Schedule<br/>(horaires théoriques)"]
+        VP["Vehicle Positions - GPS réel"]
+        TU["Trip Updates - temps prédits"]
+        STATIC["Static Schedule - horaires théoriques"]
     end
 
     subgraph Priority["🎯 Priorité de Résolution"]
-        P1{"GPS<br/>disponible ?"}
-        P2{"RT Delay<br/>disponible ?"}
-        P3["Interpolation<br/>Théorique"]
+        P1{"GPS disponible ?"}
+        P2{"RT Delay disponible ?"}
+        P3["Interpolation Théorique"]
     end
 
     subgraph Position["📍 Position Finale"]
-        GPS_POS["Position GPS<br/>✅ Précision max"]
-        RT_POS["Interpolation RT<br/>⚡ Ajustée au retard"]
-        STATIC_POS["Interpolation Static<br/>📅 Horaire théorique"]
+        GPS_POS["Position GPS ✅ Précision max"]
+        RT_POS["Interpolation RT ⚡ Ajustée au retard"]
+        STATIC_POS["Interpolation Static 📅 Horaire théorique"]
     end
 
     VP --> P1

@@ -6,9 +6,9 @@ description: Build elaborate, multi-component React/Tailwind/Shadcn artifacts. H
 
 To build powerful frontend artifacts (e.g. for Antigravity), follow these steps:
 
-1. Initialize the frontend repo using `.agent/scripts/web-artifacts-builder/init-artifact.sh`.
+1. Initialize the frontend repo using `.agent/skills/web-artifacts-builder/scripts/init-artifact.sh`.
 2. Develop your artifact by editing the generated code.
-3. Bundle all code into a single HTML file using `.agent/scripts/web-artifacts-builder/bundle-artifact.sh`.
+3. Bundle all code into a single HTML file using `.agent/skills/web-artifacts-builder/scripts/bundle-artifact.sh`.
 4. Display artifact to user.
 
 **Stack**: React 18 + TypeScript + Vite + Parcel (bundling) + Tailwind CSS + shadcn/ui.
@@ -20,7 +20,7 @@ To build powerful frontend artifacts (e.g. for Antigravity), follow these steps:
 Run the initialization script:
 
 ```bash
-bash .agent/scripts/web-artifacts-builder/init-artifact.sh <project-name>
+bash .agent/skills/web-artifacts-builder/scripts/init-artifact.sh <project-name>
 cd <project-name>
 ```
 
@@ -40,7 +40,7 @@ Edit the files in the generated project. Avoid "AI slop" aesthetics (inter font,
 To bundle the React app into a single HTML artifact:
 
 ```bash
-bash .agent/scripts/web-artifacts-builder/bundle-artifact.sh
+bash .agent/skills/web-artifacts-builder/scripts/bundle-artifact.sh
 ```
 
 This creates `bundle.html` - a self-contained artifact with all JavaScript, CSS, and dependencies inlined. This file can be directly shared with the user.

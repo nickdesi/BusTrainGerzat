@@ -8,11 +8,7 @@ Use this workflow to verify that your environment has all the necessary tools (N
 
 ## 1. Run the Check Script
 
-**Action**: Run the environment checker.
-
-```bash
-bash .agent/scripts/check-env.sh
-```
+**Action**: Run the environment check script: `.agent/skills/environment-setup/scripts/check-env.sh`
 
 ## 2. Interpret Results
 
