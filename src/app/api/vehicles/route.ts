@@ -32,18 +32,7 @@ interface StaticTrip {
 const stopsById = new Map(lineE1Data.stops.map(s => [s.stopId, s]));
 const staticTripsById = new Map((e1StopTimes as StaticTrip[]).map(t => [t.tripId, t]));
 
-/**
- * Convert seconds-from-midnight (Paris time) to Unix timestamp for today
- */
-function secondsToUnix(secondsFromMidnight: number): number {
-    const now = new Date();
-    const parisDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' });
-    const [, month] = parisDateStr.split('-').map(Number);
-    const isDST = month >= 4 && month <= 10;
-    const offset = isDST ? '+02:00' : '+01:00';
-    const correctMidnight = new Date(`${parisDateStr}T00:00:00${offset}`);
-    return Math.floor(correctMidnight.getTime() / 1000) + secondsFromMidnight;
-}
+import { getParisMidnight } from '@/utils/date';
 
 /**
  * Interpolate position between two stops based on progress (fallback - straight line)
@@ -59,9 +48,10 @@ function interpolatePosition(
     };
 }
 
-// Pre-compute shape arrays for each direction
+// Pre-compute shape arrays for each direction using a Map to avoid object injection warnings
 type ShapePoint = [number, number]; // [lat, lon]
-const shapes = lineE1Data.shapes as unknown as Record<string, ShapePoint[]>;
+const shapesData = lineE1Data.shapes as unknown as Record<string, ShapePoint[]>;
+const shapes = new Map<string, ShapePoint[]>(Object.entries(shapesData));
 
 /**
  * Calculate squared distance between two points (faster than actual distance for comparisons)
@@ -136,7 +126,7 @@ function interpolateAlongShape(
 ): { lat: number; lon: number; bearing: number } {
     // Get shape for this direction
     const shapeKey = String(direction);
-    const shape = shapes[shapeKey];
+    const shape = shapes.get(shapeKey);
 
     // Fallback to straight line if no shape available
     if (!shape || shape.length < 2) {
@@ -239,6 +229,9 @@ function calculateBearing(from: { lat: number; lon: number }, to: { lat: number;
 export async function GET() {
     try {
         const now = Math.floor(Date.now() / 1000);
+        const midnight = getParisMidnight(); // Optimization: Calculate once
+        const toUnix = (sec: number) => midnight + sec;
+
         const vehicles: EstimatedVehicle[] = [];
 
         // Fetch GTFS-RT data in parallel
@@ -262,7 +255,7 @@ export async function GET() {
             for (let i = 0; i < staticTrip.stops.length; i++) {
                 const stopId = staticTrip.stops[i].stopId;
                 const rtStopData = rtUpdate?.stopUpdates.get(stopId);
-                const predictedTime = rtStopData?.predictedTime || secondsToUnix(staticTrip.stops[i].arrivalTime);
+                const predictedTime = rtStopData?.predictedTime || toUnix(staticTrip.stops[i].arrivalTime);
                 if (predictedTime > now) {
                     nextStopIdx = i;
                     break;
@@ -281,9 +274,9 @@ export async function GET() {
 
             // Get predicted arrival times
             const rtNextStopData = rtUpdate?.stopUpdates.get(nextStop.stopId);
-            const nextTime = rtNextStopData?.predictedTime || secondsToUnix(nextStop.arrivalTime);
+            const nextTime = rtNextStopData?.predictedTime || toUnix(nextStop.arrivalTime);
             const rtLastStopData = rtUpdate?.stopUpdates.get(lastStop.stopId);
-            const terminusTime = rtLastStopData?.predictedTime || secondsToUnix(lastStop.arrivalTime);
+            const terminusTime = rtLastStopData?.predictedTime || toUnix(lastStop.arrivalTime);
 
             vehicles.push({
                 tripId,
@@ -313,8 +306,8 @@ export async function GET() {
             // Check if trip is currently active based on predicted times
             const firstStopData = rtUpdate.stopUpdates.get(staticTrip.stops[0].stopId);
             const lastStopData = rtUpdate.stopUpdates.get(staticTrip.stops[staticTrip.stops.length - 1].stopId);
-            const firstPredicted = firstStopData?.predictedTime || secondsToUnix(staticTrip.stops[0].arrivalTime);
-            const lastPredicted = lastStopData?.predictedTime || secondsToUnix(staticTrip.stops[staticTrip.stops.length - 1].arrivalTime);
+            const firstPredicted = firstStopData?.predictedTime || toUnix(staticTrip.stops[0].arrivalTime);
+            const lastPredicted = lastStopData?.predictedTime || toUnix(staticTrip.stops[staticTrip.stops.length - 1].arrivalTime);
 
             if (now < firstPredicted - 120 || now > lastPredicted + 300) continue;
 
@@ -327,7 +320,7 @@ export async function GET() {
             for (let i = 0; i < staticTrip.stops.length; i++) {
                 const stopId = staticTrip.stops[i].stopId;
                 const rtStopData = rtUpdate.stopUpdates.get(stopId);
-                const predictedTime = rtStopData?.predictedTime || secondsToUnix(staticTrip.stops[i].arrivalTime);
+                const predictedTime = rtStopData?.predictedTime || toUnix(staticTrip.stops[i].arrivalTime);
                 if (predictedTime > now) {
                     nextStopIdx = i;
                     prevStopIdx = Math.max(0, i - 1);
@@ -349,8 +342,8 @@ export async function GET() {
             // Calculate progress using PREDICTED times
             const prevRtData = rtUpdate.stopUpdates.get(prevStop.stopId);
             const nextRtData = rtUpdate.stopUpdates.get(nextStop.stopId);
-            const prevTime = prevRtData?.predictedTime || secondsToUnix(prevStop.arrivalTime);
-            const nextTime = nextRtData?.predictedTime || secondsToUnix(nextStop.arrivalTime);
+            const prevTime = prevRtData?.predictedTime || toUnix(prevStop.arrivalTime);
+            const nextTime = nextRtData?.predictedTime || toUnix(nextStop.arrivalTime);
             const timeDiff = nextTime - prevTime;
             const elapsed = now - prevTime;
             const segmentProgress = timeDiff > 0 ? Math.min(1, Math.max(0, elapsed / timeDiff)) : 0;
@@ -368,7 +361,7 @@ export async function GET() {
             const firstStop = staticTrip.stops[0];
             const firstStopInfo = stopsById.get(firstStop.stopId);
             const lastRtData = rtUpdate.stopUpdates.get(lastStop.stopId);
-            const terminusTime = lastRtData?.predictedTime || secondsToUnix(lastStop.arrivalTime);
+            const terminusTime = lastRtData?.predictedTime || toUnix(lastStop.arrivalTime);
 
             vehicles.push({
                 tripId,
@@ -393,8 +386,8 @@ export async function GET() {
             if (processedTripIds.has(trip.tripId)) continue;
             if (!trip.stops || trip.stops.length < 2) continue;
 
-            const firstStopTime = secondsToUnix(trip.stops[0].arrivalTime);
-            const lastStopTime = secondsToUnix(trip.stops[trip.stops.length - 1].arrivalTime);
+            const firstStopTime = toUnix(trip.stops[0].arrivalTime);
+            const lastStopTime = toUnix(trip.stops[trip.stops.length - 1].arrivalTime);
 
             if (now < firstStopTime - 120 || now > lastStopTime + 300) continue;
 
@@ -403,7 +396,7 @@ export async function GET() {
             let nextStopIdx = 1;
 
             for (let i = 0; i < trip.stops.length; i++) {
-                const stopTime = secondsToUnix(trip.stops[i].arrivalTime);
+                const stopTime = toUnix(trip.stops[i].arrivalTime);
                 if (stopTime > now) {
                     nextStopIdx = i;
                     prevStopIdx = Math.max(0, i - 1);
@@ -422,8 +415,8 @@ export async function GET() {
 
             if (!prevStopInfo || !nextStopInfo) continue;
 
-            const prevTime = secondsToUnix(prevStop.arrivalTime);
-            const nextTime = secondsToUnix(nextStop.arrivalTime);
+            const prevTime = toUnix(prevStop.arrivalTime);
+            const nextTime = toUnix(nextStop.arrivalTime);
             const timeDiff = nextTime - prevTime;
             const elapsed = now - prevTime;
             const segmentProgress = timeDiff > 0 ? Math.min(1, Math.max(0, elapsed / timeDiff)) : 0;

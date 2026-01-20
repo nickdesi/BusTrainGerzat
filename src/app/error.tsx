@@ -1,7 +1,7 @@
-'use client';
+'use client'; // Error boundaries must be Client Components
 
 import { useEffect } from 'react';
-import { RefreshCw, AlertTriangle } from 'lucide-react';
+import { AlertCircle, RotateCcw } from 'lucide-react';
 
 export default function Error({
     error,
@@ -11,29 +11,29 @@ export default function Error({
     reset: () => void;
 }) {
     useEffect(() => {
-        console.error('Application error:', error);
+        // Log the error to an error reporting service
+        console.error(error);
     }, [error]);
 
     return (
-        <div className="min-h-screen bg-[#0d0d0d] flex items-center justify-center p-4">
-            <div className="bg-[#1a1a1a] rounded-xl p-8 max-w-md w-full text-center border border-gray-800">
-                <AlertTriangle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-                <h2 className="text-xl font-bold text-white mb-2">
-                    Une erreur est survenue
-                </h2>
-                <p className="text-gray-400 mb-6 text-sm">
-                    L&apos;application a rencontré un problème. Veuillez réessayer.
+        <div className="flex bg-black items-center justify-center min-h-screen p-4 text-center">
+            <div className="space-y-4 max-w-md">
+                <div className="flex justify-center mb-4">
+                    <div className="p-4 bg-red-900/20 rounded-full border border-red-500/30">
+                        <AlertCircle className="w-12 h-12 text-red-500 animate-pulse" />
+                    </div>
+                </div>
+                <h2 className="text-2xl font-bold font-display text-white">Oups ! Une erreur est survenue.</h2>
+                <p className="text-gray-400">
+                    Nous n&apos;avons pas pu charger cette page. Essayez de rafraîchir ou revenez plus tard.
                 </p>
                 <button
-                    onClick={() => reset()}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-yellow-500 text-black font-bold rounded-lg hover:bg-yellow-400 transition-colors"
+                    onClick={reset}
+                    className="inline-flex items-center gap-2 px-6 py-3 mt-4 bg-yellow-500 hover:bg-yellow-400 text-black font-bold rounded-lg transition-colors"
                 >
-                    <RefreshCw className="w-5 h-5" />
+                    <RotateCcw className="w-5 h-5" />
                     Réessayer
                 </button>
-                <p className="text-gray-600 text-xs mt-4">
-                    Si le problème persiste, rechargez la page.
-                </p>
             </div>
         </div>
     );

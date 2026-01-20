@@ -43,29 +43,7 @@ const staticTripsById = new Map<string, StaticTrip>(
     (e1StopTimes as StaticTrip[]).map(t => [t.tripId, t])
 );
 
-/**
- * Convert seconds-from-midnight (Paris time) to Unix timestamp for today
- * GTFS times are in local Paris time, server may be in UTC
- */
-function secondsToUnix(secondsFromMidnight: number): number {
-    // Get current time in Paris
-    const now = new Date();
-    // Create today's date string in Paris timezone
-    const parisDateStr = now.toLocaleDateString('en-CA', { timeZone: 'Europe/Paris' }); // YYYY-MM-DD
-    // Parse as Paris midnight (the string is date-only, so we need to create midnight in Paris)
-    // Parse as Paris midnight (the string is date-only, so we need to create midnight in Paris)
-    const [, month] = parisDateStr.split('-').map(Number);
-    // Create a Date at midnight Paris time
-    // Paris is UTC+1 in winter, UTC+2 in summer
-    // We use a trick: create a date string with explicit timezone
-    // Winter time
-    // Check if we're in DST (rough check: April to October)
-    const isDST = month >= 4 && month <= 10;
-    const offset = isDST ? '+02:00' : '+01:00';
-    const correctMidnight = new Date(`${parisDateStr}T00:00:00${offset}`);
-
-    return Math.floor(correctMidnight.getTime() / 1000) + secondsFromMidnight;
-}
+import { getParisMidnight } from '@/utils/date';
 
 export async function GET(
     request: Request,
@@ -74,6 +52,8 @@ export async function GET(
     try {
         const { tripId } = await params;
         const now = Math.floor(Date.now() / 1000);
+        const midnight = getParisMidnight();
+        const toUnix = (sec: number) => midnight + sec;
 
         // Create stops lookup map
         const stopsById = new Map(
@@ -107,7 +87,7 @@ export async function GET(
                 const stopId = staticTrip.stops[i].stopId;
                 const rtData = rtStopUpdates.get(stopId);
                 // Use predicted time if RT available, otherwise scheduled
-                const predictedTime = rtData?.predictedTime || secondsToUnix(staticTrip.stops[i].arrivalTime);
+                const predictedTime = rtData?.predictedTime || toUnix(staticTrip.stops[i].arrivalTime);
                 if (predictedTime > now) {
                     currentStopIndex = i;
                     break;
@@ -124,8 +104,8 @@ export async function GET(
 
             const stops: StopTimeDetail[] = staticTrip.stops.map((stop, index) => {
                 const stopInfo = stopsById.get(stop.stopId);
-                const scheduledArrival = secondsToUnix(stop.arrivalTime);
-                const scheduledDeparture = secondsToUnix(stop.departureTime);
+                const scheduledArrival = toUnix(stop.arrivalTime);
+                const scheduledDeparture = toUnix(stop.departureTime);
 
                 // Check for RT overlay
                 const rtData = rtStopUpdates.get(stop.stopId);

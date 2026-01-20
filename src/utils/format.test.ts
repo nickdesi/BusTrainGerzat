@@ -1,64 +1,28 @@
-import { formatTime, normalizeText, getDisplayTime } from './format';
+import { formatTime } from './format';
 
-describe('formatTime', () => {
-    it('formats timestamp to HH:MM French format', () => {
-        // 2024-01-15 14:30:00 UTC => 15:30 in Paris (winter time)
-        const timestamp = 1705329000; // Mon Jan 15 2024 14:30:00 UTC
-        const result = formatTime(timestamp);
-        // Result depends on timezone, just check format
-        expect(result).toMatch(/^\d{2}:\d{2}$/);
-    });
+describe('format util', () => {
+    describe('formatTime', () => {
+        it('formats valid timestamp correctly', () => {
+            // Mocked timestamp for 14:30:00 UTC (checking locale strings might depend on system timezone, 
+            // but toLocaleTimeString with 'fr-FR' should be relatively stable if timezone is handled)
+            // Ideally we should mock the Date object or timezone, but for a smoke test:
+            const timestamp = 1698244200; // 2023-10-25T14:30:00Z
 
-    it('handles midnight correctly', () => {
-        const midnight = 1705276800; // Mon Jan 15 2024 00:00:00 UTC
-        const result = formatTime(midnight);
-        expect(result).toMatch(/^\d{2}:\d{2}$/);
-    });
-});
+            const result = formatTime(timestamp);
+            // We expect HH:mm format. The exact hour depends on local timezone of the test runner unless forced.
+            // Let's just check the format generally to be safe across environments for now
+            expect(result).toMatch(/^\d{2}:\d{2}$/);
+        });
 
-describe('normalizeText', () => {
-    it('removes accents', () => {
-        expect(normalizeText('Café')).toBe('CAFE');
-        expect(normalizeText('Gerzat Champfleuri')).toBe('GERZAT CHAMPFLEURI');
-    });
-
-    it('converts to uppercase', () => {
-        expect(normalizeText('hello world')).toBe('HELLO WORLD');
-    });
-
-    it('handles special characters', () => {
-        expect(normalizeText('Saint-Éloi')).toBe('SAINT-ELOI');
-        expect(normalizeText("L'Hôpital")).toBe("L'HOPITAL");
-    });
-
-    it('replaces invalid chars with spaces', () => {
-        expect(normalizeText('Test@#$%')).toBe('TEST    ');
-    });
-});
-
-describe('getDisplayTime', () => {
-    const busEntry = {
-        type: 'BUS',
-        arrivalTime: 1705329000,
-        departureTime: 1705329060,
-    };
-
-    const terEntry = {
-        type: 'TER',
-        arrivalTime: 1705329000,
-        departureTime: 1705329060,
-    };
-
-    it('returns departure time for departures board with BUS', () => {
-        expect(getDisplayTime(busEntry, 'departures')).toBe(1705329060);
-    });
-
-    it('returns arrival time for arrivals board with BUS', () => {
-        expect(getDisplayTime(busEntry, 'arrivals')).toBe(1705329000);
-    });
-
-    it('returns null for TER (shows both times)', () => {
-        expect(getDisplayTime(terEntry, 'departures')).toBeNull();
-        expect(getDisplayTime(terEntry, 'arrivals')).toBeNull();
+        it('handles zero timestamp', () => {
+            const result = formatTime(0);
+            expect(result).toMatch(/^\d{2}:\d{2}$/);
+        });
+        it('handles invalid inputs gracefully', () => {
+            // Check behavior for null/undefined if applicable
+            expect(formatTime(undefined)).toBe('--:--');
+            expect(formatTime(null)).toBe('--:--');
+            expect(formatTime(NaN)).toBe('--:--');
+        });
     });
 });

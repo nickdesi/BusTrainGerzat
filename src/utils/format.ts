@@ -1,4 +1,5 @@
-export const formatTime = (timestamp: number) => {
+export const formatTime = (timestamp: number | null | undefined): string => {
+    if (timestamp === null || timestamp === undefined || isNaN(timestamp)) return '--:--';
     return new Date(timestamp * 1000).toLocaleTimeString('fr-FR', {
         hour: '2-digit',
         minute: '2-digit',

@@ -9,6 +9,22 @@
   --font-display: var(--font-outfit);
 }
 
+:root {
+  /* Z-Index System - Semantic Scale */
+  --z-map: 0;
+  /* Leaflet container */
+  --z-ui-base: 10;
+  /* Standard UI elements */
+  --z-sticky: 50;
+  /* Bottom Nav, Headers */
+  --z-overlay: 100;
+  /* Dropdowns, Popovers */
+  --z-modal: 1000;
+  /* Modals, Fullscreen overlays */
+  --z-toast: 9999;
+  /* Toasts, Critical alerts */
+}
+
 @utility font-display {
   font-family: var(--font-display);
 }
@@ -142,6 +158,22 @@ body {
 .group:hover .animate-marquee,
 .animate-marquee.pause {
   animation-play-state: paused;
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+
+  .animate-pulse,
+  .flip-enter,
+  .animate-marquee,
+  .animate-slideUp,
+  .animate-fade-in-up,
+  .pulse-glow,
+  .bus-icon-pulse {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* Custom scrollbar */

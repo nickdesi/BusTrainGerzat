@@ -30,28 +30,41 @@ export function useDepartures() {
 
     // SSE Subscription for real-time updates
     useEffect(() => {
-        const eventSource = new EventSource('/api/stream');
+        let retryTimeout: NodeJS.Timeout;
 
-        eventSource.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data);
-                if (data.bus) {
-                    queryClient.setQueryData(['bus-realtime'], data.bus);
+        const connectSSE = () => {
+            const eventSource = new EventSource('/api/stream');
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data);
+                    if (data.bus) {
+                        queryClient.setQueryData(['bus-realtime'], data.bus);
+                    }
+                    if (data.train) {
+                        queryClient.setQueryData(['train-realtime'], data.train);
+                    }
+                } catch (err) {
+                    console.error('Failed to parse SSE message:', err);
                 }
-                if (data.train) {
-                    queryClient.setQueryData(['train-realtime'], data.train);
-                }
-            } catch {
-                // Silently ignore parse errors
-            }
+            };
+
+            eventSource.onerror = (error) => {
+                console.error('SSE connection error:', error);
+                eventSource.close();
+
+                // Retry connection after 5 seconds
+                retryTimeout = setTimeout(connectSSE, 5000);
+            };
+
+            return eventSource;
         };
 
-        eventSource.onerror = () => {
-            eventSource.close();
-        };
+        const es = connectSSE();
 
         return () => {
-            eventSource.close();
+            es.close();
+            clearTimeout(retryTimeout);
         };
     }, [queryClient]);
 

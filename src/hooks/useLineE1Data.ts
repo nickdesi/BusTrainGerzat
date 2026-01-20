@@ -8,13 +8,15 @@ export interface Stop {
     sequence: number;
 }
 
+export interface Route {
+    routeId: string;
+    routeShortName: string;
+    routeLongName: string;
+    routeColor: string;
+}
+
 export interface LineE1Data {
-    route: {
-        routeId: string;
-        routeShortName: string;
-        routeLongName: string;
-        routeColor: string;
-    };
+    route: Route;
     stops: Stop[];
     shapes: {
         "0": [number, number][];

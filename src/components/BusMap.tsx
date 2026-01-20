@@ -4,9 +4,13 @@ import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLineE1Data, Stop } from '@/hooks/useLineE1Data';
 import { useVehiclePositions, VehiclePosition } from '@/hooks/useVehiclePositions';
-import { Loader2, Sun, Moon, AlertCircle, Info, X } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 import StopMarker from './StopMarker';
 import BusMarker from './BusMarker';
+import MapLegend from './map/MapLegend';
+import MapStatus from './map/MapStatus';
+import MapEmptyState from './map/MapEmptyState';
+import BusMapSkeleton from './BusMapSkeleton';
 
 // Dynamically import Leaflet components to avoid SSR issues
 const MapContainer = dynamic(
@@ -80,17 +84,47 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         return ids;
     }, [lineData]);
 
-    // Deduplicate stops by position (some stops are duplicated for both directions)
+    // Calculate distance between two coordinates in meters (Haversine formula)
+    const getDistanceMeters = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+        const R = 6371000; // Earth's radius in meters
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    };
+
+    // Deduplicate stops only if they have same name AND are very close (< 5m)
+    // Keep both stops if they're on opposite sides of the road (> 5m apart)
     const uniqueStops = useMemo(() => {
         if (!lineData) return [];
-        const seen = new Map<string, Stop>();
+        const result: Stop[] = [];
+        const seenByName = new Map<string, Stop[]>();
+
+        // Group stops by name
         lineData.stops.forEach(stop => {
-            const key = `${stop.lat.toFixed(4)},${stop.lon.toFixed(4)}`;
-            if (!seen.has(key)) {
-                seen.set(key, stop);
-            }
+            const existing = seenByName.get(stop.stopName) || [];
+            existing.push(stop);
+            seenByName.set(stop.stopName, existing);
         });
-        return Array.from(seen.values());
+
+        // For each name, keep unique positions (> 5m apart)
+        seenByName.forEach(stops => {
+            stops.forEach(stop => {
+                // Check if we already added a stop at nearly the same position
+                const isDuplicate = result.some(existing =>
+                    existing.stopName === stop.stopName &&
+                    getDistanceMeters(existing.lat, existing.lon, stop.lat, stop.lon) < 5
+                );
+                if (!isDuplicate) {
+                    result.push(stop);
+                }
+            });
+        });
+
+        return result;
     }, [lineData]);
 
     // Vehicle markers with collision detection
@@ -128,14 +162,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     }, [vehicleData?.vehicles]);
 
     if (lineLoading) {
-        return (
-            <div className="flex items-center justify-center h-full bg-gray-900">
-                <div className="text-center">
-                    <Loader2 className="w-12 h-12 animate-spin text-green-500 mx-auto mb-4" />
-                    <p className="text-gray-400">Chargement de la carte...</p>
-                </div>
-            </div>
-        );
+        return <BusMapSkeleton />;
     }
 
     if (lineError) {
@@ -157,7 +184,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             <MapContainer
                 center={MAP_CENTER}
                 zoom={MAP_ZOOM}
-                className="h-full w-full z-0"
+                className="h-full w-full z-[var(--z-map)]"
                 scrollWheelZoom={true}
                 preferCanvas={true}
             >
@@ -221,117 +248,26 @@ export default function BusMap({ showStops = true }: BusMapProps) {
             </MapContainer>
 
             {/* Legend - HUD Style - Responsive */}
-            <div className="absolute top-20 right-4 z-[1001] flex flex-col items-end gap-2 pointer-events-none">
-                {/* Mobile Toggle Button */}
-                <button
-                    onClick={() => setIsLegendOpen(!isLegendOpen)}
-                    className="md:hidden w-10 h-10 flex items-center justify-center rounded-full bg-black/80 backdrop-blur-xl border border-white/10 shadow-lg text-yellow-500 pointer-events-auto"
-                    aria-label={isLegendOpen ? "Masquer la légende" : "Afficher la légende"}
-                >
-                    <Info className="w-5 h-5" />
-                </button>
-
-                {/* Legend Content */}
-                <div className={`
-                    w-64 bg-black/80 backdrop-blur-xl border border-white/10 rounded-lg overflow-hidden shadow-2xl transition-all duration-300 origin-top-right
-                    ${isLegendOpen ? 'opacity-100 scale-100 translate-y-0 pointer-events-auto' : 'opacity-0 scale-95 -translate-y-4 pointer-events-none md:opacity-100 md:scale-100 md:translate-y-0 md:pointer-events-auto'}
-                `}>
-                    {/* Header */}
-                    <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between bg-white/5">
-                        <div className="flex items-center gap-2">
-                            <span className="text-xs font-bold font-display uppercase tracking-widest text-yellow-500">STATUT LIGNE</span>
-                        </div>
-                        <div className="flex items-center gap-2">
-                            <button
-                                onClick={() => setIsDarkMode(!isDarkMode)}
-                                className="w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors"
-                                aria-label={isDarkMode ? 'Mode clair' : 'Mode sombre'}
-                            >
-                                {isDarkMode ? <Sun className="w-3.5 h-3.5 text-yellow-500" /> : <Moon className="w-3.5 h-3.5 text-gray-400" />}
-                            </button>
-                            {/* Mobile Close Button */}
-                            <button
-                                onClick={() => setIsLegendOpen(false)}
-                                className="md:hidden w-10 h-10 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 transition-colors text-gray-400 border border-white/5"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-4 space-y-4">
-                        <div className="flex items-center gap-3">
-                            <div className="flex items-center justify-center w-8 h-8 rounded border border-white/10 bg-white/5">
-                                <span className="font-bold text-yellow-500">{lineData?.route?.routeShortName}</span>
-                            </div>
-                            <div>
-                                <div className="text-[10px] uppercase text-gray-500 font-mono tracking-wider">Ligne Actuelle</div>
-                                <div className="text-sm font-bold text-white leading-none">T2C {lineData?.route?.routeShortName}</div>
-                            </div>
-                        </div>
-
-                        <div className="h-px bg-white/10 w-full"></div>
-
-                        <div className="space-y-2">
-                            <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-sm bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.5)]"></div>
-                                <span className="text-xs text-gray-400 uppercase tracking-wide">Vers Gerzat Champfleuri</span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                                <div className="w-1.5 h-1.5 rounded-sm bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.5)]"></div>
-                                <span className="text-xs text-gray-400 uppercase tracking-wide">Vers Aubière / Romagnat</span>
-                            </div>
-                        </div>
-
-                        <div className="h-px bg-white/10 w-full"></div>
-
-                        {/* Pulse color legend */}
-                        <div className="space-y-1.5">
-                            <span className="text-[10px] uppercase text-gray-500 font-mono tracking-wider">État du bus</span>
-                            <div className="grid grid-cols-3 gap-1.5">
-                                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded border border-white/5 bg-white/5">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
-                                    <span className="text-[9px] uppercase text-gray-400">À l&apos;heure</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded border border-white/5 bg-white/5">
-                                    <div className="w-2 h-2 rounded-full bg-orange-500 animate-pulse shadow-[0_0_8px_rgba(249,115,22,0.6)]"></div>
-                                    <span className="text-[9px] uppercase text-gray-400">5-10 min</span>
-                                </div>
-                                <div className="flex flex-col items-center gap-1 px-2 py-1.5 rounded border border-white/5 bg-white/5">
-                                    <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse shadow-[0_0_8px_rgba(239,68,68,0.6)]"></div>
-                                    <span className="text-[9px] uppercase text-gray-400">&gt;10 min</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <MapLegend
+                lineData={lineData}
+                isDarkMode={isDarkMode}
+                setIsDarkMode={setIsDarkMode}
+                isLegendOpen={isLegendOpen}
+                setIsLegendOpen={setIsLegendOpen}
+            />
 
             {/* Empty state overlay */}
-            {!vehiclesLoading && vehicleData?.count === 0 && (
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[1000]">
-                    <div className="bg-black/80 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 shadow-lg">
-                        <span className="text-gray-400 text-sm">Pas de bus en circulation actuellement</span>
-                    </div>
-                </div>
-            )}
+            <MapEmptyState
+                isLoading={vehiclesLoading}
+                vehicleCount={vehicleData?.count}
+            />
 
             {/* Status indicator - HUD Style */}
-            <div className="absolute top-4 right-4 z-[1000] pointer-events-none">
-                <div className="flex items-center gap-3 bg-black/80 backdrop-blur-md border border-white/10 rounded-full pl-2 pr-4 py-1.5 shadow-lg pointer-events-auto">
-                    <div className={`relative flex h-3 w-3`}>
-                        <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${isFetching ? 'bg-yellow-400' : 'bg-green-400'}`}></span>
-                        <span className={`relative inline-flex rounded-full h-3 w-3 ${isFetching ? 'bg-yellow-500' : 'bg-green-500'}`}></span>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-[10px] font-bold font-display uppercase text-gray-400 leading-none tracking-wider">EN DIRECT</span>
-                        <span className="text-xs font-bold text-white leading-none">
-                            {vehiclesLoading ? 'Chargement...' : `${vehicleData?.count || 0} bus`}
-                        </span>
-                    </div>
-                </div>
-            </div>
+            <MapStatus
+                isLoading={vehiclesLoading}
+                vehicleCount={vehicleData?.count || 0}
+                isFetching={isFetching}
+            />
 
         </div>
     );

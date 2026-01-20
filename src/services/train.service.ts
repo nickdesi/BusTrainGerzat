@@ -50,15 +50,7 @@ type SncfOrigin = z.infer<typeof SncfOriginSchema>;
 
 // --- Helpers ---
 
-function parseSncfDateTime(dateTimeStr: string): number {
-    const year = parseInt(dateTimeStr.slice(0, 4));
-    const month = parseInt(dateTimeStr.slice(4, 6)) - 1;
-    const day = parseInt(dateTimeStr.slice(6, 8));
-    const hour = parseInt(dateTimeStr.slice(9, 11));
-    const minute = parseInt(dateTimeStr.slice(11, 13));
-    const second = parseInt(dateTimeStr.slice(13, 15));
-    return Math.floor(new Date(year, month, day, hour, minute, second).getTime() / 1000);
-}
+import { parseParisTime } from '@/utils/date';
 
 // Helper for fetch with retry on 429
 async function fetchWithRetry(url: string, authHeader: string, maxRetries = 3): Promise<Response> {
@@ -76,9 +68,9 @@ function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], is
     const displayInfo = dep.display_informations;
 
     // Parse times
-    const departureTime = parseSncfDateTime(stopDateTime.departure_date_time);
-    const arrivalTime = parseSncfDateTime(stopDateTime.arrival_date_time);
-    const baseDepartureTime = parseSncfDateTime(stopDateTime.base_departure_date_time);
+    const departureTime = parseParisTime(stopDateTime.departure_date_time);
+    const arrivalTime = parseParisTime(stopDateTime.arrival_date_time);
+    const baseDepartureTime = parseParisTime(stopDateTime.base_departure_date_time);
 
     // Calculate delay (only valid for realtime source, otherwise 0)
     const delay = isRealtimeSource ? departureTime - baseDepartureTime : 0;
@@ -175,7 +167,7 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
 
         if (realtimeData?.departures) {
             for (const dep of realtimeData.departures) {
-                const depTime = parseSncfDateTime(dep.stop_date_time.departure_date_time);
+                const depTime = parseParisTime(dep.stop_date_time.departure_date_time);
 
                 // Track time window of realtime data
                 if (depTime < minRealtimeTime) minRealtimeTime = depTime;
@@ -202,7 +194,7 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
                 processedTripIds.add(journeyId);
 
                 const realtimeDep = realtimeMap.get(journeyId);
-                const baseTime = parseSncfDateTime(baseDep.stop_date_time.base_departure_date_time); // Use base time for comparison
+                const baseTime = parseParisTime(baseDep.stop_date_time.base_departure_date_time); // Use base time for comparison
 
                 let finalDep = baseDep;
                 let isRealtime = false;
@@ -219,8 +211,8 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
                         realtimeDep.display_informations.commercial_mode === 'Supprimé' ||
                         realtimeDep.display_informations.physical_mode === 'Cancelled';
 
-                    const time = parseSncfDateTime(realtimeDep.stop_date_time.departure_date_time);
-                    const base = parseSncfDateTime(realtimeDep.stop_date_time.base_departure_date_time);
+                    const time = parseParisTime(realtimeDep.stop_date_time.departure_date_time);
+                    const base = parseParisTime(realtimeDep.stop_date_time.base_departure_date_time);
                     delay = time - base;
                 }
                 // Scenario B: Train MISSING from Realtime -> Infer Status
