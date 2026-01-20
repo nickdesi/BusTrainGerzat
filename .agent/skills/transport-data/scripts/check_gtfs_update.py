@@ -77,32 +77,31 @@ def download_and_check():
         print("❌ Could not find Stop GERZAT Champfleuri in new GTFS.")
         return False
 
-    # 3. Check Stop Times
-    # We are looking for a departure at 05:53
-    found_target_time = False
+    # 3. Check Validity Dates (Replacing brittle 05:53 check)
+    print("📅 Checking GTFS validity period...")
+    max_date = "00000000"
     
-    # Pre-filter trips by route
-    trips_on_route = set()
-    with open(f"{TARGET_DIR}/trips.txt", 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row['route_id'] == route_id:
-                trips_on_route.add(row['trip_id'])
+    try:
+        with open(f"{TARGET_DIR}/calendar.txt", 'r', encoding='utf-8-sig') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                if row['end_date'] > max_date:
+                    max_date = row['end_date']
+        
+        print(f"📅 Remote GTFS data valid until: {max_date}")
+        
+        from datetime import datetime
+        today_str = datetime.now().strftime("%Y%m%d")
+        
+        if max_date >= today_str:
+             print("✅ New GTFS data is valid for the future. Proceeding.")
+             return True
+        else:
+             print(f"⚠️ New GTFS data expired on {max_date} (Today: {today_str}). Skipping.")
+             return False
 
-    with open(f"{TARGET_DIR}/stop_times.txt", 'r', encoding='utf-8-sig') as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row['trip_id'] in trips_on_route and row['stop_id'] == stop_id:
-                # Check time
-                if row['departure_time'].startswith("05:53"):
-                    found_target_time = True
-                    break
-    
-    if found_target_time:
-        print("✅ New GTFS contains the 05:53 departure! It seems Up-To-Date.")
-        return True
-    else:
-        print("⚠️ New GTFS does NOT contain the 05:53 departure. It is likely still old.")
+    except Exception as e:
+        print(f"❌ Error checking calendar dates: {e}")
         return False
 
 def apply_obfuscation():
