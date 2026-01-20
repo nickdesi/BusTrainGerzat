@@ -167,12 +167,18 @@ body {
   .flip-enter,
   .animate-marquee,
   .animate-slideUp,
-  .animate-fade-in-up,
   .pulse-glow,
   .bus-icon-pulse {
     animation: none !important;
     transition: none !important;
     transform: none !important;
+  }
+
+  /* CRITICAL: Elements with fade-in animations start with opacity: 0.
+     If animation is disabled, they must be made visible immediately. */
+  .animate-fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
   }
 }
 
