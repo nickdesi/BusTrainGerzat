@@ -124,33 +124,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         }
 
         // 2. Merge with Static Schedule
-        // Get today's date in YYYYMMDD format to filter schedules
-        // FIX: Force Europe/Paris timezone to avoid server time issues (e.g. UTC shifting date)
-        let todayDateStr = '';
-        try {
-            const formatter = new Intl.DateTimeFormat('fr-FR', {
-                timeZone: 'Europe/Paris',
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit'
-            });
-
-            // Format: "DD/MM/YYYY" -> "YYYYMMDD"
-            const parts = formatter.formatToParts(new Date());
-            const year = parts.find(p => p.type === 'year')?.value;
-            const month = parts.find(p => p.type === 'month')?.value;
-            const day = parts.find(p => p.type === 'day')?.value;
-
-            todayDateStr = `${year}${month}${day}`;
-        } catch (e) {
-            console.error('Date formatting error (fallback to system time):', e);
-            // Fallback to system time (safer than crashing)
-            const today = new Date();
-            todayDateStr = today.getFullYear().toString() +
-                (today.getMonth() + 1).toString().padStart(2, '0') +
-                today.getDate().toString().padStart(2, '0');
-        }
-
+        // Filter based on timestamp only (not date) to show upcoming buses including tomorrow
         // Build fuzzy tripId lookup: T2C's static GTFS and GTFS-RT use different service_ids
         // Static: 1132_1000001_03GC.AR_183100, RT: 1132_1000005_03GC.AR_183100
         // We match on the pattern after the service_id: "03GC.AR_183100"
@@ -163,10 +137,11 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             }
         }
 
-        const todaySchedule = (staticSchedule as StaticScheduleItem[])
-            .filter((item: StaticScheduleItem) => item.date === todayDateStr);
+        // Filter: show buses arriving in the future (or departed less than 10 min ago)
+        const upcomingSchedule = (staticSchedule as StaticScheduleItem[])
+            .filter((item: StaticScheduleItem) => item.arrival > now - 600);
 
-        const combinedUpdates = todaySchedule
+        const combinedUpdates = upcomingSchedule
             .filter((item: StaticScheduleItem) => item.arrival > now - 600)
             .map((item: StaticScheduleItem) => {
                 // Try exact match first, then fuzzy pattern match
