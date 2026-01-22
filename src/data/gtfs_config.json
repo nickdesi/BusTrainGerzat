@@ -5,15 +5,15 @@
   "routeNames": [
     "E1"
   ],
-  "generatedAt": "2026-01-21T07:19:46.291469+01:00",
+  "generatedAt": "2026-01-22T07:18:00.685569+01:00",
   "stopIds": {
     "all": [
-      "GECH",
-      "PATUR",
       "GECHR",
+      "PATU",
+      "PATUR",
       "PATUA",
-      "GECHA",
-      "PATU"
+      "GECH",
+      "GECHA"
     ],
     "champfleuri": [
       "GECHR",
@@ -21,9 +21,9 @@
       "GECHA"
     ],
     "patural": [
-      "PATUR",
       "PATUA",
-      "PATU"
+      "PATU",
+      "PATUR"
     ]
   }
 }
