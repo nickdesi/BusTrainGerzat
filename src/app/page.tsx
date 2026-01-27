@@ -54,7 +54,7 @@ export default function LandingPage() {
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                             <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                         </span>
-                        <span className="text-xs font-mono text-gray-300 font-medium">VERSION 3.5.0 LIVE</span>
+                        <span className="text-xs font-mono text-gray-300 font-medium">v3.6.0 LIVE</span>
                     </div>
 
                     <h1 className="font-display text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter leading-[0.9] mb-8 animate-fade-in-up md:whitespace-nowrap bg-gradient-to-b from-white via-white to-gray-500 bg-clip-text text-transparent opacity-0" style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>

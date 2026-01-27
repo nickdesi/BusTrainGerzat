@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.6.0] - 2026-01-27
+
+### 🧱 Architecture & Stabilité
+
+- **Node.js LTS** : Alignement strict sur la version **Active LTS v24.13.0**.
+  - Configuration du serveur (`nixpacks.toml`), environnement local (`.nvmrc`) et moteur (`engines` dans `package.json`) synchronisés.
+  - Garantie la cohérence absolue entre développement et production.
+- **Dépendances** : Mise à jour majeure de la stack technique.
+  - **Next.js** : Upgrade vers `v16.1.5` stable.
+  - **React** : Upgrade vers `v19.2.4`.
+  - **Tailwind CSS** : Upgrade vers `v4.1.18`.
+- **Linting** : Migration de la configuration ESLint pour supporter totalement **ESLint 9** et **Next.js 16** (Flat Config natif).
+
 ## [3.6.0] - 2026-01-12
 
 ### 🚆 Amélioration Données Train
