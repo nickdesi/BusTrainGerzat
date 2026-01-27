@@ -1,16 +1,6 @@
-
-import { dirname } from "path";
-import { fileURLToPath } from "url";
-import { FlatCompat } from "@eslint/eslintrc";
-import reactHooks from "eslint-plugin-react-hooks";
 import security from "eslint-plugin-security";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-});
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
 
 const eslintConfig = [
   // Global ignores
@@ -25,12 +15,13 @@ const eslintConfig = [
       "test_date_format.js",
     ],
   },
+  // Security config (Flat Config compatible)
   security.configs.recommended,
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  // Next.js configs (Flat Config compatible)
+  ...nextVitals,
+  ...nextTs,
+  // Overrides
   {
-    plugins: {
-      "react-hooks": reactHooks,
-    },
     rules: {
       // Disable this rule as it seems to be missing in the current plugin version or causing issues
       "react-hooks/preserve-manual-memoization": "off",

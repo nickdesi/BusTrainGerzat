@@ -165,13 +165,17 @@ body {
 
   .animate-pulse,
   .flip-enter,
-  .animate-marquee,
   .animate-slideUp,
   .pulse-glow,
   .bus-icon-pulse {
     animation: none !important;
     transition: none !important;
     transform: none !important;
+  }
+  
+  /* For marquee, just slow it down significantly instead of disabling */
+  .animate-marquee {
+    animation-duration: 120s !important;
   }
 
   /* CRITICAL: Elements with fade-in animations start with opacity: 0.

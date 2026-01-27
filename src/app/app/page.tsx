@@ -231,21 +231,6 @@ export default function Home() {
           />
         </div>
 
-        {/* Scrolling Ticker */}
-        <div className="mt-8 bg-yellow-500/10 border-y border-yellow-500/20 py-3 overflow-hidden relative group" role="marquee" aria-label="Informations défilantes">
-          <div className="animate-marquee group-hover:pause whitespace-nowrap text-yellow-500 font-mono text-lg font-bold tracking-widest uppercase flex items-center gap-12">
-            <span>Bienvenue en Gare de Gerzat</span>
-            <span aria-hidden="true">•</span>
-            <span>N&apos;oubliez pas de valider votre titre de transport</span>
-            <span aria-hidden="true">•</span>
-            <span>Signalez tout colis abandonné</span>
-            <span aria-hidden="true">•</span>
-            <span>Bon voyage sur nos lignes</span>
-            <span aria-hidden="true">•</span>
-            <span>T2C & SNCF vous souhaitent une agréable journée</span>
-          </div>
-        </div>
-
         {/* Version Footer */}
         <div className="w-full text-center py-4 mt-8 opacity-40 hover:opacity-100 transition-opacity duration-300">
           <div className="flex flex-col items-center gap-2">
