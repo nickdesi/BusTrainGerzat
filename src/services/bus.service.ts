@@ -1,8 +1,4 @@
 import { fetchTripUpdates } from '@/lib/gtfs-rt';
-import staticSchedule from '@/data/static_schedule.json';
-import gtfsConfig from '@/data/gtfs_config.json';
-import e1StopTimes from '../../public/data/e1_stop_times.json';
-import lineE1Data from '../../public/data/lineE1_data.json';
 import { BusUpdate } from '@/types/transport';
 
 // --- Internal Types ---
@@ -17,22 +13,59 @@ interface StaticScheduleItem {
     stopId?: string; // Added for precise matching
 }
 
-// --- GTFS Lookups ---
+// --- Lazy-loaded Data (reduces cold start time) ---
 
-// Create stopId -> stopName lookup from lineE1Data
-const stopNameById = new Map<string, string>(
-    lineE1Data.stops.map((s: { stopId: string; stopName: string }) => [s.stopId, s.stopName])
-);
-
-// Create tripId -> origin (first stop name) lookup from e1_stop_times
-interface E1Trip { tripId: string; stops: { stopId: string; sequence: number }[] }
-const tripOrigins = new Map<string, string>();
-for (const trip of e1StopTimes as E1Trip[]) {
-    if (trip.stops && trip.stops.length > 0) {
-        const firstStopId = trip.stops[0].stopId;
-        const originName = stopNameById.get(firstStopId) || firstStopId;
-        tripOrigins.set(trip.tripId, originName);
+// Cache for lazy-loaded modules
+let _staticSchedule: StaticScheduleItem[] | null = null;
+let _gtfsConfig: {
+    stopIds: {
+        all: string[];
+        champfleuri: string[];
+        patural: string[]
     }
+} | null = null;
+let _stopNameById: Map<string, string> | null = null;
+let _tripOrigins: Map<string, string> | null = null;
+
+async function getStaticSchedule(): Promise<StaticScheduleItem[]> {
+    if (!_staticSchedule) {
+        _staticSchedule = (await import('@/data/static_schedule.json')).default;
+    }
+    return _staticSchedule;
+}
+
+async function getGtfsConfig(): Promise<{ stopIds: { all: string[]; champfleuri: string[]; patural: string[] } }> {
+    if (!_gtfsConfig) {
+        _gtfsConfig = (await import('@/data/gtfs_config.json')).default;
+    }
+    return _gtfsConfig!;
+}
+
+async function getStopNameById(): Promise<Map<string, string>> {
+    if (!_stopNameById) {
+        const lineE1Data = (await import('../../public/data/lineE1_data.json')).default;
+        _stopNameById = new Map<string, string>(
+            lineE1Data.stops.map((s: { stopId: string; stopName: string }) => [s.stopId, s.stopName])
+        );
+    }
+    return _stopNameById;
+}
+
+async function getTripOrigins(): Promise<Map<string, string>> {
+    if (!_tripOrigins) {
+        const e1StopTimes = (await import('../../public/data/e1_stop_times.json')).default;
+        const stopNameById = await getStopNameById();
+        _tripOrigins = new Map<string, string>();
+        interface E1Trip { tripId: string; stops: { stopId: string; sequence: number }[] }
+        for (const trip of e1StopTimes as E1Trip[]) {
+            if (trip.stops && trip.stops.length > 0) {
+                const firstStopId = trip.stops[0].stopId;
+                const originName = stopNameById.get(firstStopId) || firstStopId;
+                _tripOrigins.set(trip.tripId, originName);
+            }
+        }
+    }
+    return _tripOrigins;
 }
 
 // --- Service ---
@@ -40,6 +73,13 @@ for (const trip of e1StopTimes as E1Trip[]) {
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
         const now = Math.floor(Date.now() / 1000);
+
+        // Lazy load data on first use (reduces cold start time)
+        const [staticSchedule, gtfsConfig, tripOrigins] = await Promise.all([
+            getStaticSchedule(),
+            getGtfsConfig(),
+            getTripOrigins()
+        ]);
 
         // 1. Fetch Real-time Data using shared service
         // Map<tripId, RTTripUpdate>
