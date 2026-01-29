@@ -1,3 +1,5 @@
+'use client';
+
 import { memo, useState, useMemo } from 'react';
 import { ArrowRight, Bus, Train, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
