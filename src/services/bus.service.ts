@@ -1,5 +1,6 @@
 import { fetchTripUpdates } from '@/lib/gtfs-rt';
 import { BusUpdate } from '@/types/transport';
+import { getNowUnix } from '@/utils/date';
 
 // --- Internal Types ---
 
@@ -72,7 +73,7 @@ async function getTripOrigins(): Promise<Map<string, string>> {
 
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
-        const now = Math.floor(Date.now() / 1000);
+        const now = getNowUnix();
 
         // Lazy load data on first use (reduces cold start time)
         const [staticSchedule, gtfsConfig, tripOrigins] = await Promise.all([
@@ -126,7 +127,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                             isCancelled: false,
                             headsign: update.directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
                             direction: update.directionId,
-                            origin: tripOrigins.get(tripId) || 'Inconnu'
+                            origin: tripOrigins.get(tripId) || (update.directionId === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
                         });
                     }
                 }
@@ -311,7 +312,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     isCancelled: isCancelled,
                     headsign: item.headsign,
                     direction: item.direction,
-                    origin: tripOrigins.get(item.tripId) || 'Inconnu'
+                    origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
                 };
             })
             .filter((item): item is BusUpdate => item !== null); // Filter out nulls

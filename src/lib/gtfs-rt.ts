@@ -53,6 +53,7 @@ enum ScheduleRelationship {
 // --- Fetching Functions ---
 
 import { fetchBinaryWithRetry } from './api-client';
+import { getNowUnix } from '@/utils/date';
 
 // ... (imports remain)
 
@@ -73,7 +74,7 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
 
         // ... (rest of logic remains)
 
-        const now = Math.floor(Date.now() / 1000);
+        const now = getNowUnix();
         if (feed.header?.timestamp) {
             const age = now - Number(feed.header.timestamp);
             if (age > 300) { // 5 minutes

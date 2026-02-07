@@ -43,7 +43,7 @@ const staticTripsById = new Map<string, StaticTrip>(
     (e1StopTimes as StaticTrip[]).map(t => [t.tripId, t])
 );
 
-import { getParisMidnight } from '@/utils/date';
+import { getParisMidnight, getNowUnix } from '@/utils/date';
 
 export async function GET(
     request: Request,
@@ -51,7 +51,7 @@ export async function GET(
 ) {
     try {
         const { tripId } = await params;
-        const now = Math.floor(Date.now() / 1000);
+        const now = getNowUnix();
         const midnight = getParisMidnight();
         const toUnix = (sec: number) => midnight + sec;
 
@@ -160,7 +160,7 @@ export async function GET(
             // Get origin from first stop
             const firstStop = staticTrip.stops[0];
             const firstStopInfo = stopsById.get(firstStop?.stopId);
-            const origin = firstStopInfo?.stopName || 'Inconnu';
+            const origin = firstStopInfo?.stopName || (staticTrip.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles');
 
             return NextResponse.json({
                 tripId,
@@ -174,7 +174,70 @@ export async function GET(
             } as TripDetailsResponse);
         }
 
-        // No static data found - return 404
+        // Fallback for added trips (no static data)
+        if (tripRtData) {
+            const stops: StopTimeDetail[] = [];
+            let sequence = 1;
+
+            // Convert Map values to array and sort by time/sequence
+            const sortedUpdates = Array.from(tripRtData.stopUpdates.values()).sort((a, b) => {
+                const timeA = a.predictedTime || 0;
+                const timeB = b.predictedTime || 0;
+                return timeA - timeB;
+            });
+
+            // Iterate and determine status
+            let currentStopFound = false;
+            for (const stopUpdate of sortedUpdates) {
+                const stopInfo = stopsById.get(stopUpdate.stopId);
+                const predictedTime = stopUpdate.predictedTime || now;
+
+                let status: 'passed' | 'current' | 'upcoming' = 'upcoming';
+
+                // Simple logic: first future stop is current, everything before is passed
+                if (!currentStopFound) {
+                    if (predictedTime > now) {
+                        status = 'current';
+                        currentStopFound = true;
+                    } else {
+                        status = 'passed';
+                    }
+                } else {
+                    status = 'upcoming';
+                }
+
+                stops.push({
+                    stopId: stopUpdate.stopId,
+                    stopName: stopInfo?.stopName || stopUpdate.stopId,
+                    sequence: sequence++,
+                    scheduledArrival: predictedTime,
+                    scheduledDeparture: predictedTime,
+                    predictedArrival: predictedTime,
+                    predictedDeparture: predictedTime,
+                    delay: stopUpdate.delay,
+                    status: status,
+                    isAccessible: true,
+                });
+            }
+
+            // Determine origin/headsign from directionId
+            const direction = tripRtData.directionId;
+            const headsign = direction === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri';
+            const origin = direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles';
+
+            return NextResponse.json({
+                tripId,
+                routeId: tripRtData.routeId,
+                direction,
+                headsign,
+                origin,
+                stops,
+                timestamp: now,
+                isRealtime: true,
+            } as TripDetailsResponse);
+        }
+
+        // No static data found and no RT data - return 404
         return NextResponse.json(
             { error: 'Trip not found', tripId },
             { status: 404 }

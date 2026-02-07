@@ -88,3 +88,32 @@ export function getParisMidnight(): number {
     const dateStr = `${year}${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}T000000`;
     return parseParisTime(dateStr);
 }
+
+/**
+ * Get current Unix timestamp in seconds (centralized utility)
+ * Use this instead of Math.floor(Date.now() / 1000) for consistency
+ */
+export function getNowUnix(): number {
+    return Math.floor(Date.now() / 1000);
+}
+
+/**
+ * Get current Paris date as string in YYYYMMDD format
+ * Useful for comparing with GTFS static schedule dates
+ */
+export function getParisDateString(): string {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('en-US', {
+        timeZone: 'Europe/Paris',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).formatToParts(now);
+
+    const year = parts.find(p => p.type === 'year')?.value || '1970';
+    const month = parts.find(p => p.type === 'month')?.value || '01';
+    const day = parts.find(p => p.type === 'day')?.value || '01';
+
+    return `${year}${month}${day}`;
+}
+
