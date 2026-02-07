@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.6.1] - 2026-02-07
+
+### ⚡ Performance & Cleanup
+
+- **Optimisation Bus Service** : Suppression de filtrage redondant dans `bus.service.ts` pour améliorer l'efficacité.
+- **Sécurité** : Correction d'une regex potentiellement insécurisée dans `src/utils/date.ts`.
+- **Nettoyage** : Suppression de scripts de debug inutilisés (`debug_pipeline.js`, `test_date_format.js`).
+- **Qualité Code** : Résolution de warnings ESLint (directives inutiles, imports).
+
 ## [3.6.0] - 2026-01-27
 
 ### 🧱 Architecture & Stabilité

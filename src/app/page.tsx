@@ -4,7 +4,7 @@ import { ArrowRight, Brain, Github, Smartphone, Zap } from 'lucide-react';
 
 export default function LandingPage() {
     return (
-        <div className="min-h-screen bg-[#050505] text-[#ededed] selection:bg-yellow-500/30 font-sans overflow-x-hidden">
+        <div className="min-h-screen bg-surface-darkest text-foreground selection:bg-yellow-500/30 font-sans overflow-x-hidden">
 
             {/* Ambient Background */}
             <div className="fixed inset-0 pointer-events-none z-0">
@@ -71,37 +71,37 @@ export default function LandingPage() {
                     <div className="relative w-full max-w-5xl mx-auto animate-fade-in-up opacity-0" style={{ animationDelay: '0.3s', animationFillMode: 'forwards' }}>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-end">
                             {/* Card 1: Home/Arrivals */}
-                            <div className="relative group rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#0f0f11] transform hover:-translate-y-2 transition-transform duration-500">
+                            <div className="relative group rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-surface-dark transform hover:-translate-y-2 transition-transform duration-500">
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10 pointer-events-none"></div>
                                 <div className="absolute bottom-0 left-0 right-0 p-6 z-20 pointer-events-none">
                                     <h3 className="text-xl font-bold text-white mb-1">Temps Réel</h3>
                                     <p className="text-sm text-gray-400">Horaires en direct</p>
                                 </div>
-                                <div className="relative aspect-[9/16] w-full bg-[#1a1a1a]">
+                                <div className="relative aspect-[9/16] w-full bg-surface-elevated">
                                     <Image src="/screenshots/app-home.png" alt="App Home" fill className="object-contain p-1 opacity-90 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             </div>
 
                             {/* Card 2: Map (Center, slightly larger/higher) */}
-                            <div className="relative group rounded-3xl overflow-hidden border-2 border-yellow-500/20 shadow-[0_0_50px_rgba(234,179,8,0.1)] bg-[#0f0f11] z-20 transform scale-105 hover:-translate-y-2 transition-transform duration-500">
+                            <div className="relative group rounded-3xl overflow-hidden border-2 border-yellow-500/20 shadow-[0_0_50px_rgba(234,179,8,0.1)] bg-surface-dark z-20 transform scale-105 hover:-translate-y-2 transition-transform duration-500">
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10 pointer-events-none"></div>
                                 <div className="absolute bottom-0 left-0 right-0 p-6 z-20 text-center pointer-events-none">
                                     <h3 className="text-2xl font-bold text-white mb-1">Carte Interactive</h3>
                                     <p className="text-sm text-yellow-500 font-medium">Suivi Live Bus & Train</p>
                                 </div>
-                                <div className="relative aspect-[9/16] w-full bg-[#1a1a1a]">
+                                <div className="relative aspect-[9/16] w-full bg-surface-elevated">
                                     <Image src="/screenshots/app-map.png" alt="App Map" fill className="object-contain p-1 opacity-100 transition-opacity" />
                                 </div>
                             </div>
 
                             {/* Card 3: Details/Timeline */}
-                            <div className="relative group rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-[#0f0f11] transform hover:-translate-y-2 transition-transform duration-500">
+                            <div className="relative group rounded-3xl overflow-hidden border border-white/10 shadow-2xl bg-surface-dark transform hover:-translate-y-2 transition-transform duration-500">
                                 <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10 pointer-events-none"></div>
                                 <div className="absolute bottom-0 left-0 right-0 p-6 z-20 pointer-events-none">
                                     <h3 className="text-xl font-bold text-white mb-1">Détails Trajet</h3>
                                     <p className="text-sm text-gray-400">Timeline & Arrêts</p>
                                 </div>
-                                <div className="relative aspect-[9/16] w-full bg-[#1a1a1a]">
+                                <div className="relative aspect-[9/16] w-full bg-surface-elevated">
                                     <Image src="/screenshots/app-details.png" alt="App Details" fill className="object-contain p-1 opacity-90 group-hover:opacity-100 transition-opacity" />
                                 </div>
                             </div>
@@ -116,7 +116,7 @@ export default function LandingPage() {
                     <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-4 gap-4 md:grid-rows-2 h-auto md:h-[600px]">
 
                         {/* FEATURE 1: REALTIME (Large) */}
-                        <div className="col-span-1 md:col-span-4 lg:col-span-2 row-span-2 bg-[#0f0f11] rounded-3xl p-8 border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all flex flex-col">
+                        <div className="col-span-1 md:col-span-4 lg:col-span-2 row-span-2 bg-surface-dark rounded-3xl p-8 border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all flex flex-col">
                             <div className="absolute top-0 right-0 p-32 bg-yellow-500/5 rounded-full blur-[80px] group-hover:bg-yellow-500/10 transition-colors"></div>
 
                             <div className="relative z-10 mb-auto">
@@ -131,7 +131,7 @@ export default function LandingPage() {
                             </div>
 
                             {/* Mockup UI element */}
-                            <div className="relative mt-8 h-[200px] w-full bg-[#161618] rounded-xl border border-white/5 overflow-hidden flex flex-col p-4 gap-3">
+                            <div className="relative mt-8 h-[200px] w-full bg-surface rounded-xl border border-white/5 overflow-hidden flex flex-col p-4 gap-3">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center text-purple-400 font-bold text-xs">E1</div>
@@ -150,7 +150,7 @@ export default function LandingPage() {
                         </div>
 
                         {/* FEATURE 2: AI PREDICTIONS (Medium) */}
-                        <div className="col-span-1 md:col-span-3 lg:col-span-2 bg-[#0f0f11] rounded-3xl p-8 border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all">
+                        <div className="col-span-1 md:col-span-3 lg:col-span-2 bg-surface-dark rounded-3xl p-8 border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all">
                             <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-purple-500/10 rounded-full blur-[50px] group-hover:bg-purple-500/20 transition-colors"></div>
                             <div className="relative z-10">
                                 <Brain className="w-10 h-10 text-purple-400 mb-6" />
@@ -160,7 +160,7 @@ export default function LandingPage() {
                         </div>
 
                         {/* FEATURE 3: OPEN SOURCE (Medium) */}
-                        <div className="col-span-1 md:col-span-3 lg:col-span-1 bg-[#1a1a2e] rounded-3xl p-8 border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all">
+                        <div className="col-span-1 md:col-span-3 lg:col-span-1 bg-surface-accent rounded-3xl p-8 border border-white/10 relative overflow-hidden group hover:border-white/20 transition-all">
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[url('/grid.svg')] opacity-10"></div>
                             <div className="relative z-10 h-full flex flex-col justify-between">
                                 <Github className="w-10 h-10 text-white mb-6" />

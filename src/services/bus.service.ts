@@ -182,7 +182,6 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             .filter((item: StaticScheduleItem) => item.arrival > now - 600);
 
         const combinedUpdates = upcomingSchedule
-            .filter((item: StaticScheduleItem) => item.arrival > now - 600)
             .map((item: StaticScheduleItem) => {
                 // Try exact match first, then fuzzy pattern match
                 let rtTrip = realtimeUpdates.get(item.tripId);

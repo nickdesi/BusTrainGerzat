@@ -1,59 +1,51 @@
 ---
+name: release-manager
 description: Automate the release process: build, version bump, changelog, and git tag.
+license: Complete terms in LICENSE.txt
 ---
 
-# Release Manager Workflow
+# Release Manager Guidelines
 
-Use this workflow to ship a new version of the application cleanly and consistentl.
+Use this skill to ship a new version of the application cleanly and consistently.
 
-## 1. Pre-Flight Checks
+## Release Process
 
-1. **Git Status**: ensure working directory is clean.
+### 1. Pre-Flight Checks
 
-    ```bash
-    git status
-    ```
+- **Git Status**: ensure working directory is clean (`git status`).
+- **Branch**: ensure you are on `main` (`git branch --show-current`).
 
-2. **Branch**: ensure you are on `main`.
+### 2. Validation Build
 
-    ```bash
-    git branch --show-current
-    ```
+- Run `npm run build`.
+- If this fails -> **STOP**. Fix the build first.
 
-## 2. Validation Build
+### 3. Version Bump Strategy
 
-Run a fresh build to ensure nothing is broken before tagging.
+- Decide: **Patch** (bug fixes), **Minor** (features), or **Major** (breaking changes).
+- Update version string in **ALL** of the following locations:
+  1. **`package.json`**: Update `"version"`. Run `npm install` to sync lockfile.
+  2. **`README.md`**: Update Badge URLs (e.g., `v1.8.0` -> `v1.9.0`).
+  3. **`components/Footer.tsx`**: Update `APP_VERSION` constant.
+  4. **`CHANGELOG.md`**: Add new header `## [X.Y.Z] - YYYY-MM-DD`.
 
-```bash
-npm run build
-```
-
-* If this fails -> **STOP**. Fix the build first.
-
-## 3. Version Bump
-
-1. Decide validity: **Patch** (bug fixes), **Minor** (features), or **Major** (breaking changes).
-2. Update `version` in `package.json`.
-3. Update `package-lock.json` (running `npm install` usually syncs it).
-
-## 4. Changelog Update
-
-1. Open `CHANGELOG.md`.
-2. Add a new header with the new version and today's date.
-3. Move "Unreleased" changes under this new header.
-
-## 5. Git Release
+### 4. Git Release
 
 ```bash
-git add package.json package-lock.json CHANGELOG.md
+# Stage all version files
+git add package.json package-lock.json README.md components/Footer.tsx CHANGELOG.md
+
+# Commit
 git commit -m "chore(release): v<NEW_VERSION>"
+
+# Tag
 git tag -a v<NEW_VERSION> -m "Release v<NEW_VERSION>"
 ```
 
-## 6. Publish
+### 5. Publish
 
 ```bash
 git push origin main --follow-tags
 ```
 
-> **Note**: If you have a CI/CD pipeline (like GitHub Actions), this push will likely trigger the production deployment.
+> **Note**: This usually triggers the deployment pipeline.

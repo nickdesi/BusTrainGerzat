@@ -41,7 +41,6 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // Create custom bus icon with SVG that rotates properly
     const busIcon = useMemo(() => {
         if (typeof window === 'undefined') return null;
-        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const L = require('leaflet');
 
         // SVG bus icon pointing up (will be rotated by bearing)
