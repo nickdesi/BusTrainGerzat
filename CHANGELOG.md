@@ -1,5 +1,20 @@
 # Changelog
 
+## [3.7.0] - 2026-02-07
+
+### 🚀 Nouveautés majeures (Transit Noir)
+
+- **Refonte Page d'Accueil** : Design "Transit Noir" premium avec arrière-plan animé (Background Beams).
+- **Interface Moderne** : Grille Bento pour la présentation des fonctionnalités clées.
+- **Interactivité** : Composants réactifs et animations fluides (Framer Motion).
+- **Version Dynamique** : Affichage automatique de la version de l'application sur la page d'accueil.
+
+### 🛠 Technique
+
+- Intégration de `framer-motion` et `mini-svg-data-uri`.
+- Amélioration de la gestion des classes CSS avec `tailwind-merge` et `clsx`.
+- Correction de vulnérabilités de sécurité (npm audit).
+
 ## [3.6.1] - 2026-02-07
 
 ### ⚡ Performance & Cleanup

@@ -16,7 +16,7 @@ import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
 
-const APP_VERSION = '3.6.1';
+const APP_VERSION = '3.7.0';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
