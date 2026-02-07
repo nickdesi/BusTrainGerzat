@@ -15,7 +15,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { TransportFilter } from '@/types';
 import { Github } from 'lucide-react';
 
-const APP_VERSION = '3.1.0';
+const APP_VERSION = '3.6.1';
 
 export default function Arrivees() {
     const { arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
@@ -46,7 +46,7 @@ export default function Arrivees() {
     }, [arrivals, filter, searchQuery]);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-[#0a0a0a] via-[#0f0f0f] to-[#0a0a0a] text-gray-100 font-sans">
+        <div className="min-h-screen bg-gradient-to-br from-background via-surface-dark to-background text-gray-100 font-sans">
             {/* Skip Link for accessibility */}
             <a
                 href="#arrivals-board"
@@ -151,7 +151,7 @@ export default function Arrivees() {
 
 
                 {/* Arrivals Board */}
-                <div id="arrivals-board" className="bg-[#1a1a1a] rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">
+                <div id="arrivals-board" className="bg-surface-elevated rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">
                     <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 md:px-6 py-3 border-b-4 border-black">
                         <h2 className="text-lg md:text-xl font-black text-white uppercase tracking-widest flex items-center gap-3 font-mono">
                             <div className="w-3 h-3 bg-white rounded-full animate-pulse" aria-hidden="true"></div>

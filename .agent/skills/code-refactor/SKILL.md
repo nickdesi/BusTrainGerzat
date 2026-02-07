@@ -1,37 +1,36 @@
 ---
-description: Clean up technical debt without breaking functionality.
+name: code-refactor
+description: "Clean up technical debt without breaking functionality."
 ---
 
-# Code Refactor Workflow
+# Code Refactor Skill
 
-Use this workflow to improve code quality, readability, and maintainability.
+This skill provides the knowledge and techniques for improving code quality, readability, and maintainability without altering external behavior.
 
-## 1. Identify the Smell
+## Core Philosophy
 
-**Target**: What specific file or function needs refactoring?
-**Reason**: Why? (Too long, high complexity, duplicated logic, unclear naming).
+**To refactor safely, you must have tests.**
 
-## 2. Create Safety Net (Tests)
+If you change code without tests, you are not refactoring; you are just changing code and hoping for the best.
 
-**CRITICAL**: Do NOT refactor without tests.
+## The Process
 
-1. Run existing tests: `npm test` or `pytest`.
-2. If no tests exist for the target, **create a characterization test** that captures the current behavior.
-3. Verify the test passes.
+1. **Identify the Smell**:
+   - Long Function
+   - Large Class
+   - Duplicated Code
+   - Feature Envy (using another object's data more than its own)
+   - Unclear Naming
 
-## 3. Refactor
+2. **Create Safety Net**:
+   - Run existing tests.
+   - If missing, write a Characterization Test (captures current behavior).
 
-**Steps**:
+3. **Execute Moves**:
+   - **Extract Method**: Group related lines into a named function.
+   - **Rename**: Give variables and functions names that reveal intent.
+   - **Inline**: Remove unnecessary indirection.
+   - **Simplify Conditional**: Use guard clauses, decompose complex boolean logic.
 
-1. Make small, incremental changes.
-2. Run tests after EACH change.
-3. **Refactoring Moves**:
-    - Extract Method
-    - Rename Variable/Method (for clarity)
-    - Remove Dead Code
-    - Simplify Conditionals
-
-## 4. Verify
-
-1. Run all tests.
-2. Manual Spot Check: Ensure the application behavior is unchanged.
+4. **Verify**:
+   - Tests must pass after *every single move*.

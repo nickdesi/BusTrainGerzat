@@ -272,6 +272,7 @@ onError: (error) => {
 Before completing any UI component:
 
 **UI States:**
+
 - [ ] Error state handled and shown to user
 - [ ] Loading state shown only when no data exists
 - [ ] Empty state provided for collections
@@ -279,11 +280,13 @@ Before completing any UI component:
 - [ ] Buttons show loading indicator when appropriate
 
 **Data & Mutations:**
+
 - [ ] Mutations have onError handler
 - [ ] All user actions have feedback (toast/visual)
 
 ## Integration with Other Skills
 
-- **graphql-schema**: Use mutation patterns with proper error handling
-- **testing-patterns**: Test all UI states (loading, error, empty, success)
-- **formik-patterns**: Apply form submission patterns
+- `test-driven-development` - Write failing tests for each UI state
+- `systematic-debugging` - Debug UI state issues systematically
+- `verification-before-completion` - Verify all states work before claiming done
+- `ui-ux-pro-max` - Accessibility and design guidelines

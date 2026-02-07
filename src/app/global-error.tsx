@@ -10,9 +10,9 @@ export default function GlobalError({
 }) {
     return (
         <html lang="fr">
-            <body className="bg-[#0d0d0d]">
+            <body className="bg-surface-darker">
                 <div className="min-h-screen flex items-center justify-center p-4">
-                    <div className="bg-[#1a1a1a] rounded-xl p-8 max-w-md w-full text-center border border-gray-800">
+                    <div className="bg-surface-elevated rounded-xl p-8 max-w-md w-full text-center border border-gray-800">
                         <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                         <h2 className="text-xl font-bold text-white mb-2">
                             Erreur critique

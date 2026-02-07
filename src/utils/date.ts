@@ -22,7 +22,8 @@ function getParisOffset(year: number, month: number, day: number): string {
     const tzPart = parts.find(p => p.type === 'timeZoneName');
 
     // Extract offset from "GMT+01:00" or "GMT+1"
-    const match = tzPart?.value.match(/GMT([+-]\d{1,2})(:?(\d{2}))?/);
+    // eslint-disable-next-line security/detect-unsafe-regex
+    const match = tzPart?.value.match(/GMT([+-]\d{1,2})(?::(\d{2}))?/);
 
     if (match) {
         const hours = match[1];

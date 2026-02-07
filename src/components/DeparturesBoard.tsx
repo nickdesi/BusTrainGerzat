@@ -38,7 +38,7 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
     }, [departures, favorites]);
 
     return (
-        <div className="hidden md:block overflow-x-auto bg-[#151515]">
+        <div className="hidden md:block overflow-x-auto bg-surface">
             <table className="w-full">
                 <thead>
                     <tr className="bg-black text-yellow-500/60 text-xs font-bold uppercase tracking-[0.2em] border-b border-gray-800">
@@ -83,7 +83,7 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                     className={`flip-enter transition-colors ${entry.type === 'BUS' && entry.tripId
                                         ? 'cursor-pointer hover:bg-yellow-900/20'
                                         : 'hover:bg-gray-800/50'
-                                        } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-[#1a1a1a]' : 'bg-[#1f1f1f]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+                                        } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
                                     title={entry.type === 'BUS' ? 'Cliquez pour voir le détail du trajet' : entry.isCancelled ? 'Train supprimé' : undefined}
                                 >
                                     {/* Favorite Toggle */}
