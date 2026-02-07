@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { fetchWithRetry } from '@/lib/api-client';
 
 export interface BusUpdate {
     tripId: string;
@@ -18,9 +19,9 @@ interface BusDataResponse {
 }
 
 async function fetchBusData(): Promise<BusDataResponse> {
-    const res = await fetch('/api/realtime');
-    if (!res.ok) throw new Error('Failed to fetch bus data');
-    return res.json();
+    return fetchWithRetry<BusDataResponse>('/api/realtime', {
+        retries: 2, // Slightly less than default since it's realtime data
+    });
 }
 
 /**

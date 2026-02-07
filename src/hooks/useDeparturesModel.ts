@@ -5,13 +5,18 @@ import { BusUpdate } from './useBusData';
 
 /**
  * Deduplicate bus updates by time (rounded to minute) + headsign
+ * Optimized to O(N) using a Set
  */
 function deduplicate(items: Update[]): Update[] {
-    return items.filter((update, index, self) => {
+    const seen = new Set<string>();
+    return items.filter((update) => {
         const roundedTime = Math.floor(update.arrival / 60);
-        return index === self.findIndex((t) => (
-            Math.floor(t.arrival / 60) === roundedTime && t.headsign === update.headsign
-        ));
+        const key = `${roundedTime}-${update.headsign}`;
+        if (seen.has(key)) {
+            return false;
+        }
+        seen.add(key);
+        return true;
     });
 }
 

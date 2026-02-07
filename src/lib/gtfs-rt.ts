@@ -52,19 +52,27 @@ enum ScheduleRelationship {
 
 // --- Fetching Functions ---
 
+import { fetchBinaryWithRetry } from './api-client';
+
+// ... (imports remain)
+
+// ... (constants remain)
+
 /**
  * Fetch and decode GTFS-RT Trip Updates for Line E1
  */
 export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
     const updates = new Map<string, RTTripUpdate>();
     try {
-        const response = await fetch(GTFS_RT_TRIP_UPDATE_URL, { next: { revalidate: 15 } });
-        if (!response.ok) return updates;
+        // Use fetchBinaryWithRetry for resilience
+        const buffer = await fetchBinaryWithRetry(GTFS_RT_TRIP_UPDATE_URL, {
+            next: { revalidate: 15 }
+        });
 
-        const buffer = await response.arrayBuffer();
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 
-        // Optional: Check for stale data
+        // ... (rest of logic remains)
+
         const now = Math.floor(Date.now() / 1000);
         if (feed.header?.timestamp) {
             const age = now - Number(feed.header.timestamp);
@@ -134,10 +142,11 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
 export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosition>> {
     const positions = new Map<string, RTVehiclePosition>();
     try {
-        const response = await fetch(GTFS_RT_VEHICLE_POSITION_URL, { next: { revalidate: 15 } });
-        if (!response.ok) return positions;
+        // Use fetchBinaryWithRetry for resilience
+        const buffer = await fetchBinaryWithRetry(GTFS_RT_VEHICLE_POSITION_URL, {
+            next: { revalidate: 15 }
+        });
 
-        const buffer = await response.arrayBuffer();
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 
         for (const entity of feed.entity) {
@@ -172,16 +181,17 @@ export function findStopUpdate(stopUpdates: Map<string, RTStopUpdate>, stopId: s
     if (rtStop) return rtStop;
 
     // 2. Group match (Champfleuri or Patural)
-    const isChampfleuri = gtfsConfig.stopIds.champfleuri.includes(stopId);
-    const isPatural = gtfsConfig.stopIds.patural.includes(stopId);
+    // Optimization: Use Sets for O(1) lookup instead of array includes/iteration
+    const champfleuriStops = new Set(gtfsConfig.stopIds.champfleuri);
+    const paturalStops = new Set(gtfsConfig.stopIds.patural);
 
-    if (isChampfleuri) {
-        for (const id of gtfsConfig.stopIds.champfleuri) {
+    if (champfleuriStops.has(stopId)) {
+        for (const id of champfleuriStops) {
             rtStop = stopUpdates.get(id);
             if (rtStop) return rtStop;
         }
-    } else if (isPatural) {
-        for (const id of gtfsConfig.stopIds.patural) {
+    } else if (paturalStops.has(stopId)) {
+        for (const id of paturalStops) {
             rtStop = stopUpdates.get(id);
             if (rtStop) return rtStop;
         }

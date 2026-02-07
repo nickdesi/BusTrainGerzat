@@ -52,16 +52,7 @@ type SncfOrigin = z.infer<typeof SncfOriginSchema>;
 
 import { parseParisTime } from '@/utils/date';
 
-// Helper for fetch with retry on 429
-async function fetchWithRetry(url: string, authHeader: string, maxRetries = 3): Promise<Response> {
-    for (let attempt = 0; attempt < maxRetries; attempt++) {
-        const res = await fetch(url, { headers: { 'Authorization': authHeader }, cache: 'no-store' });
-        if (res.status !== 429) return res;
-        // Exponential backoff: 500ms, 1000ms, 2000ms
-        await new Promise(r => setTimeout(r, 500 * Math.pow(2, attempt)));
-    }
-    return fetch(url, { headers: { 'Authorization': authHeader }, cache: 'no-store' });
-}
+import { fetchWithRetry, ApiError } from '@/lib/api-client';
 
 function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], isRealtimeSource: boolean): TrainUpdate {
     const stopDateTime = dep.stop_date_time;
@@ -113,8 +104,6 @@ const CACHE_TTL_MS = 120000; // 2 minutes cache
 let cachedResponse: { updates: TrainUpdate[], timestamp: number, debug?: Record<string, unknown> } | null = null;
 let cacheExpiry = 0;
 
-// --- Service ---
-
 export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestamp: number, error?: string, debug?: Record<string, unknown> }> {
     try {
         const now = Math.floor(Date.now() / 1000);
@@ -130,30 +119,39 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         }
 
         const authHeader = `Basic ${Buffer.from(SNCF_API_KEY + ':').toString('base64')}`;
+        const fetchOptions = {
+            headers: { 'Authorization': authHeader },
+            cache: 'no-store' as RequestCache
+        };
 
         // 1. Fetch BOTH Base Schedule (Theory) and Realtime Data
-        // Sequential calls with delay to avoid per-second rate limit
-        const realtimeRes = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, authHeader);
-        await new Promise(r => setTimeout(r, 300));
-        const baseScheduleRes = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, authHeader);
+        // Sequential calls via fetchWithRetry (handles 429 internally with backoff)
+        // If it still fails with 429 after retries, it throws ApiError
+        let realtimeDataRaw: any = null;
+        let baseDataRaw: any = null;
 
-        // Handle Rate Limits
-        if (baseScheduleRes.status === 429 || realtimeRes.status === 429) {
-            if (cachedResponse) {
-                return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } };
+        try {
+            realtimeDataRaw = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, fetchOptions);
+            await new Promise(r => setTimeout(r, 300)); // Rate limit spacing
+            baseDataRaw = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, fetchOptions);
+        } catch (err) {
+            if (err instanceof ApiError && err.status === 429) {
+                if (cachedResponse) {
+                    return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } };
+                }
+                return { updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { error: err.message } };
             }
-            return { updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { baseScheduleStatus: baseScheduleRes.status, realtimeStatus: realtimeRes.status } };
+            throw err; // Re-throw other errors to outer catch
         }
 
         // Parse and validate API responses with Zod
-        const baseDataRaw = baseScheduleRes.ok ? await baseScheduleRes.json() : null;
-        const realtimeDataRaw = realtimeRes.ok ? await realtimeRes.json() : null;
-
+        // fetchWithRetry returns parsed JSON, so we check existence
         const baseResult = baseDataRaw ? SncfApiResponseSchema.safeParse(baseDataRaw) : null;
         const realtimeResult = realtimeDataRaw ? SncfApiResponseSchema.safeParse(realtimeDataRaw) : null;
 
         const baseData = baseResult?.success ? baseResult.data : null;
         const realtimeData = realtimeResult?.success ? realtimeResult.data : null;
+
 
         const debugInfo: Record<string, unknown> = {
             baseCount: baseData?.departures?.length ?? 0,

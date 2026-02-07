@@ -20,7 +20,7 @@ const defaultConfig: ApiClientConfig = {
     baseRetries: 3,
     baseDelay: 1000,
     maxDelay: 10000,
-    timeout: 15000,
+    timeout: 8000, // Reduced to 8s for faster fail-over on mobile
 };
 
 /**

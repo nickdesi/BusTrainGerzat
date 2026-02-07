@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useBusData } from './useBusData';
 import { useTrainData } from './useTrainData';
@@ -29,9 +29,10 @@ export function useDepartures() {
     } = useTrainData();
 
     // SSE Subscription for real-time updates
-    useEffect(() => {
-        let retryTimeout: NodeJS.Timeout;
+    // useRef to securely track the timeout ID across renders
+    const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+    useEffect(() => {
         const connectSSE = () => {
             const eventSource = new EventSource('/api/stream');
 
@@ -54,7 +55,8 @@ export function useDepartures() {
                 eventSource.close();
 
                 // Retry connection after 5 seconds
-                retryTimeout = setTimeout(connectSSE, 5000);
+                if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
+                retryTimeoutRef.current = setTimeout(connectSSE, 5000);
             };
 
             return eventSource;
@@ -64,7 +66,9 @@ export function useDepartures() {
 
         return () => {
             es.close();
-            clearTimeout(retryTimeout);
+            if (retryTimeoutRef.current) {
+                clearTimeout(retryTimeoutRef.current);
+            }
         };
     }, [queryClient]);
 
