@@ -5,13 +5,13 @@
   "routeNames": [
     "E1"
   ],
-  "generatedAt": "2026-03-07T07:23:08.295292+01:00",
+  "generatedAt": "2026-03-08T07:27:53.103506+01:00",
   "stopIds": {
     "all": [
-      "GECHR",
       "PATU",
       "PATUA",
       "PATUR",
+      "GECHR",
       "GECHA",
       "GECH"
     ],
@@ -21,9 +21,9 @@
       "GECH"
     ],
     "patural": [
-      "PATUR",
+      "PATUA",
       "PATU",
-      "PATUA"
+      "PATUR"
     ]
   }
 }
