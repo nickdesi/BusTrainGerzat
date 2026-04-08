@@ -43,6 +43,17 @@ const staticTripsById = new Map<string, StaticTrip>(
     (e1StopTimes as StaticTrip[]).map(t => [t.tripId, t])
 );
 
+// Fuzzy lookup: strip leading service_id segments (e.g. "1521_1000004_03GC.AR_045700" -> "03GC.AR_045700")
+// static_schedule.json and e1_stop_times.json use different service IDs but share the route+time suffix
+const extractTripPattern = (tripId: string) => tripId.split('_').slice(2).join('_');
+const staticTripsByPattern = new Map<string, StaticTrip>();
+for (const [tid, trip] of staticTripsById) {
+    const pattern = extractTripPattern(tid);
+    if (!staticTripsByPattern.has(pattern)) {
+        staticTripsByPattern.set(pattern, trip);
+    }
+}
+
 import { getParisMidnight, getNowUnix } from '@/utils/date';
 
 export async function GET(
@@ -60,8 +71,9 @@ export async function GET(
             lineE1Data.stops.map(s => [s.stopId, s])
         );
 
-        // First, try to get static data for this trip
-        const staticTrip = staticTripsById.get(tripId);
+        // First, try to get static data for this trip (exact match, then fuzzy pattern match)
+        const staticTrip = staticTripsById.get(tripId)
+            ?? staticTripsByPattern.get(extractTripPattern(tripId));
 
         // Fetch GTFS-RT data using centralized service
         const rtTripUpdates = await fetchTripUpdates();
