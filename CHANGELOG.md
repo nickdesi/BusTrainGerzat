@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.7.1] - 2026-04-08
+
+### 🔒 Sécurité
+
+- **Headers HTTP de sécurité** : Ajout de 6 headers sur toutes les routes via `next.config.ts` (OWASP A05).
+  - `X-Content-Type-Options: nosniff` — protection MIME sniffing.
+  - `X-Frame-Options: DENY` — protection clickjacking.
+  - `Strict-Transport-Security` — force HTTPS pendant 2 ans (preload).
+  - `Referrer-Policy: strict-origin-when-cross-origin`.
+  - `Permissions-Policy` — restriction caméra/micro/géolocalisation.
+  - `Content-Security-Policy` — liste blanche des sources (tiles CartoDB, service worker blob:).
+- **Dépendances** : Correction de 15 CVE via `npm audit fix`.
+  - **Critical** : `handlebars` (JS Injection via AST confusion, prototype pollution).
+  - **High** : `@hono/node-server` (authorization bypass), `@modelcontextprotocol/sdk` (cross-client data leak), `flatted` (DoS / prototype pollution), `hono` (cookie injection, SSE injection, path traversal), `lodash` (code injection, prototype pollution), `minimatch` (ReDoS), `path-to-regexp` (ReDoS), `picomatch` (method injection + ReDoS), `underscore` (DoS recursion infinie).
+  - **Moderate** : `ajv` (ReDoS), `brace-expansion` (DoS), `markdown-it` (ReDoS), `next` (HTTP smuggling, CSRF bypass), `qs` (DoS arrayLimit).
+
 ## [3.7.0] - 2026-02-07
 
 ### 🚀 Nouveautés majeures (Transit Noir)
