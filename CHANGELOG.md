@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.7.2] - 2026-04-08
+
+### 🐛 Correctifs
+
+- **Détail de trajet bus (arrivées)** : Correction de l'erreur "Impossible de récupérer les détails du trajet" sur les bus en vue arrivées.
+  - **Cause** : `e1_stop_times.json` n'était pas synchronisé avec le GTFS quotidien. La GitHub Action régénérait `static_schedule.json` mais pas `e1_stop_times.json`, créant un décalage de tripIds (ex. `1521_1000004_*` manquants).
+  - `public/data/e1_stop_times.json` — Regénéré depuis le GTFS T2C actuel (680 trips, 0 non-matchés).
+  - `.github/workflows/update-gtfs.yml` — Ajout du step "Generate E1 stop times" pour appeler `generate_e1_stop_times.py` après chaque mise à jour GTFS.
+  - `.agent/skills/transport-data/scripts/generate_e1_stop_times.py` — Script ajouté localement (existait uniquement sur GitHub).
+
 ## [3.7.1] - 2026-04-08
 
 ### 🔒 Sécurité

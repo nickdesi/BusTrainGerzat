@@ -53,6 +53,13 @@ jobs:
           python3 .agent/skills/transport-data/scripts/generate_static_json.py
           echo "✅ Static schedule generated"
 
+      - name: Generate E1 stop times
+        if: steps.sentinel_check.outputs.is_updated == 'true'
+        run: |
+          echo "🔄 Generating E1 stop times..."
+          python3 .agent/skills/transport-data/scripts/generate_e1_stop_times.py
+          echo "✅ E1 stop times generated"
+
       - name: Validate schedule
         if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
