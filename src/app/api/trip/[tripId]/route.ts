@@ -54,6 +54,11 @@ for (const [tid, trip] of staticTripsById) {
     }
 }
 
+// Create stops lookup map
+const stopsById = new Map(
+    lineE1Data.stops.map(s => [s.stopId, s])
+);
+
 import { getParisMidnight, getNowUnix } from '@/utils/date';
 
 export async function GET(
@@ -65,11 +70,6 @@ export async function GET(
         const now = getNowUnix();
         const midnight = getParisMidnight();
         const toUnix = (sec: number) => midnight + sec;
-
-        // Create stops lookup map
-        const stopsById = new Map(
-            lineE1Data.stops.map(s => [s.stopId, s])
-        );
 
         // First, try to get static data for this trip (exact match, then fuzzy pattern match)
         const staticTrip = staticTripsById.get(tripId)
