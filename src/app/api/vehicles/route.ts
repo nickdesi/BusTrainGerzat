@@ -278,6 +278,15 @@ export async function GET() {
             const rtLastStopData = rtUpdate?.stopUpdates.get(lastStop.stopId);
             const terminusTime = rtLastStopData?.predictedTime || toUnix(lastStop.arrivalTime);
 
+            let delay = rtUpdate?.tripDelay || 0;
+            // Manual delay calculation if API reports 0 but next stop time is shifted
+            if (delay === 0 && rtNextStopData?.predictedTime) {
+                const calculatedDelay = rtNextStopData.predictedTime - toUnix(nextStop.arrivalTime);
+                if (Math.abs(calculatedDelay) >= 60) {
+                    delay = calculatedDelay;
+                }
+            }
+
             vehicles.push({
                 tripId,
                 lat: rtPos.lat,
@@ -287,7 +296,7 @@ export async function GET() {
                 nextStopName: nextStopInfo?.stopName || nextStop.stopId,
                 headsign: lastStopInfo?.stopName || staticTrip.headsign,
                 bearing: rtPos.bearing,
-                delay: rtUpdate?.tripDelay || 0,
+                delay: delay,
                 progress: nextStopIdx / staticTrip.stops.length,
                 estimatedArrival: nextTime,
                 terminusEta: terminusTime,
@@ -363,6 +372,15 @@ export async function GET() {
             const lastRtData = rtUpdate.stopUpdates.get(lastStop.stopId);
             const terminusTime = lastRtData?.predictedTime || toUnix(lastStop.arrivalTime);
 
+            let delay = rtUpdate.tripDelay;
+            // Manual delay calculation if API reports 0 but next stop time is shifted
+            if (delay === 0 && nextRtData?.predictedTime) {
+                const calculatedDelay = nextRtData.predictedTime - toUnix(nextStop.arrivalTime);
+                if (Math.abs(calculatedDelay) >= 60) {
+                    delay = calculatedDelay;
+                }
+            }
+
             vehicles.push({
                 tripId,
                 lat,
@@ -372,7 +390,7 @@ export async function GET() {
                 nextStopName: nextStopInfo.stopName,
                 headsign: lastStopInfo?.stopName || staticTrip.headsign,
                 bearing,
-                delay: rtUpdate.tripDelay,
+                delay: delay,
                 progress: nextStopIdx / staticTrip.stops.length,
                 estimatedArrival: nextTime,
                 terminusEta: terminusTime,

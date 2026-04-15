@@ -123,9 +123,17 @@ export async function GET(
                 const rtData = rtStopUpdates.get(stop.stopId);
 
                 // Use RT delay if available, otherwise propagate last known delay
-                const delay = rtData?.delay ?? lastKnownDelay;
-                if (rtData?.delay !== undefined) {
-                    lastKnownDelay = rtData.delay;
+                let delay = rtData?.delay ?? lastKnownDelay;
+
+                if (rtData) {
+                    // Manual delay calculation if API reports 0 but time is shifted (GTFS-RT bug)
+                    if (delay === 0 && rtData.predictedTime) {
+                        const calculatedDelay = rtData.predictedTime - scheduledArrival;
+                        if (Math.abs(calculatedDelay) >= 60) {
+                            delay = calculatedDelay;
+                        }
+                    }
+                    lastKnownDelay = delay;
                 }
 
                 // Calculate predicted time: use RT time if available, otherwise schedule + propagated delay
