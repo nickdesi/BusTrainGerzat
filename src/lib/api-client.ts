@@ -55,7 +55,7 @@ const getBackoffDelay = (attempt: number, baseDelay: number, maxDelay: number): 
 /**
  * Determine if an error is retryable
  */
-const isRetryableError = (status?: number): boolean => {
+export const isRetryableError = (status?: number): boolean => {
     if (!status) return true; // Network errors are retryable
     // Retry on 5xx errors and 429 (rate limit)
     return status >= 500 || status === 429;
