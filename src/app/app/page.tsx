@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RefreshCw, Bus, Train, Filter, WifiOff } from 'lucide-react';
@@ -59,8 +59,16 @@ export default function Home() {
     return null;
   }, [departures, favorites]);
 
+  // Memoize favorite IDs for stable reference
+  const favoriteIds = useMemo(() => favorites.map(f => f.id), [favorites]);
+
+  // Stable callback for toggle favorite
+  const handleToggleFavorite = useCallback((id: string, line: string, dest: string, type: 'BUS' | 'TER') => {
+    toggleFavorite({ id, line, destination: dest, type });
+  }, [toggleFavorite]);
+
   // Enable delay notifications
-  useDelayNotifications(departures, arrivals, favorites.map(f => f.id));
+  useDelayNotifications(departures, arrivals, favoriteIds);
 
   // Filter departures and arrivals based on transport type and search query
   const filteredDepartures = useMemo(() => {
@@ -220,14 +228,14 @@ export default function Home() {
           <DeparturesBoard
             departures={filteredDepartures}
             loading={isLoading}
-            favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
+            favorites={favoriteIds}
+            onToggleFavorite={handleToggleFavorite}
           />
           <DeparturesList
             departures={filteredDepartures}
             loading={isLoading}
-            favorites={favorites.map(f => f.id)}
-            onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
+            favorites={favoriteIds}
+            onToggleFavorite={handleToggleFavorite}
           />
         </div>
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { RefreshCw, Bus, Train, Filter, WifiOff } from 'lucide-react';
@@ -23,8 +23,16 @@ export default function Arrivees() {
     const [searchQuery, setSearchQuery] = useState('');
     const { favorites, toggleFavorite } = useFavorites();
 
+    // Memoize favorite IDs for stable reference
+    const favoriteIds = useMemo(() => favorites.map(f => f.id), [favorites]);
+
+    // Stable callback for toggle favorite
+    const handleToggleFavorite = useCallback((id: string, line: string, dest: string, type: 'BUS' | 'TER') => {
+        toggleFavorite({ id, line, destination: dest, type });
+    }, [toggleFavorite]);
+
     // Enable delay notifications (only for arrivals on this page)
-    useDelayNotifications([], arrivals, favorites.map(f => f.id));
+    useDelayNotifications([], arrivals, favoriteIds);
 
     // Filter arrivals based on transport type and search query
     const filteredArrivals = useMemo(() => {
@@ -163,15 +171,15 @@ export default function Arrivees() {
                         departures={filteredArrivals}
                         loading={isLoading}
                         boardType="arrivals"
-                        favorites={favorites.map(f => f.id)}
-                        onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
+                        favorites={favoriteIds}
+                        onToggleFavorite={handleToggleFavorite}
                     />
                     <DeparturesList
                         departures={filteredArrivals}
                         loading={isLoading}
                         boardType="arrivals"
-                        favorites={favorites.map(f => f.id)}
-                        onToggleFavorite={(id, line, dest, type) => toggleFavorite({ id, line, destination: dest, type })}
+                        favorites={favoriteIds}
+                        onToggleFavorite={handleToggleFavorite}
                     />
                 </div>
 

@@ -127,8 +127,8 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         // 1. Fetch BOTH Base Schedule (Theory) and Realtime Data
         // Sequential calls via fetchWithRetry (handles 429 internally with backoff)
         // If it still fails with 429 after retries, it throws ApiError
-        let realtimeDataRaw: any = null;
-        let baseDataRaw: any = null;
+        let realtimeDataRaw: unknown = null;
+        let baseDataRaw: unknown = null;
 
         try {
             realtimeDataRaw = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, fetchOptions);

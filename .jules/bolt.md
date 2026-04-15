@@ -1,0 +1,3 @@
+## 2024-04-15 - Unintentional breaking of React.memo with inline maps and callbacks
+**Learning:** Found a common anti-pattern where components wrapped in `React.memo` (like `DeparturesBoard` and `DepartureRow`) were receiving inline array maps (`favorites.map()`) and inline arrow functions as props. This completely defeated the memoization, causing large tables full of complex components (like `SplitFlapDisplay`) to re-render unnecessarily on minor state changes (like background polling status).
+**Action:** Always verify that props passed to memoized components have stable references (using `useMemo` for derived arrays/objects and `useCallback` for functions). Also, check if an existing `memo` is actually working by looking for inline props passed to it.
