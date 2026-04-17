@@ -128,3 +128,30 @@ describe('Date Utilities - Paris Timezone', () => {
     });
 
 });
+
+describe('getParisDateString', () => {
+    beforeAll(() => {
+        jest.useFakeTimers();
+    });
+
+    afterAll(() => {
+        jest.useRealTimers();
+    });
+
+    it('should format normal date correctly', () => {
+        jest.setSystemTime(new Date('2024-05-15T12:00:00Z'));
+        expect(getParisDateString()).toBe('20240515');
+    });
+
+    it('should handle year boundary correctly (late night UTC)', () => {
+        // 23:30 UTC on Dec 31 = 00:30 on Jan 1 in Paris (UTC+1)
+        jest.setSystemTime(new Date('2023-12-31T23:30:00Z'));
+        expect(getParisDateString()).toBe('20240101');
+    });
+
+    it('should handle day boundary correctly (summer time)', () => {
+        // 22:30 UTC on Aug 15 = 00:30 on Aug 16 in Paris (UTC+2)
+        jest.setSystemTime(new Date('2024-08-15T22:30:00Z'));
+        expect(getParisDateString()).toBe('20240816');
+    });
+});
