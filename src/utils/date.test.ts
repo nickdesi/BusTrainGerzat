@@ -1,3 +1,4 @@
+import { parseParisTime, getParisMidnight, getNowUnix } from './date';
 import { parseParisTime, getParisMidnight, getParisOffset } from './date';
 
 describe('Date Utilities - Paris Timezone', () => {
@@ -73,6 +74,22 @@ describe('Date Utilities - Paris Timezone', () => {
         expect(now - midnight).toBeLessThan(24 * 3600 + 10); // +10s margin
     });
 
+    describe('getNowUnix', () => {
+        it('should return the current Unix timestamp in seconds', () => {
+            // Setup mock
+            const mockTimeMs = 1713348000123; // Some arbitrary timestamp in ms
+            const dateSpy = jest.spyOn(Date, 'now').mockReturnValue(mockTimeMs);
+
+            // Execute
+            const result = getNowUnix();
+
+            // Verify
+            const expectedSeconds = Math.floor(mockTimeMs / 1000);
+            expect(result).toBe(expectedSeconds);
+            expect(dateSpy).toHaveBeenCalled();
+
+            // Restore
+            dateSpy.mockRestore();
     describe('getParisDateString', () => {
         const { getParisDateString } = require('./date');
 
