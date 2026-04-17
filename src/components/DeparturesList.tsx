@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { ArrowRight, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
@@ -103,21 +103,29 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
     );
 });
 
-export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
+export default memo(function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 
     // Sort departures: Favorites first
-    const sortedDepartures = [...departures].sort((a, b) => {
-        const idA = a.id;
-        const idB = b.id;
-        const isFavA = favorites.includes(idA);
-        const isFavB = favorites.includes(idB);
+    // ⚡ Bolt: Memoize sorting to prevent expensive O(N log N) re-sorts on parent state changes (like selecting a trip)
+    const sortedDepartures = useMemo(() => {
+        return [...departures].sort((a, b) => {
+            const idA = a.id;
+            const idB = b.id;
+            const isFavA = favorites.includes(idA);
+            const isFavB = favorites.includes(idB);
 
-        if (isFavA && !isFavB) return -1;
-        if (!isFavA && isFavB) return 1;
-        return 0;
-    });
+            if (isFavA && !isFavB) return -1;
+            if (!isFavA && isFavB) return 1;
+            return 0;
+        });
+    }, [departures, favorites]);
+
+    // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureRow's React.memo() on every render
+    const handleTripClick = useCallback((tripId: string, line: string) => {
+        setSelectedTrip({ tripId, line });
+    }, []);
 
     return (
         <div className="md:hidden divide-y divide-gray-800">
@@ -144,7 +152,7 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                             boardType={boardType}
                             isFav={isFav}
                             onToggleFavorite={onToggleFavorite}
-                            onTripClick={(tripId, line) => setSelectedTrip({ tripId, line })}
+                            onTripClick={handleTripClick}
                         />
                     );
                 })
@@ -158,4 +166,4 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
             />
         </div>
     );
-}
+});

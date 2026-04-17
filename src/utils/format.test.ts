@@ -1,6 +1,28 @@
-import { formatTime } from './format';
+import { formatTime, getDisplayTime } from './format';
 
 describe('format util', () => {
+    describe('getDisplayTime', () => {
+        const mockEntry = {
+            type: 'BUS',
+            arrivalTime: 1000,
+            departureTime: 2000,
+        };
+
+        it('returns null when entry type is TER', () => {
+            const terEntry = { ...mockEntry, type: 'TER' };
+            expect(getDisplayTime(terEntry, 'arrivals')).toBeNull();
+            expect(getDisplayTime(terEntry, 'departures')).toBeNull();
+        });
+
+        it('returns arrivalTime when boardType is arrivals and type is not TER', () => {
+            expect(getDisplayTime(mockEntry, 'arrivals')).toBe(1000);
+        });
+
+        it('returns departureTime when boardType is departures and type is not TER', () => {
+            expect(getDisplayTime(mockEntry, 'departures')).toBe(2000);
+        });
+    });
+
     describe('formatTime', () => {
         it('formats valid timestamp correctly', () => {
             // Mocked timestamp for 14:30:00 UTC (checking locale strings might depend on system timezone, 
