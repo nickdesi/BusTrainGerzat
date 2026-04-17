@@ -1,30 +1,25 @@
-import { formatTime, normalizeText } from './format';
+import { formatTime, getDisplayTime } from './format';
 
 describe('format util', () => {
-    describe('normalizeText', () => {
-        it('capitalizes basic text', () => {
-            expect(normalizeText('hello')).toBe('HELLO');
+    describe('getDisplayTime', () => {
+        const mockEntry = {
+            type: 'BUS',
+            arrivalTime: 1000,
+            departureTime: 2000,
+        };
+
+        it('returns null when entry type is TER', () => {
+            const terEntry = { ...mockEntry, type: 'TER' };
+            expect(getDisplayTime(terEntry, 'arrivals')).toBeNull();
+            expect(getDisplayTime(terEntry, 'departures')).toBeNull();
         });
 
-        it('removes accents', () => {
-            expect(normalizeText('éàçùëî')).toBe('EACUEI');
-            expect(normalizeText('Clermont-Ferrand')).toBe('CLERMONT-FERRAND');
-            expect(normalizeText('Médiathèque Hugo')).toBe('MEDIATHEQUE HUGO');
+        it('returns arrivalTime when boardType is arrivals and type is not TER', () => {
+            expect(getDisplayTime(mockEntry, 'arrivals')).toBe(1000);
         });
 
-        it('preserves allowed special characters and numbers', () => {
-            expect(normalizeText("L'arrêt 1-2")).toBe("L'ARRET 1-2");
-            expect(normalizeText('123 ABC')).toBe('123 ABC');
-            expect(normalizeText('Station - Mairie')).toBe('STATION - MAIRIE');
-        });
-
-        it('replaces unallowed special characters with space', () => {
-            expect(normalizeText('hello@world.com')).toBe('HELLO WORLD COM');
-            expect(normalizeText('A_B*C+D=E')).toBe('A B C D E');
-        });
-
-        it('handles empty string', () => {
-            expect(normalizeText('')).toBe('');
+        it('returns departureTime when boardType is departures and type is not TER', () => {
+            expect(getDisplayTime(mockEntry, 'departures')).toBe(2000);
         });
     });
 
