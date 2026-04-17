@@ -39,4 +39,41 @@ describe('Date Utilities - Paris Timezone', () => {
         expect(now - midnight).toBeLessThan(24 * 3600 + 10); // +10s margin
     });
 
+    describe('getParisDateString', () => {
+        const { getParisDateString } = require('./date');
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        it('should return YYYYMMDD for a standard date', () => {
+            // Set time to July 20, 2024, 12:00:00 UTC -> Paris is 14:00:00 on same day
+            jest.setSystemTime(new Date('2024-07-20T12:00:00Z'));
+            expect(getParisDateString()).toBe('20240720');
+        });
+
+        it('should correctly handle year boundaries when Paris is ahead of UTC', () => {
+            // Set time to Dec 31, 2023, 23:30:00 UTC
+            // Paris is UTC+1 (Winter time), so it is Jan 1, 2024, 00:30:00 in Paris
+            jest.setSystemTime(new Date('2023-12-31T23:30:00Z'));
+            expect(getParisDateString()).toBe('20240101');
+        });
+
+        it('should correctly handle leap years', () => {
+            // Set time to Feb 29, 2024, 12:00:00 UTC -> Paris is 13:00:00 on same day
+            jest.setSystemTime(new Date('2024-02-29T12:00:00Z'));
+            expect(getParisDateString()).toBe('20240229');
+        });
+
+        it('should handle single digit month and day correctly with padding', () => {
+            // Set time to Jan 5, 2024, 12:00:00 UTC
+            jest.setSystemTime(new Date('2024-01-05T12:00:00Z'));
+            expect(getParisDateString()).toBe('20240105');
+        });
+    });
+
 });
