@@ -7,7 +7,7 @@
  * Get the UTC offset string for Paris at a given date (e.g., "+01:00" or "+02:00")
  * We verify the offset at NOON on that day to avoid edge cases around 2am/3am transitions
  */
-function getParisOffset(year: number, month: number, day: number): string {
+export function getParisOffset(year: number, month: number, day: number): string {
     // Create a date at noon UTC to check the offset
     // This avoids the ambiguous hour during DST switch (2am-3am)
     const date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
