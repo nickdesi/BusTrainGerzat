@@ -1,6 +1,41 @@
 import { parseParisTime, getParisMidnight, getNowUnix } from './date';
+import { parseParisTime, getParisMidnight, getParisOffset } from './date';
 
 describe('Date Utilities - Paris Timezone', () => {
+
+    describe('getParisOffset', () => {
+        it('should return +01:00 for Winter time (January)', () => {
+            expect(getParisOffset(2024, 1, 15)).toBe('+01:00');
+        });
+
+        it('should return +02:00 for Summer time (July)', () => {
+            expect(getParisOffset(2024, 7, 15)).toBe('+02:00');
+        });
+
+        it('should handle Spring DST transition (Winter -> Summer) in 2024', () => {
+            // March 31, 2024 is the transition day
+            expect(getParisOffset(2024, 3, 30)).toBe('+01:00'); // Day before
+            expect(getParisOffset(2024, 3, 31)).toBe('+02:00'); // Transition day
+        });
+
+        it('should handle Autumn DST transition (Summer -> Winter) in 2024', () => {
+            // October 27, 2024 is the transition day
+            expect(getParisOffset(2024, 10, 26)).toBe('+02:00'); // Day before
+            expect(getParisOffset(2024, 10, 27)).toBe('+01:00'); // Transition day
+        });
+
+        it('should handle Spring DST transition (Winter -> Summer) in 2023', () => {
+            // March 26, 2023 is the transition day
+            expect(getParisOffset(2023, 3, 25)).toBe('+01:00'); // Day before
+            expect(getParisOffset(2023, 3, 26)).toBe('+02:00'); // Transition day
+        });
+
+        it('should handle Autumn DST transition (Summer -> Winter) in 2023', () => {
+            // October 29, 2023 is the transition day
+            expect(getParisOffset(2023, 10, 28)).toBe('+02:00'); // Day before
+            expect(getParisOffset(2023, 10, 29)).toBe('+01:00'); // Transition day
+        });
+    });
 
     it('should parse Winter time correctly (GMT+1)', () => {
         // 20 Jan 2024, 10:00:00 Paris -> 09:00:00 UTC
@@ -55,6 +90,40 @@ describe('Date Utilities - Paris Timezone', () => {
 
             // Restore
             dateSpy.mockRestore();
+    describe('getParisDateString', () => {
+        const { getParisDateString } = require('./date');
+
+        beforeEach(() => {
+            jest.useFakeTimers();
+        });
+
+        afterEach(() => {
+            jest.useRealTimers();
+        });
+
+        it('should return YYYYMMDD for a standard date', () => {
+            // Set time to July 20, 2024, 12:00:00 UTC -> Paris is 14:00:00 on same day
+            jest.setSystemTime(new Date('2024-07-20T12:00:00Z'));
+            expect(getParisDateString()).toBe('20240720');
+        });
+
+        it('should correctly handle year boundaries when Paris is ahead of UTC', () => {
+            // Set time to Dec 31, 2023, 23:30:00 UTC
+            // Paris is UTC+1 (Winter time), so it is Jan 1, 2024, 00:30:00 in Paris
+            jest.setSystemTime(new Date('2023-12-31T23:30:00Z'));
+            expect(getParisDateString()).toBe('20240101');
+        });
+
+        it('should correctly handle leap years', () => {
+            // Set time to Feb 29, 2024, 12:00:00 UTC -> Paris is 13:00:00 on same day
+            jest.setSystemTime(new Date('2024-02-29T12:00:00Z'));
+            expect(getParisDateString()).toBe('20240229');
+        });
+
+        it('should handle single digit month and day correctly with padding', () => {
+            // Set time to Jan 5, 2024, 12:00:00 UTC
+            jest.setSystemTime(new Date('2024-01-05T12:00:00Z'));
+            expect(getParisDateString()).toBe('20240105');
         });
     });
 
