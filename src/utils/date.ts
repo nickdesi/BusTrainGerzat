@@ -3,6 +3,28 @@
  * Handles Daylight Saving Time (DST) transitions automatically via Intl API
  */
 
+// Cache Intl.DateTimeFormat instances at the module level to avoid expensive
+// object creation on each function call.
+const PARIS_OFFSET_FORMATTER = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Paris',
+    timeZoneName: 'longOffset'
+});
+
+const PARIS_MIDNIGHT_FORMATTER = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Paris',
+    hour12: false,
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric'
+});
+
+const PARIS_DATE_STRING_FORMATTER = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Paris',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+});
+
 /**
  * Get the UTC offset string for Paris at a given date (e.g., "+01:00" or "+02:00")
  * We verify the offset at NOON on that day to avoid edge cases around 2am/3am transitions
@@ -14,10 +36,7 @@ function getParisOffset(year: number, month: number, day: number): string {
 
     // Get timeZoneName in "longOffset" format (e.g. "GMT+01:00" or "GMT+1" depending on node version)
     // We strictly default to "longOffset" but normalize the output just in case
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Europe/Paris',
-        timeZoneName: 'longOffset'
-    }).formatToParts(date);
+    const parts = PARIS_OFFSET_FORMATTER.formatToParts(date);
 
     const tzPart = parts.find(p => p.type === 'timeZoneName');
 
@@ -72,13 +91,7 @@ export function parseParisTime(dateStr: string): number {
 export function getParisMidnight(): number {
     const now = new Date();
     // Get current Paris time parts
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Europe/Paris',
-        hour12: false,
-        year: 'numeric',
-        month: 'numeric',
-        day: 'numeric'
-    }).formatToParts(now);
+    const parts = PARIS_MIDNIGHT_FORMATTER.formatToParts(now);
 
     const year = parseInt(parts.find(p => p.type === 'year')?.value || '1970');
     const month = parseInt(parts.find(p => p.type === 'month')?.value || '1');
@@ -103,12 +116,7 @@ export function getNowUnix(): number {
  */
 export function getParisDateString(): string {
     const now = new Date();
-    const parts = new Intl.DateTimeFormat('en-US', {
-        timeZone: 'Europe/Paris',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
-    }).formatToParts(now);
+    const parts = PARIS_DATE_STRING_FORMATTER.formatToParts(now);
 
     const year = parts.find(p => p.type === 'year')?.value || '1970';
     const month = parts.find(p => p.type === 'month')?.value || '01';
