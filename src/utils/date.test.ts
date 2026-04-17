@@ -1,6 +1,40 @@
-import { parseParisTime, getParisMidnight } from './date';
+import { parseParisTime, getParisMidnight, getParisOffset } from './date';
 
 describe('Date Utilities - Paris Timezone', () => {
+
+    describe('getParisOffset', () => {
+        it('should return +01:00 for Winter time (January)', () => {
+            expect(getParisOffset(2024, 1, 15)).toBe('+01:00');
+        });
+
+        it('should return +02:00 for Summer time (July)', () => {
+            expect(getParisOffset(2024, 7, 15)).toBe('+02:00');
+        });
+
+        it('should handle Spring DST transition (Winter -> Summer) in 2024', () => {
+            // March 31, 2024 is the transition day
+            expect(getParisOffset(2024, 3, 30)).toBe('+01:00'); // Day before
+            expect(getParisOffset(2024, 3, 31)).toBe('+02:00'); // Transition day
+        });
+
+        it('should handle Autumn DST transition (Summer -> Winter) in 2024', () => {
+            // October 27, 2024 is the transition day
+            expect(getParisOffset(2024, 10, 26)).toBe('+02:00'); // Day before
+            expect(getParisOffset(2024, 10, 27)).toBe('+01:00'); // Transition day
+        });
+
+        it('should handle Spring DST transition (Winter -> Summer) in 2023', () => {
+            // March 26, 2023 is the transition day
+            expect(getParisOffset(2023, 3, 25)).toBe('+01:00'); // Day before
+            expect(getParisOffset(2023, 3, 26)).toBe('+02:00'); // Transition day
+        });
+
+        it('should handle Autumn DST transition (Summer -> Winter) in 2023', () => {
+            // October 29, 2023 is the transition day
+            expect(getParisOffset(2023, 10, 28)).toBe('+02:00'); // Day before
+            expect(getParisOffset(2023, 10, 29)).toBe('+01:00'); // Transition day
+        });
+    });
 
     it('should parse Winter time correctly (GMT+1)', () => {
         // 20 Jan 2024, 10:00:00 Paris -> 09:00:00 UTC
