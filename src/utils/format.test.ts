@@ -1,6 +1,33 @@
-import { formatTime } from './format';
+import { formatTime, normalizeText } from './format';
 
 describe('format util', () => {
+    describe('normalizeText', () => {
+        it('capitalizes basic text', () => {
+            expect(normalizeText('hello')).toBe('HELLO');
+        });
+
+        it('removes accents', () => {
+            expect(normalizeText('éàçùëî')).toBe('EACUEI');
+            expect(normalizeText('Clermont-Ferrand')).toBe('CLERMONT-FERRAND');
+            expect(normalizeText('Médiathèque Hugo')).toBe('MEDIATHEQUE HUGO');
+        });
+
+        it('preserves allowed special characters and numbers', () => {
+            expect(normalizeText("L'arrêt 1-2")).toBe("L'ARRET 1-2");
+            expect(normalizeText('123 ABC')).toBe('123 ABC');
+            expect(normalizeText('Station - Mairie')).toBe('STATION - MAIRIE');
+        });
+
+        it('replaces unallowed special characters with space', () => {
+            expect(normalizeText('hello@world.com')).toBe('HELLO WORLD COM');
+            expect(normalizeText('A_B*C+D=E')).toBe('A B C D E');
+        });
+
+        it('handles empty string', () => {
+            expect(normalizeText('')).toBe('');
+        });
+    });
+
     describe('formatTime', () => {
         it('formats valid timestamp correctly', () => {
             // Mocked timestamp for 14:30:00 UTC (checking locale strings might depend on system timezone, 
