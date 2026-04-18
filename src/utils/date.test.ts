@@ -1,5 +1,4 @@
-import { parseParisTime, getParisMidnight, getNowUnix } from './date';
-import { parseParisTime, getParisMidnight, getParisOffset } from './date';
+import { parseParisTime, getParisMidnight, getParisOffset, getNowUnix, getParisDateString } from './date';
 
 describe('Date Utilities - Paris Timezone', () => {
 
@@ -90,6 +89,8 @@ describe('Date Utilities - Paris Timezone', () => {
 
             // Restore
             dateSpy.mockRestore();
+        });
+    });
     describe('getParisDateString', () => {
         const { getParisDateString } = require('./date');
 

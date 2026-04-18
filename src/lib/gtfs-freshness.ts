@@ -10,18 +10,20 @@ interface StaticScheduleItem {
     tripId: string;
 }
 
+// ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation
+const PARIS_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+});
+
 /**
  * Get today's date in YYYYMMDD format (Paris timezone)
  */
 function getTodayDateStr(): string {
     try {
-        const formatter = new Intl.DateTimeFormat('fr-FR', {
-            timeZone: 'Europe/Paris',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        });
-        const parts = formatter.formatToParts(new Date());
+        const parts = PARIS_DATE_FORMATTER.formatToParts(new Date());
         const year = parts.find(p => p.type === 'year')?.value;
         const month = parts.find(p => p.type === 'month')?.value;
         const day = parts.find(p => p.type === 'day')?.value;
