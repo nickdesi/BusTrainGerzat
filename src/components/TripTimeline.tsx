@@ -3,6 +3,7 @@
 import { memo, useState, useEffect } from 'react';
 import { Loader2, Wifi, Clock, Accessibility, Bus } from 'lucide-react';
 import { StopTimeDetail } from '@/hooks/useTripDetails';
+import { formatTime } from '@/utils/format';
 
 interface TripTimelineProps {
     stops: StopTimeDetail[];
@@ -10,13 +11,6 @@ interface TripTimelineProps {
     isRealtime?: boolean;
     routeColor?: string;
     currentTime?: number; // Unix timestamp for current time
-}
-
-function formatTime(timestamp: number): string {
-    return new Date(timestamp * 1000).toLocaleTimeString('fr-FR', {
-        hour: '2-digit',
-        minute: '2-digit',
-    });
 }
 
 function formatDelay(delaySeconds: number): string {
