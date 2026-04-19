@@ -4,6 +4,20 @@ import { useEffect, useState } from 'react';
 import { Clock, Calendar } from 'lucide-react';
 import SplitFlapDisplay from './SplitFlapDisplay';
 
+// ⚡ Bolt: Cache Intl.DateTimeFormat instances to avoid expensive recreation on every render (every second)
+const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+});
+
+const DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+});
+
 export default function ClockWidget() {
     // Use lazy initial state to avoid hydration mismatch and set initial value in effect callback
     const [currentTime, setCurrentTime] = useState<Date | null>(() => {
@@ -27,21 +41,12 @@ export default function ClockWidget() {
 
     const formatClock = () => {
         if (!currentTime) return '00:00:00';
-        return currentTime.toLocaleTimeString('fr-FR', {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-        });
+        return TIME_FORMATTER.format(currentTime);
     };
 
     const formatDate = () => {
         if (!currentTime) return '';
-        return currentTime.toLocaleDateString('fr-FR', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        });
+        return DATE_FORMATTER.format(currentTime);
     };
 
     return (

@@ -15,6 +15,12 @@ const Popup = dynamic(
     { ssr: false }
 );
 
+// ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation on every render
+const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit'
+});
+
 interface BusMarkerProps {
     vehicle: VehiclePosition;
 }
@@ -124,7 +130,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                             <div className="flex-1 bg-white/5 rounded p-2 border border-white/10 text-center">
                                 <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Arrivée</div>
                                 <div className="font-bold text-white">
-                                    {new Date(vehicle.estimatedArrival * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                                    {TIME_FORMATTER.format(vehicle.estimatedArrival * 1000)}
                                 </div>
                             </div>
                         </div>
@@ -139,7 +145,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                                 <div className="text-right">
                                     <div className="text-[10px] text-gray-500 uppercase tracking-wider">Arrivée</div>
                                     <div className="text-xl font-bold text-yellow-400 tabular-nums">
-                                        {new Date(vehicle.terminusEta * 1000).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })}
+                                        {TIME_FORMATTER.format(vehicle.terminusEta * 1000)}
                                     </div>
                                 </div>
                             </div>
