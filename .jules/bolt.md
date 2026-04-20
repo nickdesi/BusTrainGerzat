@@ -8,3 +8,6 @@
 ## 2024-05-23 - Replaced inline format instances with Intl.DateTimeFormat pattern in components
 **Learning:** When moving toLocaleTimeString() and toLocaleDateString() outside of components in render loop into globally cached variables, use Intl.DateTimeFormat pattern. Make sure not to mistakenly assume all files share the exact same configuration as they can vary between formatting sizes like having seconds or not.
 **Action:** Use explicitly cached module-level Intl.DateTimeFormat formatting rules locally within file where used, rather than defaulting to exporting them all out of utility if configuration parameters slightly differ.
+## 2026-04-20 - Extracting large list rows into React.memo components
+**Learning:** In large lists like `DeparturesBoard.tsx`, updating a single piece of state (like `selectedTrip` for a modal) causes the entire list to re-render. If the list items contain complex UI or expensive calculations, this creates significant UI lag (O(N) rendering instead of O(1)).
+**Action:** Extract list items (like `<tr>`) into separate components wrapped in `React.memo()` and ensure all passed callback functions (like click handlers) are stabilized using `useCallback` in the parent. This restricts re-rendering only to the items whose props actually change.

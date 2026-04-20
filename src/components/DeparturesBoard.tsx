@@ -1,6 +1,6 @@
 'use client';
 
-import { memo, useState, useMemo } from 'react';
+import { memo, useState, useMemo, useCallback } from 'react';
 import { ArrowRight, Bus, Train, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
@@ -17,6 +17,165 @@ interface DeparturesBoardProps {
     favorites?: string[]; // IDs of favorite lines
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
+
+// ⚡ Bolt: Extract DepartureBoardRow into a memoized component to prevent expensive re-renders
+// when parent state (like selectedTrip) changes.
+interface DepartureBoardRowProps {
+    entry: UnifiedEntry;
+    index: number;
+    boardType: 'departures' | 'arrivals';
+    isFav: boolean;
+    prediction: { probability: 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE'; estimatedDelay: number };
+    onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
+    onTripClick?: (tripId: string, line: string) => void;
+}
+
+const DepartureBoardRow = memo(function DepartureBoardRow({
+    entry,
+    index,
+    boardType,
+    isFav,
+    prediction,
+    onToggleFavorite,
+    onTripClick
+}: DepartureBoardRowProps) {
+    const showPrediction = !entry.isRealtime && !entry.isCancelled && (prediction.probability === 'HIGH' || prediction.probability === 'MEDIUM');
+    const isClickable = entry.type === 'BUS' && !!entry.tripId;
+
+    return (
+        <tr
+            onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
+            className={`flip-enter transition-colors ${isClickable
+                ? 'cursor-pointer hover:bg-yellow-900/20'
+                : 'hover:bg-gray-800/50'
+                } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+            title={entry.type === 'BUS' ? 'Cliquez pour voir le détail du trajet' : entry.isCancelled ? 'Train supprimé' : undefined}
+        >
+            {/* Favorite Toggle */}
+            <td className="px-2 py-5 text-center">
+                {onToggleFavorite && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
+                        }}
+                        className={`transition-all hover:scale-110 ${isFav ? 'text-yellow-400' : 'text-gray-700 hover:text-gray-400'}`}
+                        title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+                        aria-label={isFav ? `Retirer la ligne ${entry.line} vers ${entry.destination} des favoris` : `Ajouter la ligne ${entry.line} vers ${entry.destination} aux favoris`}
+                        aria-pressed={isFav}
+                    >
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                        </svg>
+                    </button>
+                )}
+            </td>
+
+            {/* Time */}
+            <td className="px-6 py-5">
+                {entry.type === 'TER' ? (
+                    <div className="flex items-center gap-4">
+                        <div className="flex flex-col items-center">
+                            <span className="text-[10px] uppercase text-gray-500 mb-1">Arrivée</span>
+                            <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="lg" color="text-yellow-500" />
+                        </div>
+                        <span className="text-gray-600 text-xl">→</span>
+                        <div className="flex flex-col items-center">
+                            <span className="text-[10px] uppercase text-gray-500 mb-1">Départ</span>
+                            <SplitFlapDisplay text={formatTime(entry.departureTime)} size="lg" color="text-yellow-500" />
+                        </div>
+                    </div>
+                ) : (
+                    <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="xl" color="text-yellow-500" />
+                )}
+            </td>
+
+            {/* Type */}
+            <td className="px-6 py-5">
+                <div className="flex items-center gap-2">
+                    {entry.type === 'BUS' ? (
+                        <>
+                            <Bus className="w-5 h-5 text-red-500" />
+                            <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-900/30 text-red-400 border border-red-700/50 uppercase">
+                                Bus
+                            </span>
+                        </>
+                    ) : (
+                        <>
+                            <Train className="w-5 h-5 text-blue-500" />
+                            <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-blue-900/30 text-blue-400 border border-blue-700/50 uppercase">
+                                TER
+                            </span>
+                        </>
+                    )}
+                </div>
+            </td>
+
+            {/* Line */}
+            <td className="px-6 py-5">
+                {entry.type === 'BUS' ? (
+                    <div className="w-10 h-10 flex items-center justify-center rounded shadow-lg border border-yellow-600/50" style={{ backgroundColor: '#fdc300', boxShadow: '0 4px 14px rgba(253, 195, 0, 0.3)' }}>
+                        <span className="text-lg font-bold text-black font-sans tracking-tight">{entry.line}</span>
+                    </div>
+                ) : (
+                    <div className="px-3 py-1.5 bg-blue-600 flex items-center justify-center rounded shadow-lg shadow-blue-900/40 border border-blue-500/50 min-w-[70px]">
+                        <span className="text-xs font-bold text-white font-mono tracking-wider">{entry.line}</span>
+                    </div>
+                )}
+            </td>
+
+            {/* Destination / Provenance */}
+            <td className="px-6 py-5">
+                <div className="flex items-center gap-3">
+                    <ArrowRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
+                    <div className="overflow-hidden">
+                        <SplitFlapDisplay
+                            text={boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination}
+                            size="xs"
+                            color="text-gray-200"
+                        />
+                    </div>
+                </div>
+            </td>
+
+            {/* Platform */}
+            <td className="px-6 py-5">
+                <span className="text-sm text-gray-400 font-medium">
+                    {entry.platform}
+                </span>
+            </td>
+
+            {/* Status */}
+            <td className="px-6 py-5 text-center">
+                <div className="flex flex-col items-center justify-center gap-2">
+                    <div className="flex items-center gap-3">
+                        <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
+                        {entry.isRealtime ? (
+                            <Wifi className="w-4 h-4 text-green-500 animate-pulse" strokeWidth={3} />
+                        ) : (
+                            <WifiOff className="w-3 h-3 text-gray-700/50" />
+                        )}
+                    </div>
+                    {showPrediction && (
+                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-900/30 border border-purple-500/30 animate-pulse">
+                            <BrainCircuit className="w-3 h-3 text-purple-400" />
+                            <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
+                                IA: +{prediction.estimatedDelay} min probables
+                            </span>
+                        </div>
+                    )}
+                </div>
+            </td>
+
+            {/* Click indicator for buses */}
+            {isClickable && (
+                <td className="px-2 py-5">
+                    <ChevronRight className="w-4 h-4 text-gray-600" />
+                </td>
+            )}
+        </tr>
+    );
+});
 
 export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
@@ -36,6 +195,16 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
             return 0; // Maintain existing sort (by time)
         });
     }, [departures, favorites]);
+
+    // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureBoardRow's React.memo() on every render
+    const handleTripClick = useCallback((tripId: string, line: string) => {
+        setSelectedTrip({ tripId, line });
+    }, []);
+
+    // ⚡ Bolt: Provide a stable reference for toggle favorite to prevent defeating DepartureBoardRow's React.memo()
+    const handleToggleFavorite = useCallback((id: string, line: string, destination: string, type: 'BUS' | 'TER') => {
+        onToggleFavorite?.(id, line, destination, type);
+    }, [onToggleFavorite]);
 
     return (
         <div className="hidden md:block overflow-x-auto bg-surface">
@@ -74,142 +243,19 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                             // Prediction Logic
                             const departureTime = new Date(entry.departureTime);
                             const prediction = getPrediction(entry.line, departureTime.getHours(), departureTime.getDay());
-                            const showPrediction = !entry.isRealtime && !entry.isCancelled && (prediction.probability === 'HIGH' || prediction.probability === 'MEDIUM');
 
                             return (
-                                <tr
+                                <DepartureBoardRow
                                     key={entry.id}
-                                    onClick={() => entry.type === 'BUS' && entry.tripId && setSelectedTrip({ tripId: entry.tripId, line: entry.line })}
-                                    className={`flip-enter transition-colors ${entry.type === 'BUS' && entry.tripId
-                                        ? 'cursor-pointer hover:bg-yellow-900/20'
-                                        : 'hover:bg-gray-800/50'
-                                        } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
-                                    title={entry.type === 'BUS' ? 'Cliquez pour voir le détail du trajet' : entry.isCancelled ? 'Train supprimé' : undefined}
-                                >
-                                    {/* Favorite Toggle */}
-                                    <td className="px-2 py-5 text-center">
-                                        {onToggleFavorite && (
-                                            <button
-                                                onClick={(e) => {
-                                                    e.stopPropagation();
-                                                    onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
-                                                }}
-                                                className={`transition-all hover:scale-110 ${isFav ? 'text-yellow-400' : 'text-gray-700 hover:text-gray-400'}`}
-                                                title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
-                                                aria-label={isFav ? `Retirer la ligne ${entry.line} vers ${entry.destination} des favoris` : `Ajouter la ligne ${entry.line} vers ${entry.destination} aux favoris`}
-                                                aria-pressed={isFav}
-                                            >
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
-                                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                                                </svg>
-                                            </button>
-                                        )}
-                                    </td>
-
-                                    {/* Time */}
-                                    <td className="px-6 py-5">
-                                        {entry.type === 'TER' ? (
-                                            <div className="flex items-center gap-4">
-                                                <div className="flex flex-col items-center">
-                                                    <span className="text-[10px] uppercase text-gray-500 mb-1">Arrivée</span>
-                                                    <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="lg" color="text-yellow-500" />
-                                                </div>
-                                                <span className="text-gray-600 text-xl">→</span>
-                                                <div className="flex flex-col items-center">
-                                                    <span className="text-[10px] uppercase text-gray-500 mb-1">Départ</span>
-                                                    <SplitFlapDisplay text={formatTime(entry.departureTime)} size="lg" color="text-yellow-500" />
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="xl" color="text-yellow-500" />
-                                        )}
-                                    </td>
-
-                                    {/* Type */}
-                                    <td className="px-6 py-5">
-                                        <div className="flex items-center gap-2">
-                                            {entry.type === 'BUS' ? (
-                                                <>
-                                                    <Bus className="w-5 h-5 text-red-500" />
-                                                    <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-900/30 text-red-400 border border-red-700/50 uppercase">
-                                                        Bus
-                                                    </span>
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <Train className="w-5 h-5 text-blue-500" />
-                                                    <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-blue-900/30 text-blue-400 border border-blue-700/50 uppercase">
-                                                        TER
-                                                    </span>
-                                                </>
-                                            )}
-                                        </div>
-                                    </td>
-
-                                    {/* Line */}
-                                    <td className="px-6 py-5">
-                                        {entry.type === 'BUS' ? (
-                                            <div className="w-10 h-10 flex items-center justify-center rounded shadow-lg border border-yellow-600/50" style={{ backgroundColor: '#fdc300', boxShadow: '0 4px 14px rgba(253, 195, 0, 0.3)' }}>
-                                                <span className="text-lg font-bold text-black font-sans tracking-tight">{entry.line}</span>
-                                            </div>
-                                        ) : (
-                                            <div className="px-3 py-1.5 bg-blue-600 flex items-center justify-center rounded shadow-lg shadow-blue-900/40 border border-blue-500/50 min-w-[70px]">
-                                                <span className="text-xs font-bold text-white font-mono tracking-wider">{entry.line}</span>
-                                            </div>
-                                        )}
-                                    </td>
-
-                                    {/* Destination / Provenance */}
-                                    <td className="px-6 py-5">
-                                        <div className="flex items-center gap-3">
-                                            <ArrowRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                                            <div className="overflow-hidden">
-                                                <SplitFlapDisplay
-                                                    text={boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination}
-                                                    size="xs"
-                                                    color="text-gray-200"
-                                                />
-                                            </div>
-                                        </div>
-                                    </td>
-
-                                    {/* Platform */}
-                                    <td className="px-6 py-5">
-                                        <span className="text-sm text-gray-400 font-medium">
-                                            {entry.platform}
-                                        </span>
-                                    </td>
-
-                                    {/* Status */}
-                                    <td className="px-6 py-5 text-center">
-                                        <div className="flex flex-col items-center justify-center gap-2">
-                                            <div className="flex items-center gap-3">
-                                                <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
-                                                {entry.isRealtime ? (
-                                                    <Wifi className="w-4 h-4 text-green-500 animate-pulse" strokeWidth={3} />
-                                                ) : (
-                                                    <WifiOff className="w-3 h-3 text-gray-700/50" />
-                                                )}
-                                            </div>
-                                            {showPrediction && (
-                                                <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-900/30 border border-purple-500/30 animate-pulse">
-                                                    <BrainCircuit className="w-3 h-3 text-purple-400" />
-                                                    <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
-                                                        IA: +{prediction.estimatedDelay} min probables
-                                                    </span>
-                                                </div>
-                                            )}
-                                        </div>
-                                    </td>
-
-                                    {/* Click indicator for buses */}
-                                    {entry.type === 'BUS' && entry.tripId && (
-                                        <td className="px-2 py-5">
-                                            <ChevronRight className="w-4 h-4 text-gray-600" />
-                                        </td>
-                                    )}
-                                </tr>
-                            )
+                                    entry={entry}
+                                    index={index}
+                                    boardType={boardType}
+                                    isFav={isFav}
+                                    prediction={prediction}
+                                    onToggleFavorite={onToggleFavorite ? handleToggleFavorite : undefined}
+                                    onTripClick={handleTripClick}
+                                />
+                            );
                         })
                     )}
                 </tbody>
