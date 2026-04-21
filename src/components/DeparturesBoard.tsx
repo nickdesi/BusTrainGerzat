@@ -25,7 +25,6 @@ interface DepartureBoardRowProps {
     index: number;
     boardType: 'departures' | 'arrivals';
     isFav: boolean;
-    prediction: { probability: 'HIGH' | 'MEDIUM' | 'LOW' | 'NONE'; estimatedDelay: number };
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
     onTripClick?: (tripId: string, line: string) => void;
 }
@@ -35,10 +34,19 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
     index,
     boardType,
     isFav,
-    prediction,
     onToggleFavorite,
     onTripClick
 }: DepartureBoardRowProps) {
+    const { getPrediction } = usePredictiveDelay();
+
+    // ⚡ Bolt: Compute prediction inside the memoized row instead of the parent.
+    // Parent passing a new object on every render defeated React.memo.
+    // Also fixed bug: departureTime needs to be * 1000 for Date constructor
+    const prediction = useMemo(() => {
+        const departureTime = new Date(entry.departureTime * 1000);
+        return getPrediction(entry.line, departureTime.getHours(), departureTime.getDay());
+    }, [entry.departureTime, entry.line, getPrediction]);
+
     const showPrediction = !entry.isRealtime && !entry.isCancelled && (prediction.probability === 'HIGH' || prediction.probability === 'MEDIUM');
     const isClickable = entry.type === 'BUS' && !!entry.tripId;
 
@@ -179,22 +187,27 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
 
 export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
-    const { getPrediction } = usePredictiveDelay();
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
+
+    // ⚡ Bolt: Memoize favoritesSet to avoid O(N) array recreation and O(M) includes
+    // during sorting and mapping. This ensures O(1) lookups for the map and sort functions.
+    const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
 
     // Sort departures: Favorites first, then by time
     const sortedDepartures = useMemo(() => {
+        // ⚡ Bolt: Use the memoized favoritesSet to make lookups O(1) inside the sort loop
+        // instead of O(M) inside an O(N log N) loop.
         return [...departures].sort((a, b) => {
             const idA = a.id;
             const idB = b.id;
-            const isFavA = favorites.includes(idA);
-            const isFavB = favorites.includes(idB);
+            const isFavA = favoritesSet.has(idA);
+            const isFavB = favoritesSet.has(idB);
 
             if (isFavA && !isFavB) return -1;
             if (!isFavA && isFavB) return 1;
             return 0; // Maintain existing sort (by time)
         });
-    }, [departures, favorites]);
+    }, [departures, favoritesSet]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureBoardRow's React.memo() on every render
     const handleTripClick = useCallback((tripId: string, line: string) => {
@@ -238,11 +251,8 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                         </tr>
                     ) : (
                         sortedDepartures.map((entry, index) => {
-                            const isFav = favorites.includes(entry.id);
-
-                            // Prediction Logic
-                            const departureTime = new Date(entry.departureTime);
-                            const prediction = getPrediction(entry.line, departureTime.getHours(), departureTime.getDay());
+                            // ⚡ Bolt: Use O(1) set lookup instead of O(M) includes
+                            const isFav = favoritesSet.has(entry.id);
 
                             return (
                                 <DepartureBoardRow
@@ -251,7 +261,6 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                                     index={index}
                                     boardType={boardType}
                                     isFav={isFav}
-                                    prediction={prediction}
                                     onToggleFavorite={onToggleFavorite ? handleToggleFavorite : undefined}
                                     onTripClick={handleTripClick}
                                 />
