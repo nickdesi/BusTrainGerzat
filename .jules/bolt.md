@@ -11,3 +11,6 @@
 ## 2026-04-20 - Extracting large list rows into React.memo components
 **Learning:** In large lists like `DeparturesBoard.tsx`, updating a single piece of state (like `selectedTrip` for a modal) causes the entire list to re-render. If the list items contain complex UI or expensive calculations, this creates significant UI lag (O(N) rendering instead of O(1)).
 **Action:** Extract list items (like `<tr>`) into separate components wrapped in `React.memo()` and ensure all passed callback functions (like click handlers) are stabilized using `useCallback` in the parent. This restricts re-rendering only to the items whose props actually change.
+## 2026-05-23 - Memoizing Arrays to Sets for Array Sort Lookups
+**Learning:** Checking `Array.includes()` repeatedly inside a sort comparator (`O(N log N)` loop) degrades performance to `O(N log N * M)`. This is a hidden bottleneck in list sorting, especially for features like sorting by favorites.
+**Action:** Always convert lookup arrays (like `favorites`) into a `Set` inside a `useMemo` block prior to the sort function, enabling O(1) `Set.has()` lookups and restoring sort efficiency to `O(N log N)`.

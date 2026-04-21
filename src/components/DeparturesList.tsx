@@ -107,20 +107,24 @@ export default memo(function DeparturesList({ departures, loading, boardType = '
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 
+    // ⚡ Bolt: Memoize favoritesSet to avoid O(N) array recreation and O(M) includes
+    // during sorting and mapping. This ensures O(1) lookups for the map and sort functions.
+    const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
+
     // Sort departures: Favorites first
     // ⚡ Bolt: Memoize sorting to prevent expensive O(N log N) re-sorts on parent state changes (like selecting a trip)
     const sortedDepartures = useMemo(() => {
         return [...departures].sort((a, b) => {
             const idA = a.id;
             const idB = b.id;
-            const isFavA = favorites.includes(idA);
-            const isFavB = favorites.includes(idB);
+            const isFavA = favoritesSet.has(idA);
+            const isFavB = favoritesSet.has(idB);
 
             if (isFavA && !isFavB) return -1;
             if (!isFavA && isFavB) return 1;
             return 0;
         });
-    }, [departures, favorites]);
+    }, [departures, favoritesSet]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureRow's React.memo() on every render
     const handleTripClick = useCallback((tripId: string, line: string) => {
@@ -142,7 +146,7 @@ export default memo(function DeparturesList({ departures, loading, boardType = '
                 </div>
             ) : (
                 sortedDepartures.map((entry, index) => {
-                    const isFav = favorites.includes(entry.id);
+                    const isFav = favoritesSet.has(entry.id);
 
                     return (
                         <DepartureRow
