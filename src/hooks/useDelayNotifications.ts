@@ -71,16 +71,25 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
 
     // Check for significant delays
     useEffect(() => {
-        const allEntries = [...departures, ...arrivals];
+        // ⚡ Bolt: Convert favorites array to Set for O(1) lookups instead of O(N) array includes
+        const favoritesSet = new Set(favorites);
 
-        allEntries.forEach((entry) => {
+        // ⚡ Bolt: Process departures and arrivals separately to avoid O(N^2) array includes checks
+        departures.forEach((entry) => {
             const delayMinutes = Math.floor(entry.delay / 60);
-            // Use entry.id directly since favorites now store unique trip IDs
-            const isFavorite = favorites.includes(entry.id);
+            const isFavorite = favoritesSet.has(entry.id);
 
             if (isFavorite && delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
-                const type = departures.includes(entry) ? 'departure' : 'arrival';
-                showNotification(entry, type);
+                showNotification(entry, 'departure');
+            }
+        });
+
+        arrivals.forEach((entry) => {
+            const delayMinutes = Math.floor(entry.delay / 60);
+            const isFavorite = favoritesSet.has(entry.id);
+
+            if (isFavorite && delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
+                showNotification(entry, 'arrival');
             }
         });
     }, [departures, arrivals, favorites, showNotification]);
