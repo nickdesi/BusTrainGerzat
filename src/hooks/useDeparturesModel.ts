@@ -89,13 +89,19 @@ interface DeparturesModelResult {
     arrivals: UnifiedEntry[];
 }
 
+// ⚡ Bolt: Cache empty arrays to avoid recreating them on every render
+// when data is undefined (e.g., during loading). This prevents defeating
+// the useMemo hook below and subsequent React.memo optimizations in the UI.
+const EMPTY_BUS_UPDATES: BusUpdate[] = [];
+const EMPTY_TRAIN_UPDATES: TrainUpdate[] = [];
+
 /**
  * Pure transformation hook - converts raw bus/train data into unified departures/arrivals
  * Separated from fetching logic for better testability and separation of concerns.
  */
 export function useDeparturesModel(
-    busUpdates: BusUpdate[] = [],
-    trainUpdates: TrainUpdate[] = []
+    busUpdates: BusUpdate[] = EMPTY_BUS_UPDATES,
+    trainUpdates: TrainUpdate[] = EMPTY_TRAIN_UPDATES
 ): DeparturesModelResult {
     return useMemo(() => {
         // Filter by direction:
