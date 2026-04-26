@@ -14,3 +14,10 @@
 ## 2026-05-23 - Memoizing Arrays to Sets for Array Sort Lookups
 **Learning:** Checking `Array.includes()` repeatedly inside a sort comparator (`O(N log N)` loop) degrades performance to `O(N log N * M)`. This is a hidden bottleneck in list sorting, especially for features like sorting by favorites.
 **Action:** Always convert lookup arrays (like `favorites`) into a `Set` inside a `useMemo` block prior to the sort function, enabling O(1) `Set.has()` lookups and restoring sort efficiency to `O(N log N)`.
+## 2026-05-24 - Avoiding O(N) Set Recreations Inside Map Loops
+**Learning:** Found an anti-pattern where a `Set` was being instantiated inside an `.map()` iteration over an array. For an array of size N, this meant the `Set` was allocated and populated N times, resulting in massive unnecessary memory overhead and degrading an O(N) mapping operation to essentially O(N*M) where M is the size of the set.
+**Action:** Always verify that complex data structures like `Set` or `Map` used for lookups inside loops are declared and instantiated *outside* the loop (or memoized in React components) to ensure they are created exactly once.
+
+## 2026-05-24 - Overusing Map/Set/Sort for Finding Extrema
+**Learning:** In a codebase, finding the maximum date string among 5,000+ entries was implemented using `[...new Set(schedule.map(item => item.date))].sort()`. This created a large intermediate array, deduplicated it into a Set, created another array, and applied an expensive O(N log N) sort just to grab the last element.
+**Action:** Replace expensive chaining (map + Set + sort) with a simple O(N) linear scan (e.g., using a basic `for` loop or `.reduce()`) when searching for maximums or minimums, especially on large datasets.
