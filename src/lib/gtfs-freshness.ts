@@ -52,8 +52,14 @@ export function getCalendarEndDate(): string | null {
     const schedule = staticSchedule as StaticScheduleItem[];
     if (schedule.length === 0) return null;
 
-    const dates = [...new Set(schedule.map(item => item.date))].sort();
-    return dates[dates.length - 1] || null;
+    // ⚡ Bolt: O(N) linear scan to find max date instead of O(N log N) Set+sort creation
+    let maxDate = schedule[0].date;
+    for (let i = 1; i < schedule.length; i++) {
+        if (schedule[i].date > maxDate) {
+            maxDate = schedule[i].date;
+        }
+    }
+    return maxDate;
 }
 
 /**
