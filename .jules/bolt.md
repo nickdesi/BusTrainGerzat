@@ -14,6 +14,9 @@
 ## 2026-05-23 - Memoizing Arrays to Sets for Array Sort Lookups
 **Learning:** Checking `Array.includes()` repeatedly inside a sort comparator (`O(N log N)` loop) degrades performance to `O(N log N * M)`. This is a hidden bottleneck in list sorting, especially for features like sorting by favorites.
 **Action:** Always convert lookup arrays (like `favorites`) into a `Set` inside a `useMemo` block prior to the sort function, enabling O(1) `Set.has()` lookups and restoring sort efficiency to `O(N log N)`.
+## 2024-05-24 - Avoid O(N^2) origin checks in merged arrays
+**Learning:** In hooks like `useDelayNotifications`, concatenating multiple arrays (`[...departures, ...arrivals]`) into a single `allEntries` array, and then using `.includes()` on the original arrays to determine the item's origin type inside the loop (`departures.includes(entry)`) creates an O(N^2) complexity bottleneck.
+**Action:** Process distinct arrays separately (e.g., separate `forEach` loops for `departures` and `arrivals`) rather than concatenating them. This eliminates the need for expensive origin checks inside the iteration and reduces memory overhead from array creation.
 ## 2026-05-24 - Avoiding O(N) Set Recreations Inside Map Loops
 **Learning:** Found an anti-pattern where a `Set` was being instantiated inside an `.map()` iteration over an array. For an array of size N, this meant the `Set` was allocated and populated N times, resulting in massive unnecessary memory overhead and degrading an O(N) mapping operation to essentially O(N*M) where M is the size of the set.
 **Action:** Always verify that complex data structures like `Set` or `Map` used for lookups inside loops are declared and instantiated *outside* the loop (or memoized in React components) to ensure they are created exactly once.
