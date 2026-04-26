@@ -14,6 +14,9 @@
 ## 2026-05-23 - Memoizing Arrays to Sets for Array Sort Lookups
 **Learning:** Checking `Array.includes()` repeatedly inside a sort comparator (`O(N log N)` loop) degrades performance to `O(N log N * M)`. This is a hidden bottleneck in list sorting, especially for features like sorting by favorites.
 **Action:** Always convert lookup arrays (like `favorites`) into a `Set` inside a `useMemo` block prior to the sort function, enabling O(1) `Set.has()` lookups and restoring sort efficiency to `O(N log N)`.
+## 2024-05-24 - Default function arguments and inline arrays breaking React.memo and useMemo
+**Learning:** Using `|| []` or default function parameters like `function foo(arr = [])` creates a new array reference on every render when the value is undefined (e.g., during loading states). When these arrays are passed into `useMemo` dependencies or `React.memo` components, they completely defeat memoization and cause the entire component tree to re-render unnecessarily.
+**Action:** Always use stable module-level constants (e.g., `const EMPTY_ARRAY = []`) for fallback values and default parameters when they will be used in dependency arrays or passed to memoized components.
 ## 2024-05-24 - Avoid O(N^2) origin checks in merged arrays
 **Learning:** In hooks like `useDelayNotifications`, concatenating multiple arrays (`[...departures, ...arrivals]`) into a single `allEntries` array, and then using `.includes()` on the original arrays to determine the item's origin type inside the loop (`departures.includes(entry)`) creates an O(N^2) complexity bottleneck.
 **Action:** Process distinct arrays separately (e.g., separate `forEach` loops for `departures` and `arrivals`) rather than concatenating them. This eliminates the need for expensive origin checks inside the iteration and reduces memory overhead from array creation.

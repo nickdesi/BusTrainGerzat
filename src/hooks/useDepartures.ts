@@ -74,8 +74,8 @@ export function useDepartures() {
 
     // Transformation logic (pure, testable)
     const { departures, arrivals } = useDeparturesModel(
-        busData?.updates || [],
-        trainData?.updates || []
+        busData?.updates,
+        trainData?.updates
     );
 
     // Memoized refetch function
