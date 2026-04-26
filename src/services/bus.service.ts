@@ -182,6 +182,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         const upcomingSchedule = (staticSchedule as StaticScheduleItem[])
             .filter((item: StaticScheduleItem) => item.arrival > now - 600);
 
+        const paturalIds = new Set(gtfsConfig.stopIds.patural);
+
         const combinedUpdates = upcomingSchedule
             .map((item: StaticScheduleItem) => {
                 // Try exact match first, then fuzzy pattern match
@@ -288,7 +290,6 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
                 // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
                 // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
-                const paturalIds = new Set(gtfsConfig.stopIds.patural);
                 const stopIdUpper = item.stopId?.toUpperCase() || '';
 
                 if (paturalIds.has(stopIdUpper)) {
