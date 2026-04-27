@@ -27,3 +27,6 @@
 ## 2026-05-24 - Overusing Map/Set/Sort for Finding Extrema
 **Learning:** In a codebase, finding the maximum date string among 5,000+ entries was implemented using `[...new Set(schedule.map(item => item.date))].sort()`. This created a large intermediate array, deduplicated it into a Set, created another array, and applied an expensive O(N log N) sort just to grab the last element.
 **Action:** Replace expensive chaining (map + Set + sort) with a simple O(N) linear scan (e.g., using a basic `for` loop or `.reduce()`) when searching for maximums or minimums, especially on large datasets.
+## 2026-05-25 - Avoid O(N) Set Recreations inside Function Calls
+**Learning:** Found an anti-pattern where a `Set` was being instantiated inside `findStopUpdate` and `getBusData`, both of which are called frequently (either per stop or per API request). This results in unnecessary O(N) memory allocations and GC pressure every time the functions are invoked.
+**Action:** Move Set definitions to the module scope and populate them using lazily loaded cache blocks or simply as constant definitions outside function scope to achieve O(1) performance and avoid recreation inside loops or API route handlers.
