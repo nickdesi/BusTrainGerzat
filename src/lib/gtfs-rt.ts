@@ -176,6 +176,10 @@ export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosi
 /**
  * Find RT stop update using dynamic stop groups (Champfleuri/Patural)
  */
+// ⚡ Bolt: Cache Set instances at the module level to avoid O(N) recreations inside loops
+const CHAMPFLEURI_STOPS_SET = new Set(gtfsConfig.stopIds.champfleuri);
+const PATURAL_STOPS_SET = new Set(gtfsConfig.stopIds.patural);
+
 export function findStopUpdate(stopUpdates: Map<string, RTStopUpdate>, stopId: string): RTStopUpdate | undefined {
     // 1. Exact match
     let rtStop = stopUpdates.get(stopId);
@@ -183,16 +187,13 @@ export function findStopUpdate(stopUpdates: Map<string, RTStopUpdate>, stopId: s
 
     // 2. Group match (Champfleuri or Patural)
     // Optimization: Use Sets for O(1) lookup instead of array includes/iteration
-    const champfleuriStops = new Set(gtfsConfig.stopIds.champfleuri);
-    const paturalStops = new Set(gtfsConfig.stopIds.patural);
-
-    if (champfleuriStops.has(stopId)) {
-        for (const id of champfleuriStops) {
+    if (CHAMPFLEURI_STOPS_SET.has(stopId)) {
+        for (const id of CHAMPFLEURI_STOPS_SET) {
             rtStop = stopUpdates.get(id);
             if (rtStop) return rtStop;
         }
-    } else if (paturalStops.has(stopId)) {
-        for (const id of paturalStops) {
+    } else if (PATURAL_STOPS_SET.has(stopId)) {
+        for (const id of PATURAL_STOPS_SET) {
             rtStop = stopUpdates.get(id);
             if (rtStop) return rtStop;
         }

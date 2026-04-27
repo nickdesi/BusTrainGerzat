@@ -71,6 +71,9 @@ async function getTripOrigins(): Promise<Map<string, string>> {
 
 // --- Service ---
 
+let TARGET_STOP_IDS_SET_CACHE: Set<string> | null = null;
+let PATURAL_IDS_SET_CACHE: Set<string> | null = null;
+
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
         const now = getNowUnix();
@@ -100,7 +103,15 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         // Dynamic Route Route IDs already handled by gtfs-rt.ts
         // Stop IDs used here for filtering legacy updates
-        const targetStopIds = new Set([...gtfsConfig.stopIds.champfleuri, ...gtfsConfig.stopIds.patural]);
+
+        // ⚡ Bolt: Use a lazy-loaded cache for Set instances to avoid O(N) recreations on every API call
+        // while preserving the lazy-loading pattern of the module.
+        if (!TARGET_STOP_IDS_SET_CACHE) {
+            TARGET_STOP_IDS_SET_CACHE = new Set([...gtfsConfig.stopIds.champfleuri, ...gtfsConfig.stopIds.patural]);
+        }
+        if (!PATURAL_IDS_SET_CACHE) {
+            PATURAL_IDS_SET_CACHE = new Set(gtfsConfig.stopIds.patural);
+        }
 
         for (const [tripId, update] of rtUpdates) {
             // 1. Handle Added Trips
@@ -146,7 +157,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 }>();
 
                 for (const [stopId, stopUpd] of update.stopUpdates) {
-                    if (targetStopIds.has(stopId)) {
+                    if (TARGET_STOP_IDS_SET_CACHE!.has(stopId)) {
                         stopsMap.set(stopId, {
                             arrival: stopUpd.predictedArrival ? { time: stopUpd.predictedArrival, delay: stopUpd.delay } : undefined,
                             departure: stopUpd.predictedDeparture ? { time: stopUpd.predictedDeparture, delay: stopUpd.delay } : undefined,
@@ -181,8 +192,6 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         // Filter: show buses arriving in the future (or departed less than 10 min ago)
         const upcomingSchedule = (staticSchedule as StaticScheduleItem[])
             .filter((item: StaticScheduleItem) => item.arrival > now - 600);
-
-        const paturalIds = new Set(gtfsConfig.stopIds.patural);
 
         const combinedUpdates = upcomingSchedule
             .map((item: StaticScheduleItem) => {
@@ -292,7 +301,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
                 const stopIdUpper = item.stopId?.toUpperCase() || '';
 
-                if (paturalIds.has(stopIdUpper)) {
+                if (PATURAL_IDS_SET_CACHE!.has(stopIdUpper)) {
                     // If direction is NOT 0 (0 = usually Outbound/South towards Aubière/Ballainvilliers), skip
                     // Also ideally check headsign, but direction is a strong proxy.
                     if (item.direction === 1) { // Inbound
