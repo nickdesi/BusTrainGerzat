@@ -3,6 +3,10 @@
 import { memo, useState, useMemo, useCallback } from 'react';
 import { ArrowRight, Bus, Train, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
+// ⚡ Bolt: Use a stable module-level empty array to prevent unnecessary useMemo invalidations
+// when the parent component doesn't provide a favorites array.
+const EMPTY_FAVORITES: string[] = [];
+
 import SplitFlapDisplay from './SplitFlapDisplay';
 import StatusDisplay from './StatusDisplay';
 import TripDetailModal from './TripDetailModal';
@@ -185,7 +189,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
     );
 });
 
-export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
+export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = EMPTY_FAVORITES, onToggleFavorite }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 

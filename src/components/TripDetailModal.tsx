@@ -2,8 +2,11 @@
 
 import { useEffect, useCallback } from 'react';
 import { X, Bus, AlertCircle } from 'lucide-react';
-import { useTripDetails } from '@/hooks/useTripDetails';
+import { useTripDetails, StopTimeDetail } from '@/hooks/useTripDetails';
 import TripTimeline from './TripTimeline';
+
+// ⚡ Bolt: Provide a stable reference for the empty array to avoid defeating TripTimeline's React.memo()
+const EMPTY_STOPS: StopTimeDetail[] = [];
 
 interface TripDetailModalProps {
     tripId: string | null;
@@ -86,7 +89,7 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                         </div>
                     ) : (
                         <TripTimeline
-                            stops={tripData?.stops || []}
+                            stops={tripData?.stops || EMPTY_STOPS}
                             isLoading={isLoading}
                             isRealtime={tripData?.isRealtime}
                             routeColor="#fdc300"
