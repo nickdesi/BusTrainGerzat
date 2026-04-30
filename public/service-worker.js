@@ -1,5 +1,5 @@
 // Stable cache version. Bump manually when static SW-cached assets change.
-const CACHE_VERSION = '3.7.0';
+const CACHE_VERSION = '3.7.3';
 const CACHE_NAME = `gerzat-live-v${CACHE_VERSION}`;
 
 // Only cache truly static assets (icons, fonts)

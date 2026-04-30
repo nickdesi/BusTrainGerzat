@@ -3,10 +3,10 @@ providers = ["node"]
 
 [variables]
 NODE_VERSION = "24.13.0"
+NIXPACKS_NODE_VERSION = "24.13.0"
 
 [phases.setup]
-# Use the provider's Node version instead of forcing nixPkgs
-# nixPkgs = ["nodejs_22"]
+nixPkgs = ["nodejs_24"]
 
 [phases.install]
 cmds = ["npm ci"]
