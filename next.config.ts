@@ -27,7 +27,7 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org",
       "font-src 'self'",
-      "connect-src 'self' ws: wss: https://cloudflareinsights.com",
+      "connect-src 'self' ws: wss: https://static.cloudflareinsights.com https://cloudflareinsights.com",
       "worker-src 'self' blob:",
       "frame-ancestors 'none'",
       "base-uri 'self'",

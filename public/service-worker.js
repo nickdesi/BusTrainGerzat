@@ -38,6 +38,11 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
+  // Let the browser handle cross-origin requests directly (analytics, CDN, map tiles, etc.).
+  if (url.origin !== self.location.origin) {
+    return;
+  }
+
   // API calls: Network only, never cache
   if (url.pathname.startsWith('/api/')) {
     event.respondWith(fetch(request).catch(offlineApiResponse));
