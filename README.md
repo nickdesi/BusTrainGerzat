@@ -151,9 +151,9 @@ npm run mcp      # serveur MCP
 ## 🔄 Mise à jour des données
 
 ```bash
-python3 generate_static_json.py
-python3 extract_lineE1_data.py
-python3 scripts/check_gtfs_update.py
+python3 scripts/gtfs/check_gtfs_update.py
+python3 scripts/gtfs/generate_static_json.py
+python3 scripts/gtfs/generate_e1_stop_times.py
 ```
 
 Les horaires bus T2C peuvent aussi être vérifiés automatiquement via GitHub Actions.
