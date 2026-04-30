@@ -41,9 +41,14 @@ export async function GET(request: Request) {
     }
 
     const encoder = new TextEncoder();
+    const send = (controller: ReadableStreamDefaultController<Uint8Array>, payload: string) => {
+        controller.enqueue(encoder.encode(payload));
+    };
 
-    const stream = new ReadableStream({
+    const stream = new ReadableStream<Uint8Array>({
         async start(controller) {
+            send(controller, ': connected\n\n');
+
             // Send initial data immediately
             const sendUpdate = async () => {
                 try {
@@ -58,14 +63,23 @@ export async function GET(request: Request) {
                         timestamp: Date.now()
                     });
 
-                    controller.enqueue(encoder.encode(`data: ${data}\n\n`));
+                    send(controller, `data: ${data}\n\n`);
                 } catch (error) {
                     console.error('SSE Error:', error);
-                    controller.error(error);
+                    send(controller, `event: error\ndata: ${JSON.stringify({ message: 'Unable to refresh transport data' })}\n\n`);
                 }
             };
 
             await sendUpdate();
+
+            // Keep the connection alive through proxies/CDNs between 2-minute data refreshes.
+            const heartbeat = setInterval(() => {
+                if (request.signal.aborted) {
+                    clearInterval(heartbeat);
+                    return;
+                }
+                send(controller, ': heartbeat\n\n');
+            }, 25000);
 
             // Then send updates every 2 minutes (matches server cache TTL)
             const interval = setInterval(async () => {
@@ -79,16 +93,22 @@ export async function GET(request: Request) {
             // Cleanup when closed
             request.signal.addEventListener('abort', () => {
                 clearInterval(interval);
-                controller.close();
+                clearInterval(heartbeat);
+                try {
+                    controller.close();
+                } catch {
+                    // Connection may already be closed by the client/proxy.
+                }
             });
         }
     });
 
     return new Response(stream, {
         headers: {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
+            'Content-Type': 'text/event-stream; charset=utf-8',
+            'Cache-Control': 'no-cache, no-transform',
             'Connection': 'keep-alive',
+            'X-Accel-Buffering': 'no',
         },
     });
 }
