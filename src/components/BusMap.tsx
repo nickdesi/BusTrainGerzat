@@ -12,36 +12,10 @@ import MapStatus from './map/MapStatus';
 import MapEmptyState from './map/MapEmptyState';
 import BusMapSkeleton from './BusMapSkeleton';
 
-// Dynamically import Leaflet components to avoid SSR issues
-const MapContainer = dynamic(
-    () => import('react-leaflet').then((mod) => mod.MapContainer),
-    { ssr: false }
-);
-const TileLayer = dynamic(
-    () => import('react-leaflet').then((mod) => mod.TileLayer),
-    { ssr: false }
-);
-const Polyline = dynamic(
-    () => import('react-leaflet').then((mod) => mod.Polyline),
-    { ssr: false }
-);
-
-// Zoom handler component - using useMapEvents hook
-const ZoomHandlerComponent = dynamic(
-    () => import('react-leaflet').then((mod) => {
-        const { useMapEvents } = mod;
-
-        return function ZoomHandler({ setZoom }: { setZoom: (z: number) => void }) {
-            useMapEvents({
-                zoomend: (e) => {
-                    setZoom(e.target.getZoom());
-                },
-            });
-            return null;
-        };
-    }),
-    { ssr: false }
-);
+const LeafletMapClient = dynamic(() => import('./map/LeafletMapClient'), {
+    ssr: false,
+    loading: () => <BusMapSkeleton />,
+});
 
 // Center of the Line E1 route (approximately)
 const MAP_CENTER: [number, number] = [45.78, 3.10]; // Centered between Gerzat and Romagnat
@@ -58,17 +32,10 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const [isDarkMode, setIsDarkMode] = useState(false); // Default to OSM classic (light)
     const [isLegendOpen, setIsLegendOpen] = useState(false); // Mobile legend toggle
 
-    // Map tile URLs - OpenStreetMap classic as default
-    // Map tile URLs - OpenStreetMap classic as default
-    // Leaflet CSS is imported in globals.css
-
-
-
     // Identify terminus stops (only main termini)
     const terminusStopIds = useMemo(() => {
         if (!lineData) return new Set<string>();
         const ids = new Set<string>();
-
         const MAIN_TERMINI = [
             'GERZAT Champfleuri',
             "ROMAGNAT La Gazelle",
@@ -161,6 +128,11 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         });
     }, [vehicleData?.vehicles]);
 
+    const routeColor = lineData?.route?.routeColor ? `#${lineData.route.routeColor}` : '#fdc300';
+    const tileUrl = isDarkMode
+        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+
     if (lineLoading) {
         return <BusMapSkeleton />;
     }
@@ -176,55 +148,18 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         );
     }
 
-    const routeColor = lineData?.route?.routeColor ? `#${lineData.route.routeColor}` : '#fdc300';
-
     return (
-        <div className="relative h-full w-full">
-            {/* Map Container */}
-            <MapContainer
+        <div className="relative h-full min-h-[420px] w-full overflow-hidden bg-slate-950">
+            <LeafletMapClient
                 center={MAP_CENTER}
                 zoom={MAP_ZOOM}
-                className="h-full w-full z-[var(--z-map)]"
-                scrollWheelZoom={true}
-                preferCanvas={true}
+                tileUrl={tileUrl}
+                routeColor={routeColor}
+                primaryShape={lineData?.shapes['0'] as [number, number][] | undefined}
+                secondaryShape={lineData?.shapes['1'] as [number, number][] | undefined}
+                branchShapes={lineData?.shapes.branches}
+                onZoomChange={setCurrentZoom}
             >
-                <ZoomHandlerComponent setZoom={setCurrentZoom} />
-                <TileLayer
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                    url={isDarkMode
-                        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-                        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'}
-                />
-
-                {/* Route shapes */}
-                {lineData?.shapes['0'] && (
-                    <Polyline
-                        positions={lineData.shapes['0'] as [number, number][]}
-                        color={routeColor}
-                        weight={5}
-                        opacity={0.8}
-                    />
-                )}
-                {lineData?.shapes['1'] && (
-                    <Polyline
-                        positions={lineData.shapes['1'] as [number, number][]}
-                        color={routeColor}
-                        weight={5}
-                        opacity={0.8}
-                        dashArray="10, 10"
-                    />
-                )}
-                {/* Additional branch shapes (if any) */}
-                {lineData?.shapes.branches?.map((branch: [number, number][], index: number) => (
-                    <Polyline
-                        key={`branch-${index}`}
-                        positions={branch}
-                        color={routeColor}
-                        weight={4}
-                        opacity={0.6}
-                    />
-                ))}
-
                 {/* Stop markers - Only show standard stops when zoomed in */}
                 {showStops && uniqueStops.map((stop) => {
                     const isTerminus = terminusStopIds.has(stop.stopId);
@@ -245,7 +180,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
                 {/* Vehicle markers with collision detection */}
                 {vehicleMarkers}
-            </MapContainer>
+            </LeafletMapClient>
 
             {/* Legend - HUD Style - Responsive */}
             <MapLegend

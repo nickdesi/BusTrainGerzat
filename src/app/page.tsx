@@ -1,171 +1,259 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Brain, Github, Zap, TrainFront, Smartphone } from 'lucide-react';
-import { BackgroundBeams } from "@/components/ui/background-beams";
-import { BentoGrid, BentoGridItem } from "@/components/ui/bento-grid";
+import type { ReactNode } from 'react';
+import {
+    ArrowRight,
+    BusFront,
+    Clock3,
+    ExternalLink,
+    Github,
+    MapPinned,
+    Navigation,
+    Radio,
+    Route,
+    ShieldCheck,
+    Sparkles,
+    TrainFront,
+} from 'lucide-react';
 import { promises as fs } from 'fs';
 import path from 'path';
 
-// Server Component for fetching version
 async function getAppVersion() {
     try {
         const packageJsonPath = path.join(process.cwd(), 'package.json');
         const fileContents = await fs.readFile(packageJsonPath, 'utf8');
         const packageJson = JSON.parse(fileContents);
-        return packageJson.version || '3.x.x';
+        return packageJson.version || 'LIVE';
     } catch (error) {
-        console.error("Failed to read package.json version:", error);
+        console.error('Failed to read package.json version:', error);
         return 'LIVE';
     }
+}
+
+const highlights = [
+    { value: 'E1', label: 'ligne bus suivie', icon: <BusFront className="h-4 w-4" /> },
+    { value: 'TER', label: 'gare de Gerzat', icon: <TrainFront className="h-4 w-4" /> },
+    { value: 'Live', label: 'données terrain', icon: <Radio className="h-4 w-4" /> },
+];
+
+const features = [
+    {
+        icon: <Clock3 className="h-5 w-5" />,
+        title: 'Départs lisibles',
+        description: 'Bus et trains rassemblés dans un tableau clair, pensé pour décider vite avant de partir.',
+    },
+    {
+        icon: <MapPinned className="h-5 w-5" />,
+        title: 'Carte temps réel',
+        description: 'Visualisation de la ligne E1, des arrêts importants et des véhicules actifs.',
+    },
+    {
+        icon: <Navigation className="h-5 w-5" />,
+        title: 'Favoris utiles',
+        description: 'Vos trajets ressortent en priorité pour éviter de chercher la même information chaque jour.',
+    },
+    {
+        icon: <ShieldCheck className="h-5 w-5" />,
+        title: 'Mobile d’abord',
+        description: 'Interface contrastée, rapide et utilisable dehors, même en consultation rapide.',
+    },
+];
+
+function Pill({ children }: { children: ReactNode }) {
+    return (
+        <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-3 py-1 text-xs font-bold uppercase tracking-[0.22em] text-zinc-300 backdrop-blur-xl">
+            {children}
+        </span>
+    );
+}
+
+function ProductPreview() {
+    const rows = [
+        { mode: 'BUS', line: 'E1', destination: 'Champratel', time: '08:12', status: 'Live' },
+        { mode: 'TER', line: 'Clermont', destination: 'Vichy', time: '08:27', status: 'À quai' },
+        { mode: 'BUS', line: 'E1', destination: 'Romagnat', time: '08:34', status: '+2 min' },
+    ];
+
+    return (
+        <div className="relative mx-auto w-full max-w-[560px]">
+            <div className="absolute -inset-6 rounded-[3rem] bg-yellow-400/20 blur-3xl" />
+            <div className="relative overflow-hidden rounded-[2.25rem] border border-white/15 bg-zinc-950/90 p-4 shadow-2xl shadow-black/60 backdrop-blur-2xl">
+                <div className="rounded-[1.75rem] border border-white/10 bg-black p-4">
+                    <div className="flex items-center justify-between border-b border-white/10 pb-4">
+                        <div>
+                            <p className="text-xs font-bold uppercase tracking-[0.28em] text-yellow-300">Gerzat Live</p>
+                            <h2 className="mt-1 text-2xl font-black tracking-tight text-white">Prochains passages</h2>
+                        </div>
+                        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-yellow-400 text-black shadow-lg shadow-yellow-400/25">
+                            <Radio className="h-5 w-5" />
+                        </div>
+                    </div>
+
+                    <div className="mt-4 space-y-3">
+                        {rows.map((row) => (
+                            <div key={`${row.mode}-${row.time}`} className="group flex items-center gap-3 rounded-2xl border border-white/8 bg-white/[0.04] p-3 transition-colors hover:bg-white/[0.07]">
+                                <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl text-sm font-black ${row.mode === 'BUS' ? 'bg-yellow-400 text-black' : 'bg-blue-500 text-white'}`}>
+                                    {row.mode === 'BUS' ? row.line : <TrainFront className="h-5 w-5" />}
+                                </div>
+                                <div className="min-w-0 flex-1">
+                                    <p className="truncate text-sm font-bold text-white">{row.destination}</p>
+                                    <p className="text-xs text-zinc-500">{row.mode === 'BUS' ? 'Ligne E1 · arrêt favori' : row.line}</p>
+                                </div>
+                                <div className="text-right">
+                                    <p className="font-mono text-xl font-black text-yellow-300">{row.time}</p>
+                                    <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-300">{row.status}</p>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className="mt-4 overflow-hidden rounded-2xl border border-yellow-400/20 bg-yellow-400/10 p-4">
+                        <div className="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-200">
+                            <Route className="h-4 w-4" /> Carte E1
+                        </div>
+                        <div className="relative h-28 rounded-xl bg-[radial-gradient(circle_at_30%_20%,rgba(253,224,71,0.28),transparent_30%),linear-gradient(135deg,rgba(39,39,42,1),rgba(9,9,11,1))]">
+                            <div className="absolute left-6 right-6 top-1/2 h-1 -translate-y-1/2 rounded-full bg-yellow-400 shadow-[0_0_28px_rgba(250,204,21,0.55)]" />
+                            <div className="absolute left-8 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-black bg-yellow-300" />
+                            <div className="absolute left-1/2 top-1/2 h-6 w-6 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-black bg-white shadow-lg" />
+                            <div className="absolute right-8 top-1/2 h-4 w-4 -translate-y-1/2 rounded-full border-2 border-black bg-yellow-300" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+function FeatureCard({ icon, title, description }: { icon: ReactNode; title: string; description: string }) {
+    return (
+        <div className="group rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl transition-colors hover:border-yellow-300/40 hover:bg-yellow-300/[0.06]">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-300/15 text-yellow-300 ring-1 ring-yellow-300/20 transition-transform group-hover:-translate-y-1">
+                {icon}
+            </div>
+            <h3 className="text-lg font-black tracking-tight text-white">{title}</h3>
+            <p className="mt-2 text-sm leading-6 text-zinc-400">{description}</p>
+        </div>
+    );
 }
 
 export default async function LandingPage() {
     const version = await getAppVersion();
 
     return (
-        <div className="min-h-screen bg-neutral-950 text-white selection:bg-yellow-500/30 font-sans overflow-x-hidden relative antialiased">
+        <main className="min-h-screen overflow-hidden bg-[#050505] text-white selection:bg-yellow-300/30">
+            <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_15%_10%,rgba(250,204,21,0.20),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(59,130,246,0.16),transparent_24%),linear-gradient(180deg,#050505_0%,#09090b_48%,#050505_100%)]" />
+            <div className="pointer-events-none fixed inset-0 opacity-[0.08] [background-image:linear-gradient(rgba(255,255,255,.7)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.7)_1px,transparent_1px)] [background-size:64px_64px]" />
 
-            {/* Background Beams - The "Transit Noir" Effect */}
-            <BackgroundBeams className="opacity-40" />
-
-            {/* Navbar */}
-            <header className="relative z-50 p-6 flex justify-between items-center max-w-7xl mx-auto">
-                <div className="flex items-center gap-3 group cursor-default">
-                    <div className="relative">
-                        <div className="absolute inset-0 bg-yellow-500 blur-md opacity-20 group-hover:opacity-40 transition-opacity rounded-xl"></div>
-                        <Image src="/icon-512.png" alt="Logo" width={48} height={48} className="relative w-10 h-10 md:w-12 md:h-12 rounded-xl shadow-2xl" />
+            <header className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-5 py-5 md:px-8">
+                <Link href="/" className="flex items-center gap-3" aria-label="Accueil Gerzat Live">
+                    <Image src="/icon-512.png" alt="Gerzat Live" width={48} height={48} className="h-11 w-11 rounded-2xl shadow-xl shadow-yellow-400/10" priority />
+                    <div>
+                        <p className="font-display text-xl font-black tracking-tight">Gerzat<span className="text-yellow-300">Live</span></p>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.26em] text-zinc-500">Bus · TER · Carte</p>
                     </div>
-                    <div className="flex flex-col">
-                        <span className="font-display font-bold text-xl md:text-2xl tracking-tight leading-none">
-                            GERZAT<span className="text-yellow-500">LIVE</span>
-                        </span>
-                        <span className="text-[10px] uppercase tracking-[0.3em] text-neutral-500 font-bold hidden md:block">
-                            Multimodal Hub
-                        </span>
-                    </div>
-                </div>
+                </Link>
 
-                <div className="flex gap-4">
-                    <Link
-                        href="https://github.com/nickdesi/BusTrainGerzat"
-                        target="_blank"
-                        className="hidden md:flex items-center gap-2 px-5 py-2.5 bg-neutral-900/50 hover:bg-neutral-800 border border-neutral-800 rounded-xl text-sm font-medium transition-all group backdrop-blur-md"
-                    >
-                        <Github className="w-4 h-4 text-neutral-400 group-hover:text-white transition-colors" />
-                        <span>Source</span>
+                <nav className="hidden items-center gap-6 text-sm font-semibold text-zinc-400 md:flex" aria-label="Navigation landing">
+                    <Link href="#fonctionnalites" className="hover:text-white">Fonctionnalités</Link>
+                    <Link href="#apercu" className="hover:text-white">Aperçu</Link>
+                    <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" className="inline-flex items-center gap-1 hover:text-white">
+                        Source <ExternalLink className="h-3.5 w-3.5" />
                     </Link>
-                    <Link
-                        href="/app"
-                        className="relative inline-flex h-10 overflow-hidden rounded-xl p-[1px] focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50"
-                    >
-                        <span className="absolute inset-[-1000%] animate-[spin_2s_linear_infinite] bg-[conic-gradient(from_90deg_at_50%_50%,#E2CBFF_0%,#393BB2_50%,#E2CBFF_100%)]" />
-                        <span className="inline-flex h-full w-full cursor-pointer items-center justify-center rounded-xl bg-slate-950 px-6 py-1 text-sm font-medium text-white backdrop-blur-3xl gap-2 hover:bg-slate-900 transition-colors">
-                            Lancer l&apos;App <ArrowRight className="w-4 h-4" />
-                        </span>
-                    </Link>
-                </div>
+                </nav>
+
+                <Link href="/app" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-black text-black transition-transform hover:-translate-y-0.5 hover:bg-yellow-300">
+                    Ouvrir <ArrowRight className="h-4 w-4" />
+                </Link>
             </header>
 
-            <main className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-24 flex flex-col items-center">
-
-                {/* Hero Section */}
-                <div className="text-center mb-32 relative">
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-neutral-900/50 border border-neutral-800 backdrop-blur-md mb-8 ring-1 ring-white/10">
-                        <span className="relative flex h-2 w-2">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                        </span>
-                        <span className="text-xs font-mono text-neutral-400 font-medium tracking-wide">
-                            v{version} LIVE
-                        </span>
+            <section className="relative z-10 mx-auto grid max-w-7xl items-center gap-14 px-5 pb-20 pt-12 md:grid-cols-[1.02fr_0.98fr] md:px-8 md:pb-28 md:pt-20">
+                <div>
+                    <div className="flex flex-wrap gap-3">
+                        <Pill><span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_20px_rgba(52,211,153,.8)]" /> v{version}</Pill>
+                        <Pill><Sparkles className="h-3.5 w-3.5 text-yellow-300" /> Nouvelle interface</Pill>
                     </div>
 
-                    <h1 className="text-5xl md:text-8xl font-display font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-neutral-50 to-neutral-400 bg-opacity-50">
-                        Le Futur du <br />
-                        <span className="text-yellow-500">Transit Urbain.</span>
+                    <h1 className="mt-8 max-w-4xl bg-gradient-to-br from-zinc-100 via-zinc-300 to-zinc-500 bg-clip-text text-5xl font-extrabold leading-[1.05] tracking-[-0.025em] text-transparent md:text-7xl md:leading-[1.02]">
+                        Les transports de Gerzat, enfin lisibles.
                     </h1>
+                    <p className="mt-7 max-w-2xl text-lg leading-8 text-zinc-300 md:text-xl">
+                        Une app rapide pour savoir quand partir : prochains bus E1, trains TER, favoris et carte live dans une interface pensée pour le quotidien.
+                    </p>
 
-                    <p className="mt-4 font-normal text-base md:text-lg text-neutral-300 max-w-lg mx-auto leading-relaxed">
-                        L&apos;application ultime pour les résidents de Gerzat. Données temps réel T2C & SNCF, design premium et intelligence artificielle.
+                    <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                        <Link href="/app" className="group inline-flex items-center justify-center gap-3 rounded-2xl bg-yellow-300 px-6 py-4 text-base font-black text-black shadow-2xl shadow-yellow-400/20 transition-transform hover:-translate-y-1">
+                            Voir les prochains départs
+                            <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                        </Link>
+                        <Link href="/app/carte" className="inline-flex items-center justify-center gap-3 rounded-2xl border border-white/12 bg-white/[0.06] px-6 py-4 text-base font-black text-white backdrop-blur-xl transition-colors hover:bg-white/[0.1]">
+                            Ouvrir la carte <MapPinned className="h-5 w-5 text-yellow-300" />
+                        </Link>
+                    </div>
+
+                    <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3">
+                        {highlights.map((item) => (
+                            <div key={item.label} className="rounded-3xl border border-white/10 bg-white/[0.045] p-4 backdrop-blur-xl">
+                                <div className="mb-3 text-yellow-300">{item.icon}</div>
+                                <p className="text-2xl font-black tracking-tight text-white">{item.value}</p>
+                                <p className="mt-1 text-xs font-semibold text-zinc-500">{item.label}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div id="apercu" className="relative">
+                    <ProductPreview />
+                </div>
+            </section>
+
+            <section id="fonctionnalites" className="relative z-10 mx-auto max-w-7xl px-5 pb-20 md:px-8 md:pb-28">
+                <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+                    <div>
+                        <p className="text-sm font-black uppercase tracking-[0.28em] text-yellow-300">Conçu pour le terrain</p>
+                        <h2 className="mt-3 max-w-2xl font-display text-4xl font-black tracking-tight text-white md:text-6xl">
+                            Moins de bruit, plus de décision.
+                        </h2>
+                    </div>
+                    <p className="max-w-md text-sm leading-6 text-zinc-400">
+                        Consultez l’essentiel en quelques secondes : horaires, favoris et carte live restent accessibles sans détour.
                     </p>
                 </div>
 
-                {/* Bento Grid Showcase */}
-                <BentoGrid className="max-w-6xl mx-auto md:auto-rows-[22rem]">
-                    {/* Feature 1: Realtime Map */}
-                    <BentoGridItem
-                        title="Cartographie Live"
-                        description="Suivez vos bus et trains en temps réel sur une carte interactive fluide."
-                        header={
-                            <div className="relative w-full h-full min-h-[6rem] rounded-xl overflow-hidden border border-neutral-800 bg-neutral-900">
-                                <div className="absolute inset-0 bg-[url('/screenshots/app-map.png')] bg-cover bg-center opacity-80 hover:scale-105 transition-transform duration-500"></div>
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent"></div>
-                            </div>
-                        }
-                        icon={<Smartphone className="h-4 w-4 text-neutral-500" />}
-                        className="md:col-span-2"
-                    />
+                <div className="grid gap-4 md:grid-cols-4">
+                    {features.map((feature) => (
+                        <FeatureCard key={feature.title} {...feature} />
+                    ))}
+                </div>
+            </section>
 
-                    {/* Feature 2: AI Predictions */}
-                    <BentoGridItem
-                        title="Intelligence Artificielle"
-                        description="Algorithmes prédictifs pour estimer les retards avant les canaux officiels."
-                        header={
-                            <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-gradient-to-br from-purple-900/20 to-neutral-900 border border-neutral-800 flex-col items-center justify-center relative overflow-hidden group">
-                                <Brain className="w-16 h-16 text-purple-500/50 group-hover:text-purple-400 transition-colors" />
-                                <div className="absolute inset-0 bg-purple-500/10 blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                            </div>
-                        }
-                        icon={<Brain className="h-4 w-4 text-neutral-500" />}
-                        className="md:col-span-1"
-                    />
-
-                    {/* Feature 3: Train Data */}
-                    <BentoGridItem
-                        title="Expertise Ferroviaire"
-                        description="Connexion directe aux API SNCF pour une précision à la seconde."
-                        header={
-                            <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-neutral-900 border border-neutral-800 p-4 flex-col gap-2 relative overflow-hidden">
-                                <div className="w-full h-2 bg-neutral-800 rounded-full overflow-hidden">
-                                    <div className="h-full bg-yellow-500 w-2/3 animate-pulse"></div>
-                                </div>
-                                <div className="w-full h-2 bg-neutral-800 rounded-full overflow-hidden delay-75">
-                                    <div className="h-full bg-blue-500 w-1/2 animate-pulse"></div>
-                                </div>
-                                <div className="w-full h-2 bg-neutral-800 rounded-full overflow-hidden delay-150">
-                                    <div className="h-full bg-green-500 w-3/4 animate-pulse"></div>
-                                </div>
-                            </div>
-                        }
-                        icon={<TrainFront className="h-4 w-4 text-neutral-500" />}
-                        className="md:col-span-1"
-                    />
-
-                    {/* Feature 4: Speed */}
-                    <BentoGridItem
-                        title="Performance Extrême"
-                        description="Architecture Next.js optimisée. Chargement instantané."
-                        header={
-                            <div className="flex flex-1 w-full h-full min-h-[6rem] rounded-xl bg-neutral-900 border border-neutral-800 items-center justify-center relative overflow-hidden">
-                                <Zap className="w-20 h-20 text-yellow-500/20" />
-                                <div className="absolute inset-0 bg-yellow-500/5 blur-2xl"></div>
-                            </div>
-                        }
-                        icon={<Zap className="h-4 w-4 text-neutral-500" />}
-                        className="md:col-span-2"
-                    />
-                </BentoGrid>
-
-                {/* Footer */}
-                <div className="mt-32 pt-12 border-t border-neutral-800 w-full flex flex-col md:flex-row justify-between items-center text-sm text-neutral-500 gap-6">
-                    <p>© 2026 Nicolas De Simone. Open Source MIT.</p>
-                    <div className="flex items-center gap-6">
-                        <Link href="mailto:contact@desimone.fr" className="hover:text-white transition-colors">Contact</Link>
-                        <Link href="https://github.com/nickdesi" className="hover:text-white transition-colors">GitHub Profile</Link>
+            <section className="relative z-10 mx-auto max-w-7xl px-5 pb-12 md:px-8">
+                <div className="overflow-hidden rounded-[2.25rem] border border-yellow-300/20 bg-yellow-300 p-[1px] shadow-2xl shadow-yellow-500/10">
+                    <div className="grid gap-8 rounded-[2.2rem] bg-black p-6 md:grid-cols-[1fr_auto] md:items-center md:p-10">
+                        <div>
+                            <p className="text-sm font-black uppercase tracking-[0.28em] text-yellow-300">Prêt maintenant</p>
+                            <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-white md:text-5xl">Accède directement au tableau live.</h2>
+                            <p className="mt-3 max-w-2xl text-zinc-400">Départs, arrivées et carte sont accessibles sans friction depuis l’app.</p>
+                        </div>
+                        <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
+                            <Link href="/app" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-4 font-black text-black hover:bg-yellow-300">
+                                Lancer l’app <ArrowRight className="h-4 w-4" />
+                            </Link>
+                            <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 px-6 py-4 font-black text-white hover:bg-white/10">
+                                <Github className="h-4 w-4" /> GitHub
+                            </Link>
+                        </div>
                     </div>
                 </div>
-            </main>
-        </div>
+            </section>
+
+            <footer className="relative z-10 mx-auto flex max-w-7xl flex-col gap-4 border-t border-white/10 px-5 py-8 text-sm text-zinc-500 md:flex-row md:items-center md:justify-between md:px-8">
+                <p>© 2026 Nicolas De Simone · GerzatLive</p>
+                <div className="flex gap-5">
+                    <Link href="mailto:contact@desimone.fr" className="hover:text-white">Contact</Link>
+                    <Link href="https://github.com/nickdesi" className="hover:text-white">GitHub</Link>
+                </div>
+            </footer>
+        </main>
     );
 }
 

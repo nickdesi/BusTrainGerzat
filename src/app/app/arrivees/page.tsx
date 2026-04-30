@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { RefreshCw, Bus, Train, Filter, WifiOff } from 'lucide-react';
+import { RefreshCw, Bus, Train, Filter, WifiOff, Activity, Star, Sparkles } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
@@ -14,6 +14,7 @@ import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useFavorites } from '@/hooks/useFavorites';
 import { TransportFilter } from '@/types';
 import { Github } from 'lucide-react';
+import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
 
 const APP_VERSION = '3.7.0';
 
@@ -53,8 +54,14 @@ export default function Arrivees() {
         return result;
     }, [arrivals, filter, searchQuery]);
 
+    const arrivalStats = useMemo(() => ({
+        total: filteredArrivals.length,
+        realtime: filteredArrivals.filter(a => a.isRealtime).length,
+        favorites: filteredArrivals.filter(a => favoriteIds.includes(a.id)).length,
+    }), [filteredArrivals, favoriteIds]);
+
     return (
-        <div className="min-h-screen bg-gradient-to-br from-background via-surface-dark to-background text-gray-100 font-sans">
+        <main id="main-content" className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.16),transparent_32%),radial-gradient(circle_at_top_right,rgba(253,195,0,0.10),transparent_28%),linear-gradient(135deg,var(--color-background),var(--color-surface-dark)_48%,#050505)] text-gray-100 font-sans">
             {/* Skip Link for accessibility */}
             <a
                 href="#arrivals-board"
@@ -62,7 +69,8 @@ export default function Arrivees() {
             >
                 Aller au tableau des arrivées
             </a>
-            <div className="max-w-7xl mx-auto px-4 py-6 md:py-8">
+            <div className="relative max-w-7xl mx-auto px-4 py-5 md:py-8">
+                <div className="pointer-events-none absolute inset-x-4 top-0 h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent" aria-hidden="true" />
 
                 {/* Error Banner */}
                 {error && (
@@ -81,30 +89,52 @@ export default function Arrivees() {
                     </div>
                 )}
 
+                <DataFreshnessWarning />
+
                 {/* Airport-style Header */}
-                <header className="mb-8 border-b-2 border-blue-500/30 pb-6 relative">
-                    <div className="flex flex-col lg:flex-row justify-between items-center gap-6">
+                <header className="mb-8 relative overflow-hidden rounded-[2rem] border border-blue-500/20 bg-black/25 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl md:p-6">
+                    <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true" />
+                    <div className="relative flex flex-col lg:flex-row justify-between items-center gap-6">
                         <div className="text-center lg:text-left">
+                            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-blue-300">
+                                <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                                Suivi des arrivées
+                            </div>
                             <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-blue-400 uppercase mb-2 font-mono text-glow flex items-center gap-3 justify-center lg:justify-start">
-                                <Image src="/icon-512.png" alt="Logo" width={48} height={48} className="w-8 h-8 md:w-12 md:h-12" />
+                                <Image src="/icon-512.png" alt="Logo Gerzat Live" width={48} height={48} priority className="w-8 h-8 md:w-12 md:h-12 drop-shadow-[0_0_18px_rgba(96,165,250,0.35)]" />
                                 ARRIVÉES • GERZAT
                             </h1>
                             <p className="text-sm md:text-base text-blue-400/80 uppercase tracking-widest font-medium pl-1 mt-1">
                                 Gare SNCF • Bus Champfleuri / Patural (Express)
                             </p>
                         </div>
-                        <div className="flex flex-col gap-4 items-end">
-                            <div className="flex items-center gap-4">
+                        <div className="flex w-full flex-col gap-4 sm:w-auto sm:min-w-[280px] lg:items-end">
+                            <div className="flex items-center justify-center gap-4 lg:justify-end">
                                 <ClockWidget />
                             </div>
-                            <div className="w-full max-w-[200px] lg:max-w-xs">
+                            <div className="w-full">
                                 <SearchWidget onSearch={setSearchQuery} />
                             </div>
                         </div>
                     </div>
 
+                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500"><Activity className="h-4 w-4 text-blue-400" /> Arrivées</div>
+                            <p className="mt-2 text-3xl font-black text-white">{arrivalStats.total}</p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500"><WifiOff className="h-4 w-4 text-green-400 rotate-180" /> Temps réel</div>
+                            <p className="mt-2 text-3xl font-black text-white">{arrivalStats.realtime}</p>
+                        </div>
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
+                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500"><Star className="h-4 w-4 text-yellow-300" /> Favoris</div>
+                            <p className="mt-2 text-3xl font-black text-white">{arrivalStats.favorites}</p>
+                        </div>
+                    </div>
+
                     {/* Controls Row */}
-                    <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-900/50 rounded-lg p-4 border border-gray-800">
+                    <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 rounded-2xl border border-white/10 bg-black/35 p-3 shadow-inner shadow-black/30">
                         {/* Status */}
                         <div className="flex items-center gap-2 text-sm text-gray-400 min-w-[180px]" role="status" aria-live="polite">
                             <div className="flex h-2 w-2 relative">
@@ -159,12 +189,12 @@ export default function Arrivees() {
 
 
                 {/* Arrivals Board */}
-                <div id="arrivals-board" className="bg-surface-elevated rounded-lg border-2 border-gray-800 overflow-hidden shadow-2xl">
-                    <div className="bg-gradient-to-r from-blue-600 to-blue-500 px-4 md:px-6 py-3 border-b-4 border-black">
+                <div id="arrivals-board" className="overflow-hidden rounded-[2rem] border border-blue-500/20 bg-surface-elevated shadow-2xl shadow-black/40 ring-1 ring-white/5">
+                    <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-sky-400 px-4 md:px-6 py-4 border-b-4 border-black">
                         <h2 className="text-lg md:text-xl font-black text-white uppercase tracking-widest flex items-center gap-3 font-mono">
                             <div className="w-3 h-3 bg-white rounded-full animate-pulse" aria-hidden="true"></div>
                             Tableau des Arrivées
-                            {filter !== 'all' && <span className="text-sm font-normal opacity-70">({filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'})</span>}
+                            {filter !== 'all' && <span className="rounded-full bg-white/10 px-2 py-1 text-xs font-bold opacity-90">{filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'}</span>}
                         </h2>
                     </div>
                     <DeparturesBoard
@@ -184,7 +214,7 @@ export default function Arrivees() {
                 </div>
 
                 {/* Scrolling Ticker */}
-                <div className="mt-8 bg-blue-500/10 border-y border-blue-500/20 py-3 overflow-hidden relative group" role="marquee" aria-label="Informations défilantes">
+                <div className="mt-8 overflow-hidden rounded-2xl border border-blue-500/20 bg-blue-500/10 py-3 shadow-lg shadow-black/20 group" role="marquee" aria-label="Informations défilantes">
                     <div className="animate-marquee group-hover:pause whitespace-nowrap text-blue-400 font-mono text-lg font-bold tracking-widest uppercase flex items-center gap-12">
                         <span>Bienvenue en Gare de Gerzat</span>
                         <span aria-hidden="true">•</span>
@@ -211,11 +241,11 @@ export default function Arrivees() {
                             </span>
                         </Link>
                         <p className="text-[10px] font-mono text-white/30 tracking-widest uppercase mt-2">
-                            Gerzat Live v{APP_VERSION} • {new Date().getFullYear()}
+                            Gerzat Live v{APP_VERSION} • 2026
                         </p>
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }

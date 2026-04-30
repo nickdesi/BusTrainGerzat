@@ -7,9 +7,9 @@ export default function MapEmptyState({ isLoading, vehicleCount }: MapEmptyState
     if (isLoading || (vehicleCount && vehicleCount > 0)) return null;
 
     return (
-        <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-[var(--z-modal)]">
-            <div className="bg-black/80 backdrop-blur-md border border-white/10 rounded-full px-4 py-2 shadow-lg">
-                <span className="text-gray-400 text-sm">Pas de bus en circulation actuellement</span>
+        <div className="absolute bottom-4 left-4 right-4 z-[var(--z-modal)] flex justify-center pointer-events-none md:left-1/2 md:right-auto md:-translate-x-1/2">
+            <div className="rounded-2xl border border-yellow-300/20 bg-black/80 px-4 py-3 text-center shadow-lg backdrop-blur-xl">
+                <span className="text-sm font-medium text-yellow-100">Pas de bus en circulation actuellement</span>
             </div>
         </div>
     );

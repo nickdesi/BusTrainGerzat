@@ -38,6 +38,8 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
     onTripClick
 }: DepartureBoardRowProps) {
     const { getPrediction } = usePredictiveDelay();
+    const accentHover = boardType === 'arrivals' ? 'hover:bg-blue-900/20' : 'hover:bg-yellow-900/20';
+    const favoriteTint = boardType === 'arrivals' ? 'bg-blue-900/10' : 'bg-yellow-900/10';
 
     // ⚡ Bolt: Compute prediction inside the memoized row instead of the parent.
     // Parent passing a new object on every render defeated React.memo.
@@ -53,26 +55,26 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
     return (
         <tr
             onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
-            className={`flip-enter transition-colors ${isClickable
-                ? 'cursor-pointer hover:bg-yellow-900/20'
-                : 'hover:bg-gray-800/50'
-                } ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+            className={`flip-enter border-b border-white/[0.04] transition-colors ${isClickable
+                ? `cursor-pointer ${accentHover}`
+                : 'hover:bg-white/[0.03]'
+                } ${isFav ? favoriteTint : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
             title={entry.type === 'BUS' ? 'Cliquez pour voir le détail du trajet' : entry.isCancelled ? 'Train supprimé' : undefined}
         >
             {/* Favorite Toggle */}
-            <td className="px-2 py-5 text-center">
+            <td className="px-2 py-4 text-center">
                 {onToggleFavorite && (
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
                             onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
                         }}
-                        className={`transition-all hover:scale-110 ${isFav ? 'text-yellow-400' : 'text-gray-700 hover:text-gray-400'}`}
+                        className={`inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${isFav ? 'bg-yellow-400/15 text-yellow-300' : 'text-gray-600 hover:bg-white/5 hover:text-gray-300'}`}
                         title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
                         aria-label={isFav ? `Retirer la ligne ${entry.line} vers ${entry.destination} des favoris` : `Ajouter la ligne ${entry.line} vers ${entry.destination} aux favoris`}
                         aria-pressed={isFav}
                     >
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
                             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
                         </svg>
                     </button>
@@ -80,7 +82,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             </td>
 
             {/* Time */}
-            <td className="px-6 py-5">
+            <td className="px-6 py-4">
                 {entry.type === 'TER' ? (
                     <div className="flex items-center gap-4">
                         <div className="flex flex-col items-center">
@@ -99,7 +101,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             </td>
 
             {/* Type */}
-            <td className="px-6 py-5">
+            <td className="px-6 py-4">
                 <div className="flex items-center gap-2">
                     {entry.type === 'BUS' ? (
                         <>
@@ -120,7 +122,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             </td>
 
             {/* Line */}
-            <td className="px-6 py-5">
+            <td className="px-6 py-4">
                 {entry.type === 'BUS' ? (
                     <div className="w-10 h-10 flex items-center justify-center rounded shadow-lg border border-yellow-600/50" style={{ backgroundColor: '#fdc300', boxShadow: '0 4px 14px rgba(253, 195, 0, 0.3)' }}>
                         <span className="text-lg font-bold text-black font-sans tracking-tight">{entry.line}</span>
@@ -133,7 +135,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             </td>
 
             {/* Destination / Provenance */}
-            <td className="px-6 py-5">
+            <td className="px-6 py-4">
                 <div className="flex items-center gap-3">
                     <ArrowRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
                     <div className="overflow-hidden">
@@ -147,14 +149,14 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             </td>
 
             {/* Platform */}
-            <td className="px-6 py-5">
+            <td className="px-6 py-4">
                 <span className="text-sm text-gray-400 font-medium">
                     {entry.platform}
                 </span>
             </td>
 
             {/* Status */}
-            <td className="px-6 py-5 text-center">
+            <td className="px-6 py-4 text-center">
                 <div className="flex flex-col items-center justify-center gap-2">
                     <div className="flex items-center gap-3">
                         <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
@@ -175,18 +177,17 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
                 </div>
             </td>
 
-            {/* Click indicator for buses */}
-            {isClickable && (
-                <td className="px-2 py-5">
-                    <ChevronRight className="w-4 h-4 text-gray-600" />
-                </td>
-            )}
+            {/* Click indicator */}
+            <td className="px-3 py-5 text-right">
+                {isClickable && <ChevronRight className="ml-auto h-4 w-4 text-gray-600 transition-colors group-hover:text-gray-400" />}
+            </td>
         </tr>
     );
 });
 
 export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
+    const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-500';
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
 
     // ⚡ Bolt: Memoize favoritesSet to avoid O(N) array recreation and O(M) includes
@@ -220,55 +221,64 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
     }, [onToggleFavorite]);
 
     return (
-        <div className="hidden md:block overflow-x-auto bg-surface">
-            <table className="w-full">
-                <thead>
-                    <tr className="bg-black text-yellow-500/60 text-xs font-bold uppercase tracking-[0.2em] border-b border-gray-800">
-                        <th className="w-12 px-2 py-4 text-center">★</th>
-                        <th className="px-6 py-4 text-left font-mono">Heure</th>
-                        <th className="px-6 py-4 text-left">Type</th>
-                        <th className="px-6 py-4 text-left">Ligne</th>
-                        <th className="px-6 py-4 text-left">{boardType === 'arrivals' ? 'Provenance' : 'Destination'}</th>
-                        <th className="px-6 py-4 text-left">Quai</th>
-                        <th className="px-6 py-4 text-center">État</th>
-                    </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-800">
-                    {loading && departures.length === 0 ? (
-                        <tr>
-                            <td colSpan={7} className="px-6 py-12 text-center">
-                                <div className="flex flex-col items-center gap-3 text-gray-500">
-                                    <RefreshCw className="w-8 h-8 animate-spin text-yellow-500" />
-                                    <p className="text-sm uppercase tracking-wide">Chargement des données...</p>
-                                </div>
-                            </td>
+        <div className="hidden bg-surface md:block">
+            <div className="overflow-x-auto">
+                <table className="w-full min-w-[980px]">
+                    <thead className="sticky top-0 z-10">
+                        <tr className="border-b border-white/10 bg-black/90 text-xs font-bold uppercase tracking-[0.2em] text-gray-400 backdrop-blur">
+                            <th className={`w-16 px-2 py-4 text-center ${accentText}`}>★</th>
+                            <th className="px-6 py-4 text-left font-mono">Heure</th>
+                            <th className="px-6 py-4 text-left">Type</th>
+                            <th className="px-6 py-4 text-left">Ligne</th>
+                            <th className="px-6 py-4 text-left">{boardType === 'arrivals' ? 'Provenance' : 'Destination'}</th>
+                            <th className="px-6 py-4 text-left">Quai</th>
+                            <th className="px-6 py-4 text-center">État</th>
+                            <th className="w-10 px-3 py-4" aria-label="Actions"></th>
                         </tr>
-                    ) : departures.length === 0 ? (
-                        <tr>
-                            <td colSpan={7} className="px-6 py-12 text-center text-gray-500">
-                                <p className="text-sm uppercase tracking-wide">{emptyMessage}</p>
-                            </td>
-                        </tr>
-                    ) : (
-                        sortedDepartures.map((entry, index) => {
-                            // ⚡ Bolt: Use O(1) set lookup instead of O(M) includes
-                            const isFav = favoritesSet.has(entry.id);
+                    </thead>
+                    <tbody>
+                        {loading && departures.length === 0 ? (
+                            <tr>
+                                <td colSpan={8} className="px-6 py-16 text-center">
+                                    <div className="mx-auto flex max-w-xs flex-col items-center gap-4 rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-gray-400">
+                                        <RefreshCw className={`h-9 w-9 animate-spin ${accentText}`} />
+                                        <div>
+                                            <p className="text-sm font-bold uppercase tracking-[0.2em]">Chargement en cours</p>
+                                            <p className="mt-1 text-xs text-gray-500">Synchronisation des prochains passages…</p>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : departures.length === 0 ? (
+                            <tr>
+                                <td colSpan={8} className="px-6 py-16 text-center">
+                                    <div className="mx-auto max-w-sm rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-gray-500">
+                                        <p className="text-sm font-bold uppercase tracking-[0.2em]">{emptyMessage}</p>
+                                        <p className="mt-2 text-xs text-gray-600">Essayez un autre filtre ou relancez l’actualisation.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                        ) : (
+                            sortedDepartures.map((entry, index) => {
+                                // ⚡ Bolt: Use O(1) set lookup instead of O(M) includes
+                                const isFav = favoritesSet.has(entry.id);
 
-                            return (
-                                <DepartureBoardRow
-                                    key={entry.id}
-                                    entry={entry}
-                                    index={index}
-                                    boardType={boardType}
-                                    isFav={isFav}
-                                    onToggleFavorite={onToggleFavorite ? handleToggleFavorite : undefined}
-                                    onTripClick={handleTripClick}
-                                />
-                            );
-                        })
-                    )}
-                </tbody>
-            </table>
+                                return (
+                                    <DepartureBoardRow
+                                        key={entry.id}
+                                        entry={entry}
+                                        index={index}
+                                        boardType={boardType}
+                                        isFav={isFav}
+                                        onToggleFavorite={onToggleFavorite ? handleToggleFavorite : undefined}
+                                        onTripClick={handleTripClick}
+                                    />
+                                );
+                            })
+                        )}
+                    </tbody>
+                </table>
+            </div>
 
             {/* Trip Detail Modal */}
             <TripDetailModal

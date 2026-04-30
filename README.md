@@ -1,340 +1,189 @@
-# 🚉 Gerzat Live - Hub Multimodal
+# 🚉 Gerzat Live
 
-Application Next.js pour suivre en temps réel les bus T2C et les trains TER à Gerzat.
+**Gerzat Live v3.7.0 • 2026**
 
-[![demo online](https://img.shields.io/badge/demo-online-brightgreen)](https://gerzatlive.desimone.fr)
-[![version](https://img.shields.io/badge/version-3.6.1-blue)](https://github.com/nickdesi/BusTrainGerzat)
-[![Deploy with Coolify](https://img.shields.io/badge/Deploy%20with-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
+Application web Next.js pour consulter rapidement les prochains passages des bus T2C et des trains TER à Gerzat, avec tableau temps réel, favoris et carte live de la ligne E1.
+
+[![Démo en ligne](https://img.shields.io/badge/démo-en%20ligne-brightgreen)](https://gerzatlive.desimone.fr)
+[![Version](https://img.shields.io/badge/version-3.7.0-blue)](https://github.com/nickdesi/BusTrainGerzat)
+[![Déploiement Coolify](https://img.shields.io/badge/déploiement-Coolify-blueviolet?logo=rocket)](https://coolify.io/)
 
 <div align="center">
-  <img src="docs/images/homepage.png" alt="Tableau des départs" width="400"/>
-  <img src="docs/images/map.png" alt="Carte live des bus" width="400"/>
+  <img src="docs/images/homepage.png" alt="Tableau des départs Gerzat Live" width="400" />
+  <img src="docs/images/map.png" alt="Carte live de la ligne E1" width="400" />
 </div>
 
-## 📍 Arrêts surveillés
+## ✨ Objectif
+
+Gerzat Live centralise les informations utiles avant un trajet : prochains départs et arrivées, bus T2C ligne E1, trains TER, favoris et carte live.
+
+L’interface est pensée pour une consultation rapide sur mobile avec un design sombre lisible et les informations prioritaires visibles immédiatement.
+
+## 📍 Arrêts et gare surveillés
 
 | Transport | Arrêt / Gare | Ligne(s) |
-|-----------|--------------|----------|
-| 🚌 Bus T2C | **Gerzat Champfleuri** | Ligne E1 (Toutes directions) |
-| 🚌 Bus T2C (Express) | **Le Patural** | Ligne E1 (Uniquement Dir. Ballainvilliers) |
+| --- | --- | --- |
+| 🚌 Bus T2C | **Gerzat Champfleuri** | Ligne E1, toutes directions |
+| 🚌 Bus T2C Express | **Le Patural** | Ligne E1, direction Ballainvilliers |
 | 🚆 Train TER | **Gare de Gerzat** | TER Auvergne |
 
 ## 🚀 Fonctionnalités
 
-### 🚌 Bus T2C (Ligne E1 - Arrêt Champfleuri)
+### Tableau des départs et arrivées
 
-- **Temps réel & Théorique** : Affichage précis des prochains passages avec distinction claire par badges de couleur.
-- **Indicateurs de Retard** : Visualisation immédiate de l'état du trafic (À l'heure, En avance, Retard).
-- **Directions Claires** : Séparation distincte entre les départs (Vers Aubière/Romagnat) et les arrivées (Terminus Gerzat).
-- **Vue Unifiée (Gerzat)** : Intégration automatique des bus Express ("Patural", uniquement vers Ballainvilliers) et Standard ("Champfleuri") dans un seul tableau.
-- **Fiabilité Stricte** : Calcul mathématique du retard (`Réel - Théorique`) pour ignorer les erreurs de l'API officielle (ex: retard annoncé à 0 minute alors que le bus est décalé de 5 minutes).
+- Vue unifiée bus + TER.
+- Horaires théoriques et temps réel.
+- Statuts de retard, avance, annulation et disponibilité live.
+- Favoris persistants pour mettre en avant les trajets importants.
+- Détail de trajet bus disponible au clic.
 
-### 🚆 Trains TER (Gare de Gerzat)
+### Carte live ligne E1
 
-- **Suivi en Direct** : Horaires des trains en temps réel via l'API SNCF officielle.
-- **Double Sens** : Affichage séparé des trains vers Clermont-Ferrand et vers Riom/Moulins.
-- **Horaires Détaillés** : Affichage de l'heure d'arrivée ET de départ pour chaque train à Gerzat.
-- **Détails du Train** : Numéro de train et statut du retard en temps réel.
-- **Trains Annulés** : Détection et affichage des trains supprimés avec statut "ANNULÉ" en rouge.
+- Carte Leaflet / React-Leaflet côté client.
+- Fond Carto basemap clair/sombre.
+- Recalcul automatique de taille via `invalidateSize()` pour un affichage fiable.
+- Tracé principal, branches, arrêts importants et véhicules actifs.
+- Gestion des marqueurs proches pour limiter les superpositions.
 
-### 🗺️ Carte Live (Ligne E1)
+### Données bus T2C
 
-- **Position GPS temps réel** : Affichage des positions réelles des bus via GTFS-RT Vehicle Positions.
-- **Fallback intelligent** : Si GPS indisponible, interpolation avec les temps prédits (GTFS-RT Trip Updates).
-- **Direction affichée** : 🟢 Vert = Vers Gerzat / 🔵 Bleu = Vers Aubière/Romagnat.
-- **ETA au terminus** : Heure d'arrivée estimée au terminus pour chaque bus.
-- **Prochain arrêt** : Nom de l'arrêt suivant et heure d'arrivée estimée.
-- **Indicateur de retard** : Retard/avance affiché en temps réel dans le popup.
+- GTFS statique pour les horaires planifiés.
+- GTFS-RT Trip Updates pour les prévisions temps réel.
+- GTFS-RT Vehicle Positions pour les positions GPS quand disponibles.
+- Fallback intelligent quand certaines données temps réel manquent.
 
-### ✨ Expérience Utilisateur (UX/UI & Accessibilité)
+### Données train TER
 
-- **Design Glassmorphism** : Interface sombre élégante avec effets de flou et de transparence.
-- **Recherche & Favoris** : Filtrage instantané et favoris granulaires par trajet spécifique (bus/train à une heure précise).
-- **Notifications de retard** : Alertes push pour vos trajets favoris en retard (≥5 min).
-- **Accessibilité WCAG 2.1 AA** : Conforme RGAA 4, contrastes ≥4.5:1, skip links, navigation clavier et attributs ARIA complets.
+- Intégration des horaires SNCF / Navitia.
+- Trains dans les deux sens.
+- Statuts retardés ou annulés.
+- Heures d’arrivée et de départ à Gerzat.
 
-### ⚡ Performance & Temps Réel
+### Expérience utilisateur
 
-- **Server-Sent Events (SSE)** : Flux de données continu sans rechargement (plus de polling API).
-- **Mises à jour Silencieuses** : Rafraîchissement instantané des horaires et statuts sans clignotement.
-- **Cache Intelligent** : Stratégie network-first via Service Worker pour une PWA ultra-rapide.
+- Interface responsive mobile-first.
+- Navigation simple : départs, arrivées, carte.
+- Landing page repensée pour présenter clairement le produit.
+- PWA installable sur mobile.
+- Accessibilité renforcée : contrastes, focus clavier, ARIA, lien d’évitement.
 
-## 🤖 Serveur MCP (IA & Automatisation)
+## 🧠 Serveur MCP
 
-Cette application expose un serveur **MCP (Model Context Protocol)** permettant aux agents IA (Claude Desktop, etc.) d'interagir directement avec les données de transport temps réel.
+Le projet expose un serveur **MCP (Model Context Protocol)** pour permettre à un agent IA d’interroger les données de transport.
 
-### Outils Disponibles
+Outils disponibles :
 
-- `get_bus_positions` : Récupère les positions GPS et le cap de tous les bus en circulation sur la ligne E1.
-- `get_departures` : Liste les prochains départs. Argument optionnel : `type` ("BUS", "TRAIN", ou "ALL").
-- `get_line_status` : Donne un résumé de l'état du trafic (nombre de véhicules, retard moyen).
-
-### Utilisation
+- `get_bus_positions` : positions GPS et cap des bus E1 ;
+- `get_departures` : prochains départs, filtrables par type (`BUS`, `TRAIN`, `ALL`) ;
+- `get_line_status` : résumé de ligne, nombre de véhicules et retard moyen.
 
 ```bash
-# Lancer le serveur MCP (stdio transport)
 npm run mcp
-# ou
-npx tsx src/mcp-server/index.ts
 ```
 
-## 🛠 Architecture Technique
+## 🛠️ Stack technique
 
-- **Framework** : Next.js 16 (App Router)
-- **Styling** : TailwindCSS v4
-- **State** : TanStack Query (React Query)
+- **Framework** : Next.js 16, App Router
+- **Langage** : TypeScript
+- **UI** : React 19, Tailwind CSS v4
+- **Données client** : TanStack Query
+- **Carte** : Leaflet 1.9, React-Leaflet 5
+- **Tests** : Jest, Testing Library
+- **PWA** : manifest + service worker
+- **Déploiement** : Coolify compatible via `nixpacks.toml`
 
-### 🧩 Hooks modulaires (v2.5.0)
-
-| Hook | Responsabilité |
-|------|----------------|
-| `useBusData` | Fetch données bus GTFS-RT |
-| `useTrainData` | Fetch données train SNCF |
-| `useDeparturesModel` | Transformation & tri |
-| `useDepartures` | Composition des hooks ci-dessus |
-| `useFavorites` | Gestion des favoris (localStorage) |
-| `useDelayNotifications` | Notifications push retards |
-
-### 🧩 Services de données
-
-| Service | Responsabilité |
-|---------|----------------|
-| `gtfs-rt.ts` | Service centralisé GTFS-RT (fetch, decode, types) |
-| `api-client.ts` | Client HTTP avec retry (3 tentatives, backoff exponentiel) |
-| `logger.ts` | Logger structuré (niveaux, contexte, métriques) |
-
-### 📂 Structure du Projet
+## 📂 Structure
 
 ```text
 src/
-├── app/              # Routes Next.js (App Router)
+├── app/              # Routes Next.js App Router
 ├── components/       # Composants React UI
-├── hooks/            # Hooks personnalisés (useBusData...)
-├── lib/              # Client API, Config, Logger
-├── mcp-server/       # Serveur Model Context Protocol (IA)
-├── services/         # Logique métier (Bus, Train) - Refactorisé
-├── types/            # Définitions TypeScript partagées
-└── utils/            # Fonctions utilitaires (formatters...)
+├── components/map/   # Composants dédiés à la carte
+├── hooks/            # Hooks de données et état local
+├── lib/              # Clients API, GTFS-RT, logging, sécurité
+├── mcp-server/       # Serveur MCP
+├── services/         # Services métier bus et train
+├── types/            # Types TypeScript partagés
+└── utils/            # Formatage et helpers
 ```
 
-### 📡 Sources de données
+## 📡 Sources de données
 
-| Transport | API | Source |
-|-----------|-----|--------|
-| **Train TER** | API SNCF (Navitia) | [api.sncf.com](https://api.sncf.com) / [doc.navitia.io](https://doc.navitia.io) (clé requise) |
-| **Bus T2C** | GTFS-RT temps réel | [transport.data.gouv.fr](https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update) |
-| **Bus T2C** | GTFS statique | [opendata.clermontmetropole.eu](https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs) |
+| Transport | Type | Source |
+| --- | --- | --- |
+| Bus T2C | GTFS-RT temps réel | transport.data.gouv.fr |
+| Bus T2C | GTFS statique | Clermont Métropole Open Data |
+| Train TER | API SNCF / Navitia | api.sncf.com |
 
-### 🔄 Architecture des Données Bus GTFS-RT
+## 📦 Installation locale
 
-Le système de gestion des données bus suit une architecture robuste qui combine les horaires statiques avec les mises à jour temps réel :
-
-```mermaid
-flowchart TD
-    subgraph Sources["📡 Sources de Données"]
-        GTFS_CONFIG["Config Dynamique - gtfs_config.json"]
-        GTFS_STATIC["GTFS Statique - static_schedule.json"]
-        E1_STOP_TIMES["Stop Times E1 - e1_stop_times.json"]
-        GTFS_RT["GTFS-RT Trip Updates"]
-    end
-
-    subgraph Processing["⚙️ Traitement API Routes"]
-        GTFS_SERVICE["gtfs-rt.ts - service centralisé"]
-        FETCH["Fetch et Decode"]
-        CHECK_DATA{"Données RT disponibles ?"}
-        USE_RT["Utiliser RT"]
-        USE_STATIC["Fallback Statique"]
-    end
-
-    subgraph Classification["📊 Types de Trajets"]
-        SCHEDULED["SCHEDULED 0 - Trajet normal"]
-        ADDED["ADDED 1 - Trajet de remplacement"]
-        NO_DATA["NO_DATA 2 - Pas de prédiction"]
-        CANCELED["CANCELED 3 - Trajet annulé"]
-    end
-
-    subgraph Output["📤 Résultat Final"]
-        COMBINE["Combiner et Trier"]
-        DISPLAY["Affichage UI"]
-    end
-
-    GTFS_STATIC --> COMBINE
-    E1_STOP_TIMES --> USE_STATIC
-    GTFS_RT --> GTFS_SERVICE --> FETCH --> CHECK_DATA
-    CHECK_DATA -->|Oui| USE_RT --> COMBINE
-    CHECK_DATA -->|Non| USE_STATIC --> COMBINE
-    COMBINE --> DISPLAY
-```
-
-#### Logique de Matching RT/Statique
-
-```mermaid
-flowchart LR
-    subgraph Input["Entrée"]
-        STATIC["Horaire Statique - tripId date"]
-        RT["Données RT - tripId startDate"]
-    end
-
-    subgraph Validation["Validation"]
-        CHECK_DATE{"startDate disponible ?"}
-        DATE_MATCH{"Dates correspondent ?"}
-        TIME_CHECK{"Fenêtre 4h ?"}
-    end
-
-    subgraph Result["Résultat"]
-        APPLY["✅ Appliquer RT"]
-        SKIP["⏭️ Ignorer RT"]
-    end
-
-    STATIC --> CHECK_DATE
-    RT --> CHECK_DATE
-    CHECK_DATE -->|Oui| DATE_MATCH
-    CHECK_DATE -->|Non| TIME_CHECK
-    DATE_MATCH -->|Oui| APPLY
-    DATE_MATCH -->|Non| SKIP
-    TIME_CHECK -->|Oui| APPLY
-    TIME_CHECK -->|Non| SKIP
-```
-
-#### Positions Véhicules (Carte Live)
-
-L'API `/api/vehicles` utilise un système de priorité à 3 niveaux pour afficher la position la plus précise possible :
-
-```mermaid
-flowchart TD
-    subgraph Sources["📡 Sources GTFS-RT"]
-        VP["Vehicle Positions - GPS réel"]
-        TU["Trip Updates - temps prédits"]
-        STATIC["Static Schedule - horaires théoriques"]
-    end
-
-    subgraph Priority["🎯 Priorité de Résolution"]
-        P1{"GPS disponible ?"}
-        P2{"RT Delay disponible ?"}
-        P3["Interpolation Théorique"]
-    end
-
-    subgraph Position["📍 Position Finale"]
-        GPS_POS["Position GPS ✅ Précision max"]
-        RT_POS["Interpolation RT ⚡ Ajustée au retard"]
-        STATIC_POS["Interpolation Static 📅 Horaire théorique"]
-    end
-
-    VP --> P1
-    P1 -->|Oui| GPS_POS
-    P1 -->|Non| P2
-    TU --> P2
-    P2 -->|Oui| RT_POS
-    P2 -->|Non| P3
-    STATIC --> P3 --> STATIC_POS
-```
-
-| Priorité | Source | Précision | Cas d'usage |
-|----------|--------|-----------|-------------|
-| 1 | GTFS-RT Vehicle Positions | GPS réel | Bus équipés GPS transmettant en temps réel |
-| 2 | GTFS-RT Trip Updates | Interpolation ajustée | GPS non dispo, mais retard/avance connu |
-| 3 | Static Schedule | Interpolation théorique | Aucune donnée temps réel |
-
-#### Gestion des Schedule Relationships
-
-**TripDescriptor (niveau trajet) :**
-
-| Code | Nom | Description | Traitement |
-|------|-----|-------------|------------|
-| `0` | SCHEDULED | Trajet planifié normal | Mis à jour avec données RT |
-| `1` | ADDED | Trajet ajouté (remplacement) | Créé dynamiquement |
-| `2` | UNSCHEDULED | Trajet sans horaire fixe | Traité comme ADDED |
-| `3` | CANCELED | Trajet annulé | Marqué "ANNULÉ" en rouge |
-
-**StopTimeUpdate (niveau arrêt) :**
-
-| Code | Nom | Description | Traitement |
-|------|-----|-------------|------------|
-| `0` | SCHEDULED | Arrêt planifié | Utilise temps RT |
-| `1` | SKIPPED | Arrêt sauté | Non affiché |
-| `2` | NO_DATA | Pas de prédiction | **Fallback sur horaire statique** |
-
-## 📦 Installation
-
-1. **Installer les dépendances** :
-
-    ```bash
-    npm install
-    ```
-
-2. **Configurer les variables d'environnement** :
-
-    ```bash
-    # Créer le fichier .env.local
-    echo "SNCF_API_KEY=votre_clé_api_sncf" > .env.local
-    ```
-
-    > Obtenez votre clé sur [digital.sncf.com](https://www.digital.sncf.com/startup/api)
-
-3. **Lancer le serveur de développement** :
-
-    ```bash
-    npm run dev
-    ```
-
-4. **Accéder à l'application** :
-    Ouvrir [http://localhost:3000](http://localhost:3000) dans votre navigateur.
-
-## 🔧 Scripts Utiles
-
-- **Build** : `npm run build` (Utilise Webpack pour la compatibilité PWA).
-- **Mise à jour Bus (Manuelle)** :
-
-  ```bash
-  python3 generate_static_json.py
-  ```
-
-- **Mise à jour Train (Manuelle)** :
-
-  ```bash
-  python3 generate_train_static.py
-  ```
-
-## 🔄 Mise à jour automatique
-
-Les horaires de bus T2C sont vérifiés **automatiquement chaque lundi** à 7h00 (heure de Paris) via GitHub Actions :
-
-- **Mise à jour automatique** : Le script force désormais la synchronisation avec les dernières données officielles disponibles sur le portail Open Data.
-- **Source unique** : Aucune correction manuelle n'est appliquée, l'application reflète fidèlement les données GTFS fournies par Clermont Métropole.
-
-### Scripts disponibles
+Prérequis : Node.js `>= 24.13.0`, npm et une clé API SNCF / Navitia.
 
 ```bash
-# Régénérer les horaires statiques depuis GTFS officiel
+npm install
+```
+
+Créer `.env.local` :
+
+```bash
+SNCF_API_KEY=votre_cle_api_sncf
+```
+
+Lancer le développement :
+
+```bash
+npm run dev
+```
+
+Puis ouvrir `http://localhost:3000`.
+
+## 🔧 Scripts utiles
+
+```bash
+npm run dev      # serveur de développement
+npm run build    # build production
+npm run start    # serveur production
+npm run lint     # analyse ESLint
+npm run test     # tests Jest
+npm run mcp      # serveur MCP
+```
+
+## 🔄 Mise à jour des données
+
+```bash
 python3 generate_static_json.py
-
-# Extraire les données géographiques (tracé, arrêts) pour la carte live
 python3 extract_lineE1_data.py
-
-# Vérifier si les données officielles sont à jour
 python3 scripts/check_gtfs_update.py
 ```
 
-> **Note** : Les données GTFS sont téléchargées automatiquement depuis [opendata.clermontmetropole.eu](https://opendata.clermontmetropole.eu/explore/dataset/gtfs-smtc).
+Les horaires bus T2C peuvent aussi être vérifiés automatiquement via GitHub Actions.
 
-Vous pouvez aussi déclencher la mise à jour manuellement depuis [GitHub Actions](https://github.com/nickdesi/BusTrainGerzat/actions).
+## 📱 Installation mobile
 
-## 📱 Installer l'Application sur Mobile
+### iPhone / iPad
 
-L'application peut être installée comme une app native sur votre téléphone !
+1. Ouvrir [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr) dans Safari.
+2. Appuyer sur **Partager**.
+3. Choisir **Sur l’écran d’accueil**.
+4. Valider avec **Ajouter**.
 
-### 🍎 iPhone / iPad
+### Android
 
-1. Ouvrez **Safari** et allez sur [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr)
-2. Appuyez sur l'icône **Partager** (carré avec flèche vers le haut)
-3. Faites défiler et appuyez sur **« Sur l'écran d'accueil »**
-4. Nommez l'app (ex: "Gerzat Live") et appuyez sur **Ajouter**
+1. Ouvrir [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr) dans Chrome.
+2. Ouvrir le menu `⋮`.
+3. Choisir **Installer l’application** ou **Ajouter à l’écran d’accueil**.
+4. Confirmer.
 
-### 🤖 Android
+## ✅ Version 3.7.0
 
-1. Ouvrez **Chrome** et allez sur [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr)
-2. Appuyez sur les **3 points** en haut à droite
-3. Appuyez sur **« Installer l'application »** ou **« Ajouter à l'écran d'accueil »**
-4. Confirmez l'installation
+Cette version apporte notamment :
 
-Une fois installée, l'application apparaît sur votre écran d'accueil avec sa propre icône et fonctionne comme une app native !
+- refonte de la landing page ;
+- carte live plus fiable avec wrapper Leaflet client dédié ;
+- correction CSP en développement pour React / Next ;
+- amélioration du rendu visuel de la page carte ;
+- documentation française mise à jour.
+
+## 📄 Licence
+
+Projet personnel open source sous licence MIT.

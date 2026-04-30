@@ -18,21 +18,30 @@ interface DeparturesListProps {
 
 interface DepartureRowProps {
     entry: UnifiedEntry;
-    index: number;
     boardType: 'departures' | 'arrivals';
     isFav: boolean;
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
     onTripClick?: (tripId: string, line: string) => void;
 }
 
-const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav, onToggleFavorite, onTripClick }: DepartureRowProps) {
+const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, onToggleFavorite, onTripClick }: DepartureRowProps) {
     const isClickable = entry.type === 'BUS' && entry.tripId;
+    const accentBorder = boardType === 'arrivals' ? 'border-blue-500/20' : 'border-yellow-500/20';
+    const favoriteTint = boardType === 'arrivals' ? 'bg-blue-900/15' : 'bg-yellow-900/15';
 
     return (
         <div
             onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
-            className={`p-4 flip-enter ${isClickable ? 'cursor-pointer active:bg-yellow-900/30' : ''} ${isFav ? 'bg-yellow-900/10' : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+            className={`flip-enter rounded-3xl border p-4 shadow-lg shadow-black/20 transition-colors ${isClickable ? 'cursor-pointer active:bg-yellow-900/30' : ''} ${isFav ? `${favoriteTint} ${accentBorder}` : 'border-white/[0.06] bg-white/[0.03]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
             title={entry.isCancelled ? 'Train supprimé' : undefined}
+            role={isClickable ? 'button' : undefined}
+            tabIndex={isClickable ? 0 : undefined}
+            onKeyDown={(event) => {
+                if (isClickable && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    onTripClick?.(entry.tripId!, entry.line);
+                }
+            }}
         >
             <div className="flex items-start justify-between mb-3">
                 {entry.type === 'TER' ? (
@@ -56,8 +65,9 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
                                 e.stopPropagation();
                                 onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
                             }}
-                            className={`w-10 h-10 flex items-center justify-center rounded-full transition-all active:scale-95 ${isFav ? 'text-yellow-400 bg-yellow-900/20' : 'text-gray-600 hover:bg-white/5'}`}
+                            className={`w-10 h-10 flex items-center justify-center rounded-full transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 ${isFav ? 'text-yellow-400 bg-yellow-900/20' : 'text-gray-600 hover:bg-white/5'}`}
                             title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
+                            aria-label={isFav ? `Retirer ${entry.line} des favoris` : `Ajouter ${entry.line} aux favoris`}
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-5 h-5">
                                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
@@ -79,7 +89,11 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
             <div className="flex items-center gap-2 mb-2">
                 <ArrowRight className="w-4 h-4 text-gray-500" />
                 <div className="overflow-hidden">
-                    <SplitFlapDisplay text={entry.destination} size="xs" color="text-gray-200" />
+                    <SplitFlapDisplay
+                        text={boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination}
+                        size="xs"
+                        color="text-gray-200"
+                    />
                 </div>
             </div>
 
@@ -103,25 +117,19 @@ const DepartureRow = memo(function DepartureRow({ entry, index, boardType, isFav
     );
 });
 
-export default memo(function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
-    const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
-    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
-
-    // ⚡ Bolt: Memoize favoritesSet to avoid O(N) array recreation and O(M) includes
-    // during sorting and mapping. This ensures O(1) lookups for the map and sort functions.
+export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
     const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
+    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
+    const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-400';
+    const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée trouvée' : 'Aucun départ trouvé';
 
-    // Sort departures: Favorites first
-    // ⚡ Bolt: Memoize sorting to prevent expensive O(N log N) re-sorts on parent state changes (like selecting a trip)
+    // ⚡ Bolt: Memoize sorted departures to prevent re-sorting on every render
     const sortedDepartures = useMemo(() => {
         return [...departures].sort((a, b) => {
-            const idA = a.id;
-            const idB = b.id;
-            const isFavA = favoritesSet.has(idA);
-            const isFavB = favoritesSet.has(idB);
-
-            if (isFavA && !isFavB) return -1;
-            if (!isFavA && isFavB) return 1;
+            const aFav = favoritesSet.has(a.id);
+            const bFav = favoritesSet.has(b.id);
+            if (aFav && !bFav) return -1;
+            if (!aFav && bFav) return 1;
             return 0;
         });
     }, [departures, favoritesSet]);
@@ -132,27 +140,29 @@ export default memo(function DeparturesList({ departures, loading, boardType = '
     }, []);
 
     return (
-        <div className="md:hidden divide-y divide-gray-800">
+        <div className="space-y-3 bg-surface p-3 md:hidden">
             {loading && departures.length === 0 ? (
                 <div className="px-4 py-12 text-center">
-                    <div className="flex flex-col items-center gap-3 text-gray-500">
-                        <RefreshCw className="w-8 h-8 animate-spin text-yellow-500" />
-                        <p className="text-sm uppercase tracking-wide">Chargement...</p>
+                    <div className="mx-auto flex max-w-xs flex-col items-center gap-3 rounded-3xl border border-white/10 bg-white/[0.03] p-8 text-gray-500">
+                        <RefreshCw className={`w-8 h-8 animate-spin ${accentText}`} />
+                        <p className="text-sm font-bold uppercase tracking-wide">Chargement...</p>
                     </div>
                 </div>
             ) : departures.length === 0 ? (
-                <div className="px-4 py-12 text-center text-gray-500">
-                    <p className="text-sm uppercase tracking-wide">{emptyMessage}</p>
+                <div className="px-4 py-12 text-center">
+                    <div className="rounded-3xl border border-dashed border-white/10 bg-white/[0.02] p-8 text-gray-500">
+                        <p className="text-sm font-bold uppercase tracking-wide">{emptyMessage}</p>
+                        <p className="mt-2 text-xs text-gray-600">Modifiez la recherche ou les filtres.</p>
+                    </div>
                 </div>
             ) : (
-                sortedDepartures.map((entry, index) => {
+                sortedDepartures.map((entry) => {
                     const isFav = favoritesSet.has(entry.id);
 
                     return (
                         <DepartureRow
                             key={entry.id}
                             entry={entry}
-                            index={index}
                             boardType={boardType}
                             isFav={isFav}
                             onToggleFavorite={onToggleFavorite}
@@ -170,4 +180,4 @@ export default memo(function DeparturesList({ departures, loading, boardType = '
             />
         </div>
     );
-});
+}

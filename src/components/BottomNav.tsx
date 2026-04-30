@@ -20,21 +20,28 @@ export default function BottomNav() {
     const pathname = usePathname();
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-[var(--z-sticky)] bg-black/80 backdrop-blur-lg border-t border-white/10 safe-area-bottom">
-            <div className="flex justify-around items-center h-16 max-w-lg mx-auto">
+        <nav
+            className="fixed inset-x-0 bottom-0 z-[var(--z-sticky)] px-3 pb-3 pt-2 safe-area-bottom md:bottom-auto md:top-4 md:px-4 md:pb-0"
+            aria-label="Navigation principale"
+        >
+            <div className="mx-auto flex h-[72px] max-w-md items-center justify-between rounded-[1.75rem] border border-white/10 bg-black/75 p-2 shadow-2xl shadow-black/50 backdrop-blur-2xl supports-[backdrop-filter]:bg-black/55 md:h-16 md:max-w-lg">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;
                     return (
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`flex flex-col items-center justify-center flex-1 h-full transition-colors ${isActive
-                                ? 'text-yellow-400'
-                                : 'text-gray-400 hover:text-white'
+                            aria-current={isActive ? 'page' : undefined}
+                            className={`group relative flex min-h-14 flex-1 flex-col items-center justify-center gap-1 rounded-2xl px-2 text-xs font-bold transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black md:flex-row md:gap-2 md:text-sm ${isActive
+                                ? 'bg-yellow-400 text-black shadow-lg shadow-yellow-500/20'
+                                : 'text-gray-400 hover:bg-white/5 hover:text-white'
                                 }`}
                         >
-                            {item.icon}
-                            <span className="text-xs mt-1 font-medium">{item.label}</span>
+                            <span className={`transition-transform duration-200 ${isActive ? '-translate-y-0.5 md:translate-y-0' : 'group-hover:-translate-y-0.5 md:group-hover:translate-y-0'}`} aria-hidden="true">
+                                {item.icon}
+                            </span>
+                            <span className="leading-none">{item.label}</span>
+                            {isActive && <span className="absolute -bottom-1 h-1 w-8 rounded-full bg-black/60 md:bottom-1" aria-hidden="true" />}
                         </Link>
                     );
                 })}

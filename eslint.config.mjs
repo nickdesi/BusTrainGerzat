@@ -13,6 +13,8 @@ const eslintConfig = [
       "scripts/**",
       "debug_pipeline.js",
       "test_date_format.js",
+      ".agent/**",
+      "superpowers/**",
     ],
   },
   // Security config (Flat Config compatible)

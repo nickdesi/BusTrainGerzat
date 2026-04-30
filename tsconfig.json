@@ -30,16 +30,19 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "*.ts",
+    "*.mts"
   ],
   "exclude": [
     "node_modules",
     "BusTrainGerzat",
     "inspect_sncf.ts",
-    "debug_sncf.ts"
+    "debug_sncf.ts",
+    ".agent/**",
+    "superpowers/**"
   ]
 }

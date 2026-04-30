@@ -7,9 +7,9 @@ export default function AppLayout({
 }>) {
     return (
         <>
-            <main className="pb-20">
+            <div className="pb-24 md:pb-6 md:pt-24">
                 {children}
-            </main>
+            </div>
             <BottomNav />
         </>
     );
