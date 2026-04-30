@@ -59,6 +59,12 @@ const stopsById = new Map(
     lineE1Data.stops.map(s => [s.stopId, s])
 );
 
+const TRIP_ID_PATTERN = /^[A-Za-z0-9._-]{1,128}$/;
+
+function isValidTripId(tripId: string): boolean {
+    return TRIP_ID_PATTERN.test(tripId) && !tripId.includes('..');
+}
+
 import { getParisMidnight, getNowUnix } from '@/utils/date';
 
 export async function GET(
@@ -67,6 +73,14 @@ export async function GET(
 ) {
     try {
         const { tripId } = await params;
+
+        if (!isValidTripId(tripId)) {
+            return NextResponse.json(
+                { error: 'Invalid tripId' },
+                { status: 400 }
+            );
+        }
+
         const now = getNowUnix();
         const midnight = getParisMidnight();
         const toUnix = (sec: number) => midnight + sec;
@@ -95,17 +109,16 @@ export async function GET(
             // Find current stop based on PREDICTED time (RT if available, else scheduled)
             // This ensures stops are correctly marked as "passed" when bus is early
             let currentStopIndex = 0;
-            for (let i = 0; i < staticTrip.stops.length; i++) {
-                const stopId = staticTrip.stops[i].stopId;
-                const rtData = rtStopUpdates.get(stopId);
+            for (const [index, stop] of staticTrip.stops.entries()) {
+                const rtData = rtStopUpdates.get(stop.stopId);
                 // Use predicted time if RT available, otherwise scheduled
-                const predictedTime = rtData?.predictedTime || toUnix(staticTrip.stops[i].arrivalTime);
+                const predictedTime = rtData?.predictedTime || toUnix(stop.arrivalTime);
                 if (predictedTime > now) {
-                    currentStopIndex = i;
+                    currentStopIndex = index;
                     break;
                 }
-                if (i === staticTrip.stops.length - 1) {
-                    currentStopIndex = i; // All passed, last is current
+                if (index === staticTrip.stops.length - 1) {
+                    currentStopIndex = index; // All passed, last is current
                 }
             }
 

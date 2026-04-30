@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchTripUpdates, fetchVehiclePositions } from '@/lib/gtfs-rt';
+import { createShapesMap, interpolateAlongShape, type ShapePoint } from '@/lib/vehicle-interpolation';
+import { getParisMidnight } from '@/utils/date';
 import lineE1Data from '../../../../public/data/lineE1_data.json';
 import e1StopTimes from '../../../../public/data/e1_stop_times.json';
 
@@ -32,199 +34,21 @@ interface StaticTrip {
 const stopsById = new Map(lineE1Data.stops.map(s => [s.stopId, s]));
 const staticTripsById = new Map((e1StopTimes as StaticTrip[]).map(t => [t.tripId, t]));
 
-import { getParisMidnight } from '@/utils/date';
+function getStopAt(trip: StaticTrip, index: number) {
+    return trip.stops.at(index);
+}
 
-/**
- * Interpolate position between two stops based on progress (fallback - straight line)
- */
-function interpolatePosition(
-    prevStop: { lat: number; lon: number },
-    nextStop: { lat: number; lon: number },
-    progress: number
-): { lat: number; lon: number } {
-    return {
-        lat: prevStop.lat + (nextStop.lat - prevStop.lat) * progress,
-        lon: prevStop.lon + (nextStop.lon - prevStop.lon) * progress
-    };
+function getFirstStop(trip: StaticTrip) {
+    return trip.stops.at(0);
+}
+
+function getLastStop(trip: StaticTrip) {
+    return trip.stops.at(-1);
 }
 
 // Pre-compute shape arrays for each direction using a Map to avoid object injection warnings
-type ShapePoint = [number, number]; // [lat, lon]
 const shapesData = lineE1Data.shapes as unknown as Record<string, ShapePoint[]>;
-const shapes = new Map<string, ShapePoint[]>(Object.entries(shapesData));
-
-/**
- * Calculate squared distance between two points (faster than actual distance for comparisons)
- */
-function distanceSquared(lat1: number, lon1: number, lat2: number, lon2: number): number {
-    const dLat = lat2 - lat1;
-    const dLon = lon2 - lon1;
-    return dLat * dLat + dLon * dLon;
-}
-
-/**
- * Find the index of the closest point on the shape to a given stop
- * Uses sampling for performance (check every Nth point, then refine)
- */
-function findClosestShapeIndex(shape: ShapePoint[], lat: number, lon: number): number {
-    if (shape.length === 0) return 0;
-
-    // Coarse search: sample every 20th point
-    let bestIdx = 0;
-    let bestDist = Infinity;
-    const step = 20;
-
-    for (let i = 0; i < shape.length; i += step) {
-        const dist = distanceSquared(lat, lon, shape[i][0], shape[i][1]);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIdx = i;
-        }
-    }
-
-    // Fine search: check nearby points
-    const searchStart = Math.max(0, bestIdx - step);
-    const searchEnd = Math.min(shape.length - 1, bestIdx + step);
-
-    for (let i = searchStart; i <= searchEnd; i++) {
-        const dist = distanceSquared(lat, lon, shape[i][0], shape[i][1]);
-        if (dist < bestDist) {
-            bestDist = dist;
-            bestIdx = i;
-        }
-    }
-
-    return bestIdx;
-}
-
-/**
- * Calculate cumulative distances along shape segment
- */
-function calculateShapeSegmentLength(shape: ShapePoint[], startIdx: number, endIdx: number): number {
-    let length = 0;
-    const start = Math.min(startIdx, endIdx);
-    const end = Math.max(startIdx, endIdx);
-
-    for (let i = start; i < end; i++) {
-        length += Math.sqrt(distanceSquared(
-            shape[i][0], shape[i][1],
-            shape[i + 1][0], shape[i + 1][1]
-        ));
-    }
-    return length;
-}
-
-/**
- * Interpolate position along the shape path between two stops
- * This ensures the bus follows the actual route instead of cutting corners
- */
-function interpolateAlongShape(
-    prevStop: { lat: number; lon: number },
-    nextStop: { lat: number; lon: number },
-    progress: number,
-    direction: number
-): { lat: number; lon: number; bearing: number } {
-    // Get shape for this direction
-    const shapeKey = String(direction);
-    const shape = shapes.get(shapeKey);
-
-    // Fallback to straight line if no shape available
-    if (!shape || shape.length < 2) {
-        const pos = interpolatePosition(prevStop, nextStop, progress);
-        return {
-            ...pos,
-            bearing: calculateBearing(prevStop, nextStop)
-        };
-    }
-
-    // Find closest shape points to prev and next stops
-    const prevIdx = findClosestShapeIndex(shape, prevStop.lat, prevStop.lon);
-    const nextIdx = findClosestShapeIndex(shape, nextStop.lat, nextStop.lon);
-
-    // Handle edge case where points are same or reversed
-    if (prevIdx === nextIdx) {
-        return {
-            lat: shape[prevIdx][0],
-            lon: shape[prevIdx][1],
-            bearing: calculateBearing(prevStop, nextStop)
-        };
-    }
-
-    // Determine segment direction on shape
-    const shapeStart = Math.min(prevIdx, nextIdx);
-    const shapeEnd = Math.max(prevIdx, nextIdx);
-    const isReversed = prevIdx > nextIdx;
-
-    // Calculate total segment length
-    const totalLength = calculateShapeSegmentLength(shape, shapeStart, shapeEnd);
-    if (totalLength === 0) {
-        return {
-            lat: shape[prevIdx][0],
-            lon: shape[prevIdx][1],
-            bearing: calculateBearing(prevStop, nextStop)
-        };
-    }
-
-    // Find position at given progress along the segment
-    const targetDistance = totalLength * progress;
-    let accumulatedLength = 0;
-
-    // Walk along shape from prevIdx toward nextIdx
-    const walkStart = isReversed ? shapeEnd : shapeStart;
-    const walkDirection = isReversed ? -1 : 1;
-    const walkEnd = isReversed ? shapeStart : shapeEnd;
-
-    let currentIdx = walkStart;
-    while ((walkDirection > 0 ? currentIdx < walkEnd : currentIdx > walkEnd)) {
-        const nextPointIdx = currentIdx + walkDirection;
-        const segmentLength = Math.sqrt(distanceSquared(
-            shape[currentIdx][0], shape[currentIdx][1],
-            shape[nextPointIdx][0], shape[nextPointIdx][1]
-        ));
-
-        if (accumulatedLength + segmentLength >= targetDistance) {
-            // Target is within this segment
-            const remainingDistance = targetDistance - accumulatedLength;
-            const segmentProgress = segmentLength > 0 ? remainingDistance / segmentLength : 0;
-
-            const lat = shape[currentIdx][0] + (shape[nextPointIdx][0] - shape[currentIdx][0]) * segmentProgress;
-            const lon = shape[currentIdx][1] + (shape[nextPointIdx][1] - shape[currentIdx][1]) * segmentProgress;
-
-            // Calculate bearing from current segment
-            const bearing = calculateBearing(
-                { lat: shape[currentIdx][0], lon: shape[currentIdx][1] },
-                { lat: shape[nextPointIdx][0], lon: shape[nextPointIdx][1] }
-            );
-
-            return { lat, lon, bearing };
-        }
-
-        accumulatedLength += segmentLength;
-        currentIdx = nextPointIdx;
-    }
-
-    // Fallback: return end point
-    return {
-        lat: shape[walkEnd][0],
-        lon: shape[walkEnd][1],
-        bearing: calculateBearing(prevStop, nextStop)
-    };
-}
-
-/**
- * Calculate bearing between two points
- */
-function calculateBearing(from: { lat: number; lon: number }, to: { lat: number; lon: number }): number {
-    const toRad = Math.PI / 180;
-    const dLon = (to.lon - from.lon) * toRad;
-    const lat1 = from.lat * toRad;
-    const lat2 = to.lat * toRad;
-    const y = Math.sin(dLon) * Math.cos(lat2);
-    const x = Math.cos(lat1) * Math.sin(lat2) - Math.sin(lat1) * Math.cos(lat2) * Math.cos(dLon);
-    return ((Math.atan2(y, x) * 180 / Math.PI) + 360) % 360;
-}
-
-
+const shapes = createShapesMap(shapesData);
 
 export async function GET() {
     try {
@@ -252,24 +76,25 @@ export async function GET() {
 
             // Find next stop based on predicted times
             let nextStopIdx = 0;
-            for (let i = 0; i < staticTrip.stops.length; i++) {
-                const stopId = staticTrip.stops[i].stopId;
-                const rtStopData = rtUpdate?.stopUpdates.get(stopId);
-                const predictedTime = rtStopData?.predictedTime || toUnix(staticTrip.stops[i].arrivalTime);
+            for (const [index, stop] of staticTrip.stops.entries()) {
+                const rtStopData = rtUpdate?.stopUpdates.get(stop.stopId);
+                const predictedTime = rtStopData?.predictedTime || toUnix(stop.arrivalTime);
                 if (predictedTime > now) {
-                    nextStopIdx = i;
+                    nextStopIdx = index;
                     break;
                 }
-                if (i === staticTrip.stops.length - 1) {
-                    nextStopIdx = i;
+                if (index === staticTrip.stops.length - 1) {
+                    nextStopIdx = index;
                 }
             }
 
-            const nextStop = staticTrip.stops[nextStopIdx];
+            const nextStop = getStopAt(staticTrip, nextStopIdx);
+            const lastStop = getLastStop(staticTrip);
+            const firstStop = getFirstStop(staticTrip);
+            if (!nextStop || !lastStop || !firstStop) continue;
+
             const nextStopInfo = stopsById.get(nextStop.stopId);
-            const lastStop = staticTrip.stops[staticTrip.stops.length - 1];
             const lastStopInfo = stopsById.get(lastStop.stopId);
-            const firstStop = staticTrip.stops[0];
             const firstStopInfo = stopsById.get(firstStop.stopId);
 
             // Get predicted arrival times
@@ -313,10 +138,14 @@ export async function GET() {
             if (!staticTrip || staticTrip.stops.length < 2) continue;
 
             // Check if trip is currently active based on predicted times
-            const firstStopData = rtUpdate.stopUpdates.get(staticTrip.stops[0].stopId);
-            const lastStopData = rtUpdate.stopUpdates.get(staticTrip.stops[staticTrip.stops.length - 1].stopId);
-            const firstPredicted = firstStopData?.predictedTime || toUnix(staticTrip.stops[0].arrivalTime);
-            const lastPredicted = lastStopData?.predictedTime || toUnix(staticTrip.stops[staticTrip.stops.length - 1].arrivalTime);
+            const firstStop = getFirstStop(staticTrip);
+            const lastStop = getLastStop(staticTrip);
+            if (!firstStop || !lastStop) continue;
+
+            const firstStopData = rtUpdate.stopUpdates.get(firstStop.stopId);
+            const lastStopData = rtUpdate.stopUpdates.get(lastStop.stopId);
+            const firstPredicted = firstStopData?.predictedTime || toUnix(firstStop.arrivalTime);
+            const lastPredicted = lastStopData?.predictedTime || toUnix(lastStop.arrivalTime);
 
             if (now < firstPredicted - 120 || now > lastPredicted + 300) continue;
 
@@ -326,23 +155,24 @@ export async function GET() {
             let prevStopIdx = 0;
             let nextStopIdx = 1;
 
-            for (let i = 0; i < staticTrip.stops.length; i++) {
-                const stopId = staticTrip.stops[i].stopId;
-                const rtStopData = rtUpdate.stopUpdates.get(stopId);
-                const predictedTime = rtStopData?.predictedTime || toUnix(staticTrip.stops[i].arrivalTime);
+            for (const [index, stop] of staticTrip.stops.entries()) {
+                const rtStopData = rtUpdate.stopUpdates.get(stop.stopId);
+                const predictedTime = rtStopData?.predictedTime || toUnix(stop.arrivalTime);
                 if (predictedTime > now) {
-                    nextStopIdx = i;
-                    prevStopIdx = Math.max(0, i - 1);
+                    nextStopIdx = index;
+                    prevStopIdx = Math.max(0, index - 1);
                     break;
                 }
-                if (i === staticTrip.stops.length - 1) {
-                    prevStopIdx = i - 1;
-                    nextStopIdx = i;
+                if (index === staticTrip.stops.length - 1) {
+                    prevStopIdx = index - 1;
+                    nextStopIdx = index;
                 }
             }
 
-            const prevStop = staticTrip.stops[prevStopIdx];
-            const nextStop = staticTrip.stops[nextStopIdx];
+            const prevStop = getStopAt(staticTrip, prevStopIdx);
+            const nextStop = getStopAt(staticTrip, nextStopIdx);
+            if (!prevStop || !nextStop) continue;
+
             const prevStopInfo = stopsById.get(prevStop.stopId);
             const nextStopInfo = stopsById.get(nextStop.stopId);
 
@@ -362,15 +192,18 @@ export async function GET() {
                 { lat: prevStopInfo.lat, lon: prevStopInfo.lon },
                 { lat: nextStopInfo.lat, lon: nextStopInfo.lon },
                 segmentProgress,
-                staticTrip.direction
+                staticTrip.direction,
+                shapes
             );
 
-            const lastStop = staticTrip.stops[staticTrip.stops.length - 1];
-            const lastStopInfo = stopsById.get(lastStop.stopId);
-            const firstStop = staticTrip.stops[0];
-            const firstStopInfo = stopsById.get(firstStop.stopId);
-            const lastRtData = rtUpdate.stopUpdates.get(lastStop.stopId);
-            const terminusTime = lastRtData?.predictedTime || toUnix(lastStop.arrivalTime);
+            const lastStopForTrip = getLastStop(staticTrip);
+            const firstStopForTrip = getFirstStop(staticTrip);
+            if (!lastStopForTrip || !firstStopForTrip) continue;
+
+            const lastStopInfo = stopsById.get(lastStopForTrip.stopId);
+            const firstStopInfo = stopsById.get(firstStopForTrip.stopId);
+            const lastRtData = rtUpdate.stopUpdates.get(lastStopForTrip.stopId);
+            const terminusTime = lastRtData?.predictedTime || toUnix(lastStopForTrip.arrivalTime);
 
             let delay = rtUpdate.tripDelay;
             // Manual delay calculation if API reports 0 but next stop time is shifted
@@ -404,8 +237,12 @@ export async function GET() {
             if (processedTripIds.has(trip.tripId)) continue;
             if (!trip.stops || trip.stops.length < 2) continue;
 
-            const firstStopTime = toUnix(trip.stops[0].arrivalTime);
-            const lastStopTime = toUnix(trip.stops[trip.stops.length - 1].arrivalTime);
+            const firstStop = getFirstStop(trip);
+            const lastStop = getLastStop(trip);
+            if (!firstStop || !lastStop) continue;
+
+            const firstStopTime = toUnix(firstStop.arrivalTime);
+            const lastStopTime = toUnix(lastStop.arrivalTime);
 
             if (now < firstStopTime - 120 || now > lastStopTime + 300) continue;
 
@@ -413,21 +250,23 @@ export async function GET() {
             let prevStopIdx = 0;
             let nextStopIdx = 1;
 
-            for (let i = 0; i < trip.stops.length; i++) {
-                const stopTime = toUnix(trip.stops[i].arrivalTime);
+            for (const [index, stop] of trip.stops.entries()) {
+                const stopTime = toUnix(stop.arrivalTime);
                 if (stopTime > now) {
-                    nextStopIdx = i;
-                    prevStopIdx = Math.max(0, i - 1);
+                    nextStopIdx = index;
+                    prevStopIdx = Math.max(0, index - 1);
                     break;
                 }
-                if (i === trip.stops.length - 1) {
-                    prevStopIdx = i - 1;
-                    nextStopIdx = i;
+                if (index === trip.stops.length - 1) {
+                    prevStopIdx = index - 1;
+                    nextStopIdx = index;
                 }
             }
 
-            const prevStop = trip.stops[prevStopIdx];
-            const nextStop = trip.stops[nextStopIdx];
+            const prevStop = getStopAt(trip, prevStopIdx);
+            const nextStop = getStopAt(trip, nextStopIdx);
+            if (!prevStop || !nextStop) continue;
+
             const prevStopInfo = stopsById.get(prevStop.stopId);
             const nextStopInfo = stopsById.get(nextStop.stopId);
 
@@ -444,12 +283,11 @@ export async function GET() {
                 { lat: prevStopInfo.lat, lon: prevStopInfo.lon },
                 { lat: nextStopInfo.lat, lon: nextStopInfo.lon },
                 segmentProgress,
-                trip.direction
+                trip.direction,
+                shapes
             );
 
-            const lastStop = trip.stops[trip.stops.length - 1];
             const lastStopInfo = stopsById.get(lastStop.stopId);
-            const firstStop = trip.stops[0];
             const firstStopInfo = stopsById.get(firstStop.stopId);
 
             vehicles.push({

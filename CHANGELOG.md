@@ -1,5 +1,24 @@
 # Changelog
 
+## [3.7.3] - 2026-04-30
+
+### 🔒 Sécurité & robustesse
+
+- **API détail trajet** : validation stricte des `tripId` avant traitement (`400` si identifiant invalide).
+- **API véhicules** : extraction de l’interpolation géographique dans `src/lib/vehicle-interpolation.ts` et suppression des accès indexés risqués signalés par ESLint security.
+- **Service worker** : version de cache stable, nettoyage limité aux caches Gerzat Live et réponse JSON structurée en mode hors-ligne pour les APIs.
+- **PWA update UX** : remplacement du rechargement forcé par une bannière de mise à jour déclenchée par l’utilisateur.
+
+### ♿ Accessibilité & SEO
+
+- **Viewport mobile** : zoom utilisateur à nouveau autorisé.
+- **Sitemap** : correction des routes indexées (`/app`, `/app/carte`, `/app/arrivees`) et date de modification stable.
+
+### 🧪 Qualité
+
+- **Tests interpolation véhicule** : ajout de 7 tests unitaires couvrant position, distance, cap, interpolation sur shape et fallback.
+- **Build Next.js** : configuration explicite de la racine Turbopack pour éviter l’inférence incorrecte en environnement multi-dossiers.
+
 ## [3.7.2] - 2026-04-08
 
 ### 🐛 Correctifs

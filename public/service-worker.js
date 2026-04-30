@@ -1,5 +1,5 @@
-// AGGRESSIVE CACHE BUSTING - Version bumped on every deploy
-const CACHE_VERSION = Date.now(); // Changes on every deploy
+// Stable cache version. Bump manually when static SW-cached assets change.
+const CACHE_VERSION = '3.7.0';
 const CACHE_NAME = `gerzat-live-v${CACHE_VERSION}`;
 
 // Only cache truly static assets (icons, fonts)
@@ -8,50 +8,39 @@ const STATIC_ASSETS = [
   '/apple-touch-icon.png'
 ];
 
-// Install: Skip waiting immediately
 self.addEventListener('install', (event) => {
-  // Installing new version
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(STATIC_ASSETS))
   );
-  self.skipWaiting(); // Take over immediately
 });
 
-// Activate: Delete ALL old caches aggressively
 self.addEventListener('activate', (event) => {
-  // Activating and clearing old caches
   event.waitUntil(
     caches.keys().then((names) =>
       Promise.all(
         names
-          .filter((n) => n !== CACHE_NAME)
-          .map((n) => {
-            // Deleting old cache
-            return caches.delete(n);
-          })
+          .filter((name) => name.startsWith('gerzat-live-v') && name !== CACHE_NAME)
+          .map((name) => caches.delete(name))
       )
-    ).then(() => {
-      // Force all clients to use this new service worker
-      return self.clients.claim();
-    })
+    ).then(() => self.clients.claim())
   );
 });
 
-// Fetch: Network-first for EVERYTHING except icons
+const offlineApiResponse = () => new Response(
+  JSON.stringify({ error: 'offline', updates: [], offline: true, timestamp: Math.floor(Date.now() / 1000) }),
+  {
+    headers: { 'Content-Type': 'application/json' },
+    status: 503
+  }
+);
+
 self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
   // API calls: Network only, never cache
   if (url.pathname.startsWith('/api/')) {
-    event.respondWith(
-      fetch(request).catch(() => {
-        return new Response(JSON.stringify({ updates: [], offline: true }), {
-          headers: { 'Content-Type': 'application/json' },
-          status: 503
-        });
-      })
-    );
+    event.respondWith(fetch(request).catch(offlineApiResponse));
     return;
   }
 
@@ -63,26 +52,19 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // Everything else (HTML, JS, CSS): NETWORK FIRST, no caching
+  // Everything else (HTML, JS, CSS): network first
   event.respondWith(
-    fetch(request)
-      .then((response) => {
-        // Don't cache HTML/JS/CSS - always get fresh from network
-        return response;
-      })
-      .catch(() => {
-        // Offline fallback: try cache, or return offline page
-        return caches.match(request).then((cached) => {
-          if (cached) return cached;
-          // Return a simple offline message for navigation requests
-          if (request.mode === 'navigate') {
-            return new Response('<html><body><h1>Hors ligne</h1><p>Veuillez vérifier votre connexion internet.</p></body></html>', {
-              headers: { 'Content-Type': 'text/html' }
-            });
-          }
-          return new Response('Offline', { status: 503 });
-        });
-      })
+    fetch(request).catch(() => {
+      return caches.match(request).then((cached) => {
+        if (cached) return cached;
+        if (request.mode === 'navigate') {
+          return new Response('<html lang="fr"><body><h1>Hors ligne</h1><p>Veuillez vérifier votre connexion internet.</p></body></html>', {
+            headers: { 'Content-Type': 'text/html; charset=utf-8' }
+          });
+        }
+        return new Response('Offline', { status: 503 });
+      });
+    })
   );
 });
 
@@ -100,7 +82,6 @@ self.addEventListener('push', (event) => {
   );
 });
 
-// Force update check on every page load
 self.addEventListener('message', (event) => {
   if (event.data === 'skipWaiting') {
     self.skipWaiting();

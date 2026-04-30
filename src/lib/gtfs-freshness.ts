@@ -53,10 +53,11 @@ export function getCalendarEndDate(): string | null {
     if (schedule.length === 0) return null;
 
     // ⚡ Bolt: O(N) linear scan to find max date instead of O(N log N) Set+sort creation
-    let maxDate = schedule[0].date;
-    for (let i = 1; i < schedule.length; i++) {
-        if (schedule[i].date > maxDate) {
-            maxDate = schedule[i].date;
+    const [firstItem, ...remainingItems] = schedule;
+    let maxDate = firstItem.date;
+    for (const item of remainingItems) {
+        if (item.date > maxDate) {
+            maxDate = item.date;
         }
     }
     return maxDate;
