@@ -22,6 +22,16 @@ type LegacyRtStop = {
     isSkipped: boolean;
 };
 
+type AddedTripStop = {
+    stopId: string;
+    predictedTime?: number;
+    predictedArrival?: number;
+    predictedDeparture?: number;
+    delay: number;
+};
+
+const RT_FALLBACK_MATCH_WINDOW_SECONDS = 3 * 60 * 60;
+
 // --- Lazy-loaded Data (reduces cold start time) ---
 
 // Cache for lazy-loaded modules
@@ -130,6 +140,26 @@ export function removeCancelledTripsWithReplacement(updates: BusUpdate[]): BusUp
     return cleanedUpdates;
 }
 
+export function shouldApplyRealtimeUpdate(rtStartDate: string | undefined, staticDate: string, rtTime: number, scheduledArrival: number): boolean {
+    if (rtStartDate) return rtStartDate === staticDate;
+    return rtTime > 0 && Math.abs(rtTime - scheduledArrival) <= RT_FALLBACK_MATCH_WINDOW_SECONDS;
+}
+
+export function findGerzatStopForAddedTrip(
+    stops: AddedTripStop[],
+    directionId: number,
+    stopGroups: { champfleuri: string[]; patural: string[] }
+): AddedTripStop | undefined {
+    const targetStopIds = new Set([...stopGroups.champfleuri, ...stopGroups.patural]);
+    const matchingStops = stops.filter(stop => targetStopIds.has(stop.stopId));
+
+    if (matchingStops.length > 0) {
+        return directionId === 0 ? matchingStops[0] : matchingStops.at(-1);
+    }
+
+    return undefined;
+}
+
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
         const now = getNowUnix();
@@ -177,14 +207,9 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             // 1. Handle Added Trips
             if (update.isAdded) {
                 const stops = Array.from(update.stopUpdates.values());
-                if (stops.length > 0) {
-                    // Direction 0 = leaving Gerzat (first stop is Gerzat estimate)
-                    // Direction 1 = arriving at Gerzat (last stop is Gerzat estimate)
-                    const gerzatStop = update.directionId === 0 ? stops[0] : stops[stops.length - 1];
+                const gerzatStop = findGerzatStopForAddedTrip(stops, update.directionId, gtfsConfig.stopIds);
 
-                    // Convert to milliseconds-based structure if needed, or keeping it as unix timestamp (seconds)
-                    // BusUpdate expects simple numbers. 'arrival' in BusUpdate is unix timestamp.
-                    // RTStopUpdate.predictedTime is unix timestamp (seconds).
+                if (gerzatStop) {
                     const arrivalTime = gerzatStop.predictedTime;
                     const arrivalDelay = gerzatStop.delay;
 
@@ -277,13 +302,13 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     let shouldApplyRT = false;
 
                     if (rtStartDate && staticDate) {
-                        shouldApplyRT = rtStartDate === staticDate;
+                        shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, 0, item.arrival);
                     } else {
                         // Fallback: check timestamp of ANY available stop update for this trip
-                        // to ensure it's not a stale or future false match (e.g. next day same tripId?)
+                        // to ensure it's not a stale or future false match when startDate is absent.
                         const firstStopUpdate = rtTrip.stops.values().next().value;
                         const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
-                        shouldApplyRT = rtTime > 0 && Math.abs(rtTime - item.arrival) < 43200; // 12h window (relaxed)
+                        shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, rtTime, item.arrival);
                     }
 
                     if (shouldApplyRT) {
