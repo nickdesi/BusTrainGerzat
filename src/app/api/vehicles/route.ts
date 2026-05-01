@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchTripUpdates, fetchVehiclePositions } from '@/lib/gtfs-rt';
 import { createShapesMap, interpolateAlongShape, type ShapePoint } from '@/lib/vehicle-interpolation';
-import { getParisMidnight } from '@/utils/date';
+import { getParisMidnight, isT2CNoServiceDay } from '@/utils/date';
 import lineE1Data from '../../../../public/data/lineE1_data.json';
 import e1StopTimes from '../../../../public/data/e1_stop_times.json';
 
@@ -53,6 +53,16 @@ const shapes = createShapesMap(shapesData);
 export async function GET() {
     try {
         const now = Math.floor(Date.now() / 1000);
+
+        if (isT2CNoServiceDay()) {
+            return NextResponse.json({
+                vehicles: [],
+                timestamp: now,
+                count: 0,
+                hasRealtime: false
+            });
+        }
+
         const midnight = getParisMidnight(); // Optimization: Calculate once
         const toUnix = (sec: number) => midnight + sec;
 

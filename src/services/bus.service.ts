@@ -1,6 +1,6 @@
 import { fetchTripUpdates } from '@/lib/gtfs-rt';
 import { BusUpdate } from '@/types/transport';
-import { getNowUnix } from '@/utils/date';
+import { getNowUnix, isT2CNoServiceDay } from '@/utils/date';
 
 // --- Internal Types ---
 
@@ -77,6 +77,10 @@ let PATURAL_IDS_SET_CACHE: Set<string> | null = null;
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
         const now = getNowUnix();
+
+        if (isT2CNoServiceDay()) {
+            return { updates: [], timestamp: now };
+        }
 
         // Lazy load data on first use (reduces cold start time)
         const [staticSchedule, gtfsConfig, tripOrigins] = await Promise.all([

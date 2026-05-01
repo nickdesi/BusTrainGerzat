@@ -1,4 +1,4 @@
-import { parseParisTime, getParisMidnight, getParisOffset, getNowUnix, getParisDateString } from './date';
+import { parseParisTime, getParisMidnight, getParisOffset, getNowUnix, getParisDateString, isT2CNoServiceDay } from './date';
 
 describe('Date Utilities - Paris Timezone', () => {
 
@@ -154,5 +154,15 @@ describe('getParisDateString', () => {
         // 22:30 UTC on Aug 15 = 00:30 on Aug 16 in Paris (UTC+2)
         jest.setSystemTime(new Date('2024-08-15T22:30:00Z'));
         expect(getParisDateString()).toBe('20240816');
+    });
+});
+
+describe('isT2CNoServiceDay', () => {
+    it('should return true on May 1st in Paris timezone', () => {
+        expect(isT2CNoServiceDay(new Date('2026-05-01T10:00:00Z'))).toBe(true);
+    });
+
+    it('should return false outside May 1st', () => {
+        expect(isT2CNoServiceDay(new Date('2026-05-02T10:00:00Z'))).toBe(false);
     });
 });

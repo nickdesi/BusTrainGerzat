@@ -125,3 +125,15 @@ export function getParisDateString(): string {
     return `${year}${month}${day}`;
 }
 
+/**
+ * T2C does not operate bus/tram services on May 1st (Labour Day) in Clermont-Ferrand.
+ * Keep this runtime guard because GTFS static/RT feeds can still expose stale or theoretical trips.
+ */
+export function isT2CNoServiceDay(date = new Date()): boolean {
+    const parts = PARIS_DATE_STRING_FORMATTER.formatToParts(date);
+    const month = parts.find(p => p.type === 'month')?.value;
+    const day = parts.find(p => p.type === 'day')?.value;
+
+    return month === '05' && day === '01';
+}
+

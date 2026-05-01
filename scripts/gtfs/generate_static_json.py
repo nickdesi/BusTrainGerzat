@@ -115,6 +115,10 @@ print(f"📋 Found {len(trip_stops)} stop times at target stops")
 final_schedule = []
 
 for date_str in dates:
+    # T2C buses/trams do not operate on May 1st, even if a GTFS feed exposes theoretical service.
+    if date_str.endswith('0501'):
+        continue
+
     dt = datetime.strptime(date_str, '%Y%m%d').replace(tzinfo=PARIS_TZ)
     day_of_week = dt.weekday() # 0=Mon, 6=Sun
     days_key = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'][day_of_week]
