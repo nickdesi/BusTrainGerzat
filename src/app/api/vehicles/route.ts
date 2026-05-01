@@ -2,8 +2,16 @@ import { NextResponse } from 'next/server';
 import { fetchTripUpdates, fetchVehiclePositions } from '@/lib/gtfs-rt';
 import { createShapesMap, interpolateAlongShape, type ShapePoint } from '@/lib/vehicle-interpolation';
 import { getParisMidnight, isT2CNoServiceDay } from '@/utils/date';
-import lineE1Data from '../../../../public/data/lineE1_data.json';
-import e1StopTimes from '../../../../public/data/e1_stop_times.json';
+import {
+    getEffectiveDelay,
+    getFirstStop,
+    getLastStop,
+    getLineE1Shapes,
+    getLineE1StaticTrip,
+    getLineE1StaticTrips,
+    getLineE1Stop,
+    getStopAt,
+} from '@/services/t2c-line-e1.service';
 
 export const dynamic = 'force-dynamic';
 
@@ -24,30 +32,8 @@ interface EstimatedVehicle {
     isRealtime: boolean;
 }
 
-interface StaticTrip {
-    tripId: string;
-    headsign: string;
-    direction: number;
-    stops: { stopId: string; sequence: number; arrivalTime: number; departureTime: number }[];
-}
-
-const stopsById = new Map(lineE1Data.stops.map(s => [s.stopId, s]));
-const staticTripsById = new Map((e1StopTimes as StaticTrip[]).map(t => [t.tripId, t]));
-
-function getStopAt(trip: StaticTrip, index: number) {
-    return trip.stops.at(index);
-}
-
-function getFirstStop(trip: StaticTrip) {
-    return trip.stops.at(0);
-}
-
-function getLastStop(trip: StaticTrip) {
-    return trip.stops.at(-1);
-}
-
 // Pre-compute shape arrays for each direction using a Map to avoid object injection warnings
-const shapesData = lineE1Data.shapes as unknown as Record<string, ShapePoint[]>;
+const shapesData = getLineE1Shapes() as unknown as Record<string, ShapePoint[]>;
 const shapes = createShapesMap(shapesData);
 
 export async function GET() {
@@ -78,7 +64,7 @@ export async function GET() {
 
         // PRIORITY 1: Use actual GPS positions from GTFS-RT
         for (const [tripId, rtPos] of rtPositions) {
-            const staticTrip = staticTripsById.get(tripId);
+            const staticTrip = getLineE1StaticTrip(tripId);
             if (!staticTrip) continue;
 
             processedTripIds.add(tripId);
@@ -103,9 +89,9 @@ export async function GET() {
             const firstStop = getFirstStop(staticTrip);
             if (!nextStop || !lastStop || !firstStop) continue;
 
-            const nextStopInfo = stopsById.get(nextStop.stopId);
-            const lastStopInfo = stopsById.get(lastStop.stopId);
-            const firstStopInfo = stopsById.get(firstStop.stopId);
+            const nextStopInfo = getLineE1Stop(nextStop.stopId);
+            const lastStopInfo = getLineE1Stop(lastStop.stopId);
+            const firstStopInfo = getLineE1Stop(firstStop.stopId);
 
             // Get predicted arrival times
             const rtNextStopData = rtUpdate?.stopUpdates.get(nextStop.stopId);
@@ -113,14 +99,8 @@ export async function GET() {
             const rtLastStopData = rtUpdate?.stopUpdates.get(lastStop.stopId);
             const terminusTime = rtLastStopData?.predictedTime || toUnix(lastStop.arrivalTime);
 
-            let delay = rtUpdate?.tripDelay || 0;
-            // Manual delay calculation if API reports 0 but next stop time is shifted
-            if (delay === 0 && rtNextStopData?.predictedTime) {
-                const calculatedDelay = rtNextStopData.predictedTime - toUnix(nextStop.arrivalTime);
-                if (Math.abs(calculatedDelay) >= 60) {
-                    delay = calculatedDelay;
-                }
-            }
+            const scheduledNextTime = toUnix(nextStop.arrivalTime);
+            const delay = getEffectiveDelay(rtUpdate?.tripDelay || 0, rtNextStopData?.predictedTime, scheduledNextTime);
 
             vehicles.push({
                 tripId,
@@ -144,7 +124,7 @@ export async function GET() {
         for (const [tripId, rtUpdate] of rtUpdates) {
             if (processedTripIds.has(tripId)) continue;
 
-            const staticTrip = staticTripsById.get(tripId);
+            const staticTrip = getLineE1StaticTrip(tripId);
             if (!staticTrip || staticTrip.stops.length < 2) continue;
 
             // Check if trip is currently active based on predicted times
@@ -183,8 +163,8 @@ export async function GET() {
             const nextStop = getStopAt(staticTrip, nextStopIdx);
             if (!prevStop || !nextStop) continue;
 
-            const prevStopInfo = stopsById.get(prevStop.stopId);
-            const nextStopInfo = stopsById.get(nextStop.stopId);
+            const prevStopInfo = getLineE1Stop(prevStop.stopId);
+            const nextStopInfo = getLineE1Stop(nextStop.stopId);
 
             if (!prevStopInfo || !nextStopInfo) continue;
 
@@ -210,19 +190,12 @@ export async function GET() {
             const firstStopForTrip = getFirstStop(staticTrip);
             if (!lastStopForTrip || !firstStopForTrip) continue;
 
-            const lastStopInfo = stopsById.get(lastStopForTrip.stopId);
-            const firstStopInfo = stopsById.get(firstStopForTrip.stopId);
+            const lastStopInfo = getLineE1Stop(lastStopForTrip.stopId);
+            const firstStopInfo = getLineE1Stop(firstStopForTrip.stopId);
             const lastRtData = rtUpdate.stopUpdates.get(lastStopForTrip.stopId);
             const terminusTime = lastRtData?.predictedTime || toUnix(lastStopForTrip.arrivalTime);
 
-            let delay = rtUpdate.tripDelay;
-            // Manual delay calculation if API reports 0 but next stop time is shifted
-            if (delay === 0 && nextRtData?.predictedTime) {
-                const calculatedDelay = nextRtData.predictedTime - toUnix(nextStop.arrivalTime);
-                if (Math.abs(calculatedDelay) >= 60) {
-                    delay = calculatedDelay;
-                }
-            }
+            const delay = getEffectiveDelay(rtUpdate.tripDelay, nextRtData?.predictedTime, toUnix(nextStop.arrivalTime));
 
             vehicles.push({
                 tripId,
@@ -243,7 +216,7 @@ export async function GET() {
         }
 
         // PRIORITY 3: Fall back to pure static schedule (no RT data at all)
-        for (const trip of e1StopTimes as StaticTrip[]) {
+        for (const trip of getLineE1StaticTrips()) {
             if (processedTripIds.has(trip.tripId)) continue;
             if (!trip.stops || trip.stops.length < 2) continue;
 
@@ -277,8 +250,8 @@ export async function GET() {
             const nextStop = getStopAt(trip, nextStopIdx);
             if (!prevStop || !nextStop) continue;
 
-            const prevStopInfo = stopsById.get(prevStop.stopId);
-            const nextStopInfo = stopsById.get(nextStop.stopId);
+            const prevStopInfo = getLineE1Stop(prevStop.stopId);
+            const nextStopInfo = getLineE1Stop(nextStop.stopId);
 
             if (!prevStopInfo || !nextStopInfo) continue;
 
@@ -297,8 +270,8 @@ export async function GET() {
                 shapes
             );
 
-            const lastStopInfo = stopsById.get(lastStop.stopId);
-            const firstStopInfo = stopsById.get(firstStop.stopId);
+            const lastStopInfo = getLineE1Stop(lastStop.stopId);
+            const firstStopInfo = getLineE1Stop(firstStop.stopId);
 
             vehicles.push({
                 tripId: trip.tripId,

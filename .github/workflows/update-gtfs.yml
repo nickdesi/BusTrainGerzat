@@ -6,6 +6,10 @@ on:
     - cron: '0 6 * * *'
   workflow_dispatch: # Allow manual trigger
 
+concurrency:
+  group: update-t2c-gtfs
+  cancel-in-progress: false
+
 jobs:
   update-gtfs:
     runs-on: ubuntu-latest
@@ -16,67 +20,69 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.15.0'
+          cache: 'npm'
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'
 
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: pip install requests
 
-      - name: Check if GTFS is up-to-date (Sentinel Check)
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Download and validate T2C GTFS
         id: sentinel_check
         run: |
-          echo "🔍 Checking if official GTFS contains new schedule..."
+          echo "🔍 Downloading and validating official GTFS..."
           if python3 scripts/gtfs/check_gtfs_update.py; then
             echo "is_updated=true" >> $GITHUB_OUTPUT
-            echo "✅ Official data IS up-to-date. Proceeding with update."
+            echo "✅ Official data is valid. Proceeding with generation."
           else
             echo "is_updated=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Official data is still old. Skipping update to preserve manual corrections."
+            echo "⚠️ Official data unavailable or invalid. Skipping update."
           fi
-
-      - name: Download T2C GTFS
-        if: steps.sentinel_check.outputs.is_updated == 'true'
-        run: |
-          echo "📥 Downloading GTFS data from T2C..."
-          curl -L -f -o gtfs_t2c.zip "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs" || exit 1
-          echo "📦 Extracting GTFS data..."
-          unzip -o gtfs_t2c.zip -d gtfs_data
-          rm gtfs_t2c.zip
-          echo "✅ GTFS data downloaded successfully"
 
       - name: Generate static schedule
         if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
-          echo "🔄 Generating static schedule..."
           python3 scripts/gtfs/generate_static_json.py
-          echo "✅ Static schedule generated"
-
-      - name: Generate E1 stop times
-        if: steps.sentinel_check.outputs.is_updated == 'true'
-        run: |
-          echo "🔄 Generating E1 stop times..."
           python3 scripts/gtfs/generate_e1_stop_times.py
-          echo "✅ E1 stop times generated"
 
-      - name: Validate schedule
+      - name: Validate generated data
         if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
-          echo "🔍 Validating schedule..."
-          STOPS=$(python3 -c "import json; print(len(json.load(open('src/data/static_schedule.json'))))")
-          echo "Found $STOPS scheduled stops"
-          if [ "$STOPS" -lt 100 ]; then
-            echo "❌ Error: Too few stops ($STOPS), something may be wrong"
-            exit 1
-          fi
-          echo "✅ Schedule validation passed"
+          node - <<'NODE'
+          const fs = require('fs');
+          const schedule = JSON.parse(fs.readFileSync('src/data/static_schedule.json', 'utf8'));
+          const config = JSON.parse(fs.readFileSync('src/data/gtfs_config.json', 'utf8'));
+          const stopTimes = JSON.parse(fs.readFileSync('public/data/e1_stop_times.json', 'utf8'));
+          if (schedule.length < 100) throw new Error(`Too few scheduled stops: ${schedule.length}`);
+          if (!Array.isArray(config.routeIds) || config.routeIds.length === 0) throw new Error('Missing routeIds');
+          if (!config.stopIds?.champfleuri?.length) throw new Error('Missing Champfleuri stop ids');
+          if (!config.stopIds?.patural?.length) throw new Error('Missing Patural stop ids');
+          if (!Array.isArray(stopTimes) || stopTimes.length === 0) throw new Error('Missing E1 stop times');
+          console.log('✅ Generated data validation passed');
+          NODE
+
+      - name: Validate app
+        if: steps.sentinel_check.outputs.is_updated == 'true'
+        run: |
+          npm run lint
+          npm test -- --runInBand
+          npm run build
 
       - name: Check for changes
         if: steps.sentinel_check.outputs.is_updated == 'true'
         id: check_changes
         run: |
-          git add -A
+          git add gtfs_data src/data/gtfs_config.json src/data/static_schedule.json public/data/e1_stop_times.json
           if git diff --cached --quiet; then
             echo "changes=false" >> $GITHUB_OUTPUT
             echo "ℹ️ No changes detected"
@@ -90,7 +96,6 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -m "chore: Auto-update T2C GTFS data [$(date +'%Y-%m-%d')]"
+          git commit -m "chore: update T2C GTFS data [$(date +'%Y-%m-%d')]"
           git push
-          echo "🚀 Changes pushed to repository"
 

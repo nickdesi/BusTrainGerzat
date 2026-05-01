@@ -1,6 +1,7 @@
 import { fetchTripUpdates } from '@/lib/gtfs-rt';
 import { BusUpdate } from '@/types/transport';
 import { getNowUnix, isT2CNoServiceDay } from '@/utils/date';
+import { extractTripPattern, getEffectiveDelay } from '@/services/t2c-line-e1.service';
 
 // --- Internal Types ---
 
@@ -13,6 +14,13 @@ interface StaticScheduleItem {
     date: string;
     stopId?: string; // Added for precise matching
 }
+
+type LegacyRtStop = {
+    arrival?: { time?: number; delay?: number };
+    departure?: { time?: number; delay?: number };
+    delay: number;
+    isSkipped: boolean;
+};
 
 // --- Lazy-loaded Data (reduces cold start time) ---
 
@@ -73,6 +81,54 @@ async function getTripOrigins(): Promise<Map<string, string>> {
 
 let TARGET_STOP_IDS_SET_CACHE: Set<string> | null = null;
 let PATURAL_IDS_SET_CACHE: Set<string> | null = null;
+
+export function findRelevantStopUpdate(
+    stops: Map<string, LegacyRtStop>,
+    stopId: string | undefined,
+    stopGroups: { champfleuri: string[]; patural: string[] }
+): LegacyRtStop | undefined {
+    if (!stopId) return undefined;
+
+    const exact = stops.get(stopId);
+    if (exact) return exact;
+
+    const groups = [stopGroups.champfleuri, stopGroups.patural];
+    const group = groups.find(ids => ids.includes(stopId));
+    if (!group) return undefined;
+
+    for (const id of group) {
+        const update = stops.get(id);
+        if (update) return update;
+    }
+
+    return undefined;
+}
+
+export function shouldKeepPaturalTrip(item: Pick<StaticScheduleItem, 'stopId' | 'direction' | 'headsign'>, paturalStopIds: Set<string>): boolean {
+    const stopIdUpper = item.stopId?.toUpperCase() || '';
+    if (!paturalStopIds.has(stopIdUpper)) return true;
+    if (item.direction !== 1) return true;
+    return item.headsign.toUpperCase().includes('PATURAL');
+}
+
+export function removeCancelledTripsWithReplacement(updates: BusUpdate[]): BusUpdate[] {
+    const cleanedUpdates: BusUpdate[] = [];
+    const nonCancelled = updates.filter(u => !u.isCancelled);
+
+    updates.forEach(u => {
+        if (u.isCancelled) {
+            const replacement = nonCancelled.find(nc =>
+                nc.direction === u.direction &&
+                Math.abs(nc.arrival - u.arrival) < 20 * 60
+            );
+            if (!replacement) cleanedUpdates.push(u);
+        } else {
+            cleanedUpdates.push(u);
+        }
+    });
+
+    return cleanedUpdates;
+}
 
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
     try {
@@ -184,8 +240,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         // Build fuzzy tripId lookup: T2C's static GTFS and GTFS-RT use different service_ids
         // Static: 1132_1000001_03GC.AR_183100, RT: 1132_1000005_03GC.AR_183100
         // We match on the pattern after the service_id: "03GC.AR_183100"
-        const extractTripPattern = (tripId: string) => tripId.split('_').slice(2).join('_');
         const rtByPattern = new Map<string, typeof realtimeUpdates extends Map<string, infer V> ? V : never>();
+
         for (const [tripId, update] of realtimeUpdates) {
             const pattern = extractTripPattern(tripId);
             if (!rtByPattern.has(pattern)) {
@@ -232,35 +288,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
                     if (shouldApplyRT) {
                         const stopId = item.stopId;
-                        // Strict -> Fuzzy Matching: Check exact ID, then aliases
-                        // RT feed might send GECH instead of GECHR
-                        let rtStop = stopId ? rtTrip.stops.get(stopId) : undefined;
-
-                        if (!rtStop && stopId) {
-                            // Use shared utility for robust alias/group matching
-                            // We need to convert our local legacy map-of-stops back to Map<string, RTStopUpdate> 
-                            // This is silly. We should have used the original RTTripUpdate structure if possible.
-                            // But for now, to minimize refactor risk:
-                            // We don't have the original RTStopUpdate objects here, we have the simplified Objects.
-                            // The shared `findStopUpdate` expects Map<string, RTStopUpdate>.
-                            // Re-implementing simplified logic here is safer than converting types back and forth.
-
-                            // 2. Group match (Champfleuri or Patural)
-                            const isChampfleuri = gtfsConfig.stopIds.champfleuri.includes(stopId);
-                            const isPatural = gtfsConfig.stopIds.patural.includes(stopId);
-
-                            if (isChampfleuri) {
-                                for (const id of gtfsConfig.stopIds.champfleuri) {
-                                    rtStop = rtTrip.stops.get(id);
-                                    if (rtStop) break;
-                                }
-                            } else if (isPatural) {
-                                for (const id of gtfsConfig.stopIds.patural) {
-                                    rtStop = rtTrip.stops.get(id);
-                                    if (rtStop) break;
-                                }
-                            }
-                        }
+                        const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
 
                         if (rtStop) {
                             isRealtime = true;
@@ -278,17 +306,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                                 departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
                             }
 
-                            delay = rtStop.delay;
-
-                            // Robust delay calculation: if GTFS-RT reports 0 delay but the predicted time
-                            // is shifted compared to schedule, manually compute it to ensure user
-                            // visibility (e.g. show "RETARD 5 min" instead of "A L'HEURE").
-                            if (delay === 0) {
-                                const calculatedDelay = arrival - item.arrival;
-                                if (Math.abs(calculatedDelay) >= 60) {
-                                    delay = calculatedDelay;
-                                }
-                            }
+                            delay = getEffectiveDelay(rtStop.delay, arrival, item.arrival);
 
                             if (rtStop.isSkipped) isCancelled = true;
 
@@ -303,19 +321,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
                 // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
                 // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
-                const stopIdUpper = item.stopId?.toUpperCase() || '';
-
-                if (PATURAL_IDS_SET_CACHE!.has(stopIdUpper)) {
-                    // If direction is NOT 0 (0 = usually Outbound/South towards Aubière/Ballainvilliers), skip
-                    // Also ideally check headsign, but direction is a strong proxy.
-                    if (item.direction === 1) { // Inbound
-                        const headsignUpper = item.headsign.toUpperCase();
-                        if (!headsignUpper.includes('PATURAL')) {
-                            return null; // Not Express Inbound, skip
-                        }
-                    }
-                    // Optional: Check headsign if known to be unrelated to Ballainvilliers? 
-                    // For now, Direction 0 at Patural implies leaving Gerzat, which matches the criteria.
+                if (!shouldKeepPaturalTrip(item, PATURAL_IDS_SET_CACHE!)) {
+                    return null;
                 }
 
                 return {
@@ -335,27 +342,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         // Add ADDED trips (replacement trips from GTFS-RT)
         combinedUpdates.push(...addedTrips);
 
-        // Deduplicate: Remove CANCELLED trips if there is an ADDED/Realtime trip 
-        // in the same direction within a short time window (e.g., 20 mins).
-        // This prevents showing "Annulé" + "En temps réel" for the same actual service.
-        const cleanedUpdates: BusUpdate[] = [];
-        const nonCancelled = combinedUpdates.filter(u => !u.isCancelled);
-
-        combinedUpdates.forEach(u => {
-            if (u.isCancelled) {
-                // Check for replacement
-                const replacement = nonCancelled.find(nc =>
-                    nc.direction === u.direction &&
-                    Math.abs(nc.arrival - u.arrival) < 20 * 60 // 20 min window
-                );
-                // Only keep cancelled if NO replacement found
-                if (!replacement) {
-                    cleanedUpdates.push(u);
-                }
-            } else {
-                cleanedUpdates.push(u);
-            }
-        });
+        const cleanedUpdates = removeCancelledTripsWithReplacement(combinedUpdates);
 
         cleanedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
         const nextBuses = cleanedUpdates.filter((u: BusUpdate) => u.arrival > now - 60).slice(0, 20);

@@ -1,9 +1,11 @@
 import { NextResponse } from 'next/server';
 import { fetchTripUpdates, LINE_E1_ROUTE_IDS } from '@/lib/gtfs-rt';
-import lineE1Data from '../../../../../public/data/lineE1_data.json';
-import e1StopTimes from '../../../../../public/data/e1_stop_times.json';
-
-export const dynamic = 'force-dynamic';
+import { getParisMidnight, getNowUnix } from '@/utils/date';
+import {
+    getEffectiveDelay,
+    getLineE1StaticTrip,
+    getLineE1Stop,
+} from '@/services/t2c-line-e1.service';
 
 interface StopTimeDetail {
     stopId: string;
@@ -29,43 +31,11 @@ interface TripDetailsResponse {
     origin: string;
 }
 
-interface StaticTrip {
-    tripId: string;
-    headsign: string;
-    direction: number;
-    stops: { stopId: string; sequence: number; arrivalTime: number; departureTime: number }[];
-}
-
-
-
-// Create lookup map from static data
-const staticTripsById = new Map<string, StaticTrip>(
-    (e1StopTimes as StaticTrip[]).map(t => [t.tripId, t])
-);
-
-// Fuzzy lookup: strip leading service_id segments (e.g. "1521_1000004_03GC.AR_045700" -> "03GC.AR_045700")
-// static_schedule.json and e1_stop_times.json use different service IDs but share the route+time suffix
-const extractTripPattern = (tripId: string) => tripId.split('_').slice(2).join('_');
-const staticTripsByPattern = new Map<string, StaticTrip>();
-for (const [tid, trip] of staticTripsById) {
-    const pattern = extractTripPattern(tid);
-    if (!staticTripsByPattern.has(pattern)) {
-        staticTripsByPattern.set(pattern, trip);
-    }
-}
-
-// Create stops lookup map
-const stopsById = new Map(
-    lineE1Data.stops.map(s => [s.stopId, s])
-);
-
 const TRIP_ID_PATTERN = /^[A-Za-z0-9._-]{1,128}$/;
 
 function isValidTripId(tripId: string): boolean {
     return TRIP_ID_PATTERN.test(tripId) && !tripId.includes('..');
 }
-
-import { getParisMidnight, getNowUnix } from '@/utils/date';
 
 export async function GET(
     request: Request,
@@ -86,8 +56,7 @@ export async function GET(
         const toUnix = (sec: number) => midnight + sec;
 
         // First, try to get static data for this trip (exact match, then fuzzy pattern match)
-        const staticTrip = staticTripsById.get(tripId)
-            ?? staticTripsByPattern.get(extractTripPattern(tripId));
+        const staticTrip = getLineE1StaticTrip(tripId);
 
         // Fetch GTFS-RT data using centralized service
         const rtTripUpdates = await fetchTripUpdates();
@@ -128,7 +97,7 @@ export async function GET(
             let lastPredictedArrival = 0;
 
             const stops: StopTimeDetail[] = staticTrip.stops.map((stop, index) => {
-                const stopInfo = stopsById.get(stop.stopId);
+                const stopInfo = getLineE1Stop(stop.stopId);
                 const scheduledArrival = toUnix(stop.arrivalTime);
                 const scheduledDeparture = toUnix(stop.departureTime);
 
@@ -136,16 +105,9 @@ export async function GET(
                 const rtData = rtStopUpdates.get(stop.stopId);
 
                 // Use RT delay if available, otherwise propagate last known delay
-                let delay = rtData?.delay ?? lastKnownDelay;
+                const delay = rtData ? getEffectiveDelay(rtData.delay, rtData.predictedTime, scheduledArrival) : lastKnownDelay;
 
                 if (rtData) {
-                    // Manual delay calculation if API reports 0 but time is shifted (GTFS-RT bug)
-                    if (delay === 0 && rtData.predictedTime) {
-                        const calculatedDelay = rtData.predictedTime - scheduledArrival;
-                        if (Math.abs(calculatedDelay) >= 60) {
-                            delay = calculatedDelay;
-                        }
-                    }
                     lastKnownDelay = delay;
                 }
 
@@ -187,12 +149,12 @@ export async function GET(
 
             // Get headsign from last stop
             const lastStop = staticTrip.stops[staticTrip.stops.length - 1];
-            const lastStopInfo = stopsById.get(lastStop?.stopId);
+            const lastStopInfo = lastStop ? getLineE1Stop(lastStop.stopId) : undefined;
             const headsign = lastStopInfo?.stopName || staticTrip.headsign;
 
             // Get origin from first stop
             const firstStop = staticTrip.stops[0];
-            const firstStopInfo = stopsById.get(firstStop?.stopId);
+            const firstStopInfo = firstStop ? getLineE1Stop(firstStop.stopId) : undefined;
             const origin = firstStopInfo?.stopName || (staticTrip.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles');
 
             return NextResponse.json({
@@ -222,7 +184,7 @@ export async function GET(
             // Iterate and determine status
             let currentStopFound = false;
             for (const stopUpdate of sortedUpdates) {
-                const stopInfo = stopsById.get(stopUpdate.stopId);
+                const stopInfo = getLineE1Stop(stopUpdate.stopId);
                 const predictedTime = stopUpdate.predictedTime || now;
 
                 let status: 'passed' | 'current' | 'upcoming' = 'upcoming';

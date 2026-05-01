@@ -6,7 +6,7 @@
 
 - **Dépendances** : correction de l’audit npm (`0 vulnerabilities`) via mise à jour de `next`, `eslint-config-next`, `protobufjs` et overrides sécurisés pour `postcss`/`hono`.
 - **Version déploiement** : alignement `package.json`/`package-lock.json` sur `3.7.3` pour que Coolify n’affiche plus `bus-train-gerzat@3.7.0`.
-- **Runtime Coolify** : verrouillage Nixpacks sur Node `24.13.0` afin d’éviter les builds en Node 22 incompatibles avec `engines.node`.
+- **Runtime Coolify** : verrouillage Nixpacks sur Node `24.15.0` afin d’éviter les builds avec une version Node incompatible avec `engines.node`.
 - **API détail trajet** : validation stricte des `tripId` avant traitement (`400` si identifiant invalide).
 - **API véhicules** : extraction de l’interpolation géographique dans `src/lib/vehicle-interpolation.ts` et suppression des accès indexés risqués signalés par ESLint security.
 - **Service worker** : version de cache stable, nettoyage limité aux caches Gerzat Live et réponse JSON structurée en mode hors-ligne pour les APIs.
@@ -76,7 +76,7 @@
 
 ### 🧱 Architecture & Stabilité
 
-- **Node.js LTS** : Alignement strict sur la version **Active LTS v24.13.0**.
+- **Node.js LTS** : Alignement strict sur la version **Active LTS v24.15.0**.
   - Configuration du serveur (`nixpacks.toml`), environnement local (`.nvmrc`) et moteur (`engines` dans `package.json`) synchronisés.
   - Garantie la cohérence absolue entre développement et production.
 - **Dépendances** : Mise à jour majeure de la stack technique.

@@ -117,7 +117,7 @@ src/
 
 ## 📦 Installation locale
 
-Prérequis : Node.js `>= 24.13.0`, npm et une clé API SNCF / Navitia.
+Prérequis : Node.js `>= 24.15.0`, npm et une clé API SNCF / Navitia.
 
 ```bash
 npm install

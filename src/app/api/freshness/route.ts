@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getFreshnessStatus } from '@/lib/gtfs-freshness';
+import { getTrainFreshnessStatus } from '@/services/train.service';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
     const busFreshness = getFreshnessStatus();
-
-    // Train data is always fetched realtime from SNCF API, no local cache
-    const trainFreshness = { isValid: true };
+    const trainFreshness = getTrainFreshnessStatus();
 
     return NextResponse.json({
         bus: busFreshness,

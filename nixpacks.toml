@@ -2,8 +2,8 @@
 providers = ["node"]
 
 [variables]
-NODE_VERSION = "24.13.0"
-NIXPACKS_NODE_VERSION = "24.13.0"
+NODE_VERSION = "24.15.0"
+NIXPACKS_NODE_VERSION = "24.15.0"
 
 [phases.setup]
 nixPkgs = ["nodejs_24"]

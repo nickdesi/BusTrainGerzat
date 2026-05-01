@@ -104,6 +104,89 @@ const CACHE_TTL_MS = 120000; // 2 minutes cache
 let cachedResponse: { updates: TrainUpdate[], timestamp: number, debug?: Record<string, unknown> } | null = null;
 let cacheExpiry = 0;
 
+type TrainFreshnessStatus = {
+    isValid: boolean;
+    hasApiKey: boolean;
+    isCached: boolean;
+    cacheExpiresIn: number;
+    lastFetchAge: number | null;
+    warningLevel: 'none' | 'info' | 'warning' | 'critical';
+    message?: string;
+};
+
+export function buildTrainFreshnessStatus({
+    hasApiKey,
+    hasCachedResponse,
+    cacheExpiry,
+    cachedTimestamp,
+    nowMs = Date.now(),
+}: {
+    hasApiKey: boolean;
+    hasCachedResponse: boolean;
+    cacheExpiry: number;
+    cachedTimestamp: number | null;
+    nowMs?: number;
+}): TrainFreshnessStatus {
+    const isCached = hasCachedResponse && nowMs < cacheExpiry;
+    const cacheExpiresIn = Math.max(0, Math.ceil((cacheExpiry - nowMs) / 1000));
+    const lastFetchAge = cachedTimestamp === null ? null : Math.max(0, Math.floor(nowMs / 1000) - cachedTimestamp);
+
+    if (!hasApiKey) {
+        return {
+            isValid: false,
+            hasApiKey,
+            isCached,
+            cacheExpiresIn,
+            lastFetchAge,
+            warningLevel: 'critical',
+            message: 'Clé API SNCF manquante'
+        };
+    }
+
+    if (!hasCachedResponse) {
+        return {
+            isValid: true,
+            hasApiKey,
+            isCached,
+            cacheExpiresIn,
+            lastFetchAge,
+            warningLevel: 'info',
+            message: 'Données SNCF chargées à la demande'
+        };
+    }
+
+    if (lastFetchAge !== null && lastFetchAge > 600) {
+        return {
+            isValid: false,
+            hasApiKey,
+            isCached,
+            cacheExpiresIn,
+            lastFetchAge,
+            warningLevel: 'warning',
+            message: 'Dernières données SNCF anciennes'
+        };
+    }
+
+    return {
+        isValid: true,
+        hasApiKey,
+        isCached,
+        cacheExpiresIn,
+        lastFetchAge,
+        warningLevel: isCached ? 'none' : 'info',
+        message: isCached ? undefined : 'Cache SNCF expiré, prochain appel rafraîchira les données'
+    };
+}
+
+export function getTrainFreshnessStatus(): TrainFreshnessStatus {
+    return buildTrainFreshnessStatus({
+        hasApiKey: Boolean(SNCF_API_KEY),
+        hasCachedResponse: Boolean(cachedResponse),
+        cacheExpiry,
+        cachedTimestamp: cachedResponse?.timestamp ?? null,
+    });
+}
+
 export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestamp: number, error?: string, debug?: Record<string, unknown> }> {
     try {
         const now = Math.floor(Date.now() / 1000);
