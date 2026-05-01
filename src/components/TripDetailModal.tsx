@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useCallback } from 'react';
-import { X, Bus, AlertCircle } from 'lucide-react';
+import { X, Bus, AlertCircle, Route } from 'lucide-react';
 import { useTripDetails } from '@/hooks/useTripDetails';
 import TripTimeline from './TripTimeline';
 
@@ -35,52 +35,63 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
     if (!tripId) return null;
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                className="absolute inset-0 bg-gray-950/80 backdrop-blur-md"
                 onClick={onClose}
             />
 
             {/* Modal */}
-            <div className="relative w-full max-w-lg max-h-[85vh] bg-gray-900 rounded-xl border border-gray-700 shadow-2xl overflow-hidden flex flex-col">
+            <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-gray-950/95 shadow-2xl shadow-black/50 ring-1 ring-white/5">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-yellow-400/10 via-emerald-400/5 to-transparent" />
+
                 {/* Header */}
-                <div className="flex items-center justify-between px-5 py-4 border-b border-gray-700 bg-gradient-to-r from-gray-900 to-gray-800">
-                    <div className="flex items-center gap-3">
+                <div className="relative flex items-center justify-between gap-4 border-b border-white/10 bg-white/[0.03] px-5 py-4 sm:px-6">
+                    <div className="flex min-w-0 items-center gap-3">
                         <div
-                            className="w-10 h-10 flex items-center justify-center rounded-lg shadow-lg"
+                            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-lg shadow-yellow-500/20 ring-1 ring-white/20"
                             style={{ backgroundColor: '#fdc300' }}
                         >
-                            <Bus className="w-5 h-5 text-black" />
+                            <Bus className="h-6 w-6 text-black" />
                         </div>
-                        <div>
-                            <h2 className="text-lg font-bold text-white flex items-center gap-2">
-                                Ligne {lineName}
-                            </h2>
-                            {tripData && (
-                                <div className="text-sm text-gray-400">
-                                    <span className="block text-xs uppercase tracking-wider text-gray-500">De {tripData.origin}</span>
-                                    <span className="block font-medium text-white text-base">→ {tripData.headsign}</span>
+                        <div className="min-w-0">
+                            <div className="mb-1 flex items-center gap-2">
+                                <span className="rounded-full bg-yellow-400 px-2.5 py-1 text-xs font-black text-black shadow-sm">
+                                    Ligne {lineName}
+                                </span>
+                                {tripData?.isRealtime && (
+                                    <span className="rounded-full border border-emerald-300/20 bg-emerald-300/10 px-2.5 py-1 text-[11px] font-semibold text-emerald-200">
+                                        live
+                                    </span>
+                                )}
+                            </div>
+                            {tripData ? (
+                                <div className="min-w-0 text-sm text-gray-400">
+                                    <p className="truncate text-xs uppercase tracking-[0.18em] text-gray-500">Départ · {tripData.origin}</p>
+                                    <p className="truncate text-base font-bold text-white">→ {tripData.headsign}</p>
                                 </div>
+                            ) : (
+                                <h2 className="text-lg font-bold text-white">Détail du trajet</h2>
                             )}
                         </div>
                     </div>
                     <button
                         onClick={onClose}
-                        className="w-11 h-11 flex items-center justify-center rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-400 hover:text-white transition-colors"
+                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-gray-400 transition hover:bg-white/10 hover:text-white"
                         aria-label="Fermer"
                     >
-                        <X className="w-5 h-5" />
+                        <X className="h-5 w-5" />
                     </button>
                 </div>
 
                 {/* Body */}
-                <div className="flex-1 overflow-y-auto p-5">
+                <div className="relative flex-1 overflow-y-auto p-3 sm:p-5">
                     {error ? (
-                        <div className="flex flex-col items-center justify-center py-12 text-red-400">
-                            <AlertCircle className="w-10 h-10 mb-3" />
-                            <p className="font-medium">Erreur de chargement</p>
-                            <p className="text-sm text-gray-500 mt-1">
+                        <div className="flex flex-col items-center justify-center rounded-3xl border border-red-400/15 bg-red-500/[0.06] py-14 text-red-300">
+                            <AlertCircle className="mb-3 h-10 w-10" />
+                            <p className="font-semibold">Erreur de chargement</p>
+                            <p className="mt-1 text-sm text-gray-500">
                                 Impossible de récupérer les détails du trajet
                             </p>
                         </div>
@@ -95,21 +106,22 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                 </div>
 
                 {/* Footer */}
-                <div className="px-5 py-3 border-t border-gray-700 bg-gray-800/50">
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                <div className="relative border-t border-white/10 bg-white/[0.03] px-5 py-3 sm:px-6">
+                    <div className="flex flex-col gap-2 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
                         <span>
                             {tripData?.isRealtime ? (
-                                <span className="flex items-center gap-1.5 text-green-400">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                <span className="flex items-center gap-1.5 text-emerald-300">
+                                    <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)] animate-pulse" />
                                     Données temps réel
                                 </span>
                             ) : (
-                                'Horaires théoriques'
+                                <span className="flex items-center gap-1.5">
+                                    <Route className="h-3.5 w-3.5" />
+                                    Horaires théoriques
+                                </span>
                             )}
                         </span>
-                        <span>
-                            Mise à jour automatique toutes les 15s
-                        </span>
+                        <span>Mise à jour automatique toutes les 15s</span>
                     </div>
                 </div>
             </div>

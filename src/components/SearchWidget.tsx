@@ -25,7 +25,7 @@ export default function SearchWidget({ onSearch }: SearchWidgetProps) {
             </div>
             <input
                 type="text"
-                className="block h-12 w-full rounded-2xl border border-white/10 bg-black/35 pl-12 pr-12 text-base leading-5 text-gray-100 placeholder-gray-500 shadow-inner shadow-black/30 transition-colors focus:border-yellow-400 focus:bg-black/55 focus:outline-none focus:ring-2 focus:ring-yellow-400/25"
+                className="block h-10 w-full rounded-xl border border-white/10 bg-black/35 pl-10 pr-10 text-sm leading-5 text-gray-100 placeholder-gray-500 shadow-inner shadow-black/30 transition-colors focus:border-yellow-400 focus:bg-black/55 focus:outline-none focus:ring-2 focus:ring-yellow-400/25 md:h-11 md:rounded-2xl md:pl-11 md:pr-11 md:text-base"
                 placeholder="Rechercher ligne, destination..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
@@ -34,7 +34,7 @@ export default function SearchWidget({ onSearch }: SearchWidgetProps) {
             {query && (
                 <button
                     onClick={() => setQuery('')}
-                    className="absolute inset-y-1 right-1 flex w-10 items-center justify-center rounded-xl text-gray-500 transition-colors hover:bg-white/5 hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                    className="absolute inset-y-1 right-1 flex w-8 items-center justify-center rounded-lg text-gray-500 transition-colors hover:bg-white/5 hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 md:w-9 md:rounded-xl"
                     aria-label="Effacer la recherche"
                 >
                     <X className="h-5 w-5" />

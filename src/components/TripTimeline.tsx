@@ -1,7 +1,7 @@
 'use client';
 
 import { memo, useState, useEffect } from 'react';
-import { Loader2, Wifi, Clock, Accessibility, Bus } from 'lucide-react';
+import { Loader2, Wifi, Clock, Accessibility, Bus, MapPin, Navigation } from 'lucide-react';
 import { StopTimeDetail } from '@/hooks/useTripDetails';
 import { formatTime } from '@/utils/format';
 
@@ -26,7 +26,6 @@ const TripTimeline = memo(function TripTimeline({
     routeColor = '#fdc300',
     currentTime
 }: TripTimelineProps) {
-    // Real-time clock for bus position - updates every second
     const [nowUnix, setNowUnix] = useState(() => currentTime ?? Math.floor(Date.now() / 1000));
 
     useEffect(() => {
@@ -38,185 +37,188 @@ const TripTimeline = memo(function TripTimeline({
 
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center py-12">
-                <Loader2 className="w-8 h-8 animate-spin text-yellow-500" />
+            <div className="flex items-center justify-center py-16">
+                <div className="relative">
+                    <div className="absolute inset-0 rounded-full bg-yellow-400/30 blur-xl animate-pulse" />
+                    <Loader2 className="relative w-9 h-9 animate-spin text-yellow-400" />
+                </div>
             </div>
         );
     }
 
     if (stops.length === 0) {
         return (
-            <div className="text-center py-8 text-gray-500">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-10 text-center text-gray-400">
                 Aucun arrêt disponible
             </div>
         );
     }
 
+    const currentStopIndex = stops.findIndex((stop) => stop.status === 'current');
+    const activeSegmentIndex = currentStopIndex > 0 ? currentStopIndex - 1 : -1;
+    const nextStop = stops.find((stop) => stop.status === 'current') ?? null;
+    const previousStop = activeSegmentIndex >= 0
+        ? stops.find((_, index) => index === activeSegmentIndex) ?? null
+        : null;
+
+    let activeProgress = 0;
+    if (previousStop && nextStop) {
+        const totalDuration = nextStop.predictedArrival - previousStop.predictedDeparture;
+        if (totalDuration > 0) {
+            activeProgress = Math.min(Math.max((nowUnix - previousStop.predictedDeparture) / totalDuration, 0), 1);
+        }
+    }
+
     return (
-        <div className="relative">
-            {/* Legend */}
-            <div className="flex items-center gap-4 mb-4 text-xs text-gray-400">
-                <div className="flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>Horaire théorique</span>
+        <div className="space-y-5">
+            <div className="overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 shadow-2xl shadow-black/30">
+                <div className="border-b border-white/10 bg-white/[0.03] px-4 py-3">
+                    <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-gray-400">
+                        <div className="flex items-center gap-2">
+                            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400/15 text-yellow-300 ring-1 ring-yellow-300/25">
+                                <Navigation className="h-4 w-4" />
+                            </span>
+                            <div>
+                                <p className="font-semibold text-gray-100">Progression du trajet</p>
+                                <p>{stops.length} arrêts sur la ligne</p>
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/20 px-3 py-1.5">
+                            {isRealtime ? (
+                                <>
+                                    <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)] animate-pulse" />
+                                    <Wifi className="h-3.5 w-3.5 text-emerald-300" />
+                                    <span className="font-medium text-emerald-200">Temps réel</span>
+                                </>
+                            ) : (
+                                <>
+                                    <Clock className="h-3.5 w-3.5" />
+                                    <span>Horaire théorique</span>
+                                </>
+                            )}
+                        </div>
+                    </div>
                 </div>
-                {isRealtime && (
-                    <div className="flex items-center gap-1.5 text-green-400">
-                        <Wifi className="w-3.5 h-3.5" />
-                        <span>Temps réel</span>
+
+                {previousStop && nextStop && (
+                    <div className="m-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/[0.07] p-4 shadow-lg shadow-emerald-950/20">
+                        <div className="mb-3 flex items-center gap-3">
+                            <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400 text-gray-950 shadow-lg shadow-emerald-500/25">
+                                <span className="absolute inset-0 rounded-2xl bg-emerald-300/40 blur-md" />
+                                <Bus className="relative h-5 w-5" />
+                            </div>
+                            <div className="min-w-0">
+                                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/80">Bus en approche</p>
+                                <p className="truncate text-base font-bold text-white">{nextStop.stopName}</p>
+                            </div>
+                            <span className="ml-auto rounded-full bg-black/25 px-3 py-1 font-mono text-sm font-semibold text-emerald-100 ring-1 ring-white/10">
+                                {formatTime(nextStop.predictedArrival)}
+                            </span>
+                        </div>
+                        <div className="relative h-2 overflow-hidden rounded-full bg-black/30">
+                            <div
+                                className="h-full rounded-full bg-gradient-to-r from-emerald-400 via-yellow-300 to-yellow-400 transition-all duration-1000 ease-out"
+                                style={{ width: `${activeProgress * 100}%` }}
+                            />
+                        </div>
+                        <div className="mt-2 flex justify-between text-[11px] text-gray-400">
+                            <span className="truncate pr-2">{previousStop.stopName}</span>
+                            <span>{Math.round(activeProgress * 100)}%</span>
+                        </div>
                     </div>
                 )}
-            </div>
 
-            {/* Timeline */}
-            <div className="relative">
-                {stops.map((stop, index) => {
-                    const isFirst = index === 0;
-                    const isLast = index === stops.length - 1;
-                    const isTerminus = isFirst || isLast;
-                    const isPassed = stop.status === 'passed';
-                    const isCurrent = stop.status === 'current';
+                <div className="px-4 pb-4">
+                    <div className="relative rounded-2xl bg-black/15 px-3 py-2">
+                        {stops.map((stop, index) => {
+                            const isFirst = index === 0;
+                            const isLast = index === stops.length - 1;
+                            const isTerminus = isFirst || isLast;
+                            const isPassed = stop.status === 'passed';
+                            const isCurrent = stop.status === 'current';
+                            const isNextStopCurrent = index === activeSegmentIndex;
+                            const scheduledTime = formatTime(stop.scheduledArrival);
+                            const predictedTime = formatTime(stop.predictedArrival);
+                            const calculatedDelay = stop.predictedArrival - stop.scheduledArrival;
+                            const delayText = formatDelay(calculatedDelay);
+                            const showStrikethrough = isRealtime && stop.delay !== 0 && !isPassed && scheduledTime !== predictedTime;
 
-                    // Show bus indicator on the segment LEADING TO the current stop
-                    // i.e., on the line below the PREVIOUS stop (which is now 'passed')
-                    const isNextStopCurrent = !isLast && stops[index + 1]?.status === 'current';
-
-                    // Calculate bus progress TOWARDS the next stop (current)
-                    let busProgress = 0;
-                    if (isNextStopCurrent && isPassed) {
-                        const nextStop = stops[index + 1];
-                        // Progress from this stop's departure to next stop's arrival
-                        const departureTime = stop.predictedDeparture;
-                        const arrivalTime = nextStop.predictedArrival;
-                        const totalDuration = arrivalTime - departureTime;
-                        if (totalDuration > 0) {
-                            const elapsed = nowUnix - departureTime;
-                            busProgress = Math.min(Math.max(elapsed / totalDuration, 0), 1);
-                        }
-                    }
-
-                    return (
-                        <div
-                            key={stop.stopId}
-                            className={`relative flex items-start gap-4 pr-3 ${isPassed ? 'opacity-50' : ''}`}
-                        >
-                            {/* Vertical Line + Circle */}
-                            <div className="flex flex-col items-center w-6 flex-shrink-0">
-                                {/* Circle */}
-                                <div
-                                    className={`relative z-10 flex items-center justify-center rounded-full border-[3px] box-content ${isTerminus ? 'w-4 h-4' : 'w-2.5 h-2.5'
-                                        } ${isCurrent
-                                            ? 'bg-green-500 border-green-400 shadow-[0_0_12px_rgba(34,197,94,0.6)]'
-                                            : isPassed
-                                                ? 'bg-gray-700 border-gray-600'
-                                                : 'border-2'
-                                        }`}
-                                    style={{
-                                        borderColor: isCurrent ? undefined : (isPassed ? undefined : routeColor),
-                                        backgroundColor: isCurrent ? undefined : (isPassed ? undefined : (isTerminus ? routeColor : 'transparent'))
-                                    }}
-                                >
-                                    {isCurrent && (
-                                        <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-                                    )}
-                                </div>
-
-                                {/* Vertical Line (not after last item) */}
-                                {!isLast && (
-                                    <div className="relative h-full min-h-16">
-                                        <div
-                                            className={`w-1 absolute inset-y-0 left-1/2 -translate-x-1/2 ${isPassed ? 'bg-gray-700' : ''}`}
-                                            style={{ backgroundColor: isPassed ? undefined : routeColor }}
-                                        />
-                                        {/* Bus position indicator - show BEFORE current stop */}
-                                        {isNextStopCurrent && (
-                                            <div
-                                                className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000"
-                                                style={{ top: `${busProgress * 80}%` }}
-                                            >
-                                                <div className="relative flex items-center justify-center w-8 h-8">
-                                                    <div className="absolute inset-0 bg-green-500 rounded-full blur-md opacity-60 animate-pulse" />
-                                                    <div className="relative flex items-center justify-center w-7 h-7 bg-green-600 rounded-full shadow-lg shadow-green-900/50 border-2 border-green-400">
-                                                        <Bus className="w-4 h-4 text-white" />
-                                                    </div>
-                                                </div>
+                            return (
+                                <div key={stop.stopId} className={`relative grid grid-cols-[2.75rem_1fr] gap-3 ${isPassed ? 'opacity-55' : ''}`}>
+                                    <div className="relative flex justify-center">
+                                        {!isLast && (
+                                            <div className="absolute top-8 bottom-0 w-1 overflow-hidden rounded-full bg-white/10">
+                                                <div
+                                                    className="w-full rounded-full transition-all duration-700"
+                                                    style={{
+                                                        height: isPassed ? '100%' : isNextStopCurrent ? `${activeProgress * 100}%` : '0%',
+                                                        background: isPassed || isNextStopCurrent
+                                                            ? `linear-gradient(180deg, ${routeColor}, rgba(52,211,153,0.95))`
+                                                            : undefined
+                                                    }}
+                                                />
                                             </div>
                                         )}
-                                    </div>
-                                )}
-                            </div>
 
-                            {/* Stop Info */}
-                            <div className={`flex-1 min-w-0 pb-6 ${isLast ? 'pb-0' : ''}`}>
-                                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-4">
-                                    {/* Stop Name */}
-                                    <div className="flex items-start gap-2 max-w-full">
-                                        <span className={`font-medium text-base leading-tight break-words ${isCurrent ? 'text-green-400' :
-                                            isPassed ? 'text-gray-500' : 'text-gray-100'
-                                            } ${isTerminus ? 'font-bold' : ''}`}>
-                                            {stop.stopName}
-                                        </span>
-                                        <div className="flex items-center gap-1 flex-shrink-0 mt-0.5">
-                                            {stop.isAccessible && (
-                                                <Accessibility className="w-3.5 h-3.5 text-blue-400" />
-                                            )}
-                                            {isCurrent && (
-                                                <span className="px-1.5 py-0.5 text-[9px] font-bold bg-green-500/20 text-green-400 rounded uppercase tracking-wider border border-green-500/30">
-                                                    En cours
-                                                </span>
+                                        <div
+                                            className={`relative z-10 mt-1 flex items-center justify-center rounded-full ring-4 ring-gray-950 transition-all ${isTerminus ? 'h-8 w-8' : 'h-6 w-6'} ${isCurrent
+                                                ? 'scale-110 bg-emerald-400 text-gray-950 shadow-[0_0_24px_rgba(52,211,153,0.6)]'
+                                                : isPassed
+                                                    ? 'bg-gray-700 text-gray-500'
+                                                    : 'bg-gray-950 text-gray-300'
+                                                }`}
+                                            style={{ border: `2px solid ${isCurrent ? '#6ee7b7' : isPassed ? '#4b5563' : routeColor}` }}
+                                        >
+                                            {isCurrent ? (
+                                                <Bus className="h-3.5 w-3.5" />
+                                            ) : isTerminus ? (
+                                                <MapPin className="h-3.5 w-3.5" />
+                                            ) : (
+                                                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: isPassed ? '#6b7280' : routeColor }} />
                                             )}
                                         </div>
                                     </div>
 
-                                    {/* Times */}
-                                    <div className="flex items-center gap-2 text-sm">
-                                        {(() => {
-                                            // Calculate both displayed times
-                                            const scheduledTime = formatTime(stop.scheduledArrival);
-                                            const predictedTime = formatTime(stop.predictedArrival);
-                                            // Calculate delay from actual time difference for consistency
-                                            const calculatedDelay = stop.predictedArrival - stop.scheduledArrival;
-                                            const delayText = formatDelay(calculatedDelay);
-
-                                            // Only show strikethrough if times VISUALLY differ
-                                            const showStrikethrough = isRealtime &&
-                                                stop.delay !== 0 &&
-                                                !isPassed &&
-                                                scheduledTime !== predictedTime;
-
-                                            return (
-                                                <>
-                                                    {showStrikethrough && (
-                                                        <>
-                                                            <span className="text-gray-500 line-through">
-                                                                {scheduledTime}
+                                    <div className={`pb-4 ${isLast ? 'pb-1' : ''}`}>
+                                        <div className={`rounded-2xl border px-3.5 py-3 transition-all ${isCurrent
+                                            ? 'border-emerald-300/30 bg-emerald-400/[0.08] shadow-lg shadow-emerald-950/20'
+                                            : 'border-white/8 bg-white/[0.035] hover:bg-white/[0.055]'
+                                            }`}>
+                                            <div className="flex items-start justify-between gap-3">
+                                                <div className="min-w-0">
+                                                    <div className="flex flex-wrap items-center gap-2">
+                                                        <h3 className={`break-words text-sm font-semibold leading-snug ${isCurrent ? 'text-emerald-100' : isPassed ? 'text-gray-500' : 'text-gray-100'} ${isTerminus ? 'text-base' : ''}`}>
+                                                            {stop.stopName}
+                                                        </h3>
+                                                        {stop.isAccessible && <Accessibility className="h-3.5 w-3.5 shrink-0 text-sky-300" />}
+                                                        {isCurrent && (
+                                                            <span className="rounded-full border border-emerald-300/25 bg-emerald-300/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-200">
+                                                                {isFirst ? 'Départ' : isLast ? 'Arrivée' : 'Prochain arrêt'}
                                                             </span>
-                                                            <Wifi className="w-3 h-3 text-green-400" />
-                                                        </>
-                                                    )}
-                                                    {/* Show Wifi icon without strikethrough if delay exists but times look same */}
-                                                    {isRealtime && !showStrikethrough && !isPassed && (
-                                                        <Wifi className="w-3 h-3 text-green-400" />
-                                                    )}
-                                                    <span className={`font-mono ${isPassed ? 'text-gray-500' : 'text-yellow-500'
-                                                        }`}>
-                                                        {predictedTime}
-                                                    </span>
-                                                    {/* Only show delay badge if it's significant and visible */}
+                                                        )}
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex shrink-0 flex-col items-end gap-1">
+                                                    <div className="flex items-center gap-1.5 rounded-xl bg-black/25 px-2.5 py-1 ring-1 ring-white/10">
+                                                        {showStrikethrough && <span className="font-mono text-[11px] text-gray-500 line-through">{scheduledTime}</span>}
+                                                        {isRealtime && !isPassed && <Wifi className="h-3 w-3 text-emerald-300" />}
+                                                        <span className={`font-mono text-sm font-bold ${isPassed ? 'text-gray-500' : 'text-yellow-300'}`}>{predictedTime}</span>
+                                                    </div>
                                                     {calculatedDelay > 0 && !isPassed && delayText && showStrikethrough && (
-                                                        <span className="text-orange-400 font-medium text-xs">
+                                                        <span className="rounded-full bg-orange-400/10 px-2 py-0.5 text-[11px] font-semibold text-orange-300 ring-1 ring-orange-300/20">
                                                             {delayText}
                                                         </span>
                                                     )}
-                                                </>
-                                            );
-                                        })()}
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    );
-                })}
+                            );
+                        })}
+                    </div>
+                </div>
             </div>
         </div>
     );

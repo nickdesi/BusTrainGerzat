@@ -31,30 +31,31 @@ export function useDepartures() {
     // SSE Subscription for real-time updates
     // useRef to securely track the timeout ID across renders
     const retryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+    const eventSourceRef = useRef<EventSource | null>(null);
 
     useEffect(() => {
+        let isDisposed = false;
+
         const connectSSE = () => {
+            if (isDisposed) return;
+
+            eventSourceRef.current?.close();
             const eventSource = new EventSource('/api/stream');
+            eventSourceRef.current = eventSource;
 
-            eventSource.onmessage = (event) => {
-                try {
-                    const data = JSON.parse(event.data);
-                    if (data.bus) {
-                        queryClient.setQueryData(['bus-realtime'], data.bus);
-                    }
-                    if (data.train) {
-                        queryClient.setQueryData(['train-realtime'], data.train);
-                    }
-                } catch (err) {
-                    console.error('Failed to parse SSE message:', err);
-                }
-            };
+            eventSource.addEventListener('transport-error', () => {
+                // Keep the stream open: regular queries still provide fallback data.
+            });
 
-            eventSource.onerror = (error) => {
-                console.error('SSE connection error:', error);
+            eventSource.onerror = () => {
                 eventSource.close();
+                if (eventSourceRef.current === eventSource) {
+                    eventSourceRef.current = null;
+                }
 
-                // Retry connection after 5 seconds
+                if (isDisposed) return;
+
+                // Retry connection after 5 seconds without triggering the Next.js console overlay.
                 if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
                 retryTimeoutRef.current = setTimeout(connectSSE, 5000);
             };
@@ -62,12 +63,15 @@ export function useDepartures() {
             return eventSource;
         };
 
-        const es = connectSSE();
+        connectSSE();
 
         return () => {
-            es.close();
+            isDisposed = true;
+            eventSourceRef.current?.close();
+            eventSourceRef.current = null;
             if (retryTimeoutRef.current) {
                 clearTimeout(retryTimeoutRef.current);
+                retryTimeoutRef.current = null;
             }
         };
     }, [queryClient]);

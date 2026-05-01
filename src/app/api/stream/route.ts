@@ -66,7 +66,7 @@ export async function GET(request: Request) {
                     send(controller, `data: ${data}\n\n`);
                 } catch (error) {
                     console.error('SSE Error:', error);
-                    send(controller, `event: error\ndata: ${JSON.stringify({ message: 'Unable to refresh transport data' })}\n\n`);
+                    send(controller, `event: transport-error\ndata: ${JSON.stringify({ message: 'Unable to refresh transport data' })}\n\n`);
                 }
             };
 

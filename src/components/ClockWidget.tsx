@@ -50,15 +50,15 @@ export default function ClockWidget() {
     };
 
     return (
-        <div className="flex flex-col items-center lg:items-end gap-3">
-            <div className="flex items-center gap-4 bg-black/30 p-4 rounded-xl border border-yellow-500/10 box-glow">
-                <Clock className="w-8 h-8 text-yellow-500 animate-pulse" />
-                <div className="tabular-nums">
+        <div className="flex flex-col items-center gap-1.5 lg:items-end">
+            <div className="flex items-center gap-2 rounded-xl border border-yellow-500/10 bg-black/30 px-3 py-2 box-glow md:gap-3 md:px-4">
+                <Clock className="h-5 w-5 text-yellow-500 animate-pulse md:h-6 md:w-6" />
+                <div className="tabular-nums scale-90 origin-center md:scale-100">
                     <SplitFlapDisplay text={formatClock()} size="2xl" color="text-yellow-500" />
                 </div>
             </div>
-            <div className="flex items-center gap-3 text-yellow-500/60 font-mono text-sm tracking-widest uppercase">
-                <Calendar className="w-4 h-4" />
+            <div className="hidden items-center gap-2 font-mono text-[11px] uppercase tracking-widest text-yellow-500/60 sm:flex">
+                <Calendar className="h-3.5 w-3.5" />
                 <p>{formatDate()}</p>
             </div>
         </div>

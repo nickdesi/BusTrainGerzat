@@ -92,49 +92,45 @@ export default function Arrivees() {
                 <DataFreshnessWarning />
 
                 {/* Airport-style Header */}
-                <header className="mb-8 relative overflow-hidden rounded-[2rem] border border-blue-500/20 bg-black/25 p-4 shadow-2xl shadow-black/30 backdrop-blur-xl md:p-6">
-                    <div className="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true" />
-                    <div className="relative flex flex-col lg:flex-row justify-between items-center gap-6">
+                <header className="mb-4 relative overflow-hidden rounded-2xl border border-blue-500/20 bg-black/25 p-2.5 shadow-xl shadow-black/25 backdrop-blur-xl md:mb-5 md:rounded-[1.75rem] md:p-4">
+                    <div className="absolute -right-16 -top-16 h-28 w-28 rounded-full bg-blue-500/10 blur-3xl" aria-hidden="true" />
+                    <div className="relative flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                         <div className="text-center lg:text-left">
-                            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-blue-500/25 bg-blue-500/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.2em] text-blue-300">
-                                <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+                            <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-blue-500/25 bg-blue-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.16em] text-blue-300 md:text-[10px]">
+                                <Sparkles className="h-2.5 w-2.5 md:h-3 md:w-3" aria-hidden="true" />
                                 Suivi des arrivées
                             </div>
-                            <h1 className="text-3xl md:text-5xl font-bold tracking-wider text-blue-400 uppercase mb-2 font-mono text-glow flex items-center gap-3 justify-center lg:justify-start">
-                                <Image src="/icon-512.png" alt="Logo Gerzat Live" width={48} height={48} priority className="w-8 h-8 md:w-12 md:h-12 drop-shadow-[0_0_18px_rgba(96,165,250,0.35)]" />
+                            <h1 className="flex items-center justify-center gap-1.5 font-mono text-xl font-bold uppercase tracking-wider text-blue-400 text-glow md:gap-2 md:text-3xl lg:justify-start">
+                                <Image src="/icon-512.png" alt="Logo Gerzat Live" width={32} height={32} priority className="h-6 w-6 drop-shadow-[0_0_14px_rgba(96,165,250,0.35)] md:h-8 md:w-8" />
                                 ARRIVÉES • GERZAT
                             </h1>
-                            <p className="text-sm md:text-base text-blue-400/80 uppercase tracking-widest font-medium pl-1 mt-1">
+                            <p className="mt-0.5 hidden truncate text-xs font-medium uppercase tracking-widest text-blue-400/70 sm:block">
                                 Gare SNCF • Bus Champfleuri / Patural (Express)
                             </p>
                         </div>
-                        <div className="flex w-full flex-col gap-4 sm:w-auto sm:min-w-[280px] lg:items-end">
-                            <div className="flex items-center justify-center gap-4 lg:justify-end">
-                                <ClockWidget />
-                            </div>
-                            <div className="w-full">
-                                <SearchWidget onSearch={setSearchQuery} />
-                            </div>
+                        <div className="flex w-full flex-col gap-2 sm:w-auto sm:min-w-[260px] lg:items-end">
+                            <ClockWidget />
+                            <SearchWidget onSearch={setSearchQuery} />
                         </div>
                     </div>
 
-                    <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500"><Activity className="h-4 w-4 text-blue-400" /> Arrivées</div>
-                            <p className="mt-2 text-3xl font-black text-white">{arrivalStats.total}</p>
+                    <div className="mt-3 grid grid-cols-3 gap-1.5 md:gap-2">
+                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 md:rounded-xl md:px-3 md:py-2">
+                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-500 md:text-[10px]"><Activity className="h-3 w-3 text-blue-400" /> Arrivées</div>
+                            <p className="text-lg font-black leading-none text-white md:text-2xl">{arrivalStats.total}</p>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500"><WifiOff className="h-4 w-4 text-green-400 rotate-180" /> Temps réel</div>
-                            <p className="mt-2 text-3xl font-black text-white">{arrivalStats.realtime}</p>
+                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 md:rounded-xl md:px-3 md:py-2">
+                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-500 md:text-[10px]"><WifiOff className="h-3 w-3 text-green-400 rotate-180" /> Live</div>
+                            <p className="text-lg font-black leading-none text-white md:text-2xl">{arrivalStats.realtime}</p>
                         </div>
-                        <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
-                            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-500"><Star className="h-4 w-4 text-yellow-300" /> Favoris</div>
-                            <p className="mt-2 text-3xl font-black text-white">{arrivalStats.favorites}</p>
+                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 md:rounded-xl md:px-3 md:py-2">
+                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-500 md:text-[10px]"><Star className="h-3 w-3 text-yellow-300" /> Favoris</div>
+                            <p className="text-lg font-black leading-none text-white md:text-2xl">{arrivalStats.favorites}</p>
                         </div>
                     </div>
 
                     {/* Controls Row */}
-                    <div className="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4 rounded-2xl border border-white/10 bg-black/35 p-3 shadow-inner shadow-black/30">
+                    <div className="mt-3 flex flex-col sm:flex-row justify-between items-center gap-2 rounded-xl border border-white/10 bg-black/35 p-2 shadow-inner shadow-black/30 md:mt-4">
                         {/* Status */}
                         <div className="flex items-center gap-2 text-sm text-gray-400 min-w-[180px]" role="status" aria-live="polite">
                             <div className="flex h-2 w-2 relative">
