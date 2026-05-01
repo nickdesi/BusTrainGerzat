@@ -4,6 +4,7 @@
  */
 
 import staticSchedule from '@/data/static_schedule.json';
+import { isT2CNoServiceDay } from '@/utils/date';
 
 interface StaticScheduleItem {
     date: string;
@@ -40,6 +41,8 @@ function getTodayDateStr(): string {
  * Check if calendar has valid data for today
  */
 export function isCalendarValid(): boolean {
+    if (isT2CNoServiceDay()) return true;
+
     const todayStr = getTodayDateStr();
     const schedule = staticSchedule as StaticScheduleItem[];
     return schedule.some(item => item.date === todayStr);
@@ -93,11 +96,20 @@ export function getDaysUntilExpiry(): number {
 export function getFreshnessStatus(): {
     isValid: boolean;
     daysRemaining: number;
-    warningLevel: 'none' | 'warning' | 'critical';
+    warningLevel: 'none' | 'info' | 'warning' | 'critical';
     message?: string;
 } {
     const isValid = isCalendarValid();
     const daysRemaining = getDaysUntilExpiry();
+
+    if (isT2CNoServiceDay()) {
+        return {
+            isValid: true,
+            daysRemaining,
+            warningLevel: 'info',
+            message: "Aucun bus ni tram ne circule le 1er mai sur l'agglomération clermontoise"
+        };
+    }
 
     if (!isValid || daysRemaining < 0) {
         return {

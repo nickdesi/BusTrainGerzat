@@ -18,9 +18,15 @@ export function DataFreshnessWarning() {
 
     const bgColor = warningLevel === 'critical'
         ? 'bg-red-900/80 border-red-700'
-        : 'bg-amber-900/80 border-amber-700';
+        : warningLevel === 'info'
+            ? 'bg-sky-900/80 border-sky-700'
+            : 'bg-amber-900/80 border-amber-700';
 
-    const iconColor = warningLevel === 'critical' ? 'text-red-400' : 'text-amber-400';
+    const iconColor = warningLevel === 'critical'
+        ? 'text-red-400'
+        : warningLevel === 'info'
+            ? 'text-sky-400'
+            : 'text-amber-400';
 
     return (
         <div className={`${bgColor} border rounded-lg p-3 mb-4 flex items-center gap-3`}>

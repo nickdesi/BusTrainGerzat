@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 interface FreshnessStatus {
     isValid: boolean;
     daysRemaining: number;
-    warningLevel: 'none' | 'warning' | 'critical';
+    warningLevel: 'none' | 'info' | 'warning' | 'critical';
     message?: string;
 }
 
