@@ -30,3 +30,6 @@
 ## 2026-05-25 - Avoid O(N) Set Recreations inside Function Calls
 **Learning:** Found an anti-pattern where a `Set` was being instantiated inside `findStopUpdate` and `getBusData`, both of which are called frequently (either per stop or per API request). This results in unnecessary O(N) memory allocations and GC pressure every time the functions are invoked.
 **Action:** Move Set definitions to the module scope and populate them using lazily loaded cache blocks or simply as constant definitions outside function scope to achieve O(1) performance and avoid recreation inside loops or API route handlers.
+## 2026-05-26 - Avoiding Array.includes() and filter() inside useMemo loops
+**Learning:** Found an anti-pattern in `src/app/app/page.tsx` and `src/app/app/arrivees/page.tsx` where stats were being calculated using multiple `.filter()` calls, one of which used `favoriteIds.includes(d.id)`. This caused O(N) intermediate array creations and O(N*M) lookups inside a `useMemo` block that runs on every data update.
+**Action:** Replace multiple `.filter()` calls with a single loop and use a `Set` for O(1) lookups instead of `Array.includes()`. This avoids intermediate array allocations and reduces time complexity from O(N*M) to O(N).
