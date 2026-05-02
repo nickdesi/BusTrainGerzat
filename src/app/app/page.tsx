@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { RefreshCw, Bus, Train, Filter, WifiOff, Activity, Star, Sparkles } from 'lucide-react';
+import { RefreshCw, Bus, Train, Filter, WifiOff, Activity, Star, Sparkles, AlertTriangle, ExternalLink } from 'lucide-react';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import ClockWidget from '@/components/ClockWidget';
@@ -14,7 +14,6 @@ import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useFavorites } from '@/hooks/useFavorites';
 import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
-import { AlertTriangle, Github } from 'lucide-react';
 import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
 import { APP_VERSION } from '@/lib/app-version';
 
@@ -259,7 +258,7 @@ export default function Home() {
               rel="noopener noreferrer"
               className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 hover:bg-white/10 transition-colors border border-white/5 hover:border-white/20 group"
             >
-              <Github className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+              <ExternalLink className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
               <span className="text-xs font-medium text-white/50 group-hover:text-white transition-colors">
                 Code source sur GitHub
               </span>
