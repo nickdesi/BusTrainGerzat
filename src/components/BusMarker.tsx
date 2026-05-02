@@ -25,10 +25,13 @@ interface BusMarkerProps {
     vehicle: VehiclePosition;
 }
 
+interface LeafletMarkerRef {
+    setLatLng(latlng: [number, number]): void;
+}
+
 const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // Ref to access native Leaflet marker for smooth position updates
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const markerRef = useRef<any>(null);
+    const markerRef = useRef<LeafletMarkerRef | null>(null);
 
     // Determine bus color based on direction
     // direction 0 = From Gerzat towards Aubière/Romagnat (blue)
@@ -82,7 +85,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
 
     // Capture marker reference on mount
     const eventHandlers = useMemo(() => ({
-        add: (e: { target: unknown }) => {
+        add: (e: { target: LeafletMarkerRef }) => {
             markerRef.current = e.target;
         },
     }), []);

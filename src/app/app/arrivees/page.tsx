@@ -15,8 +15,7 @@ import { useFavorites } from '@/hooks/useFavorites';
 import { TransportFilter } from '@/types';
 import { Github } from 'lucide-react';
 import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
-
-const APP_VERSION = '3.7.3';
+import { APP_VERSION } from '@/lib/app-version';
 
 export default function Arrivees() {
     const { arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();

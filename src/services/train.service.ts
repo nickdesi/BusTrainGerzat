@@ -101,8 +101,17 @@ function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], is
 // SNCF API has a 5000 req/day limit. At 2 min cache with 2 calls per refresh:
 // (24*60*60)/120 * 2 = 1440 calls/day - safely under the limit
 const CACHE_TTL_MS = 120000; // 2 minutes cache
+const INCLUDE_DEBUG = process.env.NODE_ENV !== 'production';
+type TrainDataResponse = { updates: TrainUpdate[], timestamp: number, error?: string, debug?: Record<string, unknown> };
 let cachedResponse: { updates: TrainUpdate[], timestamp: number, debug?: Record<string, unknown> } | null = null;
 let cacheExpiry = 0;
+
+function stripProductionDebug(response: TrainDataResponse): TrainDataResponse {
+    if (INCLUDE_DEBUG || !('debug' in response)) return response;
+    const publicResponse = { ...response };
+    delete publicResponse.debug;
+    return publicResponse;
+}
 
 type TrainFreshnessStatus = {
     isValid: boolean;
@@ -187,14 +196,14 @@ export function getTrainFreshnessStatus(): TrainFreshnessStatus {
     });
 }
 
-export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestamp: number, error?: string, debug?: Record<string, unknown> }> {
+export async function getTrainData(): Promise<TrainDataResponse> {
     try {
         const now = Math.floor(Date.now() / 1000);
         const nowMs = Date.now();
 
         // Return cached response if still valid
         if (cachedResponse && nowMs < cacheExpiry) {
-            return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true } };
+            return stripProductionDebug({ ...cachedResponse, debug: { ...cachedResponse.debug, cached: true } });
         }
 
         if (!SNCF_API_KEY) {
@@ -220,9 +229,9 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         } catch (err) {
             if (err instanceof ApiError && err.status === 429) {
                 if (cachedResponse) {
-                    return { ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } };
+                    return stripProductionDebug({ ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } });
                 }
-                return { updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { error: err.message } };
+                return stripProductionDebug({ updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { error: err.message } });
             }
             throw err; // Re-throw other errors to outer catch
         }
@@ -235,11 +244,6 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
         const baseData = baseResult?.success ? baseResult.data : null;
         const realtimeData = realtimeResult?.success ? realtimeResult.data : null;
 
-
-        const debugInfo: Record<string, unknown> = {
-            baseCount: baseData?.departures?.length ?? 0,
-            realtimeCount: realtimeData?.departures?.length ?? 0
-        };
 
         // 2. Index Realtime Data for Fast Lookup and Window Calculation
         const realtimeMap = new Map<string, SncfDeparture>();
@@ -357,11 +361,11 @@ export async function getTrainData(): Promise<{ updates: TrainUpdate[], timestam
             .sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
 
         // Update cache
-        const result = { updates: futureUpdates, timestamp: now, debug: debugInfo };
+        const result = { updates: futureUpdates, timestamp: now, debug: { baseCount: baseData?.departures?.length ?? 0, realtimeCount: realtimeData?.departures?.length ?? 0 } };
         cachedResponse = result;
         cacheExpiry = Date.now() + CACHE_TTL_MS;
 
-        return result;
+        return stripProductionDebug(result);
     } catch (e) {
         console.error('getTrainData error:', e);
         return { updates: [], timestamp: Math.floor(Date.now() / 1000), error: 'FETCH_FAILED' };

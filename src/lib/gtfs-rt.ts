@@ -1,7 +1,3 @@
-/**
- * Centralized GTFS-RT Service
- * Eliminates duplication across data-source.ts, api/trip, and api/vehicles
- */
 import GtfsRealtimeBindings from 'gtfs-realtime-bindings';
 import { gtfsLogger } from './logger';
 
@@ -55,10 +51,6 @@ enum ScheduleRelationship {
 import { fetchBinaryWithRetry } from './api-client';
 import { getNowUnix } from '@/utils/date';
 
-// ... (imports remain)
-
-// ... (constants remain)
-
 /**
  * Fetch and decode GTFS-RT Trip Updates for Line E1
  */
@@ -71,8 +63,6 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
         });
 
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
-
-        // ... (rest of logic remains)
 
         const now = getNowUnix();
         if (feed.header?.timestamp) {

@@ -12,40 +12,28 @@ import SearchWidget from '@/components/SearchWidget';
 import { useDepartures } from '@/hooks/useDepartures';
 import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useFavorites } from '@/hooks/useFavorites';
+import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { TransportFilter } from '@/types';
 import { AlertTriangle, Github } from 'lucide-react';
 import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
-
-const APP_VERSION = '3.7.3';
+import { APP_VERSION } from '@/lib/app-version';
 
 export default function Home() {
   const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
   const [filter, setFilter] = useState<TransportFilter>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const { favorites, toggleFavorite } = useFavorites();
+  const { getPrediction } = usePredictiveDelay();
 
-  // Smart Alert Logic: Check if any favorited trip has a predicted delay
+  // Estimated delay advisory for favorited trips.
   const smartAlert = useMemo(() => {
     if (favorites.length === 0) return null;
-
-    // Inline prediction logic to avoid callback dependency issues
-    const getInlinePrediction = (line: string, hour: number, day: number) => {
-      const isWeekend = day === 0 || day === 6;
-      const isRushHour = (hour >= 7 && hour <= 9) || (hour >= 16 && hour <= 19);
-
-      if (line === 'E1') {
-        if (isRushHour && !isWeekend) {
-          return { probability: 'HIGH' as const, estimatedDelay: 5, reason: 'Pointe matin/soir (Hist. +5min)' };
-        }
-      }
-      return { probability: 'LOW' as const, estimatedDelay: 0, reason: 'Trafic fluide' };
-    };
 
     for (const departure of departures) {
       if (!favorites.some(f => f.id === departure.id)) continue;
 
       const dTime = new Date(departure.departureTime * 1000);
-      const prediction = getInlinePrediction(departure.line, dTime.getHours(), dTime.getDay());
+      const prediction = getPrediction(departure.line, dTime.getHours(), dTime.getDay());
 
       if (prediction.probability === 'HIGH') {
         return {
@@ -57,7 +45,7 @@ export default function Home() {
       }
     }
     return null;
-  }, [departures, favorites]);
+  }, [departures, favorites, getPrediction]);
 
   // Memoize favorite IDs for stable reference
   const favoriteIds = useMemo(() => favorites.map(f => f.id), [favorites]);
@@ -165,7 +153,7 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Smart Alert Banner */}
+          {/* Estimated Delay Advisory */}
           {smartAlert && (
             <div className="mt-6 p-4 rounded-lg bg-purple-900/40 border border-purple-500/50 flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
               <div className="p-2 bg-purple-900/50 rounded-full shrink-0">
@@ -174,7 +162,7 @@ export default function Home() {
               <div>
                 <h3 className="text-purple-200 font-bold flex items-center gap-2">
                   Perturbation probable sur vos favoris
-                  <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 border border-purple-500/30 uppercase">IA</span>
+                  <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 border border-purple-500/30 uppercase">Prévision</span>
                 </h3>
                 <p className="text-purple-300/80 text-sm mt-1">
                   Ligne <span className="font-bold text-white">{smartAlert.line}</span> vers {smartAlert.destination} :

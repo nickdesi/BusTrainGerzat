@@ -75,13 +75,13 @@ La logique spécifique à la ligne E1 est centralisée dans `src/services/t2c-li
 
 | Endpoint | Rôle |
 | --- | --- |
-| `/api/realtime` | Prochains départs bus/train agrégés. |
+| `/api/realtime` | Prochains départs bus E1. |
 | `/api/trains` | Données TER SNCF/Navitia. |
 | `/api/vehicles` | Véhicules E1 : GPS, interpolation ou fallback statique. |
 | `/api/trip/[tripId]` | Détail d’un trajet bus E1. |
 | `/api/lineE1` | Données statiques de la ligne E1 pour la carte. |
 | `/api/freshness` | État de fraîcheur T2C + SNCF. |
-| `/api/stream` | Flux serveur pour rafraîchissement temps réel. |
+| `/api/stream` | Flux serveur bus + TER pour rafraîchissement temps réel. |
 
 ## 🧠 Serveur MCP
 

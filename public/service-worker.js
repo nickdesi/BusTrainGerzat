@@ -1,6 +1,6 @@
-// Stable cache version. Bump manually when static SW-cached assets change.
-const CACHE_VERSION = '3.7.3';
-const CACHE_NAME = `gerzat-live-v${CACHE_VERSION}`;
+// Cache schema version for static SW-cached assets. Bump only when the cache strategy/assets change.
+const CACHE_VERSION = 'static-assets-1';
+const CACHE_NAME = `gerzat-live-${CACHE_VERSION}`;
 
 // Only cache truly static assets (icons, fonts)
 const STATIC_ASSETS = [
@@ -19,7 +19,7 @@ self.addEventListener('activate', (event) => {
     caches.keys().then((names) =>
       Promise.all(
         names
-          .filter((name) => name.startsWith('gerzat-live-v') && name !== CACHE_NAME)
+          .filter((name) => name.startsWith('gerzat-live-') && name !== CACHE_NAME)
           .map((name) => caches.delete(name))
       )
     ).then(() => self.clients.claim())

@@ -85,7 +85,7 @@
   - **Tailwind CSS** : Upgrade vers `v4.1.18`.
 - **Linting** : Migration de la configuration ESLint pour supporter totalement **ESLint 9** et **Next.js 16** (Flat Config natif).
 
-## [3.6.0] - 2026-01-12
+## [3.5.1] - 2026-01-12
 
 ### 🚆 Amélioration Données Train
 

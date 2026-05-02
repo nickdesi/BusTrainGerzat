@@ -170,7 +170,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
                         <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-900/30 border border-purple-500/30 animate-pulse">
                             <BrainCircuit className="w-3 h-3 text-purple-400" />
                             <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
-                                IA: +{prediction.estimatedDelay} min probables
+                                Prévision: +{prediction.estimatedDelay} min probables
                             </span>
                         </div>
                     )}

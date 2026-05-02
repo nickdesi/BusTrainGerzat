@@ -4,6 +4,11 @@ import { useBusData } from './useBusData';
 import { useTrainData } from './useTrainData';
 import { useDeparturesModel } from './useDeparturesModel';
 
+interface TransportStreamPayload {
+    bus?: unknown;
+    train?: unknown;
+}
+
 /**
  * Main departures hook - composes data fetching, SSE, and transformation.
  * Refactored to follow separation of concerns principle.
@@ -46,6 +51,21 @@ export function useDepartures() {
             eventSource.addEventListener('transport-error', () => {
                 // Keep the stream open: regular queries still provide fallback data.
             });
+
+            eventSource.onmessage = (event) => {
+                try {
+                    const payload = JSON.parse(event.data) as TransportStreamPayload;
+
+                    if (payload.bus) {
+                        queryClient.setQueryData(['bus-realtime'], payload.bus);
+                    }
+                    if (payload.train) {
+                        queryClient.setQueryData(['train-realtime'], payload.train);
+                    }
+                } catch {
+                    // Ignore malformed stream messages; regular queries remain the fallback.
+                }
+            };
 
             eventSource.onerror = () => {
                 eventSource.close();

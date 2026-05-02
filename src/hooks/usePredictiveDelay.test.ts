@@ -16,7 +16,7 @@ describe('usePredictiveDelay', () => {
             expect(result).toEqual({
                 probability: 'HIGH',
                 estimatedDelay: 5,
-                reason: 'Pointe matin/soir (Hist. +5min)',
+                reason: 'Heures de pointe estimées (+5 min)',
             });
         });
 
@@ -27,7 +27,7 @@ describe('usePredictiveDelay', () => {
             expect(result).toEqual({
                 probability: 'HIGH',
                 estimatedDelay: 5,
-                reason: 'Pointe matin/soir (Hist. +5min)',
+                reason: 'Heures de pointe estimées (+5 min)',
             });
         });
 
@@ -38,7 +38,7 @@ describe('usePredictiveDelay', () => {
             expect(result).toEqual({
                 probability: 'MEDIUM',
                 estimatedDelay: 2,
-                reason: 'Sortie scolaire (Hist. +2min)',
+                reason: 'Sortie scolaire estimée (+2 min)',
             });
         });
 
@@ -84,7 +84,7 @@ describe('usePredictiveDelay', () => {
             expect(result).toEqual({
                 probability: 'MEDIUM',
                 estimatedDelay: 3,
-                reason: 'Trafic dense (Hist. +3min)',
+                reason: 'Trafic dense estimé (+3 min)',
             });
         });
 
@@ -95,7 +95,7 @@ describe('usePredictiveDelay', () => {
             expect(result).toEqual({
                 probability: 'MEDIUM',
                 estimatedDelay: 3,
-                reason: 'Trafic dense (Hist. +3min)',
+                reason: 'Trafic dense estimé (+3 min)',
             });
         });
 
