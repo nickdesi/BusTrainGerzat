@@ -2,7 +2,7 @@
 
 **Gerzat Live v3.7.3 • 2026**
 
-Application web Next.js pour consulter rapidement les prochains passages des bus T2C et des trains TER à Gerzat, avec tableau temps réel, favoris, carte live de la ligne E1 et indicateurs de fraîcheur des données.
+Application web Next.js pour consulter rapidement les prochains passages des bus T2C et des trains TER à Gerzat, avec tableau temps réel, favoris, carte live modernisée de la ligne E1, sélecteur de trajet et indicateurs de fraîcheur des données.
 
 [![Démo en ligne](https://img.shields.io/badge/démo-en%20ligne-brightgreen)](https://gerzatlive.desimone.fr)
 [![Version](https://img.shields.io/badge/version-3.7.3-blue)](https://github.com/nickdesi/BusTrainGerzat)
@@ -39,9 +39,12 @@ L’interface est mobile-first, sombre, lisible et pensée pour afficher immédi
 
 ### Carte live ligne E1
 
-- Carte Leaflet / React-Leaflet côté client.
-- Fond Carto basemap clair/sombre.
-- Tracé principal, branches, arrêts importants et véhicules actifs.
+- Carte Leaflet / React-Leaflet côté client, rendue en canvas pour préserver les performances.
+- Fond Carto basemap clair/sombre avec bascule intégrée.
+- Design modernisé : carte “glass”, contrôles compacts, marqueurs bus vectoriels, popups enrichies et HUD temps réel.
+- Sélecteur de trajet **Tous / Gerzat / Aubière** pour éviter les tracés superposés et n’afficher que la direction utile.
+- Filtrage synchronisé des véhicules selon la direction sélectionnée.
+- Tracés complets par direction, branches, arrêts importants et terminus.
 - Positions GPS GTFS-RT quand disponibles.
 - Interpolation ou fallback horaire quand le temps réel est incomplet.
 
@@ -54,34 +57,115 @@ L’interface est mobile-first, sombre, lisible et pensée pour afficher immédi
 
 ## 🧭 Architecture des données
 
+```mermaid
+flowchart LR
+  subgraph Sources[Sources externes]
+    T2CStatic[GTFS statique T2C]
+    T2CRT["GTFS-RT T2C<br/>Trip Updates + Vehicles"]
+    SNCF[SNCF / Navitia]
+  end
+
+  subgraph Data[Données générées]
+    StaticSchedule["src/data/static_schedule.json"]
+    GtfsConfig["src/data/gtfs_config.json"]
+    LineE1["public/data/e1_stop_times.json"]
+  end
+
+  subgraph Server[Next.js API + services]
+    BusService["bus.service.ts"]
+    E1Service["t2c-line-e1.service.ts"]
+    TrainService["train.service.ts"]
+    Freshness["gtfs-freshness.ts"]
+  end
+
+  subgraph API[API internes]
+    Realtime["/api/realtime"]
+    Vehicles["/api/vehicles"]
+    Trip["/api/trip/[tripId]"]
+    Line["/api/lineE1"]
+    Trains["/api/trains"]
+    Fresh["/api/freshness"]
+    Stream["/api/stream"]
+  end
+
+  subgraph UI[Interface]
+    Board[Tableau départs / arrivées]
+    Map[Carte live E1]
+    Favorites[Favoris]
+    Status[Alertes fraîcheur]
+  end
+
+  T2CStatic --> StaticSchedule
+  T2CStatic --> GtfsConfig
+  T2CStatic --> LineE1
+  T2CRT --> BusService
+  T2CRT --> E1Service
+  SNCF --> TrainService
+  StaticSchedule --> BusService
+  GtfsConfig --> BusService
+  LineE1 --> E1Service
+  BusService --> Realtime
+  E1Service --> Vehicles
+  E1Service --> Trip
+  E1Service --> Line
+  TrainService --> Trains
+  Freshness --> Fresh
+  Realtime --> Board
+  Trains --> Board
+  Vehicles --> Map
+  Trip --> Map
+  Line --> Map
+  Stream --> Board
+  Fresh --> Status
+  Board --> Favorites
+```
+
 ### Bus T2C
 
 Gerzat Live combine plusieurs niveaux de données pour garder l’affichage exploitable même si un flux est incomplet :
 
-1. **GTFS statique** : horaires planifiés, arrêts, trips et données générées.
+1. **GTFS statique** : horaires planifiés, arrêts, routes, trips, shapes et fichiers générés.
 2. **GTFS-RT Trip Updates** : retards, annulations et prévisions temps réel.
-3. **GTFS-RT Vehicle Positions** : positions GPS des véhicules quand disponibles.
-4. **Fallback applicatif** : interpolation ou horaire théorique si un signal live manque.
+3. **GTFS-RT Vehicle Positions** : positions GPS et cap des véhicules quand disponibles.
+4. **Fallback applicatif** : interpolation sur tracé E1 ou horaire théorique si un signal live manque.
+
+```mermaid
+flowchart TD
+  Request[Requête carte ou départs] --> HasRealtime{Signal GTFS-RT disponible ?}
+  HasRealtime -- Oui --> TripUpdate["Trip Update<br/>retards / annulations"]
+  HasRealtime -- Oui --> VehicleGPS["Vehicle Position<br/>GPS + cap"]
+  HasRealtime -- Non --> Static[Horaire GTFS statique]
+  TripUpdate --> Merge[Fusion service E1]
+  VehicleGPS --> Merge
+  Static --> Interpolation[Interpolation sur shape E1]
+  Interpolation --> Merge
+  Merge --> Confidence{Qualité position}
+  Confidence -- GPS --> Live[Affichage live]
+  Confidence -- Estimée --> Estimated[Affichage estimé]
+  Confidence -- Statique --> Fallback[Fallback horaire]
+```
 
 La logique spécifique à la ligne E1 est centralisée dans `src/services/t2c-line-e1.service.ts` afin d’éviter la duplication entre `/api/vehicles`, `/api/trip/[tripId]` et les services métier.
 
-### Trains TER / SNCF
+### Carte live E1
 
-- Intégration SNCF / Navitia via `SNCF_API_KEY`.
-- Gestion du cache côté service pour limiter les appels et préserver l’affichage.
-- Statut de fraîcheur exposé à l’application via `/api/freshness`.
-
-## 📡 API internes
-
-| Endpoint | Rôle |
-| --- | --- |
-| `/api/realtime` | Prochains départs bus E1. |
-| `/api/trains` | Données TER SNCF/Navitia. |
-| `/api/vehicles` | Véhicules E1 : GPS, interpolation ou fallback statique. |
-| `/api/trip/[tripId]` | Détail d’un trajet bus E1. |
-| `/api/lineE1` | Données statiques de la ligne E1 pour la carte. |
-| `/api/freshness` | État de fraîcheur T2C + SNCF. |
-| `/api/stream` | Flux serveur bus + TER pour rafraîchissement temps réel. |
+```mermaid
+flowchart LR
+  Direction["Filtre trajet<br/>Tous / Gerzat / Aubière"] --> Shapes{Shapes visibles}
+  Direction --> Buses{Bus visibles}
+  Shapes -- Tous --> Both[Deux directions + branches]
+  Shapes -- Gerzat --> North[Tracé direction Gerzat]
+  Shapes -- Aubière --> South[Tracé direction Aubière]
+  Buses -- Tous --> AllVehicles[Tous les véhicules E1]
+  Buses -- Gerzat --> NorthVehicles[Bus direction Gerzat]
+  Buses -- Aubière --> SouthVehicles[Bus direction Aubière]
+  Both --> Leaflet[LeafletMapClient]
+  North --> Leaflet
+  South --> Leaflet
+  AllVehicles --> Leaflet
+  NorthVehicles --> Leaflet
+  SouthVehicles --> Leaflet
+```
 
 ## 🧠 Serveur MCP
 
@@ -113,13 +197,13 @@ npm run mcp
 
 ```text
 src/
-├── app/              # Routes Next.js App Router et API
-├── components/       # Composants React UI
-├── components/map/   # Composants dédiés à la carte
-├── hooks/            # Hooks de données et état local
-├── lib/              # Clients API, GTFS-RT, logging, rate-limit
-├── mcp-server/       # Serveur MCP
-├── services/         # Services métier T2C, ligne E1 et SNCF
+├── app/              # Routes Next.js App Router, pages et API internes
+├── components/       # Composants React UI transverses
+├── components/map/   # Carte E1, légende, statut, overlays et rendu Leaflet
+├── hooks/            # Hooks TanStack Query, favoris, fraîcheur et temps réel
+├── lib/              # Clients API, GTFS-RT, fraîcheur, logging, rate-limit
+├── mcp-server/       # Serveur MCP pour interrogation agent IA
+├── services/         # Services métier T2C, ligne E1 et SNCF/Navitia
 ├── types/            # Types TypeScript partagés
 └── utils/            # Formatage et helpers date
 ```
@@ -251,9 +335,11 @@ SNCF_API_KEY=votre_cle_api_sncf
 
 Cette version apporte notamment :
 
+- modernisation complète de la carte live E1 : interface glass, contrôles compacts, marqueurs bus vectoriels, popups enrichies et HUD temps réel ;
+- ajout du sélecteur de trajet **Tous / Gerzat / Aubière** avec filtrage des tracés et véhicules par direction ;
 - centralisation de la logique Line E1 dans `t2c-line-e1.service.ts` ;
 - refactor des routes `/api/vehicles` et `/api/trip/[tripId]` ;
-- amélioration des règles T2C : fallback, retards, annulations et remplacement de trips ;
+- amélioration des règles T2C : fallback GPS, interpolation, retards, annulations et remplacement de trips ;
 - ajout d’un statut de fraîcheur SNCF/Navitia ;
 - tests unitaires supplémentaires sur T2C et SNCF ;
 - création d’un workflow CI complet ;
