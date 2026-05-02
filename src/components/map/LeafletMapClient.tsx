@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import { MapContainer, TileLayer, Polyline, useMap, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Polyline, useMap, useMapEvents, ZoomControl } from 'react-leaflet';
 import type { LatLngExpression } from 'leaflet';
 
 type Shape = [number, number][];
@@ -56,47 +56,77 @@ export default function LeafletMapClient({
     onZoomChange,
     children,
 }: LeafletMapClientProps) {
+    const routeGlow = `${routeColor}55`;
+
     return (
         <MapContainer
             center={center as LatLngExpression}
             zoom={zoom}
-            className="h-full min-h-[420px] w-full"
+            className="transit-map h-full min-h-[420px] w-full"
             style={{ height: '100%', minHeight: '420px', width: '100%' }}
             scrollWheelZoom
             preferCanvas
+            zoomControl={false}
         >
             <MapResizeController />
             <ZoomController onZoomChange={onZoomChange} />
+            <ZoomControl position="bottomleft" />
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
                 url={tileUrl}
                 zIndex={1}
+                updateWhenIdle
+                keepBuffer={3}
             />
 
-            {primaryShape && (
-                <Polyline
-                    positions={primaryShape}
-                    color={routeColor}
-                    weight={8}
-                    opacity={0.92}
-                />
-            )}
             {secondaryShape && (
                 <Polyline
                     positions={secondaryShape}
                     color={routeColor}
-                    weight={8}
-                    opacity={0.78}
-                    dashArray="12, 10"
+                    weight={5}
+                    opacity={0.42}
+                    lineCap="round"
+                    lineJoin="round"
                 />
+            )}
+
+            {primaryShape && (
+                <>
+                    <Polyline
+                        positions={primaryShape}
+                        color="#020617"
+                        weight={14}
+                        opacity={0.7}
+                        lineCap="round"
+                        lineJoin="round"
+                    />
+                    <Polyline
+                        positions={primaryShape}
+                        color={routeGlow}
+                        weight={11}
+                        opacity={0.55}
+                        lineCap="round"
+                        lineJoin="round"
+                    />
+                    <Polyline
+                        positions={primaryShape}
+                        color={routeColor}
+                        weight={6}
+                        opacity={0.98}
+                        lineCap="round"
+                        lineJoin="round"
+                    />
+                </>
             )}
             {branchShapes?.map((branch, index) => (
                 <Polyline
                     key={`branch-${index}`}
                     positions={branch}
                     color={routeColor}
-                    weight={6}
-                    opacity={0.72}
+                    weight={4}
+                    opacity={0.7}
+                    lineCap="round"
+                    lineJoin="round"
                 />
             ))}
 

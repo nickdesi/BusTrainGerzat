@@ -24,20 +24,24 @@ const StopMarker = memo(function StopMarker({ stop, isTerminus, routeColor }: St
     return (
         <CircleMarker
             center={[stop.lat, stop.lon]}
-            radius={isTerminus ? 10 : 6}
-            fillColor={isTerminus ? routeColor : '#ffffff'}
-            fillOpacity={isTerminus ? 1 : 0.9}
-            color={isTerminus ? '#ffffff' : routeColor}
-            weight={isTerminus ? 3 : 2}
+            radius={isTerminus ? 11 : 5}
+            fillColor={isTerminus ? routeColor : '#f8fafc'}
+            fillOpacity={isTerminus ? 0.98 : 0.88}
+            color={isTerminus ? '#f8fafc' : routeColor}
+            weight={isTerminus ? 4 : 2}
+            opacity={isTerminus ? 0.95 : 0.72}
         >
             <Popup>
-                <div className="text-white">
-                    <div className="font-bold text-lg mb-1">{stop.stopName}</div>
-                    {isTerminus && (
-                        <span className="inline-block px-2 py-0.5 rounded bg-green-500/20 text-green-400 text-xs border border-green-500/50">
-                            Terminus
-                        </span>
-                    )}
+                <div className="min-w-[180px] p-1 text-white">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.055] p-3">
+                        <div className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">Arrêt E1</div>
+                        <div className="font-display text-base font-black leading-tight">{stop.stopName}</div>
+                        {isTerminus && (
+                            <span className="mt-2 inline-flex rounded-full border border-emerald-300/25 bg-emerald-300/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-200">
+                                Terminus
+                            </span>
+                        )}
+                    </div>
                 </div>
             </Popup>
         </CircleMarker>

@@ -37,6 +37,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // direction 0 = From Gerzat towards Aubière/Romagnat (blue)
     // direction 1 = Towards Gerzat (green)
     const iconColor = vehicle.direction === 1 ? '#22c55e' : '#3b82f6';
+    const directionLabel = vehicle.direction === 1 ? 'GERZAT' : 'SUD';
 
     // Determine pulse class based on delay
     const delayMinutes = Math.round(vehicle.delay / 60);
@@ -54,26 +55,29 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
 
         // SVG bus icon pointing up (will be rotated by bearing)
         const svgIcon = `
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="28" height="28" fill="${iconColor}" style="transform: rotate(${vehicle.bearing || 0}deg); filter: drop-shadow(0 2px 3px rgba(0,0,0,0.5));">
-                <path d="M12 2C8 2 4 2.5 4 6v9.5c0 .95.38 1.81 1 2.44V20c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h8v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-2.06c.62-.63 1-1.49 1-2.44V6c0-3.5-4-4-8-4zm-3.5 15c-.83 0-1.5-.67-1.5-1.5S7.67 14 8.5 14s1.5.67 1.5 1.5S9.33 17 8.5 17zm7 0c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm1.5-6H7V7h10v4z"/>
+            <svg class="bus-vector" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true" style="transform: rotate(${vehicle.bearing || 0}deg);">
+                <path fill="${iconColor}" d="M16 3.2c-5.8 0-9.5 1.1-9.5 5.3v11.2c0 1.3.6 2.5 1.6 3.3v2.1c0 .8.6 1.4 1.4 1.4h1.2c.8 0 1.4-.6 1.4-1.4v-1h7.8v1c0 .8.6 1.4 1.4 1.4h1.2c.8 0 1.4-.6 1.4-1.4V23c1-.8 1.6-2 1.6-3.3V8.5c0-4.2-3.7-5.3-9.5-5.3Zm-5.3 4.7h10.6c.9 0 1.6.7 1.6 1.6v5.2H9.1V9.5c0-.9.7-1.6 1.6-1.6Zm.6 12.1a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6Zm9.4 0a1.8 1.8 0 1 1 0-3.6 1.8 1.8 0 0 1 0 3.6Z"/>
+                <path fill="rgba(255,255,255,.8)" d="M10.4 10.1h11.2v3.2H10.4z"/>
             </svg>
         `;
 
         return L.divIcon({
             className: 'bus-marker',
             html: `
-                <div class="bus-icon-container">
+                <div class="bus-icon-container" style="--bus-color:${iconColor}">
                     <div class="${pulseClass}"></div>
+                    <div class="bus-bearing-ring"></div>
                     <div class="bus-icon">
                         ${svgIcon}
+                        <span class="bus-direction-chip">${directionLabel}</span>
                     </div>
                 </div>
             `,
-            iconSize: [40, 40],
-            iconAnchor: [20, 20],
-            popupAnchor: [0, -20],
+            iconSize: [52, 52],
+            iconAnchor: [26, 26],
+            popupAnchor: [0, -26],
         });
-    }, [vehicle.bearing, iconColor, pulseClass]);
+    }, [vehicle.bearing, iconColor, pulseClass, directionLabel]);
 
     // Update marker position smoothly when vehicle data changes
     useEffect(() => {
@@ -99,55 +103,60 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
             eventHandlers={eventHandlers}
         >
             <Popup>
-                <div className="p-1">
-                    <div className="font-bold text-lg flex items-center gap-2 text-white mb-2">
-                        <Bus className="w-5 h-5 text-green-400" />
-                        <span>Ligne E1</span>
+                <div className="min-w-[240px] p-1">
+                    <div className="mb-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-emerald-300/20 bg-emerald-300/10 text-emerald-200">
+                            <Bus className="h-5 w-5" />
+                        </div>
+                        <div>
+                            <div className="font-display text-lg font-black leading-none text-white">Ligne E1</div>
+                            <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/45">{vehicle.direction === 1 ? 'Retour nord' : 'Trajet sud'}</div>
+                        </div>
                     </div>
 
                     {/* Origin & Direction indicator */}
-                    <div className="flex flex-col gap-1 mb-2">
-                        <div className="text-xs text-gray-400 text-center">
+                    <div className="mb-3 flex flex-col gap-1.5">
+                        <div className="text-center text-xs text-gray-400">
                             Depuis {vehicle.origin}
                         </div>
-                        <div className="bg-green-500/20 border border-green-500/30 rounded px-2 py-1 text-center">
-                            <span className="text-green-400 font-medium text-sm">
+                        <div className="rounded-2xl border border-emerald-300/20 bg-emerald-300/10 px-3 py-2 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                            <span className="text-sm font-bold text-emerald-200">
                                 → {vehicle.headsign}
                             </span>
                         </div>
                     </div>
 
                     <div className="space-y-2">
-                        <div className="bg-white/5 rounded p-2 border border-white/10">
-                            <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Prochain arrêt</div>
+                        <div className="rounded-2xl border border-white/10 bg-white/[0.055] p-3">
+                            <div className="mb-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Prochain arrêt</div>
                             <div className="font-medium text-white">{vehicle.nextStopName}</div>
                         </div>
 
-                        <div className="flex gap-2">
-                            <div className="flex-1 bg-white/5 rounded p-2 border border-white/10 text-center">
-                                <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Retard</div>
-                                <div className={`font-bold ${vehicle.delay > 0 ? 'text-orange-400' : 'text-green-400'}`}>
-                                    {vehicle.delay > 0 ? `+${Math.round(vehicle.delay / 60)} min` : 'À l\'heure'}
+                        <div className="grid grid-cols-2 gap-2">
+                            <div className="rounded-2xl border border-white/10 bg-white/[0.055] p-3 text-center">
+                                <div className="mb-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Retard</div>
+                                <div className={`font-display text-lg font-black ${vehicle.delay > 0 ? 'text-orange-300' : 'text-emerald-300'}`}>
+                                    {vehicle.delay > 0 ? `+${Math.round(vehicle.delay / 60)} min` : 'OK'}
                                 </div>
                             </div>
-                            <div className="flex-1 bg-white/5 rounded p-2 border border-white/10 text-center">
-                                <div className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">Arrivée</div>
-                                <div className="font-bold text-white">
+                            <div className="rounded-2xl border border-white/10 bg-white/[0.055] p-3 text-center">
+                                <div className="mb-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-gray-500">Arrivée</div>
+                                <div className="font-display text-lg font-black tabular-nums text-white">
                                     {TIME_FORMATTER.format(vehicle.estimatedArrival * 1000)}
                                 </div>
                             </div>
                         </div>
 
                         {/* Terminus ETA */}
-                        <div className="bg-gradient-to-r from-yellow-900/30 to-yellow-800/20 rounded-lg p-3 border border-yellow-500/30">
-                            <div className="flex items-center justify-between">
+                        <div className="rounded-[1.25rem] border border-yellow-300/20 bg-gradient-to-r from-yellow-300/15 to-orange-300/10 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+                            <div className="flex items-center justify-between gap-4">
                                 <div>
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-wider">Terminus</div>
-                                    <div className="text-sm font-medium text-white truncate max-w-[150px]">{vehicle.headsign}</div>
+                                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-100/45">Terminus</div>
+                                    <div className="max-w-[145px] truncate text-sm font-semibold text-white">{vehicle.headsign}</div>
                                 </div>
                                 <div className="text-right">
-                                    <div className="text-[10px] text-gray-500 uppercase tracking-wider">Arrivée</div>
-                                    <div className="text-xl font-bold text-yellow-400 tabular-nums">
+                                    <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-100/45">Arrivée</div>
+                                    <div className="font-display text-xl font-black tabular-nums text-yellow-300">
                                         {TIME_FORMATTER.format(vehicle.terminusEta * 1000)}
                                     </div>
                                 </div>

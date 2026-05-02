@@ -31,6 +31,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
     const [isDarkMode, setIsDarkMode] = useState(false); // Default to OSM classic (light)
     const [isLegendOpen, setIsLegendOpen] = useState(false); // Mobile legend toggle
+    const [routeDirection, setRouteDirection] = useState<'all' | '0' | '1'>('all');
 
     // Identify terminus stops (only main termini)
     const terminusStopIds = useMemo(() => {
@@ -96,7 +97,10 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
     // Vehicle markers with collision detection
     const vehicleMarkers = useMemo(() => {
-        const sortedVehicles = [...(vehicleData?.vehicles || [])].sort((a, b) => a.lat - b.lat || a.lon - b.lon);
+        const selectedVehicles = routeDirection === 'all'
+            ? (vehicleData?.vehicles || [])
+            : (vehicleData?.vehicles || []).filter(vehicle => String(vehicle.direction) === routeDirection);
+        const sortedVehicles = [...selectedVehicles].sort((a, b) => a.lat - b.lat || a.lon - b.lon);
         const positions = new Map<string, number>();
 
         return sortedVehicles.map((vehicle: VehiclePosition) => {
@@ -126,9 +130,14 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
             return <BusMarker key={vehicle.tripId} vehicle={displayVehicle} />;
         });
-    }, [vehicleData?.vehicles]);
+    }, [routeDirection, vehicleData?.vehicles]);
 
     const routeColor = lineData?.route?.routeColor ? `#${lineData.route.routeColor}` : '#fdc300';
+    const direction0Shape = lineData?.shapes['0'] as [number, number][] | undefined;
+    const direction1Shape = lineData?.shapes['1'] as [number, number][] | undefined;
+    const visiblePrimaryShape = routeDirection === '1' ? direction1Shape : direction0Shape;
+    const visibleSecondaryShape = routeDirection === 'all' ? direction1Shape : undefined;
+    const visibleBranchShapes = routeDirection === 'all' ? lineData?.shapes.branches : undefined;
     const tileUrl = isDarkMode
         ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
         : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
@@ -149,15 +158,22 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     }
 
     return (
-        <div className="relative h-full min-h-[420px] w-full overflow-hidden bg-slate-950">
+        <div className="relative h-full min-h-[420px] w-full overflow-hidden rounded-[2rem] border border-white/10 bg-slate-950 shadow-[0_28px_90px_rgba(0,0,0,0.45)] ring-1 ring-white/5">
+            <div className="pointer-events-none absolute inset-0 z-[var(--z-ui-base)] bg-[radial-gradient(circle_at_18%_12%,rgba(16,185,129,0.20),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(59,130,246,0.16),transparent_26%),linear-gradient(180deg,rgba(2,6,23,0.18),transparent_36%,rgba(2,6,23,0.34))]" />
+            <div className="pointer-events-none absolute inset-0 z-[var(--z-ui-base)] bg-noise opacity-35 mix-blend-soft-light" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 z-[calc(var(--z-ui-base)+1)] h-24 bg-gradient-to-b from-slate-950/70 to-transparent" />
+            <div className="pointer-events-none absolute left-4 top-20 z-[calc(var(--z-modal)+1)] hidden rounded-full border border-white/10 bg-slate-950/70 px-3 py-1.5 shadow-lg shadow-black/30 backdrop-blur-xl md:block">
+                <span className="font-display text-[10px] font-black uppercase tracking-[0.28em] text-white/80">Carte temps réel</span>
+            </div>
+
             <LeafletMapClient
                 center={MAP_CENTER}
                 zoom={MAP_ZOOM}
                 tileUrl={tileUrl}
                 routeColor={routeColor}
-                primaryShape={lineData?.shapes['0'] as [number, number][] | undefined}
-                secondaryShape={lineData?.shapes['1'] as [number, number][] | undefined}
-                branchShapes={lineData?.shapes.branches}
+                primaryShape={visiblePrimaryShape}
+                secondaryShape={visibleSecondaryShape}
+                branchShapes={visibleBranchShapes}
                 onZoomChange={setCurrentZoom}
             >
                 {/* Stop markers - Only show standard stops when zoomed in */}
@@ -189,6 +205,8 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 setIsDarkMode={setIsDarkMode}
                 isLegendOpen={isLegendOpen}
                 setIsLegendOpen={setIsLegendOpen}
+                routeDirection={routeDirection}
+                setRouteDirection={setRouteDirection}
             />
 
             {/* Empty state overlay */}
