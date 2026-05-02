@@ -77,11 +77,25 @@ export default function Home() {
     return result;
   }, [departures, filter, searchQuery]);
 
-  const departureStats = useMemo(() => ({
-    total: filteredDepartures.length,
-    realtime: filteredDepartures.filter(d => d.isRealtime).length,
-    favorites: filteredDepartures.filter(d => favoriteIds.includes(d.id)).length,
-  }), [filteredDepartures, favoriteIds]);
+  const departureStats = useMemo(() => {
+    let realtimeCount = 0;
+    let favoritesCount = 0;
+
+    // ⚡ Bolt: Convert favorites to Set for O(1) lookups instead of O(N) array includes
+    const favSet = new Set(favoriteIds);
+
+    // ⚡ Bolt: Calculate stats in a single pass to avoid creating multiple intermediate arrays with filter()
+    for (const d of filteredDepartures) {
+      if (d.isRealtime) realtimeCount++;
+      if (favSet.has(d.id)) favoritesCount++;
+    }
+
+    return {
+      total: filteredDepartures.length,
+      realtime: realtimeCount,
+      favorites: favoritesCount,
+    };
+  }, [filteredDepartures, favoriteIds]);
 
   return (
     <main id="main-content" className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(253,195,0,0.16),transparent_32%),radial-gradient(circle_at_top_right,rgba(59,130,246,0.12),transparent_28%),linear-gradient(135deg,var(--color-background),var(--color-surface-dark)_48%,#050505)] text-gray-100 font-sans">

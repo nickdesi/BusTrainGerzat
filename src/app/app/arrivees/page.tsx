@@ -53,11 +53,25 @@ export default function Arrivees() {
         return result;
     }, [arrivals, filter, searchQuery]);
 
-    const arrivalStats = useMemo(() => ({
-        total: filteredArrivals.length,
-        realtime: filteredArrivals.filter(a => a.isRealtime).length,
-        favorites: filteredArrivals.filter(a => favoriteIds.includes(a.id)).length,
-    }), [filteredArrivals, favoriteIds]);
+    const arrivalStats = useMemo(() => {
+        let realtimeCount = 0;
+        let favoritesCount = 0;
+
+        // ⚡ Bolt: Convert favorites to Set for O(1) lookups instead of O(N) array includes
+        const favSet = new Set(favoriteIds);
+
+        // ⚡ Bolt: Calculate stats in a single pass to avoid creating multiple intermediate arrays with filter()
+        for (const a of filteredArrivals) {
+            if (a.isRealtime) realtimeCount++;
+            if (favSet.has(a.id)) favoritesCount++;
+        }
+
+        return {
+            total: filteredArrivals.length,
+            realtime: realtimeCount,
+            favorites: favoritesCount,
+        };
+    }, [filteredArrivals, favoriteIds]);
 
     return (
         <main id="main-content" className="min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.16),transparent_32%),radial-gradient(circle_at_top_right,rgba(253,195,0,0.10),transparent_28%),linear-gradient(135deg,var(--color-background),var(--color-surface-dark)_48%,#050505)] text-gray-100 font-sans">
