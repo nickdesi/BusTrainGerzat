@@ -82,7 +82,7 @@ jobs:
         if: steps.sentinel_check.outputs.is_updated == 'true'
         id: check_changes
         run: |
-          git add gtfs_data src/data/gtfs_config.json src/data/static_schedule.json public/data/e1_stop_times.json
+          git add src/data/gtfs_config.json src/data/static_schedule.json public/data/e1_stop_times.json
           if git diff --cached --quiet; then
             echo "changes=false" >> $GITHUB_OUTPUT
             echo "ℹ️ No changes detected"
