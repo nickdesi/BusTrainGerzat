@@ -64,10 +64,22 @@ export default function CartePage() {
 
     const stats = useMemo(() => {
         const vehicles = vehicleData?.vehicles ?? [];
+
+        // ⚡ Bolt: Calculate stats in a single pass to avoid creating multiple intermediate arrays with filter()
+        let realtimeCount = 0;
+        let estimatedCount = 0;
+        for (const vehicle of vehicles) {
+            if (vehicle.isRealtime) {
+                realtimeCount++;
+            } else {
+                estimatedCount++;
+            }
+        }
+
         return {
             total: vehicleData?.count ?? vehicles.length,
-            realtime: vehicles.filter((vehicle) => vehicle.isRealtime).length,
-            estimated: vehicles.filter((vehicle) => !vehicle.isRealtime).length,
+            realtime: realtimeCount,
+            estimated: estimatedCount,
             stops: lineData?.stops.length ?? 0,
         };
     }, [lineData?.stops.length, vehicleData?.count, vehicleData?.vehicles]);
