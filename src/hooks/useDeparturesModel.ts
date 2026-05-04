@@ -1,24 +1,7 @@
 import { useMemo } from 'react';
-import { UnifiedEntry, Update, TrainUpdate } from '@/types';
+import { UnifiedEntry, TrainUpdate } from '@/types';
 import { normalizeText } from '@/utils/format';
 import { BusUpdate } from './useBusData';
-
-/**
- * Deduplicate bus updates by time (rounded to minute) + headsign
- * Optimized to O(N) using a Set
- */
-function deduplicate(items: Update[]): Update[] {
-    const seen = new Set<string>();
-    return items.filter((update) => {
-        const roundedTime = Math.floor(update.arrival / 60);
-        const key = `${roundedTime}-${update.headsign}`;
-        if (seen.has(key)) {
-            return false;
-        }
-        seen.add(key);
-        return true;
-    });
-}
 
 /**
  * Map a bus update to a unified departure entry
@@ -104,21 +87,43 @@ export function useDeparturesModel(
     trainUpdates: TrainUpdate[] = EMPTY_TRAIN_UPDATES
 ): DeparturesModelResult {
     return useMemo(() => {
-        // Filter by direction:
-        // - Departures: buses LEAVING Gerzat (direction 0)
-        // - Arrivals: buses ARRIVING at Gerzat (direction 1)
-        const busDepartures = deduplicate(busUpdates.filter(u => u.direction === 0));
-        const busArrivals = deduplicate(busUpdates.filter(u => u.direction === 1));
+        // ⚡ Bolt: Single pass processing to avoid intermediate array allocations
+        // from multiple filter() and map() calls.
+        const deps: UnifiedEntry[] = [];
+        const arrs: UnifiedEntry[] = [];
+        const seenBusDepartures = new Set<string>();
+        const seenBusArrivals = new Set<string>();
 
-        const deps: UnifiedEntry[] = [
-            ...busDepartures.map(mapBusDeparture),
-            ...trainUpdates.map(t => mapTrain(t, 'Voie 1')),
-        ].sort((a, b) => a.time - b.time);
+        // Process buses
+        for (const bus of busUpdates) {
+            const roundedTime = Math.floor(bus.arrival / 60);
+            const key = `${roundedTime}-${bus.headsign}`;
 
-        const arrs: UnifiedEntry[] = [
-            ...busArrivals.map(mapBusArrival),
-            ...trainUpdates.map(t => mapTrain(t, 'Voie 2')),
-        ].sort((a, b) => a.arrivalTime - b.arrivalTime);
+            // Departures: direction 0
+            if (bus.direction === 0) {
+                if (!seenBusDepartures.has(key)) {
+                    seenBusDepartures.add(key);
+                    deps.push(mapBusDeparture(bus));
+                }
+            }
+            // Arrivals: direction 1
+            else if (bus.direction === 1) {
+                if (!seenBusArrivals.has(key)) {
+                    seenBusArrivals.add(key);
+                    arrs.push(mapBusArrival(bus));
+                }
+            }
+        }
+
+        // Process trains
+        for (const train of trainUpdates) {
+            deps.push(mapTrain(train, 'Voie 1'));
+            arrs.push(mapTrain(train, 'Voie 2'));
+        }
+
+        // Sort at the end
+        deps.sort((a, b) => a.time - b.time);
+        arrs.sort((a, b) => a.arrivalTime - b.arrivalTime);
 
         return { departures: deps, arrivals: arrs };
     }, [busUpdates, trainUpdates]);
