@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { protectApiRequest } from '@/lib/api-protection';
 import { fetchTripUpdates, fetchVehiclePositions } from '@/lib/gtfs-rt';
 import { createShapesMap, interpolateAlongShape, type ShapePoint } from '@/lib/vehicle-interpolation';
 import { getParisMidnight, isT2CNoServiceDay } from '@/utils/date';
@@ -36,7 +37,10 @@ interface EstimatedVehicle {
 const shapesData = getLineE1Shapes() as unknown as Record<string, ShapePoint[]>;
 const shapes = createShapesMap(shapesData);
 
-export async function GET() {
+export async function GET(request: Request) {
+    const blocked = protectApiRequest(request, 'vehicles');
+    if (blocked) return blocked;
+
     try {
         const now = Math.floor(Date.now() / 1000);
 
@@ -46,6 +50,8 @@ export async function GET() {
                 timestamp: now,
                 count: 0,
                 hasRealtime: false
+            }, {
+                headers: { 'Cache-Control': 'no-store' },
             });
         }
 
@@ -296,13 +302,18 @@ export async function GET() {
             timestamp: now,
             count: vehicles.length,
             hasRealtime: rtPositions.size > 0 || rtUpdates.size > 0
+        }, {
+            headers: { 'Cache-Control': 'no-store' },
         });
 
     } catch (error) {
         console.error('Vehicles API error:', error);
         return NextResponse.json(
             { error: 'Failed to fetch vehicles', vehicles: [], count: 0 },
-            { status: 500 }
+            {
+                status: 500,
+                headers: { 'Cache-Control': 'no-store' },
+            }
         );
     }
 }

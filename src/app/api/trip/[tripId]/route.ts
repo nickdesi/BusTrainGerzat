@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { protectApiRequest } from '@/lib/api-protection';
 import { fetchTripUpdates, LINE_E1_ROUTE_IDS } from '@/lib/gtfs-rt';
 import { getParisMidnight, getNowUnix } from '@/utils/date';
 import {
@@ -41,13 +42,19 @@ export async function GET(
     request: Request,
     { params }: { params: Promise<{ tripId: string }> }
 ) {
+    const blocked = protectApiRequest(request, 'trip');
+    if (blocked) return blocked;
+
     try {
         const { tripId } = await params;
 
         if (!isValidTripId(tripId)) {
             return NextResponse.json(
                 { error: 'Invalid tripId' },
-                { status: 400 }
+                {
+                    status: 400,
+                    headers: { 'Cache-Control': 'no-store' },
+                }
             );
         }
 
@@ -166,7 +173,9 @@ export async function GET(
                 stops,
                 timestamp: now,
                 isRealtime: hasRealTimeData,
-            } as TripDetailsResponse);
+            } as TripDetailsResponse, {
+                headers: { 'Cache-Control': 'no-store' },
+            });
         }
 
         // Fallback for added trips (no static data)
@@ -229,20 +238,28 @@ export async function GET(
                 stops,
                 timestamp: now,
                 isRealtime: true,
-            } as TripDetailsResponse);
+            } as TripDetailsResponse, {
+                headers: { 'Cache-Control': 'no-store' },
+            });
         }
 
         // No static data found and no RT data - return 404
         return NextResponse.json(
             { error: 'Trip not found', tripId },
-            { status: 404 }
+            {
+                status: 404,
+                headers: { 'Cache-Control': 'no-store' },
+            }
         );
 
     } catch (error) {
         console.error('Trip details error:', error);
         return NextResponse.json(
             { error: 'Failed to fetch trip details' },
-            { status: 500 }
+            {
+                status: 500,
+                headers: { 'Cache-Control': 'no-store' },
+            }
         );
     }
 }

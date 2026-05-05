@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import type { ReactNode } from 'react';
+import { APP_VERSION } from '@/lib/app-version';
 import {
     ArrowRight,
     BusFront,
@@ -14,20 +15,6 @@ import {
     Sparkles,
     TrainFront,
 } from 'lucide-react';
-import { promises as fs } from 'fs';
-import path from 'path';
-
-async function getAppVersion() {
-    try {
-        const packageJsonPath = path.join(process.cwd(), 'package.json');
-        const fileContents = await fs.readFile(packageJsonPath, 'utf8');
-        const packageJson = JSON.parse(fileContents);
-        return packageJson.version || 'LIVE';
-    } catch (error) {
-        console.error('Failed to read package.json version:', error);
-        return 'LIVE';
-    }
-}
 
 const highlights = [
     { value: 'E1', label: 'ligne bus suivie', icon: <BusFront className="h-4 w-4" /> },
@@ -135,8 +122,8 @@ function FeatureCard({ icon, title, description }: { icon: ReactNode; title: str
     );
 }
 
-export default async function LandingPage() {
-    const version = await getAppVersion();
+export default function LandingPage() {
+    const version = APP_VERSION;
 
     return (
         <main className="min-h-screen overflow-hidden bg-[#050505] text-white selection:bg-yellow-300/30">
