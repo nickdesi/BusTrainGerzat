@@ -103,7 +103,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
             eventHandlers={eventHandlers}
         >
             <Popup>
-                <div className="min-w-[240px] p-1">
+                <div className="w-[min(78vw,280px)] p-1 sm:min-w-[240px]">
                     <div className="mb-3 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.06] p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
                         <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-emerald-300/20 bg-emerald-300/10 text-emerald-200">
                             <Bus className="h-5 w-5" />
@@ -152,7 +152,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                             <div className="flex items-center justify-between gap-4">
                                 <div>
                                     <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-100/45">Terminus</div>
-                                    <div className="max-w-[145px] truncate text-sm font-semibold text-white">{vehicle.headsign}</div>
+                                    <div className="max-w-[130px] truncate text-sm font-semibold text-white sm:max-w-[145px]">{vehicle.headsign}</div>
                                 </div>
                                 <div className="text-right">
                                     <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-yellow-100/45">Arrivée</div>

@@ -29,7 +29,7 @@ export default function MapLegend({
     ];
 
     return (
-        <div className="absolute bottom-4 right-4 top-auto z-[calc(var(--z-modal)+1)] flex flex-col items-end gap-2 pointer-events-none md:bottom-auto md:top-4">
+        <div className="absolute inset-x-3 bottom-3 z-[calc(var(--z-modal)+1)] flex flex-col items-end gap-2 pointer-events-none md:inset-x-auto md:bottom-auto md:right-4 md:top-4">
             {/* Mobile Toggle Button */}
             <button
                 onClick={() => setIsLegendOpen(!isLegendOpen)}
@@ -42,10 +42,10 @@ export default function MapLegend({
 
             {/* Legend Content */}
             <div className={`
-                pointer-events-auto w-[min(19rem,calc(100vw-2rem))] rounded-[1.75rem] border border-white/10 bg-white/[0.055] p-1.5 shadow-[0_24px_80px_rgba(0,0,0,0.34)] backdrop-blur-xl transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] origin-bottom-right md:origin-top-right
+                pointer-events-auto max-h-[min(72dvh,32rem)] w-full overflow-y-auto rounded-[1.5rem] border border-white/10 bg-white/[0.055] p-1.5 shadow-[0_24px_80px_rgba(0,0,0,0.34)] backdrop-blur-xl transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] origin-bottom md:w-[19rem] md:origin-top-right
                 ${isLegendOpen ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-3 pointer-events-none md:opacity-100 md:translate-y-0 md:pointer-events-auto'}
             `}>
-                <div className="overflow-hidden rounded-[calc(1.75rem-0.375rem)] border border-white/10 bg-slate-950/86 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]">
+                <div className="overflow-hidden rounded-[calc(1.5rem-0.375rem)] border border-white/10 bg-slate-950/86 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)]">
                     {/* Header */}
                     <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.045] px-4 py-3">
                         <div>
@@ -73,7 +73,7 @@ export default function MapLegend({
                     </div>
 
                     {/* Content */}
-                    <div className="space-y-4 p-4">
+                    <div className="space-y-3 p-3 md:space-y-4 md:p-4">
                         <div className="flex items-center gap-3 rounded-2xl border border-emerald-300/15 bg-emerald-300/10 p-3">
                             <div className="flex h-11 w-11 items-center justify-center rounded-2xl border border-emerald-300/25 bg-slate-950/50">
                                 <span className="font-display text-lg font-black text-emerald-200">{lineData?.route?.routeShortName ?? 'E1'}</span>
@@ -97,7 +97,7 @@ export default function MapLegend({
                                             role="radio"
                                             aria-checked={isSelected}
                                             onClick={() => setRouteDirection(option.value)}
-                                            className={`rounded-xl px-2 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition-[transform,background-color,color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 ${isSelected ? 'bg-white/14 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]' : `${option.tone} bg-transparent opacity-70 hover:bg-white/[0.08] hover:opacity-100`}`}
+                                            className={`min-h-11 rounded-xl px-2 py-2 text-[10px] font-black uppercase tracking-[0.14em] transition-[transform,background-color,color] duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 ${isSelected ? 'bg-white/14 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]' : `${option.tone} bg-transparent opacity-70 hover:bg-white/[0.08] hover:opacity-100`}`}
                                         >
                                             {option.label}
                                         </button>

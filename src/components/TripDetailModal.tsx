@@ -35,7 +35,7 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
     if (!tripId) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4">
+        <div className="fixed inset-0 z-[9999] flex items-end justify-center p-0 sm:items-center sm:p-4">
             {/* Backdrop */}
             <div
                 className="absolute inset-0 bg-gray-950/80 backdrop-blur-md"
@@ -43,21 +43,21 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
             />
 
             {/* Modal */}
-            <div className="relative flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-gray-950/95 shadow-2xl shadow-black/50 ring-1 ring-white/5">
+            <div className="relative flex max-h-[calc(100dvh-env(safe-area-inset-top)-0.75rem)] w-full max-w-2xl flex-col overflow-hidden rounded-t-[1.75rem] border border-white/10 bg-gray-950/95 shadow-2xl shadow-black/50 ring-1 ring-white/5 sm:max-h-[90vh] sm:rounded-[2rem]">
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-yellow-400/10 via-emerald-400/5 to-transparent" />
 
                 {/* Header */}
-                <div className="relative flex items-center justify-between gap-4 border-b border-white/10 bg-white/[0.03] px-5 py-4 sm:px-6">
+                <div className="relative flex items-center justify-between gap-3 border-b border-white/10 bg-white/[0.03] px-4 py-3 sm:gap-4 sm:px-6 sm:py-4">
                     <div className="flex min-w-0 items-center gap-3">
                         <div
-                            className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl shadow-lg shadow-yellow-500/20 ring-1 ring-white/20"
+                            className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl shadow-lg shadow-yellow-500/20 ring-1 ring-white/20 sm:h-12 sm:w-12"
                             style={{ backgroundColor: '#fdc300' }}
                         >
                             <Bus className="h-6 w-6 text-black" />
                         </div>
                         <div className="min-w-0">
                             <div className="mb-1 flex items-center gap-2">
-                                <span className="rounded-full bg-yellow-400 px-2.5 py-1 text-xs font-black text-black shadow-sm">
+                                <span className="rounded-full bg-yellow-400 px-2.5 py-1 text-[11px] font-black text-black shadow-sm sm:text-xs">
                                     Ligne {lineName}
                                 </span>
                                 {tripData?.isRealtime && (
@@ -68,8 +68,8 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                             </div>
                             {tripData ? (
                                 <div className="min-w-0 text-sm text-gray-400">
-                                    <p className="truncate text-xs uppercase tracking-[0.18em] text-gray-500">Départ · {tripData.origin}</p>
-                                    <p className="truncate text-base font-bold text-white">→ {tripData.headsign}</p>
+                                    <p className="truncate text-[11px] uppercase tracking-[0.14em] text-gray-500 sm:text-xs sm:tracking-[0.18em]">Départ · {tripData.origin}</p>
+                                    <p className="truncate text-sm font-bold text-white sm:text-base">→ {tripData.headsign}</p>
                                 </div>
                             ) : (
                                 <h2 className="text-lg font-bold text-white">Détail du trajet</h2>
@@ -78,7 +78,7 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                     </div>
                     <button
                         onClick={onClose}
-                        className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-gray-400 transition hover:bg-white/10 hover:text-white"
+                        className="flex min-h-12 min-w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-gray-300 transition hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950"
                         aria-label="Fermer"
                     >
                         <X className="h-5 w-5" />
@@ -86,7 +86,7 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                 </div>
 
                 {/* Body */}
-                <div className="relative flex-1 overflow-y-auto p-3 sm:p-5">
+                <div className="relative flex-1 overflow-y-auto overscroll-contain p-2.5 sm:p-5">
                     {error ? (
                         <div className="flex flex-col items-center justify-center rounded-3xl border border-red-400/15 bg-red-500/[0.06] py-14 text-red-300">
                             <AlertCircle className="mb-3 h-10 w-10" />
@@ -106,7 +106,7 @@ export default function TripDetailModal({ tripId, lineName, onClose }: TripDetai
                 </div>
 
                 {/* Footer */}
-                <div className="relative border-t border-white/10 bg-white/[0.03] px-5 py-3 sm:px-6">
+                <div className="relative border-t border-white/10 bg-white/[0.03] px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 sm:px-6 sm:pb-3">
                     <div className="flex flex-col gap-2 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
                         <span>
                             {tripData?.isRealtime ? (

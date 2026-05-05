@@ -426,3 +426,47 @@ body {
 .leaflet-marker-shadow {
   display: none;
 }
+
+@media (max-width: 640px) {
+  .transit-map .leaflet-control-zoom {
+    margin-left: 12px !important;
+    margin-bottom: calc(12px + env(safe-area-inset-bottom)) !important;
+    border-radius: 20px !important;
+  }
+
+  .transit-map .leaflet-control-zoom a {
+    width: 48px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 22px !important;
+  }
+
+  .leaflet-popup {
+    margin-bottom: 10px !important;
+  }
+
+  .leaflet-popup-content-wrapper {
+    max-width: calc(100vw - 32px) !important;
+    border-radius: 20px !important;
+  }
+
+  .leaflet-popup-content {
+    max-width: calc(100vw - 32px) !important;
+  }
+
+  .leaflet-popup-close-button {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 26px !important;
+  }
+
+  .bus-icon-container {
+    width: 56px;
+    height: 56px;
+  }
+
+  .bus-icon-pulse {
+    width: 50px;
+    height: 50px;
+  }
+}
