@@ -33,3 +33,7 @@
 ## 2026-05-26 - Avoiding Array.includes() and filter() inside useMemo loops
 **Learning:** Found an anti-pattern in `src/app/app/page.tsx` and `src/app/app/arrivees/page.tsx` where stats were being calculated using multiple `.filter()` calls, one of which used `favoriteIds.includes(d.id)`. This caused O(N) intermediate array creations and O(N*M) lookups inside a `useMemo` block that runs on every data update.
 **Action:** Replace multiple `.filter()` calls with a single loop and use a `Set` for O(1) lookups instead of `Array.includes()`. This avoids intermediate array allocations and reduces time complexity from O(N*M) to O(N).
+
+## 2026-05-03 - Avoiding redundant filter() calls for simple stats calculation
+**Learning:** Found an anti-pattern in `src/app/app/carte/page.tsx` where multiple `.filter().length` calls were chained sequentially on the same array to compute counts for different booleans (`isRealtime`). This leads to unnecessary O(N) array allocations and degrades performance when dealing with large datasets.
+**Action:** Replace multiple `.filter()` calls with a single O(N) `for...of` loop that calculates all necessary statistics in one pass without creating intermediate array references.
