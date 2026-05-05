@@ -4,13 +4,10 @@
 
 ### 🔒 Sécurité & robustesse
 
-- **Dépendances** : correction de l’audit npm (`0 vulnerabilities`) via mise à jour de `next`, `eslint-config-next`, `protobufjs` et overrides sécurisés pour `postcss`/`hono`.
-- **Version déploiement** : alignement `package.json`/`package-lock.json` sur `3.7.3` pour que Coolify n’affiche plus `bus-train-gerzat@3.7.0`.
-- **Runtime Coolify** : verrouillage Nixpacks sur Node `24.15.0` afin d’éviter les builds avec une version Node incompatible avec `engines.node`.
-- **API détail trajet** : validation stricte des `tripId` avant traitement (`400` si identifiant invalide).
-- **API véhicules** : extraction de l’interpolation géographique dans `src/lib/vehicle-interpolation.ts` et suppression des accès indexés risqués signalés par ESLint security.
-- **Service worker** : version de cache stable, nettoyage limité aux caches Gerzat Live et réponse JSON structurée en mode hors-ligne pour les APIs.
-- **PWA update UX** : remplacement du rechargement forcé par une bannière de mise à jour déclenchée par l’utilisateur.
+- **Dépendances** : Correction de 15 CVE via `npm audit fix`.
+  - **Critical** : `handlebars` (JS Injection via AST confusion, prototype pollution).
+  - **High** : `@hono/node-server` (authorization bypass), `flatted` (DoS / prototype pollution), `hono` (cookie injection, SSE injection, path traversal), `lodash` (code injection, prototype pollution), `minimatch` (ReDoS), `path-to-regexp` (ReDoS), `picomatch` (method injection + ReDoS), `underscore` (DoS recursion infinie).
+  - **Moderate** : `ajv` (ReDoS), `brace-expansion` (DoS), `markdown-it` (ReDoS), `next` (HTTP smuggling, CSRF bypass), `qs` (DoS arrayLimit).
 
 ### ♿ Accessibilité & SEO
 
@@ -45,7 +42,7 @@
   - `Content-Security-Policy` — liste blanche des sources (tiles CartoDB, service worker blob:).
 - **Dépendances** : Correction de 15 CVE via `npm audit fix`.
   - **Critical** : `handlebars` (JS Injection via AST confusion, prototype pollution).
-  - **High** : `@hono/node-server` (authorization bypass), `@modelcontextprotocol/sdk` (cross-client data leak), `flatted` (DoS / prototype pollution), `hono` (cookie injection, SSE injection, path traversal), `lodash` (code injection, prototype pollution), `minimatch` (ReDoS), `path-to-regexp` (ReDoS), `picomatch` (method injection + ReDoS), `underscore` (DoS recursion infinie).
+  - **High** : `@hono/node-server` (authorization bypass), `flatted` (DoS / prototype pollution), `hono` (cookie injection, SSE injection, path traversal), `lodash` (code injection, prototype pollution), `minimatch` (ReDoS), `path-to-regexp` (ReDoS), `picomatch` (method injection + ReDoS), `underscore` (DoS recursion infinie).
   - **Moderate** : `ajv` (ReDoS), `brace-expansion` (DoS), `markdown-it` (ReDoS), `next` (HTTP smuggling, CSRF bypass), `qs` (DoS arrayLimit).
 
 ## [3.7.0] - 2026-02-07
@@ -109,17 +106,10 @@
 
 ## [3.5.0] - 2026-01-04
 
-### 🤖 Interface IA (MCP)
-
-- **Nouveau Serveur MCP** : Implémentation du *Model Context Protocol* pour permettre aux agents IA de requêter l'application.
-  - **Tools** : `get_bus_positions`, `get_departures`, `get_line_status`.
-  - **Architecture** : Serveur TypeScript léger utilisant les services existants (`gtfs-rt`, `data-source`).
-  - **Commande** : `npm run mcp` pour lancer le serveur sur stdio.
-
 ### 🛠 Maintenance
 
 - **Setup Check** : Nouveau script `.agent/scripts/check-env.sh` pour vérifier l'environnement de dev.
-- **Dépendances** : Ménage dans `package.json` (ajout `zod`, `tsx`, `tsconfig-paths`, `@modelcontextprotocol/sdk`).
+- **Dépendances** : Ménage dans `package.json`.
 
 ## [3.4.1] - 2026-01-04
 

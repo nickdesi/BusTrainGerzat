@@ -167,20 +167,6 @@ flowchart LR
   SouthVehicles --> Leaflet
 ```
 
-## 🧠 Serveur MCP
-
-Le projet expose un serveur **MCP (Model Context Protocol)** pour permettre à un agent IA d’interroger les données de transport.
-
-Outils disponibles :
-
-- `get_bus_positions` : positions GPS et cap des bus E1 ;
-- `get_departures` : prochains départs, filtrables par type (`BUS`, `TRAIN`, `ALL`) ;
-- `get_line_status` : résumé de ligne, nombre de véhicules et retard moyen.
-
-```bash
-npm run mcp
-```
-
 ## 🛠️ Stack technique
 
 - **Framework** : Next.js 16, App Router
@@ -202,7 +188,6 @@ src/
 ├── components/map/   # Carte E1, légende, statut, overlays et rendu Leaflet
 ├── hooks/            # Hooks TanStack Query, favoris, fraîcheur et temps réel
 ├── lib/              # Clients API, GTFS-RT, fraîcheur, logging, rate-limit
-├── mcp-server/       # Serveur MCP pour interrogation agent IA
 ├── services/         # Services métier T2C, ligne E1 et SNCF/Navitia
 ├── types/            # Types TypeScript partagés
 └── utils/            # Formatage et helpers date
@@ -253,7 +238,6 @@ npm run build    # build production
 npm run start    # serveur production
 npm run lint     # analyse ESLint
 npm run test     # tests Jest
-npm run mcp      # serveur MCP
 ```
 
 Validation complète recommandée avant publication :
