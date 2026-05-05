@@ -51,6 +51,7 @@ jobs:
         run: |
           python scripts/gtfs/generate_static_json.py
           python scripts/gtfs/generate_e1_stop_times.py
+          python scripts/gtfs/extract_lineE1_data.py
 
       - name: Validate generated data
         if: steps.sentinel_check.outputs.is_updated == 'true'
@@ -62,6 +63,7 @@ jobs:
           schedule = json.loads(Path('src/data/static_schedule.json').read_text())
           config = json.loads(Path('src/data/gtfs_config.json').read_text())
           stop_times = json.loads(Path('public/data/e1_stop_times.json').read_text())
+          line_e1 = json.loads(Path('public/data/lineE1_data.json').read_text())
 
           if len(schedule) < 100:
               raise RuntimeError(f'Too few scheduled stops: {len(schedule)}')
@@ -73,6 +75,10 @@ jobs:
               raise RuntimeError('Missing Patural stop ids')
           if not isinstance(stop_times, list) or not stop_times:
               raise RuntimeError('Missing E1 stop times')
+          if len(line_e1.get('stops', [])) < 50:
+              raise RuntimeError(f"Too few E1 map stops: {len(line_e1.get('stops', []))}")
+          if not line_e1.get('shapes', {}).get('0') or not line_e1.get('shapes', {}).get('1'):
+              raise RuntimeError('Missing E1 map shapes')
           print('✅ Generated data validation passed')
           PY
 
@@ -80,7 +86,7 @@ jobs:
         if: steps.sentinel_check.outputs.is_updated == 'true'
         id: check_changes
         run: |
-          git add src/data/gtfs_config.json src/data/static_schedule.json public/data/e1_stop_times.json
+          git add src/data/gtfs_config.json src/data/static_schedule.json public/data/e1_stop_times.json public/data/lineE1_data.json
           if git diff --cached --quiet; then
             echo "changes=false" >> $GITHUB_OUTPUT
             echo "ℹ️ No changes detected"
