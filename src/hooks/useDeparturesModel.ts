@@ -1,24 +1,10 @@
 import { useMemo } from 'react';
-import { UnifiedEntry, Update, TrainUpdate } from '@/types';
+import { UnifiedEntry, TrainUpdate } from '@/types';
 import { normalizeText } from '@/utils/format';
 import { BusUpdate } from './useBusData';
 
-/**
- * Deduplicate bus updates by time (rounded to minute) + headsign
- * Optimized to O(N) using a Set
- */
-function deduplicate(items: Update[]): Update[] {
-    const seen = new Set<string>();
-    return items.filter((update) => {
-        const roundedTime = Math.floor(update.arrival / 60);
-        const key = `${roundedTime}-${update.headsign}`;
-        if (seen.has(key)) {
-            return false;
-        }
-        seen.add(key);
-        return true;
-    });
-}
+// ⚡ Bolt: Removed standalone deduplicate function that used .filter()
+// Deduplication is now integrated into the single-pass for...of loop
 
 /**
  * Map a bus update to a unified departure entry
@@ -104,21 +90,41 @@ export function useDeparturesModel(
     trainUpdates: TrainUpdate[] = EMPTY_TRAIN_UPDATES
 ): DeparturesModelResult {
     return useMemo(() => {
-        // Filter by direction:
-        // - Departures: buses LEAVING Gerzat (direction 0)
-        // - Arrivals: buses ARRIVING at Gerzat (direction 1)
-        const busDepartures = deduplicate(busUpdates.filter(u => u.direction === 0));
-        const busArrivals = deduplicate(busUpdates.filter(u => u.direction === 1));
+        const deps: UnifiedEntry[] = [];
+        const arrs: UnifiedEntry[] = [];
 
-        const deps: UnifiedEntry[] = [
-            ...busDepartures.map(mapBusDeparture),
-            ...trainUpdates.map(t => mapTrain(t, 'Voie 1')),
-        ].sort((a, b) => a.time - b.time);
+        // ⚡ Bolt: Single-pass processing for buses to avoid multiple array allocations
+        // This replaces multiple calls to .filter(), deduplicate(), and .map()
+        const seenDeps = new Set<string>();
+        const seenArrs = new Set<string>();
 
-        const arrs: UnifiedEntry[] = [
-            ...busArrivals.map(mapBusArrival),
-            ...trainUpdates.map(t => mapTrain(t, 'Voie 2')),
-        ].sort((a, b) => a.arrivalTime - b.arrivalTime);
+        for (const u of busUpdates) {
+            const roundedTime = Math.floor(u.arrival / 60);
+            const key = `${roundedTime}-${u.headsign}`;
+
+            if (u.direction === 0) {
+                // Departures: buses LEAVING Gerzat
+                if (!seenDeps.has(key)) {
+                    seenDeps.add(key);
+                    deps.push(mapBusDeparture(u));
+                }
+            } else if (u.direction === 1) {
+                // Arrivals: buses ARRIVING at Gerzat
+                if (!seenArrs.has(key)) {
+                    seenArrs.add(key);
+                    arrs.push(mapBusArrival(u));
+                }
+            }
+        }
+
+        // ⚡ Bolt: Single-pass processing for trains
+        for (const t of trainUpdates) {
+            deps.push(mapTrain(t, 'Voie 1'));
+            arrs.push(mapTrain(t, 'Voie 2'));
+        }
+
+        deps.sort((a, b) => a.time - b.time);
+        arrs.sort((a, b) => a.arrivalTime - b.arrivalTime);
 
         return { departures: deps, arrivals: arrs };
     }, [busUpdates, trainUpdates]);

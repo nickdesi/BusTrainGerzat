@@ -35,21 +35,26 @@ export default function Arrivees() {
 
     // Filter arrivals based on transport type and search query
     const filteredArrivals = useMemo(() => {
-        let result = arrivals;
+        if (filter === 'all' && !searchQuery) return arrivals;
 
-        // Type filter
-        if (filter === 'bus') result = result.filter(a => a.type === 'BUS');
-        else if (filter === 'train') result = result.filter(a => a.type === 'TER');
+        const q = searchQuery ? searchQuery.toLowerCase() : '';
 
-        // Search filter
-        if (searchQuery) {
-            const q = searchQuery.toLowerCase();
-            result = result.filter(a =>
-                a.line.toLowerCase().includes(q) ||
-                (a.provenance && a.provenance.toLowerCase().includes(q))
-            );
-        }
-        return result;
+        // ⚡ Bolt: Single-pass filtering combining both type and search filters
+        // to avoid multiple intermediate array allocations
+        return arrivals.filter(a => {
+            // Type filter
+            if (filter === 'bus' && a.type !== 'BUS') return false;
+            if (filter === 'train' && a.type !== 'TER') return false;
+
+            // Search filter
+            if (q) {
+                if (!a.line.toLowerCase().includes(q) && !(a.provenance && a.provenance.toLowerCase().includes(q))) {
+                    return false;
+                }
+            }
+
+            return true;
+        });
     }, [arrivals, filter, searchQuery]);
 
     const arrivalStats = useMemo(() => {

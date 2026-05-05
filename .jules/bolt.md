@@ -33,3 +33,7 @@
 ## 2026-05-26 - Avoiding Array.includes() and filter() inside useMemo loops
 **Learning:** Found an anti-pattern in `src/app/app/page.tsx` and `src/app/app/arrivees/page.tsx` where stats were being calculated using multiple `.filter()` calls, one of which used `favoriteIds.includes(d.id)`. This caused O(N) intermediate array creations and O(N*M) lookups inside a `useMemo` block that runs on every data update.
 **Action:** Replace multiple `.filter()` calls with a single loop and use a `Set` for O(1) lookups instead of `Array.includes()`. This avoids intermediate array allocations and reduces time complexity from O(N*M) to O(N).
+
+## 2024-05-05 - Avoid chained array operations in React memo blocks
+**Learning:** Chained array operations like `.filter(...).filter(...)` or `.filter(...).map(...)` inside `useMemo` hooks cause intermediate array allocations on every render. This creates unnecessary garbage collection overhead.
+**Action:** Always combine conditions into a single `.filter()` pass or use a `for...of` loop when multiple transformations are needed in a single render pass.
