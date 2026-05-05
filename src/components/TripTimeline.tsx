@@ -70,9 +70,9 @@ const TripTimeline = memo(function TripTimeline({
     }
 
     return (
-        <div className="space-y-5">
-            <div className="overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 shadow-2xl shadow-black/30">
-                <div className="border-b border-white/10 bg-white/[0.03] px-4 py-3">
+        <div className="space-y-3 sm:space-y-5">
+            <div className="overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-gray-950 via-gray-900 to-gray-950 shadow-2xl shadow-black/30 sm:rounded-3xl">
+                <div className="border-b border-white/10 bg-white/[0.03] px-3 py-3 sm:px-4">
                     <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-gray-400">
                         <div className="flex items-center gap-2">
                             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400/15 text-yellow-300 ring-1 ring-yellow-300/25">
@@ -101,7 +101,7 @@ const TripTimeline = memo(function TripTimeline({
                 </div>
 
                 {previousStop && nextStop && (
-                    <div className="m-4 rounded-2xl border border-emerald-300/20 bg-emerald-400/[0.07] p-4 shadow-lg shadow-emerald-950/20">
+                    <div className="m-3 rounded-2xl border border-emerald-300/20 bg-emerald-400/[0.07] p-3 shadow-lg shadow-emerald-950/20 sm:m-4 sm:p-4">
                         <div className="mb-3 flex items-center gap-3">
                             <div className="relative flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400 text-gray-950 shadow-lg shadow-emerald-500/25">
                                 <span className="absolute inset-0 rounded-2xl bg-emerald-300/40 blur-md" />
@@ -111,7 +111,7 @@ const TripTimeline = memo(function TripTimeline({
                                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-200/80">Bus en approche</p>
                                 <p className="truncate text-base font-bold text-white">{nextStop.stopName}</p>
                             </div>
-                            <span className="ml-auto rounded-full bg-black/25 px-3 py-1 font-mono text-sm font-semibold text-emerald-100 ring-1 ring-white/10">
+                            <span className="ml-auto shrink-0 rounded-full bg-black/25 px-3 py-1 font-mono text-sm font-semibold text-emerald-100 ring-1 ring-white/10">
                                 {formatTime(nextStop.predictedArrival)}
                             </span>
                         </div>
@@ -128,8 +128,8 @@ const TripTimeline = memo(function TripTimeline({
                     </div>
                 )}
 
-                <div className="px-4 pb-4">
-                    <div className="relative rounded-2xl bg-black/15 px-3 py-2">
+                <div className="px-2.5 pb-3 sm:px-4 sm:pb-4">
+                    <div className="relative rounded-2xl bg-black/15 px-2 py-2 sm:px-3">
                         {stops.map((stop, index) => {
                             const isFirst = index === 0;
                             const isLast = index === stops.length - 1;
@@ -144,7 +144,7 @@ const TripTimeline = memo(function TripTimeline({
                             const showStrikethrough = isRealtime && stop.delay !== 0 && !isPassed && scheduledTime !== predictedTime;
 
                             return (
-                                <div key={stop.stopId} className={`relative grid grid-cols-[2.75rem_1fr] gap-3 ${isPassed ? 'opacity-55' : ''}`}>
+                                <div key={stop.stopId} className={`relative grid grid-cols-[2.25rem_1fr] gap-2 sm:grid-cols-[2.75rem_1fr] sm:gap-3 ${isPassed ? 'opacity-55' : ''}`}>
                                     <div className="relative flex justify-center">
                                         {!isLast && (
                                             <div className="absolute top-8 bottom-0 w-1 overflow-hidden rounded-full bg-white/10">
@@ -179,12 +179,12 @@ const TripTimeline = memo(function TripTimeline({
                                         </div>
                                     </div>
 
-                                    <div className={`pb-4 ${isLast ? 'pb-1' : ''}`}>
-                                        <div className={`rounded-2xl border px-3.5 py-3 transition-all ${isCurrent
+                                    <div className={`pb-3 sm:pb-4 ${isLast ? 'pb-1' : ''}`}>
+                                        <div className={`rounded-2xl border px-3 py-3 transition-all sm:px-3.5 ${isCurrent
                                             ? 'border-emerald-300/30 bg-emerald-400/[0.08] shadow-lg shadow-emerald-950/20'
                                             : 'border-white/8 bg-white/[0.035] hover:bg-white/[0.055]'
                                             }`}>
-                                            <div className="flex items-start justify-between gap-3">
+                                            <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
                                                 <div className="min-w-0">
                                                     <div className="flex flex-wrap items-center gap-2">
                                                         <h3 className={`break-words text-sm font-semibold leading-snug ${isCurrent ? 'text-emerald-100' : isPassed ? 'text-gray-500' : 'text-gray-100'} ${isTerminus ? 'text-base' : ''}`}>
@@ -199,7 +199,7 @@ const TripTimeline = memo(function TripTimeline({
                                                     </div>
                                                 </div>
 
-                                                <div className="flex shrink-0 flex-col items-end gap-1">
+                                                <div className="flex shrink-0 flex-row items-center justify-between gap-2 sm:flex-col sm:items-end sm:justify-start sm:gap-1">
                                                     <div className="flex items-center gap-1.5 rounded-xl bg-black/25 px-2.5 py-1 ring-1 ring-white/10">
                                                         {showStrikethrough && <span className="font-mono text-[11px] text-gray-500 line-through">{scheduledTime}</span>}
                                                         {isRealtime && !isPassed && <Wifi className="h-3 w-3 text-emerald-300" />}

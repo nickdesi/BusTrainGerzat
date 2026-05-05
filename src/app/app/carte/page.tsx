@@ -14,7 +14,7 @@ const BusMap = dynamic(() => import('@/components/BusMap'), {
 
 function MapLoadingState() {
     return (
-        <div className="flex h-full min-h-[420px] items-center justify-center overflow-hidden rounded-[1.75rem] border border-white/10 bg-black/45 shadow-2xl shadow-black/40 backdrop-blur-xl">
+        <div className="flex h-full min-h-[min(68dvh,640px)] items-center justify-center overflow-hidden rounded-[1.25rem] border border-white/10 bg-black/45 shadow-2xl shadow-black/40 backdrop-blur-xl md:min-h-[420px] md:rounded-[1.75rem]">
             <div className="text-center">
                 <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-400/25 bg-emerald-400/10">
                     <RefreshCw className="h-7 w-7 animate-spin text-emerald-300" aria-hidden="true" />
@@ -41,12 +41,12 @@ function getMetricToneClasses(tone: 'green' | 'yellow' | 'blue' | 'neutral') {
 
 function MetricCard({ icon: Icon, label, value, tone }: { icon: typeof Bus; label: string; value: number | string; tone: 'green' | 'yellow' | 'blue' | 'neutral' }) {
     return (
-        <div className={`relative overflow-hidden rounded-3xl border bg-gradient-to-br p-4 shadow-xl shadow-black/25 ${getMetricToneClasses(tone)}`}>
+        <div className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br p-3 shadow-xl shadow-black/25 md:rounded-3xl md:p-4 ${getMetricToneClasses(tone)}`}>
             <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-current opacity-10 blur-2xl" aria-hidden="true" />
             <div className="relative flex items-center justify-between gap-4">
                 <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.24em] opacity-70">{label}</p>
-                    <p className="mt-2 text-3xl font-black leading-none text-white md:text-4xl">{value}</p>
+                    <p className="mt-1.5 text-2xl font-black leading-none text-white md:mt-2 md:text-4xl">{value}</p>
                 </div>
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-black/25">
                     <Icon className="h-6 w-6" aria-hidden="true" />
@@ -93,7 +93,7 @@ export default function CartePage() {
     };
 
     return (
-        <main id="main-content" className="min-h-screen overflow-hidden bg-[#050505] px-3 py-4 text-gray-100 md:px-6 md:py-6">
+        <main id="main-content" className="min-h-screen overflow-hidden bg-[#050505] px-2 py-3 text-gray-100 md:px-6 md:py-6">
             <div className="pointer-events-none fixed inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(16,185,129,0.22),transparent_28%),radial-gradient(circle_at_80%_0%,rgba(253,195,0,0.18),transparent_24%),linear-gradient(135deg,#050505_0%,#101014_52%,#050505_100%)]" aria-hidden="true" />
             <div className="pointer-events-none fixed inset-0 bg-[linear-gradient(rgba(255,255,255,0.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:48px_48px] opacity-20 [mask-image:radial-gradient(circle_at_center,black,transparent_72%)]" aria-hidden="true" />
 
@@ -104,28 +104,28 @@ export default function CartePage() {
                 Aller à la carte live
             </a>
 
-            <div className="relative mx-auto grid min-h-[calc(100vh-2rem)] max-w-[1800px] gap-4 xl:grid-cols-[24rem_minmax(0,1fr)]">
-                <aside className="relative z-10 flex flex-col gap-4 xl:min-h-[calc(100vh-3rem)]">
-                    <header className="overflow-hidden rounded-[2rem] border border-emerald-300/20 bg-black/55 p-5 shadow-2xl shadow-black/50 backdrop-blur-xl">
-                        <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-100">
+            <div className="relative mx-auto grid min-h-[calc(100dvh-1.5rem)] max-w-[1800px] gap-3 md:gap-4 xl:grid-cols-[24rem_minmax(0,1fr)]">
+                <aside className="relative z-10 flex flex-col gap-3 md:gap-4 xl:min-h-[calc(100vh-3rem)]">
+                    <header className="overflow-hidden rounded-[1.5rem] border border-emerald-300/20 bg-black/55 p-4 shadow-2xl shadow-black/50 backdrop-blur-xl md:rounded-[2rem] md:p-5">
+                        <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-100 md:mb-5">
                             <Radar className="h-3.5 w-3.5" aria-hidden="true" /> Live Ops
                         </div>
-                        <h1 className="font-mono text-4xl font-black uppercase leading-none tracking-tight text-white md:text-5xl xl:text-6xl">
+                        <h1 className="font-mono text-3xl font-black uppercase leading-none tracking-tight text-white md:text-5xl xl:text-6xl">
                             Ligne<br /><span className="text-emerald-300 text-glow">E1</span>
                         </h1>
-                        <p className="mt-4 text-sm font-semibold uppercase leading-6 tracking-[0.18em] text-gray-400">
+                        <p className="mt-3 text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-gray-400 md:mt-4 md:text-sm md:leading-6 md:tracking-[0.18em]">
                             Carte temps réel Gerzat, Clermont, Aubière et Romagnat.
                         </p>
                     </header>
 
-                    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
+                    <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
                         <MetricCard icon={Bus} label="Bus visibles" value={stats.total} tone="green" />
                         <MetricCard icon={Satellite} label="Signal GPS" value={stats.realtime} tone="yellow" />
                         <MetricCard icon={MapPin} label="Arrêts" value={stats.stops} tone="blue" />
                         <MetricCard icon={Clock3} label="Estimées" value={stats.estimated} tone="neutral" />
                     </div>
 
-                    <section className="rounded-[2rem] border border-white/10 bg-black/55 p-4 shadow-2xl shadow-black/40 backdrop-blur-xl">
+                    <section className="rounded-[1.5rem] border border-white/10 bg-black/55 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl md:rounded-[2rem] md:p-4">
                         <div className="mb-4 flex items-center justify-between gap-3">
                             <div>
                                 <p className="text-[10px] font-black uppercase tracking-[0.24em] text-gray-500">Console</p>
@@ -162,10 +162,10 @@ export default function CartePage() {
                     </section>
                 </aside>
 
-                <section id="live-map" aria-label="Carte live de la ligne E1" className="relative z-0 min-h-[68vh] overflow-hidden rounded-[2.25rem] border border-white/10 bg-black shadow-2xl shadow-black/60 md:min-h-[760px] xl:min-h-[calc(100vh-3rem)]">
-                    <div className="pointer-events-none absolute inset-0 z-[2] rounded-[2.25rem] ring-1 ring-inset ring-white/10" aria-hidden="true" />
-                    <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] flex items-center justify-between gap-3 bg-gradient-to-b from-black/70 via-black/25 to-transparent p-4 md:p-6" aria-hidden="true">
-                        <div className="rounded-full border border-white/10 bg-black/50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-white/80 backdrop-blur-xl">
+                <section id="live-map" aria-label="Carte live de la ligne E1" className="relative z-0 min-h-[min(72dvh,720px)] overflow-hidden rounded-[1.5rem] border border-white/10 bg-black shadow-2xl shadow-black/60 md:min-h-[760px] md:rounded-[2.25rem] xl:min-h-[calc(100vh-3rem)]">
+                    <div className="pointer-events-none absolute inset-0 z-[2] rounded-[1.5rem] ring-1 ring-inset ring-white/10 md:rounded-[2.25rem]" aria-hidden="true" />
+                    <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] flex items-center justify-between gap-3 bg-gradient-to-b from-black/70 via-black/25 to-transparent p-3 md:p-6" aria-hidden="true">
+                        <div className="rounded-full border border-white/10 bg-black/50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/80 backdrop-blur-xl md:px-4 md:text-xs md:tracking-[0.24em]">
                             <Navigation className="mr-2 inline h-4 w-4 text-emerald-300" />Carte opérationnelle
                         </div>
                         <div className="hidden rounded-full border border-white/10 bg-black/50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-white/60 backdrop-blur-xl md:block">

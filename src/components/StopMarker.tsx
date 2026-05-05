@@ -32,7 +32,7 @@ const StopMarker = memo(function StopMarker({ stop, isTerminus, routeColor }: St
             opacity={isTerminus ? 0.95 : 0.72}
         >
             <Popup>
-                <div className="min-w-[180px] p-1 text-white">
+                <div className="w-[min(72vw,240px)] p-1 text-white sm:min-w-[180px]">
                     <div className="rounded-2xl border border-white/10 bg-white/[0.055] p-3">
                         <div className="mb-1 text-[10px] font-bold uppercase tracking-[0.18em] text-white/40">Arrêt E1</div>
                         <div className="font-display text-base font-black leading-tight">{stop.stopName}</div>
