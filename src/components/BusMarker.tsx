@@ -2,6 +2,7 @@
 
 import { useMemo, memo, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { divIcon } from 'leaflet';
 import { VehiclePosition } from '@/hooks/useVehiclePositions';
 import { Bus } from 'lucide-react';
 
@@ -51,7 +52,6 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // Create custom bus icon with SVG that rotates properly
     const busIcon = useMemo(() => {
         if (typeof window === 'undefined') return null;
-        const L = require('leaflet');
 
         // SVG bus icon pointing up (will be rotated by bearing)
         const svgIcon = `
@@ -61,7 +61,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
             </svg>
         `;
 
-        return L.divIcon({
+        return divIcon({
             className: 'bus-marker',
             html: `
                 <div class="bus-icon-container" style="--bus-color:${iconColor}">

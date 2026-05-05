@@ -26,7 +26,7 @@ export interface LineE1Data {
 }
 
 async function fetchLineE1Data(): Promise<LineE1Data> {
-    const res = await fetch('/api/lineE1');
+    const res = await fetch('/data/lineE1_data.json');
     if (!res.ok) {
         throw new Error('Failed to fetch Line E1 data');
     }

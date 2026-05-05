@@ -17,6 +17,24 @@ const LeafletMapClient = dynamic(() => import('./map/LeafletMapClient'), {
     loading: () => <BusMapSkeleton />,
 });
 
+const MAIN_TERMINI = new Set([
+    'GERZAT Champfleuri',
+    "ROMAGNAT La Gazelle",
+    "AUBIÈRE Pl. des Ramacles"
+]);
+
+// Calculate distance between two coordinates in meters (Haversine formula)
+const getDistanceMeters = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
+    const R = 6371000; // Earth's radius in meters
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+};
+
 // Center of the Line E1 route (approximately)
 const MAP_CENTER: [number, number] = [45.78, 3.10]; // Centered between Gerzat and Romagnat
 const MAP_ZOOM = 12;
@@ -37,32 +55,15 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const terminusStopIds = useMemo(() => {
         if (!lineData) return new Set<string>();
         const ids = new Set<string>();
-        const MAIN_TERMINI = [
-            'GERZAT Champfleuri',
-            "ROMAGNAT La Gazelle",
-            "AUBIÈRE Pl. des Ramacles"
-        ];
 
-        lineData.stops.forEach(stop => {
-            if (MAIN_TERMINI.includes(stop.stopName)) {
+        for (const stop of lineData.stops) {
+            if (MAIN_TERMINI.has(stop.stopName)) {
                 ids.add(stop.stopId);
             }
-        });
+        }
 
         return ids;
     }, [lineData]);
-
-    // Calculate distance between two coordinates in meters (Haversine formula)
-    const getDistanceMeters = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-        const R = 6371000; // Earth's radius in meters
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    };
 
     // Deduplicate stops only if they have same name AND are very close (< 5m)
     // Keep both stops if they're on opposite sides of the road (> 5m apart)
@@ -71,39 +72,54 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         const result: Stop[] = [];
         const seenByName = new Map<string, Stop[]>();
 
-        // Group stops by name
-        lineData.stops.forEach(stop => {
-            const existing = seenByName.get(stop.stopName) || [];
-            existing.push(stop);
-            seenByName.set(stop.stopName, existing);
-        });
+        for (const stop of lineData.stops) {
+            const existing = seenByName.get(stop.stopName);
+            if (existing) {
+                existing.push(stop);
+            } else {
+                seenByName.set(stop.stopName, [stop]);
+            }
+        }
 
-        // For each name, keep unique positions (> 5m apart)
-        seenByName.forEach(stops => {
-            stops.forEach(stop => {
-                // Check if we already added a stop at nearly the same position
-                const isDuplicate = result.some(existing =>
-                    existing.stopName === stop.stopName &&
+        for (const stops of seenByName.values()) {
+            const uniqueForName: Stop[] = [];
+
+            for (const stop of stops) {
+                const isDuplicate = uniqueForName.some(existing =>
                     getDistanceMeters(existing.lat, existing.lon, stop.lat, stop.lon) < 5
                 );
+
                 if (!isDuplicate) {
+                    uniqueForName.push(stop);
                     result.push(stop);
                 }
-            });
-        });
+            }
+        }
 
         return result;
     }, [lineData]);
 
+    const visibleStops = useMemo(() => {
+        if (!showStops) return [];
+        if (currentZoom >= 14) return uniqueStops;
+        return uniqueStops.filter(stop => terminusStopIds.has(stop.stopId));
+    }, [currentZoom, showStops, terminusStopIds, uniqueStops]);
+
     // Vehicle markers with collision detection
     const vehicleMarkers = useMemo(() => {
-        const selectedVehicles = routeDirection === 'all'
-            ? (vehicleData?.vehicles || [])
-            : (vehicleData?.vehicles || []).filter(vehicle => String(vehicle.direction) === routeDirection);
-        const sortedVehicles = [...selectedVehicles].sort((a, b) => a.lat - b.lat || a.lon - b.lon);
+        const vehicles = vehicleData?.vehicles || [];
+        const selectedVehicles: VehiclePosition[] = [];
+
+        for (const vehicle of vehicles) {
+            if (routeDirection === 'all' || String(vehicle.direction) === routeDirection) {
+                selectedVehicles.push(vehicle);
+            }
+        }
+
+        selectedVehicles.sort((a, b) => a.lat - b.lat || a.lon - b.lon);
         const positions = new Map<string, number>();
 
-        return sortedVehicles.map((vehicle: VehiclePosition) => {
+        return selectedVehicles.map((vehicle: VehiclePosition) => {
             const key = `${vehicle.lat}-${vehicle.lon}`;
             const count = positions.get(key) || 0;
             positions.set(key, count + 1);
@@ -177,12 +193,8 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 onZoomChange={setCurrentZoom}
             >
                 {/* Stop markers - Only show standard stops when zoomed in */}
-                {showStops && uniqueStops.map((stop) => {
+                {visibleStops.map((stop) => {
                     const isTerminus = terminusStopIds.has(stop.stopId);
-
-                    // Show standard stops only if zoomed in enough (> 13)
-                    // Always show terminus
-                    if (!isTerminus && currentZoom < 14) return null;
 
                     return (
                         <StopMarker

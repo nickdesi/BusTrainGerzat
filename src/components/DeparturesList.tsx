@@ -139,6 +139,10 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
         setSelectedTrip({ tripId, line });
     }, []);
 
+    const handleToggleFavorite = useCallback((id: string, line: string, destination: string, type: 'BUS' | 'TER') => {
+        onToggleFavorite?.(id, line, destination, type);
+    }, [onToggleFavorite]);
+
     return (
         <div className="space-y-3 bg-surface p-3 md:hidden">
             {loading && departures.length === 0 ? (
@@ -165,7 +169,7 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                             entry={entry}
                             boardType={boardType}
                             isFav={isFav}
-                            onToggleFavorite={onToggleFavorite}
+                            onToggleFavorite={onToggleFavorite ? handleToggleFavorite : undefined}
                             onTripClick={handleTripClick}
                         />
                     );
