@@ -13,6 +13,22 @@ Application web Next.js pour consulter rapidement les prochains passages des bus
   <img src="docs/images/map.png" alt="Carte live de la ligne E1" width="400" />
 </div>
 
+## Sommaire
+
+- [Objectif](#-objectif)
+- [Fonctionnalités](#-fonctionnalités)
+- [Architecture des données](#-architecture-des-données)
+- [Stack technique](#️-stack-technique)
+- [Installation locale](#-installation-locale)
+- [Variables d’environnement](#-variables-denvironnement)
+- [Scripts utiles](#-scripts-utiles)
+- [Tests et validation](#-tests-et-validation)
+- [Mise à jour des données T2C](#-mise-à-jour-des-données-t2c)
+- [CI et qualité](#-ci-et-qualité)
+- [Déploiement](#-déploiement)
+- [Dépannage](#-dépannage)
+- [Licence](#-licence)
+
 ## ✨ Objectif
 
 Gerzat Live centralise les informations utiles avant un trajet depuis ou vers Gerzat : prochains départs, arrivées, bus T2C ligne E1, trains TER, favoris et carte live.
@@ -68,7 +84,8 @@ flowchart LR
   subgraph Data[Données générées]
     StaticSchedule["src/data/static_schedule.json"]
     GtfsConfig["src/data/gtfs_config.json"]
-    LineE1["public/data/e1_stop_times.json"]
+    LineE1Map["public/data/lineE1_data.json"]
+    LineE1StopTimes["public/data/e1_stop_times.json"]
   end
 
   subgraph Server[Next.js API + services]
@@ -97,13 +114,15 @@ flowchart LR
 
   T2CStatic --> StaticSchedule
   T2CStatic --> GtfsConfig
-  T2CStatic --> LineE1
+  T2CStatic --> LineE1Map
+  T2CStatic --> LineE1StopTimes
   T2CRT --> BusService
   T2CRT --> E1Service
   SNCF --> TrainService
   StaticSchedule --> BusService
   GtfsConfig --> BusService
-  LineE1 --> E1Service
+  LineE1StopTimes --> E1Service
+  LineE1Map --> Map
   BusService --> Realtime
   E1Service --> Vehicles
   E1Service --> Trip
@@ -203,50 +222,65 @@ src/
 
 ## 📦 Installation locale
 
-Prérequis :
+### Prérequis
 
 - Node.js `>= 24.15.0` ;
 - npm ;
 - une clé API SNCF / Navitia pour les trains ;
 - Python `>= 3.13` uniquement pour régénérer les données GTFS.
 
-Installer les dépendances :
+### Démarrage rapide
 
 ```bash
 npm install
-```
-
-Créer `.env.local` :
-
-```bash
-SNCF_API_KEY=votre_cle_api_sncf
-```
-
-Lancer le développement :
-
-```bash
 npm run dev
 ```
 
 Puis ouvrir `http://localhost:3000`.
 
-## 🔧 Scripts utiles
+### Configuration trains
+
+Créer `.env.local` à la racine du dépôt :
 
 ```bash
-npm run dev      # serveur de développement
-npm run build    # build production
-npm run start    # serveur production
-npm run lint     # analyse ESLint
-npm run test     # tests Jest
+SNCF_API_KEY=votre_cle_api_sncf
 ```
+
+Sans cette variable, les données TER SNCF/Navitia ne peuvent pas être récupérées.
+
+## 🔐 Variables d’environnement
+
+| Variable | Requise | Description |
+| --- | --- | --- |
+| `SNCF_API_KEY` | Oui pour les trains | Clé API SNCF/Navitia utilisée par les endpoints TER. |
+
+## 🔧 Scripts utiles
+
+| Commande | Description |
+| --- | --- |
+| `npm run dev` | Lance le serveur de développement Next.js. |
+| `npm run build` | Compile l’application pour la production. |
+| `npm run start` | Lance le serveur Next.js après un build. |
+| `npm run lint` | Exécute ESLint. |
+| `npm run test` | Exécute la suite Jest. |
+| `npm run test:watch` | Exécute Jest en mode watch. |
+
+## 🧪 Tests et validation
 
 Validation complète recommandée avant publication :
 
 ```bash
 npm run lint
-npm test -- --runInBand
+npm run test -- --runInBand
 npm run build
 ```
+
+Les tests couvrent notamment :
+
+- les helpers ligne E1 et la correspondance fuzzy des trip IDs ;
+- les règles de filtrage/remplacement T2C ;
+- la fraîcheur SNCF/Navitia ;
+- les helpers de date, formatage, API client et interpolation véhicule.
 
 ## 🔄 Mise à jour des données T2C
 
@@ -255,7 +289,8 @@ Les données générées sont principalement :
 - `gtfs_data/` : archive GTFS T2C extraite ;
 - `src/data/static_schedule.json` : horaires statiques consommés par l’app ;
 - `src/data/gtfs_config.json` : configuration arrêts/routes ;
-- `public/data/e1_stop_times.json` : trips et stop times E1 pour carte et détails.
+- `public/data/lineE1_data.json` : arrêts officiels et tracés de la ligne E1 pour la carte ;
+- `public/data/e1_stop_times.json` : trips et stop times E1 pour les détails de trajet.
 
 Régénération locale :
 
@@ -263,6 +298,7 @@ Régénération locale :
 python3 scripts/gtfs/check_gtfs_update.py
 python3 scripts/gtfs/generate_static_json.py
 python3 scripts/gtfs/generate_e1_stop_times.py
+python3 scripts/gtfs/extract_lineE1_data.py
 ```
 
 Le workflow GitHub Actions `Update T2C GTFS Schedule` exécute automatiquement cette chaîne, valide les JSON générés, lance lint/tests/build, puis commit uniquement si les données changent.
@@ -275,13 +311,6 @@ Le workflow `CI` s’exécute sur `main` et sur les pull requests :
 2. lint ESLint ;
 3. tests Jest en série ;
 4. build Next.js.
-
-Les tests couvrent notamment :
-
-- les helpers ligne E1 et la correspondance fuzzy des trip IDs ;
-- les règles de filtrage/remplacement T2C ;
-- la fraîcheur SNCF/Navitia ;
-- les helpers de date, formatage, API client et interpolation véhicule.
 
 ## 🚢 Déploiement
 
@@ -297,6 +326,27 @@ Variables d’environnement requises en production :
 
 ```bash
 SNCF_API_KEY=votre_cle_api_sncf
+```
+
+## 🩺 Dépannage
+
+### Les trains ne s’affichent pas
+
+Vérifier que `SNCF_API_KEY` est définie dans `.env.local` en développement et dans l’environnement de production.
+
+### La carte E1 affiche des arrêts ou tracés obsolètes
+
+Régénérer les données GTFS, puis vérifier `public/data/lineE1_data.json` et `public/data/e1_stop_times.json`.
+
+### Le build échoue après une mise à jour de dépendances
+
+Relancer une installation propre puis les validations :
+
+```bash
+npm install
+npm run lint
+npm run test -- --runInBand
+npm run build
 ```
 
 ## 📱 Installation mobile
