@@ -275,94 +275,95 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         }
 
         // Filter: show buses arriving in the future (or departed less than 10 min ago)
-        const upcomingSchedule = (staticSchedule as StaticScheduleItem[])
-            .filter((item: StaticScheduleItem) => item.arrival > now - 600);
+        // ⚡ Bolt: Use a single pass for filtering, mapping, and null-checking to avoid
+        // creating multiple intermediate arrays which causes unnecessary O(N) allocations.
+        const combinedUpdates: BusUpdate[] = [];
 
-        const combinedUpdates = upcomingSchedule
-            .map((item: StaticScheduleItem) => {
-                // Try exact match first, then fuzzy pattern match
-                let rtTrip = realtimeUpdates.get(item.tripId);
-                if (!rtTrip) {
-                    const pattern = extractTripPattern(item.tripId);
-                    rtTrip = rtByPattern.get(pattern);
+        for (const item of (staticSchedule as StaticScheduleItem[])) {
+            if (item.arrival <= now - 600) continue; // Filter past buses
+
+            // Try exact match first, then fuzzy pattern match
+            let rtTrip = realtimeUpdates.get(item.tripId);
+            if (!rtTrip) {
+                const pattern = extractTripPattern(item.tripId);
+                rtTrip = rtByPattern.get(pattern);
+            }
+
+            let arrival = item.arrival;
+            let departure = item.departure;
+            let delay = 0;
+            let isRealtime = false;
+
+            // Trip-level cancellation status
+            let isCancelled = rtTrip?.tripCancelled || false;
+
+            if (rtTrip) {
+                // Validate RT data matches this static entry
+                const rtStartDate = rtTrip.startDate;
+                const staticDate = item.date;
+                let shouldApplyRT = false;
+
+                if (rtStartDate && staticDate) {
+                    shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, 0, item.arrival);
+                } else {
+                    // Fallback: check timestamp of ANY available stop update for this trip
+                    // to ensure it's not a stale or future false match when startDate is absent.
+                    const firstStopUpdate = rtTrip.stops.values().next().value;
+                    const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
+                    shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, rtTime, item.arrival);
                 }
 
-                let arrival = item.arrival;
-                let departure = item.departure;
-                let delay = 0;
-                let isRealtime = false;
+                if (shouldApplyRT) {
+                    const stopId = item.stopId;
+                    const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
 
-                // Trip-level cancellation status
-                let isCancelled = rtTrip?.tripCancelled || false;
+                    if (rtStop) {
+                        isRealtime = true;
 
-                if (rtTrip) {
-                    // Validate RT data matches this static entry
-                    const rtStartDate = rtTrip.startDate;
-                    const staticDate = item.date;
-                    let shouldApplyRT = false;
-
-                    if (rtStartDate && staticDate) {
-                        shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, 0, item.arrival);
-                    } else {
-                        // Fallback: check timestamp of ANY available stop update for this trip
-                        // to ensure it's not a stale or future false match when startDate is absent.
-                        const firstStopUpdate = rtTrip.stops.values().next().value;
-                        const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
-                        shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, rtTime, item.arrival);
-                    }
-
-                    if (shouldApplyRT) {
-                        const stopId = item.stopId;
-                        const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
-
-                        if (rtStop) {
-                            isRealtime = true;
-
-                            if (rtStop.arrival?.time) {
-                                arrival = Number(rtStop.arrival.time);
-                            } else if (rtStop.departure?.time) {
-                                arrival = Number(rtStop.departure.time);
-                            }
-
-                            if (rtStop.departure?.time) {
-                                departure = Number(rtStop.departure.time);
-                            } else if (rtStop.arrival?.time) {
-                                const dwell = item.departure - item.arrival;
-                                departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
-                            }
-
-                            delay = getEffectiveDelay(rtStop.delay, arrival, item.arrival);
-
-                            if (rtStop.isSkipped) isCancelled = true;
-
-                        } else {
-                            // Trip exists in RT but no update for this stop.
-                            // If the global trip is NOT cancelled, it means the bus missed/passed this stop 
-                            // or the feed doesn't have it.
-                            // We do NOT set isRealtime=true to indicate we are falling back to static time.
+                        if (rtStop.arrival?.time) {
+                            arrival = Number(rtStop.arrival.time);
+                        } else if (rtStop.departure?.time) {
+                            arrival = Number(rtStop.departure.time);
                         }
+
+                        if (rtStop.departure?.time) {
+                            departure = Number(rtStop.departure.time);
+                        } else if (rtStop.arrival?.time) {
+                            const dwell = item.departure - item.arrival;
+                            departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
+                        }
+
+                        delay = getEffectiveDelay(rtStop.delay, arrival, item.arrival);
+
+                        if (rtStop.isSkipped) isCancelled = true;
+
+                    } else {
+                        // Trip exists in RT but no update for this stop.
+                        // If the global trip is NOT cancelled, it means the bus missed/passed this stop
+                        // or the feed doesn't have it.
+                        // We do NOT set isRealtime=true to indicate we are falling back to static time.
                     }
                 }
+            }
 
-                // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
-                // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
-                if (!shouldKeepPaturalTrip(item, PATURAL_IDS_SET_CACHE!)) {
-                    return null;
-                }
+            // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
+            // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
+            if (!shouldKeepPaturalTrip(item, PATURAL_IDS_SET_CACHE!)) {
+                continue; // Skip nulls
+            }
 
-                return {
-                    tripId: item.tripId,
-                    arrival: arrival,
-                    departure: departure,
-                    delay: delay,
-                    isRealtime: isRealtime,
-                    isCancelled: isCancelled,
-                    headsign: item.headsign,
-                    direction: item.direction,
-                    origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
-                };
-            })
-            .filter((item): item is BusUpdate => item !== null); // Filter out nulls
+            combinedUpdates.push({
+                tripId: item.tripId,
+                arrival: arrival,
+                departure: departure,
+                delay: delay,
+                isRealtime: isRealtime,
+                isCancelled: isCancelled,
+                headsign: item.headsign,
+                direction: item.direction,
+                origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
+            });
+        }
 
         // Add ADDED trips (replacement trips from GTFS-RT)
         combinedUpdates.push(...addedTrips);

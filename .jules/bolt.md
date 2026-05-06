@@ -40,3 +40,6 @@
 ## 2026-05-03 - Avoiding redundant filter() calls for simple stats calculation
 **Learning:** Found an anti-pattern in `src/app/app/carte/page.tsx` where multiple `.filter().length` calls were chained sequentially on the same array to compute counts for different booleans (`isRealtime`). This leads to unnecessary O(N) array allocations and degrades performance when dealing with large datasets.
 **Action:** Replace multiple `.filter()` calls with a single O(N) `for...of` loop that calculates all necessary statistics in one pass without creating intermediate array references.
+## 2026-05-06 - Avoid chained array operations in data processing
+**Learning:** Found an anti-pattern in `src/services/bus.service.ts` where multiple `.filter().map().filter()` calls were chained sequentially on the `staticSchedule` array to calculate the `combinedUpdates` state. This leads to unnecessary O(N) array allocations and degrades performance when dealing with large datasets on the server.
+**Action:** Replace multiple chained array operations with a single O(N) `for...of` loop that calculates all necessary steps in one pass without creating intermediate array references.
