@@ -150,14 +150,24 @@ export function findGerzatStopForAddedTrip(
     directionId: number,
     stopGroups: { champfleuri: string[]; patural: string[] }
 ): AddedTripStop | undefined {
-    const targetStopIds = new Set([...stopGroups.champfleuri, ...stopGroups.patural]);
-    const matchingStops = stops.filter(stop => targetStopIds.has(stop.stopId));
-
-    if (matchingStops.length > 0) {
-        return directionId === 0 ? matchingStops[0] : matchingStops.at(-1);
+    // ⚡ Bolt: Populate cache if missing to avoid recreating the Set every time this is called
+    // stopGroups are from static gtfsConfig so they are safe to cache
+    if (!TARGET_STOP_IDS_SET_CACHE) {
+        TARGET_STOP_IDS_SET_CACHE = new Set([...stopGroups.champfleuri, ...stopGroups.patural]);
     }
 
-    return undefined;
+    let firstMatch: AddedTripStop | undefined;
+    let lastMatch: AddedTripStop | undefined;
+
+    // ⚡ Bolt: Single pass O(N) loop without intermediate array allocation (.filter())
+    for (const stop of stops) {
+        if (TARGET_STOP_IDS_SET_CACHE.has(stop.stopId)) {
+            if (!firstMatch) firstMatch = stop;
+            lastMatch = stop;
+        }
+    }
+
+    return directionId === 0 ? firstMatch : lastMatch;
 }
 
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
