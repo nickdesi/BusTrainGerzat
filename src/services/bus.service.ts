@@ -122,20 +122,26 @@ export function shouldKeepPaturalTrip(item: Pick<StaticScheduleItem, 'stopId' | 
 }
 
 export function removeCancelledTripsWithReplacement(updates: BusUpdate[]): BusUpdate[] {
-    const cleanedUpdates: BusUpdate[] = [];
-    const nonCancelled = updates.filter(u => !u.isCancelled);
+    // Single-pass optimization: Pre-group non-cancelled trips by direction
+    const nonCancelledByDir = { 0: [] as BusUpdate[], 1: [] as BusUpdate[] };
+    for (const u of updates) {
+        if (!u.isCancelled && (u.direction === 0 || u.direction === 1)) {
+            nonCancelledByDir[u.direction as 0 | 1].push(u);
+        }
+    }
 
-    updates.forEach(u => {
-        if (u.isCancelled) {
-            const replacement = nonCancelled.find(nc =>
-                nc.direction === u.direction &&
-                Math.abs(nc.arrival - u.arrival) < 20 * 60
+    const cleanedUpdates: BusUpdate[] = [];
+    for (const u of updates) {
+        if (u.isCancelled && (u.direction === 0 || u.direction === 1)) {
+            // Check only against non-cancelled trips in the same direction
+            const hasReplacement = nonCancelledByDir[u.direction as 0 | 1].some(
+                nc => Math.abs(nc.arrival - u.arrival) < 20 * 60
             );
-            if (!replacement) cleanedUpdates.push(u);
+            if (!hasReplacement) cleanedUpdates.push(u);
         } else {
             cleanedUpdates.push(u);
         }
-    });
+    }
 
     return cleanedUpdates;
 }
