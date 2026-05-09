@@ -274,8 +274,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             }
         }
 
-        // ⚡ Bolt: Single-pass filtering and mapping to prevent multiple O(N) array allocations
-        // Replaced chained .filter().map().filter() with a fast for...of loop
+        // Single-pass filtering and mapping to prevent multiple O(N) array allocations
         const combinedUpdates: BusUpdate[] = [];
 
         for (const item of (staticSchedule as StaticScheduleItem[])) {
@@ -363,7 +362,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         cleanedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
 
-        // ⚡ Bolt: Single-pass early-exit loop instead of .filter().slice() to prevent array allocation
+        // Single-pass early-exit loop to prevent array allocation
         const nextBuses: BusUpdate[] = [];
         for (const u of cleanedUpdates) {
             if (u.arrival > now - 60) {
