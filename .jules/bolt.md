@@ -40,3 +40,7 @@
 ## 2026-05-03 - Avoiding redundant filter() calls for simple stats calculation
 **Learning:** Found an anti-pattern in `src/app/app/carte/page.tsx` where multiple `.filter().length` calls were chained sequentially on the same array to compute counts for different booleans (`isRealtime`). This leads to unnecessary O(N) array allocations and degrades performance when dealing with large datasets.
 **Action:** Replace multiple `.filter()` calls with a single O(N) `for...of` loop that calculates all necessary statistics in one pass without creating intermediate array references.
+
+## 2026-05-27 - Eliminating Chained Array Allocations in API Routes
+**Learning:** Found an anti-pattern in `src/services/bus.service.ts` where generating the `combinedUpdates` array involved a chain of `.filter().map().filter()` calls, and determining the final `nextBuses` involved a `.filter().slice()` chain. For datasets like upcoming schedules, these create multiple large intermediate arrays that cause unnecessary GC pressure and latency on API routes or SSE event loops.
+**Action:** Replace chained `.filter().map()` loops with a single `for...of` loop and use early `continue` or `break` statements. This consolidates data processing, avoids intermediate array allocations, and speeds up computation.
