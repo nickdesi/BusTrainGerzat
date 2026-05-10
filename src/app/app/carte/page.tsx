@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Bus, Clock3, Eye, EyeOff, MapPin, Navigation, Radar, RefreshCw, Satellite } from 'lucide-react';
+import { Bus, Clock3, Eye, EyeOff, Navigation, Radar, RefreshCw, Satellite } from 'lucide-react';
 import { useVehiclePositions } from '@/hooks/useVehiclePositions';
 import { useLineE1Data } from '@/hooks/useLineE1Data';
 import { useQueryClient } from '@tanstack/react-query';
@@ -66,20 +66,24 @@ export default function CartePage() {
         const vehicles = vehicleData?.vehicles ?? [];
 
         // ⚡ Bolt: Calculate stats in a single pass to avoid creating multiple intermediate arrays with filter()
-        let realtimeCount = 0;
-        let estimatedCount = 0;
+        let gpsCount = 0;
+        let realtimeInterpolatedCount = 0;
+        let staticCount = 0;
         for (const vehicle of vehicles) {
-            if (vehicle.isRealtime) {
-                realtimeCount++;
+            if (vehicle.source === 'gps') {
+                gpsCount++;
+            } else if (vehicle.source === 'realtime_interpolated') {
+                realtimeInterpolatedCount++;
             } else {
-                estimatedCount++;
+                staticCount++;
             }
         }
 
         return {
             total: vehicleData?.count ?? vehicles.length,
-            realtime: realtimeCount,
-            estimated: estimatedCount,
+            gps: gpsCount,
+            realtimeEstimated: realtimeInterpolatedCount,
+            estimated: realtimeInterpolatedCount + staticCount,
             stops: lineData?.stops.length ?? 0,
         };
     }, [lineData?.stops.length, vehicleData?.count, vehicleData?.vehicles]);
@@ -120,8 +124,8 @@ export default function CartePage() {
 
                     <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
                         <MetricCard icon={Bus} label="Bus visibles" value={stats.total} tone="green" />
-                        <MetricCard icon={Satellite} label="Signal GPS" value={stats.realtime} tone="yellow" />
-                        <MetricCard icon={MapPin} label="Arrêts" value={stats.stops} tone="blue" />
+                        <MetricCard icon={Satellite} label="Signal GPS" value={stats.gps} tone="yellow" />
+                        <MetricCard icon={Radar} label="Temps réel" value={stats.realtimeEstimated} tone="green" />
                         <MetricCard icon={Clock3} label="Estimées" value={stats.estimated} tone="neutral" />
                     </div>
 

@@ -31,6 +31,7 @@ interface EstimatedVehicle {
     terminusEta: number;
     origin: string;
     isRealtime: boolean;
+    source: 'gps' | 'realtime_interpolated' | 'static';
 }
 
 // Pre-compute shape arrays for each direction using a Map to avoid object injection warnings
@@ -49,7 +50,8 @@ export async function GET(request: Request) {
                 vehicles: [],
                 timestamp: now,
                 count: 0,
-                hasRealtime: false
+                hasRealtime: false,
+                hasGps: false
             }, {
                 headers: { 'Cache-Control': 'no-store' },
             });
@@ -122,7 +124,8 @@ export async function GET(request: Request) {
                 estimatedArrival: nextTime,
                 terminusEta: terminusTime,
                 origin: firstStopInfo?.stopName || 'Inconnu',
-                isRealtime: true
+                isRealtime: true,
+                source: 'gps'
             });
         }
 
@@ -217,7 +220,8 @@ export async function GET(request: Request) {
                 estimatedArrival: nextTime,
                 terminusEta: terminusTime,
                 origin: firstStopInfo?.stopName || 'Inconnu',
-                isRealtime: true // Has RT delay data
+                isRealtime: true, // Has RT delay data
+                source: 'realtime_interpolated'
             });
         }
 
@@ -293,15 +297,26 @@ export async function GET(request: Request) {
                 estimatedArrival: nextTime,
                 terminusEta: lastStopTime,
                 origin: firstStopInfo?.stopName || 'Inconnu',
-                isRealtime: false
+                isRealtime: false,
+                source: 'static'
             });
         }
+
+        const gpsCount = vehicles.filter((vehicle) => vehicle.source === 'gps').length;
+        const realtimeInterpolatedCount = vehicles.filter((vehicle) => vehicle.source === 'realtime_interpolated').length;
+        const staticCount = vehicles.filter((vehicle) => vehicle.source === 'static').length;
 
         return NextResponse.json({
             vehicles,
             timestamp: now,
             count: vehicles.length,
-            hasRealtime: rtPositions.size > 0 || rtUpdates.size > 0
+            hasRealtime: realtimeInterpolatedCount > 0 || gpsCount > 0,
+            hasGps: gpsCount > 0,
+            sources: {
+                gps: gpsCount,
+                realtimeInterpolated: realtimeInterpolatedCount,
+                static: staticCount
+            }
         }, {
             headers: { 'Cache-Control': 'no-store' },
         });

@@ -39,6 +39,11 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
     // direction 1 = Towards Gerzat (green)
     const iconColor = vehicle.direction === 1 ? '#22c55e' : '#3b82f6';
     const directionLabel = vehicle.direction === 1 ? 'GERZAT' : 'SUD';
+    const sourceLabel = vehicle.source === 'gps'
+        ? 'GPS véhicule'
+        : vehicle.source === 'realtime_interpolated'
+            ? 'Position estimée avec horaires temps réel'
+            : 'Position estimée avec horaires théoriques';
 
     // Determine pulse class based on delay
     const delayMinutes = Math.round(vehicle.delay / 60);
@@ -111,6 +116,7 @@ const BusMarker = memo(function BusMarker({ vehicle }: BusMarkerProps) {
                         <div>
                             <div className="font-display text-lg font-black leading-none text-white">Ligne E1</div>
                             <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.22em] text-white/45">{vehicle.direction === 1 ? 'Retour nord' : 'Trajet sud'}</div>
+                            <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-200/80">{sourceLabel}</div>
                         </div>
                     </div>
 

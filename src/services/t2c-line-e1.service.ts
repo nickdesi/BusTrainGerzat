@@ -44,6 +44,18 @@ export function extractTripPattern(tripId: string): string {
     return parts.length > 2 ? parts.slice(2).join('_') : tripId;
 }
 
+export function getByTripIdOrPattern<T>(items: Map<string, T>, tripId: string): T | undefined {
+    const exact = items.get(tripId);
+    if (exact) return exact;
+
+    const pattern = extractTripPattern(tripId);
+    for (const [itemTripId, item] of items) {
+        if (extractTripPattern(itemTripId) === pattern) return item;
+    }
+
+    return undefined;
+}
+
 export function getLineE1StaticTrips(): LineE1StaticTrip[] {
     return staticTrips;
 }
@@ -62,6 +74,11 @@ export function getLineE1Shapes(): LineE1Shapes {
 
 export function getStopAt(trip: LineE1StaticTrip, index: number): LineE1StaticStopTime | undefined {
     return trip.stops.at(index);
+}
+
+export function getCurrentStopIndex(stops: { predictedArrival: number }[], now: number): number {
+    const nextIndex = stops.findIndex(stop => stop.predictedArrival > now);
+    return nextIndex === -1 ? stops.length - 1 : nextIndex;
 }
 
 export function getFirstStop(trip: LineE1StaticTrip): LineE1StaticStopTime | undefined {
