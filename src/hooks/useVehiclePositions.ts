@@ -14,14 +14,21 @@ export interface VehiclePosition {
     estimatedArrival: number;
     terminusEta: number; // ETA at terminus
     origin: string;
-    isRealtime: boolean; // True if position is from GPS, false if interpolated
+    isRealtime: boolean; // True when GTFS-RT data contributes to the estimate
+    source: 'gps' | 'realtime_interpolated' | 'static';
 }
 
 interface VehiclesResponse {
     vehicles: VehiclePosition[];
     timestamp: number;
     count: number;
-    isEstimated: boolean;
+    hasRealtime: boolean;
+    hasGps: boolean;
+    sources: {
+        gps: number;
+        realtimeInterpolated: number;
+        static: number;
+    };
 }
 
 async function fetchVehicles(): Promise<VehiclesResponse> {

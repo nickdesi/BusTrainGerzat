@@ -1,5 +1,7 @@
 import {
     extractTripPattern,
+    getByTripIdOrPattern,
+    getCurrentStopIndex,
     getEffectiveDelay,
     getFirstStop,
     getLastStop,
@@ -26,12 +28,37 @@ describe('t2c-line-e1.service', () => {
         expect(fuzzy?.tripId).toBe(trip.tripId);
     });
 
+    it('finds map entries by exact trip id or stable suffix', () => {
+        const items = new Map([
+            ['1132_1000005_03GC.AR_183100', 'exact'],
+            ['1132_1000005_03GC.AR_184000', 'other'],
+        ]);
+
+        expect(getByTripIdOrPattern(items, '1132_1000005_03GC.AR_183100')).toBe('exact');
+        expect(getByTripIdOrPattern(items, '1132_1000001_03GC.AR_183100')).toBe('exact');
+        expect(getByTripIdOrPattern(items, 'missing')).toBeUndefined();
+    });
+
     it('returns stops by index helpers safely', () => {
         const [trip] = getLineE1StaticTrips();
         expect(getFirstStop(trip)).toBe(trip.stops[0]);
         expect(getLastStop(trip)).toBe(trip.stops.at(-1));
         expect(getStopAt(trip, 0)).toBe(trip.stops[0]);
         expect(getStopAt(trip, 99999)).toBeUndefined();
+    });
+
+    it('finds current stop from predicted times for early and late buses', () => {
+        expect(getCurrentStopIndex([
+            { predictedArrival: 1_000 },
+            { predictedArrival: 1_200 },
+            { predictedArrival: 1_400 },
+        ], 1_150)).toBe(1);
+
+        expect(getCurrentStopIndex([
+            { predictedArrival: 1_180 },
+            { predictedArrival: 1_380 },
+            { predictedArrival: 1_580 },
+        ], 1_150)).toBe(0);
     });
 
     it('computes effective delay from predicted time when reported delay is zero', () => {

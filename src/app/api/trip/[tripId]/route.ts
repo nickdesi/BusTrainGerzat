@@ -3,6 +3,8 @@ import { protectApiRequest } from '@/lib/api-protection';
 import { fetchTripUpdates, LINE_E1_ROUTE_IDS } from '@/lib/gtfs-rt';
 import { getParisMidnight, getNowUnix } from '@/utils/date';
 import {
+    getByTripIdOrPattern,
+    getCurrentStopIndex,
     getEffectiveDelay,
     getLineE1StaticTrip,
     getLineE1Stop,
@@ -67,7 +69,7 @@ export async function GET(
 
         // Fetch GTFS-RT data using centralized service
         const rtTripUpdates = await fetchTripUpdates();
-        const tripRtData = rtTripUpdates.get(tripId);
+        const tripRtData = getByTripIdOrPattern(rtTripUpdates, tripId);
         let hasRealTimeData = false;
 
         const rtStopUpdates: Map<string, { delay: number; predictedTime: number }> = new Map();
@@ -82,22 +84,6 @@ export async function GET(
 
         // Build response - prefer static + RT overlay
         if (staticTrip) {
-            // Find current stop based on PREDICTED time (RT if available, else scheduled)
-            // This ensures stops are correctly marked as "passed" when bus is early
-            let currentStopIndex = 0;
-            for (const [index, stop] of staticTrip.stops.entries()) {
-                const rtData = rtStopUpdates.get(stop.stopId);
-                // Use predicted time if RT available, otherwise scheduled
-                const predictedTime = rtData?.predictedTime || toUnix(stop.arrivalTime);
-                if (predictedTime > now) {
-                    currentStopIndex = index;
-                    break;
-                }
-                if (index === staticTrip.stops.length - 1) {
-                    currentStopIndex = index; // All passed, last is current
-                }
-            }
-
             // Build stops with delay propagation
             // Track last known delay to propagate to stops without RT data
             let lastKnownDelay = 0;
@@ -130,16 +116,6 @@ export async function GET(
 
                 const predictedDeparture = rtData ? predictedArrival : (scheduledDeparture + delay);
 
-                // Determine status
-                let status: 'passed' | 'current' | 'upcoming';
-                if (index < currentStopIndex) {
-                    status = 'passed';
-                } else if (index === currentStopIndex) {
-                    status = 'current';
-                } else {
-                    status = 'upcoming';
-                }
-
                 return {
                     stopId: stop.stopId,
                     stopName: stopInfo?.stopName || stop.stopId,
@@ -149,10 +125,15 @@ export async function GET(
                     predictedArrival,
                     predictedDeparture,
                     delay,
-                    status,
+                    status: 'upcoming',
                     isAccessible: true,
                 };
             });
+
+            const currentStopIndex = getCurrentStopIndex(stops, now);
+            for (const [index, stop] of stops.entries()) {
+                stop.status = index < currentStopIndex ? 'passed' : index === currentStopIndex ? 'current' : 'upcoming';
+            }
 
             // Get headsign from last stop
             const lastStop = staticTrip.stops[staticTrip.stops.length - 1];

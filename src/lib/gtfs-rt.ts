@@ -5,7 +5,7 @@ import { gtfsLogger } from './logger';
 import gtfsConfig from '@/data/gtfs_config.json';
 export const LINE_E1_ROUTE_IDS = new Set(gtfsConfig.routeIds);
 const GTFS_RT_TRIP_UPDATE_URL = 'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update';
-const GTFS_RT_VEHICLE_POSITION_URL = 'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-vehicle-position';
+const GTFS_RT_VEHICLE_POSITION_URL = process.env.T2C_GTFS_RT_VEHICLE_POSITION_URL;
 
 // --- Types ---
 export interface RTStopUpdate {
@@ -128,10 +128,20 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
 }
 
 /**
- * Fetch and decode GTFS-RT Vehicle Positions for Line E1
+ * Fetch and decode GTFS-RT Vehicle Positions for Line E1.
+ *
+ * T2C currently publishes official GTFS-RT Trip Updates only. No official
+ * VehiclePositions feed is listed on transport.data.gouv.fr / Clermont OpenData.
+ * Keep this optional to avoid repeatedly fetching the old 404 proxy URL and to
+ * allow enabling a verified GPS feed later through T2C_GTFS_RT_VEHICLE_POSITION_URL.
  */
 export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosition>> {
     const positions = new Map<string, RTVehiclePosition>();
+
+    if (!GTFS_RT_VEHICLE_POSITION_URL) {
+        return positions;
+    }
+
     try {
         // Use fetchBinaryWithRetry for resilience
         const buffer = await fetchBinaryWithRetry(GTFS_RT_VEHICLE_POSITION_URL, {
@@ -139,6 +149,15 @@ export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosi
         });
 
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
+
+        const now = getNowUnix();
+        if (feed.header?.timestamp) {
+            const age = now - Number(feed.header.timestamp);
+            if (age > 300) {
+                gtfsLogger.warn('Stale vehicle positions feed ignored', { age, maxAge: 300 });
+                return positions;
+            }
+        }
 
         for (const entity of feed.entity) {
             if (!entity.vehicle) continue;
@@ -158,7 +177,7 @@ export async function fetchVehiclePositions(): Promise<Map<string, RTVehiclePosi
             }
         }
     } catch (e) {
-        gtfsLogger.error('Failed to fetch vehicle positions', {}, e as Error);
+        gtfsLogger.error('Failed to fetch configured vehicle positions feed', {}, e as Error);
     }
     return positions;
 }
