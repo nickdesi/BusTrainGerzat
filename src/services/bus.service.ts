@@ -122,20 +122,26 @@ export function shouldKeepPaturalTrip(item: Pick<StaticScheduleItem, 'stopId' | 
 }
 
 export function removeCancelledTripsWithReplacement(updates: BusUpdate[]): BusUpdate[] {
-    const cleanedUpdates: BusUpdate[] = [];
-    const nonCancelled = updates.filter(u => !u.isCancelled);
+    // Single-pass optimization: Pre-group non-cancelled trips by direction
+    const nonCancelledByDir = { 0: [] as BusUpdate[], 1: [] as BusUpdate[] };
+    for (const u of updates) {
+        if (!u.isCancelled && (u.direction === 0 || u.direction === 1)) {
+            nonCancelledByDir[u.direction as 0 | 1].push(u);
+        }
+    }
 
-    updates.forEach(u => {
-        if (u.isCancelled) {
-            const replacement = nonCancelled.find(nc =>
-                nc.direction === u.direction &&
-                Math.abs(nc.arrival - u.arrival) < 20 * 60
+    const cleanedUpdates: BusUpdate[] = [];
+    for (const u of updates) {
+        if (u.isCancelled && (u.direction === 0 || u.direction === 1)) {
+            // Check only against non-cancelled trips in the same direction
+            const hasReplacement = nonCancelledByDir[u.direction as 0 | 1].some(
+                nc => Math.abs(nc.arrival - u.arrival) < 20 * 60
             );
-            if (!replacement) cleanedUpdates.push(u);
+            if (!hasReplacement) cleanedUpdates.push(u);
         } else {
             cleanedUpdates.push(u);
         }
-    });
+    }
 
     return cleanedUpdates;
 }
@@ -274,95 +280,86 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             }
         }
 
-        // Filter: show buses arriving in the future (or departed less than 10 min ago)
-        const upcomingSchedule = (staticSchedule as StaticScheduleItem[])
-            .filter((item: StaticScheduleItem) => item.arrival > now - 600);
+        // Single-pass filtering and mapping to prevent multiple O(N) array allocations
+        const combinedUpdates: BusUpdate[] = [];
 
-        const combinedUpdates = upcomingSchedule
-            .map((item: StaticScheduleItem) => {
-                // Try exact match first, then fuzzy pattern match
-                let rtTrip = realtimeUpdates.get(item.tripId);
-                if (!rtTrip) {
-                    const pattern = extractTripPattern(item.tripId);
-                    rtTrip = rtByPattern.get(pattern);
+        for (const item of (staticSchedule as StaticScheduleItem[])) {
+            // Filter: show buses arriving in the future (or departed less than 10 min ago)
+            if (item.arrival <= now - 600) continue;
+
+            // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
+            if (!shouldKeepPaturalTrip(item, PATURAL_IDS_SET_CACHE!)) continue;
+
+            // Try exact match first, then fuzzy pattern match
+            let rtTrip = realtimeUpdates.get(item.tripId);
+            if (!rtTrip) {
+                const pattern = extractTripPattern(item.tripId);
+                rtTrip = rtByPattern.get(pattern);
+            }
+
+            let arrival = item.arrival;
+            let departure = item.departure;
+            let delay = 0;
+            let isRealtime = false;
+
+            // Trip-level cancellation status
+            let isCancelled = rtTrip?.tripCancelled || false;
+
+            if (rtTrip) {
+                // Validate RT data matches this static entry
+                const rtStartDate = rtTrip.startDate;
+                const staticDate = item.date;
+                let shouldApplyRT = false;
+
+                if (rtStartDate && staticDate) {
+                    shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, 0, item.arrival);
+                } else {
+                    // Fallback: check timestamp of ANY available stop update for this trip
+                    const firstStopUpdate = rtTrip.stops.values().next().value;
+                    const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
+                    shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, rtTime, item.arrival);
                 }
 
-                let arrival = item.arrival;
-                let departure = item.departure;
-                let delay = 0;
-                let isRealtime = false;
+                if (shouldApplyRT) {
+                    const stopId = item.stopId;
+                    const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
 
-                // Trip-level cancellation status
-                let isCancelled = rtTrip?.tripCancelled || false;
+                    if (rtStop) {
+                        isRealtime = true;
 
-                if (rtTrip) {
-                    // Validate RT data matches this static entry
-                    const rtStartDate = rtTrip.startDate;
-                    const staticDate = item.date;
-                    let shouldApplyRT = false;
-
-                    if (rtStartDate && staticDate) {
-                        shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, 0, item.arrival);
-                    } else {
-                        // Fallback: check timestamp of ANY available stop update for this trip
-                        // to ensure it's not a stale or future false match when startDate is absent.
-                        const firstStopUpdate = rtTrip.stops.values().next().value;
-                        const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
-                        shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, rtTime, item.arrival);
-                    }
-
-                    if (shouldApplyRT) {
-                        const stopId = item.stopId;
-                        const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
-
-                        if (rtStop) {
-                            isRealtime = true;
-
-                            if (rtStop.arrival?.time) {
-                                arrival = Number(rtStop.arrival.time);
-                            } else if (rtStop.departure?.time) {
-                                arrival = Number(rtStop.departure.time);
-                            }
-
-                            if (rtStop.departure?.time) {
-                                departure = Number(rtStop.departure.time);
-                            } else if (rtStop.arrival?.time) {
-                                const dwell = item.departure - item.arrival;
-                                departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
-                            }
-
-                            delay = getEffectiveDelay(rtStop.delay, arrival, item.arrival);
-
-                            if (rtStop.isSkipped) isCancelled = true;
-
-                        } else {
-                            // Trip exists in RT but no update for this stop.
-                            // If the global trip is NOT cancelled, it means the bus missed/passed this stop 
-                            // or the feed doesn't have it.
-                            // We do NOT set isRealtime=true to indicate we are falling back to static time.
+                        if (rtStop.arrival?.time) {
+                            arrival = Number(rtStop.arrival.time);
+                        } else if (rtStop.departure?.time) {
+                            arrival = Number(rtStop.departure.time);
                         }
+
+                        if (rtStop.departure?.time) {
+                            departure = Number(rtStop.departure.time);
+                        } else if (rtStop.arrival?.time) {
+                            const dwell = item.departure - item.arrival;
+                            departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
+                        }
+
+                        delay = getEffectiveDelay(rtStop.delay, arrival, item.arrival);
+
+                        if (rtStop.isSkipped) isCancelled = true;
+
                     }
                 }
+            }
 
-                // STRICT RULE: For "Le Patural", ONLY keep trips towards Ballainvilliers (Direction 0)
-                // "L'arrêt 'Le Patural' (uniquement pour les bus express en direction de Ballainvilliers)"
-                if (!shouldKeepPaturalTrip(item, PATURAL_IDS_SET_CACHE!)) {
-                    return null;
-                }
-
-                return {
-                    tripId: item.tripId,
-                    arrival: arrival,
-                    departure: departure,
-                    delay: delay,
-                    isRealtime: isRealtime,
-                    isCancelled: isCancelled,
-                    headsign: item.headsign,
-                    direction: item.direction,
-                    origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
-                };
-            })
-            .filter((item): item is BusUpdate => item !== null); // Filter out nulls
+            combinedUpdates.push({
+                tripId: item.tripId,
+                arrival: arrival,
+                departure: departure,
+                delay: delay,
+                isRealtime: isRealtime,
+                isCancelled: isCancelled,
+                headsign: item.headsign,
+                direction: item.direction,
+                origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
+            });
+        }
 
         // Add ADDED trips (replacement trips from GTFS-RT)
         combinedUpdates.push(...addedTrips);
@@ -370,7 +367,15 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         const cleanedUpdates = removeCancelledTripsWithReplacement(combinedUpdates);
 
         cleanedUpdates.sort((a: BusUpdate, b: BusUpdate) => a.arrival - b.arrival);
-        const nextBuses = cleanedUpdates.filter((u: BusUpdate) => u.arrival > now - 60).slice(0, 20);
+
+        // Single-pass early-exit loop to prevent array allocation
+        const nextBuses: BusUpdate[] = [];
+        for (const u of cleanedUpdates) {
+            if (u.arrival > now - 60) {
+                nextBuses.push(u);
+                if (nextBuses.length >= 20) break;
+            }
+        }
 
         return { updates: nextBuses, timestamp: now };
     } catch (error) {
