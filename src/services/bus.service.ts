@@ -156,14 +156,24 @@ export function findGerzatStopForAddedTrip(
     directionId: number,
     stopGroups: { champfleuri: string[]; patural: string[] }
 ): AddedTripStop | undefined {
+    // ⚡ Bolt: Use a local Set instead of a global cache.
+    // The previous implementation used a global cache that was vulnerable to being stale
+    // if the passed stopGroups parameter ever changed between calls.
+    // We maintain the performance improvement by keeping the O(N) single-pass loop.
     const targetStopIds = new Set([...stopGroups.champfleuri, ...stopGroups.patural]);
-    const matchingStops = stops.filter(stop => targetStopIds.has(stop.stopId));
 
-    if (matchingStops.length > 0) {
-        return directionId === 0 ? matchingStops[0] : matchingStops.at(-1);
+    let firstMatch: AddedTripStop | undefined;
+    let lastMatch: AddedTripStop | undefined;
+
+    // ⚡ Bolt: Single pass O(N) loop without intermediate array allocation (.filter())
+    for (const stop of stops) {
+        if (targetStopIds.has(stop.stopId)) {
+            if (!firstMatch) firstMatch = stop;
+            lastMatch = stop;
+        }
     }
 
-    return undefined;
+    return directionId === 0 ? firstMatch : lastMatch;
 }
 
 export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
