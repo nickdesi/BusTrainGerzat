@@ -83,7 +83,7 @@ export default function CartePage() {
             total: vehicleData?.count ?? vehicles.length,
             gps: gpsCount,
             realtimeEstimated: realtimeInterpolatedCount,
-            estimated: realtimeInterpolatedCount + staticCount,
+            staticEstimated: staticCount,
             stops: lineData?.stops.length ?? 0,
         };
     }, [lineData?.stops.length, vehicleData?.count, vehicleData?.vehicles]);
@@ -123,10 +123,10 @@ export default function CartePage() {
                     </header>
 
                     <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
-                        <MetricCard icon={Bus} label="Bus visibles" value={stats.total} tone="green" />
-                        <MetricCard icon={Satellite} label="Signal GPS" value={stats.gps} tone="yellow" />
-                        <MetricCard icon={Radar} label="Temps réel" value={stats.realtimeEstimated} tone="green" />
-                        <MetricCard icon={Clock3} label="Estimées" value={stats.estimated} tone="neutral" />
+                        <MetricCard icon={Bus} label="Total bus" value={stats.total} tone="green" />
+                        <MetricCard icon={Satellite} label="GPS réel" value={stats.gps} tone="yellow" />
+                        <MetricCard icon={Radar} label="Estimé temps réel" value={stats.realtimeEstimated} tone="green" />
+                        <MetricCard icon={Clock3} label="Estimé horaire" value={stats.staticEstimated} tone="neutral" />
                     </div>
 
                     <section className="rounded-[1.5rem] border border-white/10 bg-black/55 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl md:rounded-[2rem] md:p-4">
