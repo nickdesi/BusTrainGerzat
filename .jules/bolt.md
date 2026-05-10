@@ -46,3 +46,11 @@
 ## 2026-05-28 - Risk of caching parameters when creating sets
 **Learning:** Moving `new Set` creations out of loops into global caches is a great performance optimization but it comes with a massive danger zone: If that set creation involves parameters passed directly from a function, the function essentially ignores any changes to those parameters on future calls because it just returns the first cached `Set`. This creates a subtle logic error where cache becomes stale when different data sets are processed using the same function.
 **Action:** When extracting Set creation into global scope caches, always verify if those elements depend on arguments being provided to the enclosing function. If they are dependent, it is generally safer to create the Set inside the function, or pass the cached set in as an argument, rather than utilizing a global cache within the function scope.
+
+## 2026-05-27 - Eliminating Chained Array Allocations in API Routes
+**Learning:** Found an anti-pattern in `src/services/bus.service.ts` where generating the `combinedUpdates` array involved a chain of `.filter().map().filter()` calls, and determining the final `nextBuses` involved a `.filter().slice()` chain. For datasets like upcoming schedules, these create multiple large intermediate arrays that cause unnecessary GC pressure and latency on API routes or SSE event loops.
+**Action:** Replace chained `.filter().map()` loops with a single `for...of` loop and use early `continue` or `break` statements. This consolidates data processing, avoids intermediate array allocations, and speeds up computation.
+
+## 2026-05-27 - O(N^2) Anti-Pattern in Array Filtering Methods
+**Learning:** Found an `O(N*M)` complexity bug where `array.find()` was being used inside an `array.forEach()` over potentially hundreds of elements (in `removeCancelledTripsWithReplacement`). While `Array.find()` feels clean, inside a loop it degrades performance dramatically.
+**Action:** Always pre-group or index secondary arrays (e.g. by direction) before comparing them inside loops, and use `.some()` instead of `.find()` if you only need boolean existence to short-circuit the inner loop faster.
