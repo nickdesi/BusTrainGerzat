@@ -39,6 +39,10 @@ const getDistanceMeters = (lat1: number, lon1: number, lat2: number, lon2: numbe
 const MAP_CENTER: [number, number] = [45.78, 3.10]; // Centered between Gerzat and Romagnat
 const MAP_ZOOM = 12;
 
+// Stable empty array reference to prevent unnecessary re-renders when data is missing
+const EMPTY_VEHICLES_ARRAY: VehiclePosition[] = [];
+const EMPTY_STOPS_ARRAY: Stop[] = [];
+
 interface BusMapProps {
     showStops?: boolean;
 }
@@ -100,14 +104,21 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     }, [lineData]);
 
     const visibleStops = useMemo(() => {
-        if (!showStops) return [];
+        if (!showStops) return EMPTY_STOPS_ARRAY;
         if (currentZoom >= 14) return uniqueStops;
-        return uniqueStops.filter(stop => terminusStopIds.has(stop.stopId));
+
+        const filteredStops: Stop[] = [];
+        for (const stop of uniqueStops) {
+            if (terminusStopIds.has(stop.stopId)) {
+                filteredStops.push(stop);
+            }
+        }
+        return filteredStops;
     }, [currentZoom, showStops, terminusStopIds, uniqueStops]);
 
     // Vehicle markers with collision detection
     const vehicleMarkers = useMemo(() => {
-        const vehicles = vehicleData?.vehicles || [];
+        const vehicles = vehicleData?.vehicles || EMPTY_VEHICLES_ARRAY;
         const selectedVehicles: VehiclePosition[] = [];
 
         for (const vehicle of vehicles) {
