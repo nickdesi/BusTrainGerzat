@@ -61,8 +61,8 @@ L’interface est mobile-first, sombre, lisible et pensée pour afficher immédi
 - Sélecteur de trajet **Tous / Gerzat / Aubière** pour éviter les tracés superposés et n’afficher que la direction utile.
 - Filtrage synchronisé des véhicules selon la direction sélectionnée.
 - Tracés complets par direction, branches, arrêts importants et terminus.
-- Positions GPS GTFS-RT quand disponibles.
-- Interpolation ou fallback horaire quand le temps réel est incomplet.
+- Positions GPS GTFS-RT uniquement si un flux officiel vérifié est configuré.
+- Interpolation depuis les Trip Updates ou fallback horaire quand le temps réel est incomplet.
 
 ### Qualité et fraîcheur des données
 
@@ -77,7 +77,8 @@ L’interface est mobile-first, sombre, lisible et pensée pour afficher immédi
 flowchart LR
   subgraph Sources[Sources externes]
     T2CStatic[GTFS statique T2C]
-    T2CRT["GTFS-RT T2C<br/>Trip Updates + Vehicles"]
+    T2CRT["GTFS-RT T2C<br/>Trip Updates"]
+    OptionalGPS["Vehicle Positions<br/>optionnel, non publié actuellement"]
     SNCF[SNCF / Navitia]
   end
 
@@ -118,6 +119,7 @@ flowchart LR
   T2CStatic --> LineE1StopTimes
   T2CRT --> BusService
   T2CRT --> E1Service
+  OptionalGPS -. si configuré .-> E1Service
   SNCF --> TrainService
   StaticSchedule --> BusService
   GtfsConfig --> BusService
@@ -144,18 +146,21 @@ flowchart LR
 Gerzat Live combine plusieurs niveaux de données pour garder l’affichage exploitable même si un flux est incomplet :
 
 1. **GTFS statique** : horaires planifiés, arrêts, routes, trips, shapes et fichiers générés.
-2. **GTFS-RT Trip Updates** : retards, annulations et prévisions temps réel.
-3. **GTFS-RT Vehicle Positions** : positions GPS et cap des véhicules quand disponibles.
+2. **GTFS-RT Trip Updates officiel** : retards, annulations et prévisions temps réel.
+3. **GTFS-RT Vehicle Positions optionnel** : positions GPS et cap uniquement si un flux officiel vérifié est configuré. À la vérification du 10 mai 2026, le dataset officiel T2C ne publie pas de ressource `VehiclePositions`.
 4. **Fallback applicatif** : interpolation sur tracé E1 ou horaire théorique si un signal live manque.
 
 ```mermaid
 flowchart TD
-  Request[Requête carte ou départs] --> HasRealtime{Signal GTFS-RT disponible ?}
+  Request[Requête carte ou départs] --> HasRealtime{Trip Updates GTFS-RT disponibles ?}
   HasRealtime -- Oui --> TripUpdate["Trip Update<br/>retards / annulations"]
-  HasRealtime -- Oui --> VehicleGPS["Vehicle Position<br/>GPS + cap"]
+  Request --> HasGps{Vehicle Positions configuré ?}
+  HasGps -- Oui --> VehicleGPS["Vehicle Position<br/>GPS + cap"]
+  HasGps -- Non --> NoGps[Pas de GPS officiel T2C]
   HasRealtime -- Non --> Static[Horaire GTFS statique]
   TripUpdate --> Merge[Fusion service E1]
   VehicleGPS --> Merge
+  NoGps --> Interpolation
   Static --> Interpolation[Interpolation sur shape E1]
   Interpolation --> Merge
   Merge --> Confidence{Qualité position}
@@ -373,7 +378,7 @@ Cette version apporte notamment :
 - ajout du sélecteur de trajet **Tous / Gerzat / Aubière** avec filtrage des tracés et véhicules par direction ;
 - centralisation de la logique Line E1 dans `t2c-line-e1.service.ts` ;
 - refactor des routes `/api/vehicles` et `/api/trip/[tripId]` ;
-- amélioration des règles T2C : fallback GPS, interpolation, retards, annulations et remplacement de trips ;
+- amélioration des règles T2C : GPS optionnel, interpolation, retards, annulations et remplacement de trips ;
 - ajout d’un statut de fraîcheur SNCF/Navitia ;
 - tests unitaires supplémentaires sur T2C et SNCF ;
 - création d’un workflow CI complet ;

@@ -118,14 +118,14 @@ export default function CartePage() {
                             Ligne<br /><span className="text-emerald-300 text-glow">E1</span>
                         </h1>
                         <p className="mt-3 text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-gray-400 md:mt-4 md:text-sm md:leading-6 md:tracking-[0.18em]">
-                            Carte temps réel Gerzat, Clermont, Aubière et Romagnat.
+                            Carte E1 avec positions estimées depuis GTFS-RT et horaires T2C.
                         </p>
                     </header>
 
                     <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
                         <MetricCard icon={Bus} label="Total bus" value={stats.total} tone="green" />
-                        <MetricCard icon={Satellite} label="GPS réel" value={stats.gps} tone="yellow" />
-                        <MetricCard icon={Radar} label="Estimé temps réel" value={stats.realtimeEstimated} tone="green" />
+                        <MetricCard icon={Satellite} label="GPS officiel" value={stats.gps} tone="yellow" />
+                        <MetricCard icon={Radar} label="Estimé RT" value={stats.realtimeEstimated} tone="green" />
                         <MetricCard icon={Clock3} label="Estimé horaire" value={stats.staticEstimated} tone="neutral" />
                     </div>
 
