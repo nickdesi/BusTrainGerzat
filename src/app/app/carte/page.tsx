@@ -39,14 +39,15 @@ function getMetricToneClasses(tone: 'green' | 'yellow' | 'blue' | 'neutral') {
     }
 }
 
-function MetricCard({ icon: Icon, label, value, tone }: { icon: typeof Bus; label: string; value: number | string; tone: 'green' | 'yellow' | 'blue' | 'neutral' }) {
+function MetricCard({ icon: Icon, label, value, tone, description }: { icon: typeof Bus; label: string; value: number | string; tone: 'green' | 'yellow' | 'blue' | 'neutral'; description?: string }) {
     return (
         <div className={`relative overflow-hidden rounded-2xl border bg-gradient-to-br p-3 shadow-xl shadow-black/25 md:rounded-3xl md:p-4 ${getMetricToneClasses(tone)}`}>
             <div className="absolute -right-6 -top-6 h-20 w-20 rounded-full bg-current opacity-10 blur-2xl" aria-hidden="true" />
-            <div className="relative flex items-center justify-between gap-4">
+            <div className="relative flex items-start justify-between gap-4">
                 <div>
                     <p className="text-[10px] font-black uppercase tracking-[0.24em] opacity-70">{label}</p>
                     <p className="mt-1.5 text-2xl font-black leading-none text-white md:mt-2 md:text-4xl">{value}</p>
+                    {description ? <p className="mt-2 text-xs font-semibold leading-4 text-white/55">{description}</p> : null}
                 </div>
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-white/10 bg-black/25">
                     <Icon className="h-6 w-6" aria-hidden="true" />
@@ -82,7 +83,6 @@ export default function CartePage() {
         return {
             total: vehicleData?.count ?? vehicles.length,
             realtime: gpsCount + realtimeInterpolatedCount,
-            realtimeEstimated: realtimeInterpolatedCount,
             staticEstimated: staticCount,
             stops: lineData?.stops.length ?? 0,
         };
@@ -123,10 +123,9 @@ export default function CartePage() {
                     </header>
 
                     <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
-                        <MetricCard icon={Bus} label="Total bus" value={stats.total} tone="green" />
-                        <MetricCard icon={Radar} label="Temps réel" value={stats.realtime} tone="yellow" />
-                        <MetricCard icon={Radar} label="Estimé RT" value={stats.realtimeEstimated} tone="green" />
-                        <MetricCard icon={Clock3} label="Estimé horaire" value={stats.staticEstimated} tone="neutral" />
+                        <MetricCard icon={Bus} label="Positions" value={stats.total} tone="green" description="Bus visibles sur la carte" />
+                        <MetricCard icon={Radar} label="Temps réel" value={stats.realtime} tone="yellow" description="Position GPS ou calculée avec les données live T2C" />
+                        <MetricCard icon={Clock3} label="Estimé" value={stats.staticEstimated} tone="neutral" description="Position calculée sans mise à jour temps réel" />
                     </div>
 
                     <section className="rounded-[1.5rem] border border-white/10 bg-black/55 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl md:rounded-[2rem] md:p-4">
