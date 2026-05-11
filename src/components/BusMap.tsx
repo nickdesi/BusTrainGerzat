@@ -185,9 +185,9 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     }
 
     return (
-        <div className="relative h-full min-h-[min(72dvh,720px)] w-full overflow-hidden rounded-[1.25rem] border border-white/10 bg-slate-950 shadow-[0_28px_90px_rgba(0,0,0,0.45)] ring-1 ring-white/5 md:min-h-[420px] md:rounded-[2rem]">
-            <div className="pointer-events-none absolute inset-0 z-[var(--z-ui-base)] bg-[radial-gradient(circle_at_18%_12%,rgba(16,185,129,0.20),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(59,130,246,0.16),transparent_26%),linear-gradient(180deg,rgba(2,6,23,0.18),transparent_36%,rgba(2,6,23,0.34))]" />
-            <div className="pointer-events-none absolute inset-0 z-[var(--z-ui-base)] bg-noise opacity-35 mix-blend-soft-light" />
+        <div className="relative h-full min-h-[min(72dvh,720px)] w-full overflow-hidden rounded-[1.25rem] border border-white/10 bg-slate-950 shadow-[0_16px_45px_rgba(0,0,0,0.34)] ring-1 ring-white/5 md:min-h-[420px] md:rounded-[2rem] md:shadow-[0_28px_90px_rgba(0,0,0,0.45)]">
+            <div className="pointer-events-none absolute inset-0 z-[var(--z-ui-base)] bg-[radial-gradient(circle_at_18%_12%,rgba(16,185,129,0.16),transparent_28%),linear-gradient(180deg,rgba(2,6,23,0.14),transparent_36%,rgba(2,6,23,0.28))] md:bg-[radial-gradient(circle_at_18%_12%,rgba(16,185,129,0.20),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(59,130,246,0.16),transparent_26%),linear-gradient(180deg,rgba(2,6,23,0.18),transparent_36%,rgba(2,6,23,0.34))]" />
+            <div className="pointer-events-none absolute inset-0 z-[var(--z-ui-base)] hidden bg-noise opacity-35 mix-blend-soft-light md:block" />
             <div className="pointer-events-none absolute inset-x-0 top-0 z-[calc(var(--z-ui-base)+1)] h-16 bg-gradient-to-b from-slate-950/70 to-transparent md:h-24" />
             <div className="pointer-events-none absolute left-4 top-20 z-[calc(var(--z-modal)+1)] hidden rounded-full border border-white/10 bg-slate-950/70 px-3 py-1.5 shadow-lg shadow-black/30 backdrop-blur-xl md:block">
                 <span className="font-display text-[10px] font-black uppercase tracking-[0.28em] text-white/80">Carte temps réel</span>

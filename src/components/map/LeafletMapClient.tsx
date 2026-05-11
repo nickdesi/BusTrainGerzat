@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, useEffect } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Polyline, useMap, useMapEvents, ZoomControl } from 'react-leaflet';
 import type { LatLngExpression } from 'leaflet';
 
@@ -45,6 +45,21 @@ function ZoomController({ onZoomChange }: { onZoomChange: (zoom: number) => void
     return null;
 }
 
+function useIsMobileMap() {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const query = window.matchMedia('(max-width: 640px), (pointer: coarse)');
+        const update = () => setIsMobile(query.matches);
+
+        update();
+        query.addEventListener('change', update);
+        return () => query.removeEventListener('change', update);
+    }, []);
+
+    return isMobile;
+}
+
 export default function LeafletMapClient({
     center,
     zoom,
@@ -57,6 +72,8 @@ export default function LeafletMapClient({
     children,
 }: LeafletMapClientProps) {
     const routeGlow = `${routeColor}55`;
+    const isMobileMap = useIsMobileMap();
+    const pathSmoothFactor = isMobileMap ? 3.5 : 1;
 
     return (
         <MapContainer
@@ -67,6 +84,9 @@ export default function LeafletMapClient({
             scrollWheelZoom
             preferCanvas
             zoomControl={false}
+            zoomAnimation={!isMobileMap}
+            markerZoomAnimation={!isMobileMap}
+            fadeAnimation={!isMobileMap}
         >
             <MapResizeController />
             <ZoomController onZoomChange={onZoomChange} />
@@ -83,38 +103,46 @@ export default function LeafletMapClient({
                 <Polyline
                     positions={secondaryShape}
                     color={routeColor}
-                    weight={5}
+                    weight={isMobileMap ? 4 : 5}
                     opacity={0.42}
                     lineCap="round"
                     lineJoin="round"
+                    smoothFactor={pathSmoothFactor}
                 />
             )}
 
             {primaryShape && (
                 <>
-                    <Polyline
-                        positions={primaryShape}
-                        color="#020617"
-                        weight={14}
-                        opacity={0.7}
-                        lineCap="round"
-                        lineJoin="round"
-                    />
-                    <Polyline
-                        positions={primaryShape}
-                        color={routeGlow}
-                        weight={11}
-                        opacity={0.55}
-                        lineCap="round"
-                        lineJoin="round"
-                    />
+                    {!isMobileMap && (
+                        <>
+                            <Polyline
+                                positions={primaryShape}
+                                color="#020617"
+                                weight={14}
+                                opacity={0.7}
+                                lineCap="round"
+                                lineJoin="round"
+                                smoothFactor={pathSmoothFactor}
+                            />
+                            <Polyline
+                                positions={primaryShape}
+                                color={routeGlow}
+                                weight={11}
+                                opacity={0.55}
+                                lineCap="round"
+                                lineJoin="round"
+                                smoothFactor={pathSmoothFactor}
+                            />
+                        </>
+                    )}
                     <Polyline
                         positions={primaryShape}
                         color={routeColor}
-                        weight={6}
+                        weight={isMobileMap ? 5 : 6}
                         opacity={0.98}
                         lineCap="round"
                         lineJoin="round"
+                        smoothFactor={pathSmoothFactor}
                     />
                 </>
             )}
@@ -123,10 +151,11 @@ export default function LeafletMapClient({
                     key={`branch-${index}`}
                     positions={branch}
                     color={routeColor}
-                    weight={4}
+                    weight={isMobileMap ? 3 : 4}
                     opacity={0.7}
                     lineCap="round"
                     lineJoin="round"
+                    smoothFactor={pathSmoothFactor}
                 />
             ))}
 
