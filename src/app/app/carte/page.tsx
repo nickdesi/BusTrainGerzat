@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Bus, Clock3, Eye, EyeOff, Navigation, Radar, RefreshCw, Satellite } from 'lucide-react';
+import { Bus, Clock3, Eye, EyeOff, Navigation, Radar, RefreshCw } from 'lucide-react';
 import { useVehiclePositions } from '@/hooks/useVehiclePositions';
 import { useLineE1Data } from '@/hooks/useLineE1Data';
 import { useQueryClient } from '@tanstack/react-query';
@@ -81,7 +81,7 @@ export default function CartePage() {
 
         return {
             total: vehicleData?.count ?? vehicles.length,
-            gps: gpsCount,
+            realtime: gpsCount + realtimeInterpolatedCount,
             realtimeEstimated: realtimeInterpolatedCount,
             staticEstimated: staticCount,
             stops: lineData?.stops.length ?? 0,
@@ -118,13 +118,13 @@ export default function CartePage() {
                             Ligne<br /><span className="text-emerald-300 text-glow">E1</span>
                         </h1>
                         <p className="mt-3 text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-gray-400 md:mt-4 md:text-sm md:leading-6 md:tracking-[0.18em]">
-                            Carte E1 avec positions estimées depuis GTFS-RT et horaires T2C.
+                            Carte E1 avec positions temps réel GTFS-RT et estimations horaires T2C.
                         </p>
                     </header>
 
                     <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
                         <MetricCard icon={Bus} label="Total bus" value={stats.total} tone="green" />
-                        <MetricCard icon={Satellite} label="GPS officiel" value={stats.gps} tone="yellow" />
+                        <MetricCard icon={Radar} label="Temps réel" value={stats.realtime} tone="yellow" />
                         <MetricCard icon={Radar} label="Estimé RT" value={stats.realtimeEstimated} tone="green" />
                         <MetricCard icon={Clock3} label="Estimé horaire" value={stats.staticEstimated} tone="neutral" />
                     </div>
