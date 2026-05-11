@@ -1,17 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchWithRetry } from '@/lib/api-client';
-
-export interface BusUpdate {
-    tripId: string;
-    arrival: number;
-    departure: number;
-    delay: number;
-    isRealtime: boolean;
-    isCancelled: boolean;
-    headsign: string;
-    direction: number;
-    origin: string; // First stop name from GTFS (e.g., Ballainvilliers for Express)
-}
+import { BusUpdate } from '@/types/bus';
 
 interface BusDataResponse {
     updates: BusUpdate[];

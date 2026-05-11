@@ -5,9 +5,15 @@ import { useState, useEffect } from 'react';
 
 interface SearchWidgetProps {
     onSearch: (query: string) => void;
+    placeholder?: string;
+    ariaLabel?: string;
 }
 
-export default function SearchWidget({ onSearch }: SearchWidgetProps) {
+export default function SearchWidget({
+    onSearch,
+    placeholder = 'Rechercher ligne, destination...',
+    ariaLabel = 'Rechercher une ligne ou une destination',
+}: SearchWidgetProps) {
     const [query, setQuery] = useState('');
 
     // Debounce search update
@@ -26,10 +32,10 @@ export default function SearchWidget({ onSearch }: SearchWidgetProps) {
             <input
                 type="text"
                 className="block h-10 w-full rounded-xl border border-white/10 bg-black/35 pl-10 pr-10 text-sm leading-5 text-gray-100 placeholder-gray-500 shadow-inner shadow-black/30 transition-colors focus:border-yellow-400 focus:bg-black/55 focus:outline-none focus:ring-2 focus:ring-yellow-400/25 md:h-11 md:rounded-2xl md:pl-11 md:pr-11 md:text-base"
-                placeholder="Rechercher ligne, destination..."
+                placeholder={placeholder}
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                aria-label="Rechercher une ligne ou une destination"
+                aria-label={ariaLabel}
             />
             {query && (
                 <button

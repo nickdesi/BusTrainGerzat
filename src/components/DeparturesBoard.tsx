@@ -52,10 +52,21 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
     const showPrediction = !entry.isRealtime && !entry.isCancelled && (prediction.probability === 'HIGH' || prediction.probability === 'MEDIUM');
     const isClickable = entry.type === 'BUS' && !!entry.tripId;
 
+    const timeColor = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-500';
+    const favoriteLabel = boardType === 'arrivals' ? entry.provenance ?? entry.destination : entry.destination;
+
     return (
         <tr
             onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
-            className={`flip-enter border-b border-white/[0.04] transition-colors ${isClickable
+            onKeyDown={(event) => {
+                if (isClickable && (event.key === 'Enter' || event.key === ' ')) {
+                    event.preventDefault();
+                    onTripClick?.(entry.tripId!, entry.line);
+                }
+            }}
+            tabIndex={isClickable ? 0 : undefined}
+            role={isClickable ? 'button' : undefined}
+            className={`group flip-enter border-b border-white/[0.04] transition-colors ${isClickable
                 ? `cursor-pointer ${accentHover}`
                 : 'hover:bg-white/[0.03]'
                 } ${isFav ? favoriteTint : index % 2 === 0 ? 'bg-surface-elevated' : 'bg-surface-raised'} ${entry.isCancelled ? 'opacity-60' : ''}`}
@@ -67,11 +78,11 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
                     <button
                         onClick={(e) => {
                             e.stopPropagation();
-                            onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
+                            onToggleFavorite(entry.id, entry.line, favoriteLabel, entry.type);
                         }}
                         className={`inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${isFav ? 'bg-yellow-400/15 text-yellow-300' : 'text-gray-600 hover:bg-white/5 hover:text-gray-300'}`}
                         title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
-                        aria-label={isFav ? `Retirer la ligne ${entry.line} vers ${entry.destination} des favoris` : `Ajouter la ligne ${entry.line} vers ${entry.destination} aux favoris`}
+                        aria-label={isFav ? `Retirer la ligne ${entry.line} vers ${favoriteLabel} des favoris` : `Ajouter la ligne ${entry.line} vers ${favoriteLabel} aux favoris`}
                         aria-pressed={isFav}
                     >
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill={isFav ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
@@ -87,16 +98,16 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
                     <div className="flex items-center gap-4">
                         <div className="flex flex-col items-center">
                             <span className="text-[10px] uppercase text-gray-500 mb-1">Arrivée</span>
-                            <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="lg" color="text-yellow-500" />
+                            <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="lg" color={timeColor} />
                         </div>
                         <span className="text-gray-600 text-xl">→</span>
                         <div className="flex flex-col items-center">
                             <span className="text-[10px] uppercase text-gray-500 mb-1">Départ</span>
-                            <SplitFlapDisplay text={formatTime(entry.departureTime)} size="lg" color="text-yellow-500" />
+                            <SplitFlapDisplay text={formatTime(entry.departureTime)} size="lg" color={timeColor} />
                         </div>
                     </div>
                 ) : (
-                    <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="xl" color="text-yellow-500" />
+                    <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="xl" color={timeColor} />
                 )}
             </td>
 

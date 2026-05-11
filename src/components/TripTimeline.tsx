@@ -26,14 +26,25 @@ const TripTimeline = memo(function TripTimeline({
     routeColor = '#fdc300',
     currentTime
 }: TripTimelineProps) {
-    const [nowUnix, setNowUnix] = useState(() => currentTime ?? Math.floor(Date.now() / 1000));
+    const [liveNowUnix, setLiveNowUnix] = useState(() => Math.floor(Date.now() / 1000));
+    const nowUnix = currentTime ?? liveNowUnix;
+
+    const currentStopIndex = stops.findIndex((stop) => stop.status === 'current');
+    const activeSegmentIndex = currentStopIndex > 0 ? currentStopIndex - 1 : -1;
+    const nextStop = stops.find((stop) => stop.status === 'current') ?? null;
+    const previousStop = activeSegmentIndex >= 0
+        ? stops.find((_, index) => index === activeSegmentIndex) ?? null
+        : null;
+    const shouldTrackProgress = currentTime === undefined && Boolean(previousStop && nextStop);
 
     useEffect(() => {
+        if (!shouldTrackProgress) return;
+
         const interval = setInterval(() => {
-            setNowUnix(Math.floor(Date.now() / 1000));
-        }, 1000);
+            setLiveNowUnix(Math.floor(Date.now() / 1000));
+        }, 10_000);
         return () => clearInterval(interval);
-    }, []);
+    }, [shouldTrackProgress]);
 
     if (isLoading) {
         return (
@@ -53,13 +64,6 @@ const TripTimeline = memo(function TripTimeline({
             </div>
         );
     }
-
-    const currentStopIndex = stops.findIndex((stop) => stop.status === 'current');
-    const activeSegmentIndex = currentStopIndex > 0 ? currentStopIndex - 1 : -1;
-    const nextStop = stops.find((stop) => stop.status === 'current') ?? null;
-    const previousStop = activeSegmentIndex >= 0
-        ? stops.find((_, index) => index === activeSegmentIndex) ?? null
-        : null;
 
     let activeProgress = 0;
     if (previousStop && nextStop) {

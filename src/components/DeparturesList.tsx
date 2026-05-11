@@ -28,11 +28,14 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, onTog
     const isClickable = entry.type === 'BUS' && entry.tripId;
     const accentBorder = boardType === 'arrivals' ? 'border-blue-500/20' : 'border-yellow-500/20';
     const favoriteTint = boardType === 'arrivals' ? 'bg-blue-900/15' : 'bg-yellow-900/15';
+    const timeColor = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-500';
+    const activeTint = boardType === 'arrivals' ? 'active:bg-blue-900/30' : 'active:bg-yellow-900/30';
+    const favoriteLabel = boardType === 'arrivals' ? entry.provenance ?? entry.destination : entry.destination;
 
     return (
         <div
             onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
-            className={`flip-enter rounded-3xl border p-4 shadow-lg shadow-black/20 transition-colors ${isClickable ? 'cursor-pointer active:bg-yellow-900/30' : ''} ${isFav ? `${favoriteTint} ${accentBorder}` : 'border-white/[0.06] bg-white/[0.03]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+            className={`flip-enter rounded-3xl border p-4 shadow-lg shadow-black/20 transition-colors ${isClickable ? `cursor-pointer ${activeTint}` : ''} ${isFav ? `${favoriteTint} ${accentBorder}` : 'border-white/[0.06] bg-white/[0.03]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
             title={entry.isCancelled ? 'Train supprimé' : undefined}
             role={isClickable ? 'button' : undefined}
             tabIndex={isClickable ? 0 : undefined}
@@ -48,22 +51,22 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, onTog
                     <div className="flex items-center gap-4">
                         <div className="flex flex-col">
                             <span className="text-[10px] text-gray-500 uppercase">Arrivée</span>
-                            <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="sm" color="text-yellow-500" />
+                            <SplitFlapDisplay text={formatTime(entry.arrivalTime)} size="sm" color={timeColor} />
                         </div>
                         <div className="flex flex-col">
                             <span className="text-[10px] text-gray-500 uppercase">Départ</span>
-                            <SplitFlapDisplay text={formatTime(entry.departureTime)} size="sm" color="text-yellow-500" />
+                            <SplitFlapDisplay text={formatTime(entry.departureTime)} size="sm" color={timeColor} />
                         </div>
                     </div>
                 ) : (
-                    <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="lg" color="text-yellow-500" />
+                    <SplitFlapDisplay text={formatTime(getDisplayTime(entry, boardType)!)} size="lg" color={timeColor} />
                 )}
                 <div className="flex items-center gap-3">
                     {onToggleFavorite && (
                         <button
                             onClick={(e) => {
                                 e.stopPropagation();
-                                onToggleFavorite(entry.id, entry.line, entry.destination, entry.type);
+                                onToggleFavorite(entry.id, entry.line, favoriteLabel, entry.type);
                             }}
                             className={`w-10 h-10 flex items-center justify-center rounded-full transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 ${isFav ? 'text-yellow-400 bg-yellow-900/20' : 'text-gray-600 hover:bg-white/5'}`}
                             title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}

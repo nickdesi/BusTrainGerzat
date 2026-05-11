@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { fetchWithRetry } from '@/lib/api-client';
 import { TrainUpdate } from '@/types';
 
 interface TrainDataResponse {
@@ -7,11 +8,9 @@ interface TrainDataResponse {
 }
 
 async function fetchTrainData(): Promise<TrainDataResponse> {
-    const res = await fetch('/api/trains');
-    if (!res.ok) {
-        return { updates: [], timestamp: Date.now() / 1000 };
-    }
-    return res.json();
+    return fetchWithRetry<TrainDataResponse>('/api/trains', {
+        retries: 2,
+    });
 }
 
 /**

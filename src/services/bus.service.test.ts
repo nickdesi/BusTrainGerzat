@@ -44,11 +44,11 @@ describe('bus.service helpers', () => {
     it('removes cancelled trips when a close replacement exists', () => {
         const cancelled: BusUpdate = {
             tripId: 'cancelled', arrival: 1_000, departure: 1_000, delay: 0,
-            isRealtime: true, isCancelled: true, headsign: 'Aubière', direction: 0,
+            isRealtime: true, isCancelled: true, headsign: 'Aubière', direction: 0, origin: 'Gerzat',
         };
         const replacement: BusUpdate = {
             tripId: 'replacement', arrival: 1_500, departure: 1_500, delay: 0,
-            isRealtime: true, isCancelled: false, headsign: 'Aubière', direction: 0,
+            isRealtime: true, isCancelled: false, headsign: 'Aubière', direction: 0, origin: 'Gerzat',
         };
         const farCancelled: BusUpdate = {
             ...cancelled,

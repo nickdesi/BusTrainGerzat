@@ -106,6 +106,20 @@ type TrainDataResponse = { updates: TrainUpdate[], timestamp: number, error?: st
 let cachedResponse: { updates: TrainUpdate[], timestamp: number, debug?: Record<string, unknown> } | null = null;
 let cacheExpiry = 0;
 
+function buildCachedTrainResponse(reason: 'rateLimited' | 'fetchFailed'): TrainDataResponse | null {
+    if (!cachedResponse) return null;
+
+    return stripProductionDebug({
+        ...cachedResponse,
+        debug: {
+            ...cachedResponse.debug,
+            cached: true,
+            stale: Date.now() >= cacheExpiry,
+            [reason]: true,
+        },
+    });
+}
+
 function stripProductionDebug(response: TrainDataResponse): TrainDataResponse {
     if (INCLUDE_DEBUG || !('debug' in response)) return response;
     const publicResponse = { ...response };
@@ -228,9 +242,9 @@ export async function getTrainData(): Promise<TrainDataResponse> {
             baseDataRaw = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, fetchOptions);
         } catch (err) {
             if (err instanceof ApiError && err.status === 429) {
-                if (cachedResponse) {
-                    return stripProductionDebug({ ...cachedResponse, debug: { ...cachedResponse.debug, cached: true, rateLimited: true } });
-                }
+                const cached = buildCachedTrainResponse('rateLimited');
+                if (cached) return cached;
+
                 return stripProductionDebug({ updates: [], timestamp: now, error: 'RATE_LIMITED', debug: { error: err.message } });
             }
             throw err; // Re-throw other errors to outer catch
@@ -368,6 +382,10 @@ export async function getTrainData(): Promise<TrainDataResponse> {
         return stripProductionDebug(result);
     } catch (e) {
         console.error('getTrainData error:', e);
+
+        const cached = buildCachedTrainResponse('fetchFailed');
+        if (cached) return cached;
+
         return { updates: [], timestamp: Math.floor(Date.now() / 1000), error: 'FETCH_FAILED' };
     }
 }

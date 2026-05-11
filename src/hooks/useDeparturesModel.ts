@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { UnifiedEntry, TrainUpdate } from '@/types';
 import { normalizeText } from '@/utils/format';
-import { BusUpdate } from './useBusData';
+import { BusUpdate } from '@/types/bus';
 
 // ⚡ Bolt: Removed standalone deduplicate function that used .filter()
 // Deduplication is now integrated into the single-pass for...of loop
