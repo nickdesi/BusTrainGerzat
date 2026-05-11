@@ -48,3 +48,6 @@
 ## 2026-05-27 - O(N^2) Anti-Pattern in Array Filtering Methods
 **Learning:** Found an `O(N*M)` complexity bug where `array.find()` was being used inside an `array.forEach()` over potentially hundreds of elements (in `removeCancelledTripsWithReplacement`). While `Array.find()` feels clean, inside a loop it degrades performance dramatically.
 **Action:** Always pre-group or index secondary arrays (e.g. by direction) before comparing them inside loops, and use `.some()` instead of `.find()` if you only need boolean existence to short-circuit the inner loop faster.
+## 2026-05-28 - Avoiding multiple redundant filter() loops for counting subsets
+**Learning:** Found an anti-pattern in `src/app/api/vehicles/route.ts` where three sequential `.filter().length` calls were used to calculate subsets of a list (`gpsCount`, `realtimeInterpolatedCount`, `staticCount`). This forced iterating over the entire `vehicles` array three times and created three separate intermediate arrays just to get their lengths, resulting in $O(N)$ execution time x3 and unnecessary memory allocations.
+**Action:** Replace multiple `.filter().length` calls computing related statistics with a single O(N) `for...of` loop and simple counter variables. This achieves zero intermediate array allocations and better processing times.

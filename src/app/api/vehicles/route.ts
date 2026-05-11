@@ -302,9 +302,16 @@ export async function GET(request: Request) {
             });
         }
 
-        const gpsCount = vehicles.filter((vehicle) => vehicle.source === 'gps').length;
-        const realtimeInterpolatedCount = vehicles.filter((vehicle) => vehicle.source === 'realtime_interpolated').length;
-        const staticCount = vehicles.filter((vehicle) => vehicle.source === 'static').length;
+        // ⚡ Bolt: Single pass O(N) loop to calculate counts without creating multiple intermediate arrays via .filter()
+        let gpsCount = 0;
+        let realtimeInterpolatedCount = 0;
+        let staticCount = 0;
+
+        for (const vehicle of vehicles) {
+            if (vehicle.source === 'gps') gpsCount++;
+            else if (vehicle.source === 'realtime_interpolated') realtimeInterpolatedCount++;
+            else if (vehicle.source === 'static') staticCount++;
+        }
 
         return NextResponse.json({
             vehicles,
