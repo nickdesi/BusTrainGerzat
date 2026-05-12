@@ -58,3 +58,8 @@ public/sw.js.map
 public/workbox-*.js
 public/workbox-*.js.map
 .env*.local
+
+# Playwright
+playwright-report/
+test-results/
+

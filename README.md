@@ -297,13 +297,13 @@ Les données générées sont principalement :
 - `public/data/lineE1_data.json` : arrêts officiels et tracés de la ligne E1 pour la carte ;
 - `public/data/e1_stop_times.json` : trips et stop times E1 pour les détails de trajet.
 
-Régénération locale :
+### Automatisation des mises à jour (GTFS & JSON)
+
+Les scripts de mise à jour des données statiques ont été migrés de Python vers TypeScript.
 
 ```bash
-python3 scripts/gtfs/check_gtfs_update.py
-python3 scripts/gtfs/generate_static_json.py
-python3 scripts/gtfs/generate_e1_stop_times.py
-python3 scripts/gtfs/extract_lineE1_data.py
+# Met à jour les données GTFS et génère tous les fichiers statiques JSON
+npm run gtfs:update
 ```
 
 Le workflow GitHub Actions `Update T2C GTFS Schedule` exécute automatiquement cette chaîne, valide les JSON générés, lance lint/tests/build, puis commit uniquement si les données changent.

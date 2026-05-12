@@ -15,7 +15,6 @@ permissions:
 
 env:
   NODE_VERSION: '24.15.0'
-  PYTHON_VERSION: '3.13'
 
 jobs:
   update-gtfs:
@@ -26,61 +25,46 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
 
-      - name: Install Python dependencies
-        run: python -m pip install --disable-pip-version-check requests
+      - name: Install dependencies
+        run: npm ci --prefer-offline --no-audit --no-fund
 
-      - name: Download and validate T2C GTFS
+      - name: Download, validate and generate T2C GTFS
         id: sentinel_check
         run: |
-          echo "🔍 Downloading and validating official GTFS..."
-          if python scripts/gtfs/check_gtfs_update.py; then
+          echo "🔍 Downloading, validating and generating official GTFS..."
+          if npm run gtfs:update; then
             echo "is_updated=true" >> $GITHUB_OUTPUT
-            echo "✅ Official data is valid. Proceeding with generation."
+            echo "✅ Official data is valid and generation succeeded."
           else
             echo "is_updated=false" >> $GITHUB_OUTPUT
-            echo "⚠️ Official data unavailable or invalid. Skipping update."
+            echo "⚠️ Official data unavailable or generation failed. Skipping update."
           fi
-
-      - name: Generate static schedule
-        if: steps.sentinel_check.outputs.is_updated == 'true'
-        run: |
-          python scripts/gtfs/generate_static_json.py
-          python scripts/gtfs/generate_e1_stop_times.py
-          python scripts/gtfs/extract_lineE1_data.py
 
       - name: Validate generated data
         if: steps.sentinel_check.outputs.is_updated == 'true'
         run: |
-          python - <<'PY'
-          import json
-          from pathlib import Path
+          node -e "
+            const fs = require('fs');
+            const schedule = JSON.parse(fs.readFileSync('src/data/static_schedule.json', 'utf8'));
+            const config = JSON.parse(fs.readFileSync('src/data/gtfs_config.json', 'utf8'));
+            const stopTimes = JSON.parse(fs.readFileSync('public/data/e1_stop_times.json', 'utf8'));
+            const lineE1 = JSON.parse(fs.readFileSync('public/data/lineE1_data.json', 'utf8'));
 
-          schedule = json.loads(Path('src/data/static_schedule.json').read_text())
-          config = json.loads(Path('src/data/gtfs_config.json').read_text())
-          stop_times = json.loads(Path('public/data/e1_stop_times.json').read_text())
-          line_e1 = json.loads(Path('public/data/lineE1_data.json').read_text())
-
-          if len(schedule) < 100:
-              raise RuntimeError(f'Too few scheduled stops: {len(schedule)}')
-          if not isinstance(config.get('routeIds'), list) or not config['routeIds']:
-              raise RuntimeError('Missing routeIds')
-          if not config.get('stopIds', {}).get('champfleuri'):
-              raise RuntimeError('Missing Champfleuri stop ids')
-          if not config.get('stopIds', {}).get('patural'):
-              raise RuntimeError('Missing Patural stop ids')
-          if not isinstance(stop_times, list) or not stop_times:
-              raise RuntimeError('Missing E1 stop times')
-          if len(line_e1.get('stops', [])) < 50:
-              raise RuntimeError(f"Too few E1 map stops: {len(line_e1.get('stops', []))}")
-          if not line_e1.get('shapes', {}).get('0') or not line_e1.get('shapes', {}).get('1'):
-              raise RuntimeError('Missing E1 map shapes')
-          print('✅ Generated data validation passed')
-          PY
+            if (schedule.length < 100) throw new Error('Too few scheduled stops: ' + schedule.length);
+            if (!Array.isArray(config.routeIds) || config.routeIds.length === 0) throw new Error('Missing routeIds');
+            if (!config.stopIds || !config.stopIds.champfleuri) throw new Error('Missing Champfleuri stop ids');
+            if (!config.stopIds || !config.stopIds.patural) throw new Error('Missing Patural stop ids');
+            if (!Array.isArray(stopTimes) || stopTimes.length === 0) throw new Error('Missing E1 stop times');
+            if (!lineE1.stops || lineE1.stops.length < 50) throw new Error('Too few E1 map stops: ' + (lineE1.stops ? lineE1.stops.length : 0));
+            if (!lineE1.shapes || !lineE1.shapes['0'] || !lineE1.shapes['1']) throw new Error('Missing E1 map shapes');
+            console.log('✅ Generated data validation passed');
+          "
 
       - name: Check for changes
         if: steps.sentinel_check.outputs.is_updated == 'true'
@@ -94,17 +78,6 @@ jobs:
             echo "changes=true" >> $GITHUB_OUTPUT
             echo "📝 Changes detected, will install dependencies, validate and commit"
           fi
-
-      - name: Set up Node.js
-        if: steps.sentinel_check.outputs.is_updated == 'true' && steps.check_changes.outputs.changes == 'true'
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-
-      - name: Install Node dependencies
-        if: steps.sentinel_check.outputs.is_updated == 'true' && steps.check_changes.outputs.changes == 'true'
-        run: npm ci --prefer-offline --no-audit --no-fund
 
       - name: Validate app
         if: steps.sentinel_check.outputs.is_updated == 'true' && steps.check_changes.outputs.changes == 'true'
