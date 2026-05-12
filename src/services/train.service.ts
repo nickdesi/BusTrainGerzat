@@ -54,6 +54,17 @@ import { parseParisTime } from '@/utils/date';
 
 import { fetchWithRetry, ApiError } from '@/lib/api-client';
 
+const MAX_REASONABLE_TRAIN_DELAY_SECONDS = 12 * 60 * 60;
+
+function isValidUnixTimestamp(value: number): boolean {
+    return Number.isFinite(value) && value > 0;
+}
+
+function clampTrainDelay(delay: number): number {
+    if (!Number.isFinite(delay)) return 0;
+    return Math.max(-MAX_REASONABLE_TRAIN_DELAY_SECONDS, Math.min(MAX_REASONABLE_TRAIN_DELAY_SECONDS, delay));
+}
+
 function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], isRealtimeSource: boolean): TrainUpdate {
     const stopDateTime = dep.stop_date_time;
     const displayInfo = dep.display_informations;
@@ -62,9 +73,19 @@ function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], is
     const departureTime = parseParisTime(stopDateTime.departure_date_time);
     const arrivalTime = parseParisTime(stopDateTime.arrival_date_time);
     const baseDepartureTime = parseParisTime(stopDateTime.base_departure_date_time);
+    const hasValidDeparture = isValidUnixTimestamp(departureTime);
+    const hasValidArrival = isValidUnixTimestamp(arrivalTime);
+    const hasValidBaseDeparture = isValidUnixTimestamp(baseDepartureTime);
+
+    const safeDepartureTime = hasValidDeparture
+        ? departureTime
+        : (hasValidBaseDeparture ? baseDepartureTime : (hasValidArrival ? arrivalTime : 0));
+    const safeArrivalTime = hasValidArrival ? arrivalTime : safeDepartureTime;
 
     // Calculate delay (only valid for realtime source, otherwise 0)
-    const delay = isRealtimeSource ? departureTime - baseDepartureTime : 0;
+    const delay = isRealtimeSource && hasValidDeparture && hasValidBaseDeparture
+        ? clampTrainDelay(departureTime - baseDepartureTime)
+        : 0;
 
     // Find Origin
     let origin = 'Inconnu';
@@ -89,8 +110,8 @@ function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], is
         trainNumber: displayInfo.trip_short_name || displayInfo.headsign || 'Inconnu',
         direction: displayInfo.direction?.replace(/ \([^)]+\)$/, '') || 'Inconnu',
         origin: origin,
-        arrival: { time: arrivalTime.toString(), delay },
-        departure: { time: departureTime.toString(), delay },
+        arrival: { time: safeArrivalTime.toString(), delay },
+        departure: { time: safeDepartureTime.toString(), delay },
         delay,
         isRealtime: isRealtimeSource,
         isCancelled: isCancelledSpecific
@@ -268,6 +289,8 @@ export async function getTrainData(): Promise<TrainDataResponse> {
             for (const dep of realtimeData.departures) {
                 const depTime = parseParisTime(dep.stop_date_time.departure_date_time);
 
+                if (!isValidUnixTimestamp(depTime)) continue;
+
                 // Track time window of realtime data
                 if (depTime < minRealtimeTime) minRealtimeTime = depTime;
                 if (depTime > maxRealtimeTime) maxRealtimeTime = depTime;
@@ -312,7 +335,9 @@ export async function getTrainData(): Promise<TrainDataResponse> {
 
                     const time = parseParisTime(realtimeDep.stop_date_time.departure_date_time);
                     const base = parseParisTime(realtimeDep.stop_date_time.base_departure_date_time);
-                    delay = time - base;
+                    delay = isValidUnixTimestamp(time) && isValidUnixTimestamp(base)
+                        ? clampTrainDelay(time - base)
+                        : 0;
                 }
                 // Scenario B: Train MISSING from Realtime -> Infer Status
                 else {
@@ -339,7 +364,9 @@ export async function getTrainData(): Promise<TrainDataResponse> {
 
                 const processed = processSncfDeparture(finalDep, baseData.origins, isRealtime);
                 processed.isCancelled = isCancelled;
-                processed.delay = delay;
+                processed.delay = clampTrainDelay(delay);
+                processed.departure.delay = processed.delay;
+                processed.arrival.delay = processed.delay;
 
                 // If theoretical (no realtime match and not cancelled), explicitly mark as not realtime
                 // This will show the "offline" or "theoretical" icon in UI

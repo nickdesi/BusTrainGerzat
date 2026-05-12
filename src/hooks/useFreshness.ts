@@ -1,15 +1,25 @@
 import { useQuery } from '@tanstack/react-query';
 
-interface FreshnessStatus {
+export interface BusFreshnessStatus {
     isValid: boolean;
     daysRemaining: number;
     warningLevel: 'none' | 'info' | 'warning' | 'critical';
     message?: string;
 }
 
-interface FreshnessResponse {
-    bus: FreshnessStatus;
-    train: { isValid: boolean };
+export interface TrainFreshnessStatus {
+    isValid: boolean;
+    hasApiKey: boolean;
+    isCached: boolean;
+    cacheExpiresIn: number;
+    lastFetchAge: number | null;
+    warningLevel: 'none' | 'info' | 'warning' | 'critical';
+    message?: string;
+}
+
+export interface FreshnessResponse {
+    bus: BusFreshnessStatus;
+    train: TrainFreshnessStatus;
     timestamp: number;
 }
 

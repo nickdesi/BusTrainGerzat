@@ -25,6 +25,66 @@ const PARIS_DATE_STRING_FORMATTER = new Intl.DateTimeFormat('en-US', {
     day: '2-digit'
 });
 
+const PARIS_LOCAL_DATETIME_FORMATTER = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'Europe/Paris',
+    hour12: false,
+    hourCycle: 'h23',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+});
+
+type ParisDateTime = {
+    year: number;
+    month: number;
+    day: number;
+    hour: number;
+    minute: number;
+    second: number;
+};
+
+function parseOffsetToMinutes(offset: string): number | null {
+    const match = offset.match(/^([+-])(\d{2}):(\d{2})$/);
+    if (!match) return null;
+
+    const sign = match[1] === '-' ? -1 : 1;
+    const hours = Number.parseInt(match[2], 10);
+    const minutes = Number.parseInt(match[3], 10);
+    if (!Number.isFinite(hours) || !Number.isFinite(minutes)) return null;
+
+    return sign * (hours * 60 + minutes);
+}
+
+function parseParisPartsFromDate(utcMillis: number): ParisDateTime | null {
+    const parts = PARIS_LOCAL_DATETIME_FORMATTER.formatToParts(new Date(utcMillis));
+
+    const year = Number.parseInt(parts.find(p => p.type === 'year')?.value || '', 10);
+    const month = Number.parseInt(parts.find(p => p.type === 'month')?.value || '', 10);
+    const day = Number.parseInt(parts.find(p => p.type === 'day')?.value || '', 10);
+    const hour = Number.parseInt(parts.find(p => p.type === 'hour')?.value || '', 10);
+    const minute = Number.parseInt(parts.find(p => p.type === 'minute')?.value || '', 10);
+    const second = Number.parseInt(parts.find(p => p.type === 'second')?.value || '', 10);
+
+    if (![year, month, day, hour, minute, second].every(Number.isFinite)) return null;
+
+    return { year, month, day, hour, minute, second };
+}
+
+function matchesParisLocalTime(utcMillis: number, target: ParisDateTime): boolean {
+    const parsed = parseParisPartsFromDate(utcMillis);
+    if (!parsed) return false;
+
+    return parsed.year === target.year
+        && parsed.month === target.month
+        && parsed.day === target.day
+        && parsed.hour === target.hour
+        && parsed.minute === target.minute
+        && parsed.second === target.second;
+}
+
 /**
  * Get the UTC offset string for Paris at a given date (e.g., "+01:00" or "+02:00")
  * We verify the offset at NOON on that day to avoid edge cases around 2am/3am transitions
@@ -45,10 +105,11 @@ export function getParisOffset(year: number, month: number, day: number): string
     const match = tzPart?.value.match(/GMT([+-]\d{1,2})(?::(\d{2}))?/);
 
     if (match) {
-        const hours = match[1];
-        const minutes = match[3] || '00';
-        // Normalize to +HH:mm format
-        return `${hours.startsWith('+') || hours.startsWith('-') ? '' : '+'}${hours.padStart(3, hours.startsWith('-') || hours.startsWith('+') ? '0' : '+0')}:${minutes}`;
+        const rawHours = match[1];
+        const sign = rawHours.startsWith('-') ? '-' : '+';
+        const hours = rawHours.replace(/[+-]/, '').padStart(2, '0');
+        const minutes = (match[2] || '00').padStart(2, '0');
+        return `${sign}${hours}:${minutes}`;
     }
 
     return '+01:00'; // Default fallback (Winter)
@@ -60,29 +121,44 @@ export function getParisOffset(year: number, month: number, day: number): string
  * returns Unix timestamp (seconds)
  */
 export function parseParisTime(dateStr: string): number {
-    if (!dateStr || dateStr.length < 8) return 0;
+    if (!dateStr) return 0;
 
-    // Extract parts
-    const year = parseInt(dateStr.slice(0, 4));
-    const month = parseInt(dateStr.slice(4, 6)); // 1-12
-    const day = parseInt(dateStr.slice(6, 8));
+    const match = dateStr.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2}))?$/);
+    if (!match) return 0;
 
-    let hour = 0, minute = 0, second = 0;
+    const year = Number.parseInt(match[1], 10);
+    const month = Number.parseInt(match[2], 10);
+    const day = Number.parseInt(match[3], 10);
+    const hour = Number.parseInt(match[4] || '00', 10);
+    const minute = Number.parseInt(match[5] || '00', 10);
+    const second = Number.parseInt(match[6] || '00', 10);
 
-    if (dateStr.includes('T')) {
-        const timePart = dateStr.split('T')[1];
-        if (timePart.length >= 2) hour = parseInt(timePart.slice(0, 2));
-        if (timePart.length >= 4) minute = parseInt(timePart.slice(2, 4));
-        if (timePart.length >= 6) second = parseInt(timePart.slice(4, 6));
+    if (!Number.isFinite(year) || !Number.isFinite(month) || !Number.isFinite(day)
+        || !Number.isFinite(hour) || !Number.isFinite(minute) || !Number.isFinite(second)) {
+        return 0;
     }
 
-    // Get offset for this specific day
-    const offset = getParisOffset(year, month, day); // e.g. "+01:00"
+    if (month < 1 || month > 12 || day < 1 || day > 31 || hour < 0 || hour > 23 || minute < 0 || minute > 59 || second < 0 || second > 59) {
+        return 0;
+    }
 
-    // Construct ISO string with explicit offset: "2024-01-20T08:00:00+01:00"
-    const isoString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}T${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}${offset}`;
+    const localDateTime: ParisDateTime = { year, month, day, hour, minute, second };
+    const baseUtcMillis = Date.UTC(year, month - 1, day, hour, minute, second);
 
-    return Math.floor(new Date(isoString).getTime() / 1000);
+    const candidateOffsets = new Set<number>();
+    const dayOffsetMinutes = parseOffsetToMinutes(getParisOffset(year, month, day));
+    if (dayOffsetMinutes !== null) candidateOffsets.add(dayOffsetMinutes);
+    candidateOffsets.add(120);
+    candidateOffsets.add(60);
+
+    for (const offsetMinutes of candidateOffsets) {
+        const utcMillis = baseUtcMillis - offsetMinutes * 60_000;
+        if (matchesParisLocalTime(utcMillis, localDateTime)) {
+            return Math.floor(utcMillis / 1000);
+        }
+    }
+
+    return 0;
 }
 
 /**

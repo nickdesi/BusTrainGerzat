@@ -63,6 +63,23 @@ describe('Date Utilities - Paris Timezone', () => {
         expect(timestamp).toBe(expected);
     });
 
+    it('should return 0 for malformed or impossible local times', () => {
+        expect(parseParisTime('')).toBe(0);
+        expect(parseParisTime('invalid')).toBe(0);
+        expect(parseParisTime('20241320T100000')).toBe(0);
+        // During spring DST switch in Paris, 02:30 local does not exist.
+        expect(parseParisTime('20240331T023000')).toBe(0);
+    });
+
+    it('should parse around DST transition boundaries using Paris local clock', () => {
+        // Spring switch day: 01:30 exists in winter offset (+01)
+        expect(parseParisTime('20240331T013000')).toBe(new Date('2024-03-31T00:30:00Z').getTime() / 1000);
+        // Spring switch day: 03:30 exists in summer offset (+02)
+        expect(parseParisTime('20240331T033000')).toBe(new Date('2024-03-31T01:30:00Z').getTime() / 1000);
+        // Autumn switch day ambiguous hour: parser resolves to standard-time occurrence (+01)
+        expect(parseParisTime('20241027T023000')).toBe(new Date('2024-10-27T01:30:00Z').getTime() / 1000);
+    });
+
     it('should get realistic midnight for today', () => {
         const midnight = getParisMidnight();
         const now = Math.floor(Date.now() / 1000);

@@ -67,6 +67,11 @@ describe('bus.service helpers', () => {
         expect(shouldApplyRealtimeUpdate(undefined, '20260502', 0, 10_000)).toBe(false);
     });
 
+    it('rejects malformed realtime timestamps when matching static schedule', () => {
+        expect(shouldApplyRealtimeUpdate(undefined, '20260502', Number.NaN, 10_000)).toBe(false);
+        expect(shouldApplyRealtimeUpdate(undefined, '20260502', Number.POSITIVE_INFINITY, 10_000)).toBe(false);
+    });
+
     it('uses startDate first when present for realtime matching', () => {
         expect(shouldApplyRealtimeUpdate('20260502', '20260502', 0, 10_000)).toBe(true);
         expect(shouldApplyRealtimeUpdate('20260503', '20260502', 10_000, 10_000)).toBe(false);

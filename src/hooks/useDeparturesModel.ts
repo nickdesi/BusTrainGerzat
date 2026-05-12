@@ -99,17 +99,18 @@ export function useDeparturesModel(
         const seenArrs = new Set<string>();
 
         for (const u of busUpdates) {
-            const roundedTime = Math.floor(u.arrival / 60);
-            const key = `${roundedTime}-${u.headsign}`;
-
             if (u.direction === 0) {
                 // Departures: buses LEAVING Gerzat
+                const roundedDepartureTime = Math.floor((u.departure || u.arrival) / 60);
+                const key = `${roundedDepartureTime}-${u.headsign}`;
                 if (!seenDeps.has(key)) {
                     seenDeps.add(key);
                     deps.push(mapBusDeparture(u));
                 }
             } else if (u.direction === 1) {
                 // Arrivals: buses ARRIVING at Gerzat
+                const roundedArrivalTime = Math.floor(u.arrival / 60);
+                const key = `${roundedArrivalTime}-${u.headsign}`;
                 if (!seenArrs.has(key)) {
                     seenArrs.add(key);
                     arrs.push(mapBusArrival(u));

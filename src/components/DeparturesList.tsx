@@ -4,9 +4,10 @@ import { memo, useState, useMemo, useCallback } from 'react';
 import { ArrowRight, RefreshCw, ChevronRight, Wifi, WifiOff } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 import SplitFlapDisplay from './SplitFlapDisplay';
-import StatusDisplay from './StatusDisplay';
+import StatusDisplay, { DataConfidenceSignal } from './StatusDisplay';
 import TripDetailModal from './TripDetailModal';
 import { formatTime, getDisplayTime } from '@/utils/format';
+import { useFreshness } from '@/hooks/useFreshness';
 
 interface DeparturesListProps {
     departures: UnifiedEntry[];
@@ -20,11 +21,12 @@ interface DepartureRowProps {
     entry: UnifiedEntry;
     boardType: 'departures' | 'arrivals';
     isFav: boolean;
+    sourceSignal?: DataConfidenceSignal;
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
     onTripClick?: (tripId: string, line: string) => void;
 }
 
-const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, onToggleFavorite, onTripClick }: DepartureRowProps) {
+const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, sourceSignal, onToggleFavorite, onTripClick }: DepartureRowProps) {
     const isClickable = entry.type === 'BUS' && entry.tripId;
     const accentBorder = boardType === 'arrivals' ? 'border-blue-500/20' : 'border-yellow-500/20';
     const favoriteTint = boardType === 'arrivals' ? 'bg-blue-900/15' : 'bg-yellow-900/15';
@@ -105,7 +107,7 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, onTog
                     {entry.platform}
                 </span>
                 <div className="flex items-center gap-2">
-                    <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} />
+                    <StatusDisplay delay={entry.delay} isRealtime={entry.isRealtime} isCancelled={entry.isCancelled} sourceSignal={sourceSignal} />
                     {entry.isRealtime ? (
                         <Wifi className="w-4 h-4 text-green-500 animate-pulse" strokeWidth={3} />
                     ) : (
@@ -121,6 +123,7 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, onTog
 });
 
 export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
+    const { data: freshness } = useFreshness();
     const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
     const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-400';
@@ -172,6 +175,7 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                             entry={entry}
                             boardType={boardType}
                             isFav={isFav}
+                            sourceSignal={entry.type === 'BUS' ? freshness?.bus : freshness?.train}
                             onToggleFavorite={onToggleFavorite ? handleToggleFavorite : undefined}
                             onTripClick={handleTripClick}
                         />

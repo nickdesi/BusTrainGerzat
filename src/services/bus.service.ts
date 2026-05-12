@@ -32,6 +32,10 @@ type AddedTripStop = {
 
 const RT_FALLBACK_MATCH_WINDOW_SECONDS = 3 * 60 * 60;
 
+function isValidUnixTimestamp(value: number | undefined): value is number {
+    return typeof value === 'number' && Number.isFinite(value) && value > 0;
+}
+
 // --- Lazy-loaded Data (reduces cold start time) ---
 
 // Cache for lazy-loaded modules
@@ -148,7 +152,8 @@ export function removeCancelledTripsWithReplacement(updates: BusUpdate[]): BusUp
 
 export function shouldApplyRealtimeUpdate(rtStartDate: string | undefined, staticDate: string, rtTime: number, scheduledArrival: number): boolean {
     if (rtStartDate) return rtStartDate === staticDate;
-    return rtTime > 0 && Math.abs(rtTime - scheduledArrival) <= RT_FALLBACK_MATCH_WINDOW_SECONDS;
+    if (!isValidUnixTimestamp(rtTime) || !isValidUnixTimestamp(scheduledArrival)) return false;
+    return Math.abs(rtTime - scheduledArrival) <= RT_FALLBACK_MATCH_WINDOW_SECONDS;
 }
 
 export function findGerzatStopForAddedTrip(
@@ -229,7 +234,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     const arrivalTime = gerzatStop.predictedTime;
                     const arrivalDelay = gerzatStop.delay;
 
-                    if (arrivalTime) {
+                    if (isValidUnixTimestamp(arrivalTime)) {
                         addedTrips.push({
                             tripId: tripId,
                             arrival: arrivalTime,
@@ -326,7 +331,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 } else {
                     // Fallback: check timestamp of ANY available stop update for this trip
                     const firstStopUpdate = rtTrip.stops.values().next().value;
-                    const rtTime = firstStopUpdate?.arrival?.time || firstStopUpdate?.departure?.time || 0;
+                    const rtTime = firstStopUpdate?.arrival?.time ?? firstStopUpdate?.departure?.time ?? 0;
                     shouldApplyRT = shouldApplyRealtimeUpdate(rtStartDate, staticDate, rtTime, item.arrival);
                 }
 
@@ -337,17 +342,20 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                     if (rtStop) {
                         isRealtime = true;
 
-                        if (rtStop.arrival?.time) {
-                            arrival = Number(rtStop.arrival.time);
-                        } else if (rtStop.departure?.time) {
-                            arrival = Number(rtStop.departure.time);
+                        const rtArrivalTime = rtStop.arrival?.time;
+                        const rtDepartureTime = rtStop.departure?.time;
+
+                        if (isValidUnixTimestamp(rtArrivalTime)) {
+                            arrival = rtArrivalTime;
+                        } else if (isValidUnixTimestamp(rtDepartureTime)) {
+                            arrival = rtDepartureTime;
                         }
 
-                        if (rtStop.departure?.time) {
-                            departure = Number(rtStop.departure.time);
-                        } else if (rtStop.arrival?.time) {
+                        if (isValidUnixTimestamp(rtDepartureTime)) {
+                            departure = rtDepartureTime;
+                        } else if (isValidUnixTimestamp(rtArrivalTime)) {
                             const dwell = item.departure - item.arrival;
-                            departure = Number(rtStop.arrival.time) + (dwell > 0 ? dwell : 0);
+                            departure = rtArrivalTime + (dwell > 0 ? dwell : 0);
                         }
 
                         delay = getEffectiveDelay(rtStop.delay, arrival, item.arrival);
