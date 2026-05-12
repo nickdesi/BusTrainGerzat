@@ -231,8 +231,7 @@ src/
 
 - Node.js `>= 24.15.0` ;
 - npm ;
-- une clé API SNCF / Navitia pour les trains ;
-- Python `>= 3.13` uniquement pour régénérer les données GTFS.
+- une clé API SNCF / Navitia pour les trains.
 
 ### Démarrage rapide
 
@@ -267,8 +266,8 @@ Sans cette variable, les données TER SNCF/Navitia ne peuvent pas être récupé
 | `npm run build` | Compile l’application pour la production. |
 | `npm run start` | Lance le serveur Next.js après un build. |
 | `npm run lint` | Exécute ESLint. |
-| `npm run test` | Exécute la suite Jest. |
-| `npm run test:watch` | Exécute Jest en mode watch. |
+| `npm run test` | Exécute la suite Jest (tests unitaires). |
+| `npm run test:e2e` | Exécute les tests Playwright (End-to-End). |
 
 ## 🧪 Tests et validation
 
@@ -277,6 +276,7 @@ Validation complète recommandée avant publication :
 ```bash
 npm run lint
 npm run test -- --runInBand
+npm run test:e2e
 npm run build
 ```
 
@@ -324,7 +324,6 @@ Le projet est compatible Coolify via `nixpacks.toml`.
 Versions alignées :
 
 - Node.js `24.15.0` en local, CI et Nixpacks ;
-- Python `3.13` dans le workflow de mise à jour GTFS ;
 - Next.js `16.2.x` et React `19.2.x`.
 
 Variables d’environnement requises en production :
