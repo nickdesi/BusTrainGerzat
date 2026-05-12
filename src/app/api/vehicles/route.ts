@@ -445,9 +445,17 @@ export async function GET(request: Request) {
 
         const visibleVehicles = deduplicateVehicles(vehicles);
 
-        const gpsCount = visibleVehicles.filter((vehicle) => vehicle.source === 'gps').length;
-        const realtimeInterpolatedCount = visibleVehicles.filter((vehicle) => vehicle.source === 'realtime_interpolated').length;
-        const staticCount = visibleVehicles.filter((vehicle) => vehicle.source === 'static').length;
+        // ⚡ Bolt: Replace 3 O(N) array allocations (.filter) with a single pass O(N) loop
+        // to reduce GC pressure and CPU cycles on every API request.
+        let gpsCount = 0;
+        let realtimeInterpolatedCount = 0;
+        let staticCount = 0;
+
+        for (const vehicle of visibleVehicles) {
+            if (vehicle.source === 'gps') gpsCount++;
+            else if (vehicle.source === 'realtime_interpolated') realtimeInterpolatedCount++;
+            else if (vehicle.source === 'static') staticCount++;
+        }
 
         return NextResponse.json({
             vehicles: visibleVehicles,
