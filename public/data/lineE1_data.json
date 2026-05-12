@@ -581,17 +581,17 @@
       "sequence": 20
     },
     {
-      "stopId": "GECHA",
-      "stopName": "GERZAT Champfleuri",
-      "lat": 45.83525058,
-      "lon": 3.148001441,
-      "sequence": 20
-    },
-    {
       "stopId": "GASNR",
       "stopName": "Gare SNCF",
       "lat": 45.77869565,
       "lon": 3.099507102,
+      "sequence": 20
+    },
+    {
+      "stopId": "GECHA",
+      "stopName": "GERZAT Champfleuri",
+      "lat": 45.83525058,
+      "lon": 3.148001441,
       "sequence": 20
     },
     {
