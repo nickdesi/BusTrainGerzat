@@ -93,5 +93,7 @@ export function getEffectiveDelay(reportedDelay: number, predictedTime: number |
     if (reportedDelay !== 0 || !predictedTime) return reportedDelay;
 
     const calculatedDelay = predictedTime - scheduledTime;
+    // Sanity check: ignore calculated delay if it exceeds ±30 min (likely bad RT/static match)
+    if (Math.abs(calculatedDelay) > 30 * 60) return reportedDelay;
     return Math.abs(calculatedDelay) >= 60 ? calculatedDelay : reportedDelay;
 }
