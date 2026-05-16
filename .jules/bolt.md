@@ -51,3 +51,9 @@
 ## 2026-05-12 - Avoiding redundant filter() calls for simple stats calculation
 **Learning:** Found an anti-pattern in `src/app/api/vehicles/route.ts` where multiple `.filter().length` calls were chained sequentially on the same array to compute counts for different sources (`gps`, `realtime_interpolated`, `static`). This leads to unnecessary O(N) array allocations and degrades performance when dealing with large datasets on an API route.
 **Action:** Replace multiple `.filter()` calls with a single O(N) `for...of` loop that calculates all necessary statistics in one pass without creating intermediate array references.
+## 2026-05-16 - Fix O(N*M) lookup anti-pattern in TransitBoardPage
+**Learning:** In React components with frequent state updates (like  changing), checking  inside a loop over a large array () creates an (N \times M)$ performance bottleneck on every render.
+**Action:** Use  to convert arrays of lookup IDs (like `favorites`) into a `Set` and use `set.has()` instead, converting the lookup operation from (M)$ to (1)$, making the total loop (N)$.
+## 2026-05-28 - Fix O(N*M) lookup anti-pattern in TransitBoardPage
+**Learning:** In React components with frequent state updates (like `filteredEntries` changing), checking `array.some(id => id === item.id)` inside a loop over a large array (`departures`) creates an O(N * M) performance bottleneck on every render.
+**Action:** Use `useMemo` to convert arrays of lookup IDs (like `favorites`) into a `Set` and use `set.has()` instead, converting the lookup operation from O(M) to O(1), making the total loop O(N).

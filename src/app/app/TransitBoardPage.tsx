@@ -72,6 +72,8 @@ export default function TransitBoardPage({
 
     const entries = boardType === 'arrivals' ? arrivals : departures;
     const favoriteIds = useMemo(() => favorites.map(f => f.id), [favorites]);
+    // ⚡ Bolt: Cache favorites Set to prevent O(N) recreations and O(N*M) lookups
+    const favoriteIdsSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
 
     const handleToggleFavorite = useCallback((id: string, line: string, dest: string, type: 'BUS' | 'TER') => {
         toggleFavorite({ id, line, destination: dest, type });
@@ -105,11 +107,10 @@ export default function TransitBoardPage({
     const stats = useMemo(() => {
         let realtimeCount = 0;
         let favoritesCount = 0;
-        const favSet = new Set(favoriteIds);
 
         for (const entry of filteredEntries) {
             if (entry.isRealtime) realtimeCount++;
-            if (favSet.has(entry.id)) favoritesCount++;
+            if (favoriteIdsSet.has(entry.id)) favoritesCount++;
         }
 
         return {
@@ -117,13 +118,13 @@ export default function TransitBoardPage({
             realtime: realtimeCount,
             favorites: favoritesCount,
         };
-    }, [favoriteIds, filteredEntries]);
+    }, [favoriteIdsSet, filteredEntries]);
 
     const smartAlert = useMemo(() => {
-        if (!enableSmartAlert || favorites.length === 0) return null;
+        if (!enableSmartAlert || favoriteIdsSet.size === 0) return null;
 
         for (const departure of departures) {
-            if (!favorites.some(f => f.id === departure.id)) continue;
+            if (!favoriteIdsSet.has(departure.id)) continue;
 
             const dTime = new Date(departure.departureTime * 1000);
             const prediction = getPrediction(departure.line, dTime.getHours(), dTime.getDay());
@@ -139,7 +140,7 @@ export default function TransitBoardPage({
         }
 
         return null;
-    }, [departures, enableSmartAlert, favorites, getPrediction]);
+    }, [departures, enableSmartAlert, favoriteIdsSet, getPrediction]);
 
     return (
         <main id="main-content" className={theme.main}>
