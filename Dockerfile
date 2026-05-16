@@ -43,6 +43,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/package-lock.json ./package-lock.json
 
 # Install only production dependencies using the pruned package.json
 RUN npm ci --omit=dev
