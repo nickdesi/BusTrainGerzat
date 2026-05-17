@@ -57,3 +57,6 @@
 ## 2026-05-28 - Fix O(N*M) lookup anti-pattern in TransitBoardPage
 **Learning:** In React components with frequent state updates (like `filteredEntries` changing), checking `array.some(id => id === item.id)` inside a loop over a large array (`departures`) creates an O(N * M) performance bottleneck on every render.
 **Action:** Use `useMemo` to convert arrays of lookup IDs (like `favorites`) into a `Set` and use `set.has()` instead, converting the lookup operation from O(M) to O(1), making the total loop O(N).
+## 2026-05-29 - O(N) Array Access Anti-Pattern
+**Learning:** Found an `O(N)` complexity inefficiency where `array.find((_, index) => index === targetIndex)` and `array.find(item => item.property === value)` were being used to retrieve elements when their index was already known or calculated previously via `.findIndex()`. While `Array.find()` is convenient, it traverses the array from the beginning, turning an `O(1)` direct array access into an `O(N)` operation.
+**Action:** Always use direct array indexing (`array[index]`) when the target index is already available instead of iterating through the array using `.find()`.

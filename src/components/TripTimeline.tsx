@@ -31,10 +31,9 @@ const TripTimeline = memo(function TripTimeline({
 
     const currentStopIndex = stops.findIndex((stop) => stop.status === 'current');
     const activeSegmentIndex = currentStopIndex > 0 ? currentStopIndex - 1 : -1;
-    const nextStop = stops.find((stop) => stop.status === 'current') ?? null;
-    const previousStop = activeSegmentIndex >= 0
-        ? stops.find((_, index) => index === activeSegmentIndex) ?? null
-        : null;
+    // ⚡ Bolt: Use direct array access instead of O(N) array.find() when the indices are already known
+    const nextStop = currentStopIndex >= 0 ? stops[currentStopIndex] : null;
+    const previousStop = activeSegmentIndex >= 0 ? stops[activeSegmentIndex] : null;
     const shouldTrackProgress = currentTime === undefined && Boolean(previousStop && nextStop);
 
     useEffect(() => {
