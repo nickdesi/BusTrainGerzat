@@ -31,10 +31,11 @@ const TripTimeline = memo(function TripTimeline({
 
     const currentStopIndex = stops.findIndex((stop) => stop.status === 'current');
     const activeSegmentIndex = currentStopIndex > 0 ? currentStopIndex - 1 : -1;
-    const nextStop = stops.find((stop) => stop.status === 'current') ?? null;
-    const previousStop = activeSegmentIndex >= 0
-        ? stops.find((_, index) => index === activeSegmentIndex) ?? null
-        : null;
+    // ⚡ Bolt: Use direct array indexing O(1) instead of find O(N) using the already calculated index
+    // eslint-disable-next-line security/detect-object-injection
+    const nextStop = currentStopIndex !== -1 ? stops[currentStopIndex] : null;
+    // eslint-disable-next-line security/detect-object-injection
+    const previousStop = activeSegmentIndex >= 0 ? stops[activeSegmentIndex] : null;
     const shouldTrackProgress = currentTime === undefined && Boolean(previousStop && nextStop);
 
     useEffect(() => {
