@@ -57,3 +57,6 @@
 ## 2026-05-28 - Fix O(N*M) lookup anti-pattern in TransitBoardPage
 **Learning:** In React components with frequent state updates (like `filteredEntries` changing), checking `array.some(id => id === item.id)` inside a loop over a large array (`departures`) creates an O(N * M) performance bottleneck on every render.
 **Action:** Use `useMemo` to convert arrays of lookup IDs (like `favorites`) into a `Set` and use `set.has()` instead, converting the lookup operation from O(M) to O(1), making the total loop O(N).
+## 2026-05-29 - O(N) Anti-Pattern in Array Filtering Methods
+**Learning:** Found an `O(N)` complexity bug where `array.find()` was being used immediately after `array.findIndex()` (in `TripTimeline.tsx`). This resulted in an unnecessary second iteration over the array.
+**Action:** Always use direct array index access (`array[index]`) after a `.findIndex()` to improve performance to `O(1)`. When utilizing direct array index access after a `.findIndex()`, `eslint-plugin-security` may flag it with a `security/detect-object-injection` warning. This can be safely resolved by locally adding `// eslint-disable-next-line security/detect-object-injection` before the assignment if the index is trusted.
