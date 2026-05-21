@@ -46,8 +46,11 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   experimental: {
-    optimizePackageImports: ["lucide-react"],
+    optimizePackageImports: ["lucide-react", "@tanstack/react-query", "leaflet", "react-leaflet"],
+    serverComponentsExternalPackages: ["protobufjs", "gtfs-realtime-bindings"],
   },
+  poweredByHeader: false,
+  reactStrictMode: true,
   async headers() {
     return [
       {

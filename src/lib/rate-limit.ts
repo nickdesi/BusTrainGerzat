@@ -6,6 +6,8 @@ interface RateLimitRecord {
 const tokenCache = new Map<string, RateLimitRecord>();
 let lastCleanup = Date.now();
 
+const MAX_CACHE_SIZE = 10000;
+
 /**
  * Simple in-memory rate limiter.
  * @param token Unique identifier (e.g., IP address)
@@ -20,6 +22,13 @@ export function rateLimit(token: string, limit: number, interval: number): boole
   if (now - lastCleanup > 3600000) {
     for (const [key, record] of tokenCache.entries()) {
       if (now > record.expiresAt) {
+        tokenCache.delete(key);
+      }
+    }
+    if (tokenCache.size > MAX_CACHE_SIZE) {
+      const entries = [...tokenCache.entries()].sort((a, b) => a[1].expiresAt - b[1].expiresAt);
+      const toDelete = entries.slice(0, entries.length - MAX_CACHE_SIZE);
+      for (const [key] of toDelete) {
         tokenCache.delete(key);
       }
     }

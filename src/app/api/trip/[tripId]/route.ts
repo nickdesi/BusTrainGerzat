@@ -9,6 +9,7 @@ import {
     getLineE1StaticTrip,
     getLineE1Stop,
 } from '@/services/t2c-line-e1.service';
+import { apiLogger } from '@/lib/logger';
 
 interface StopTimeDetail {
     stopId: string;
@@ -234,7 +235,7 @@ export async function GET(
         );
 
     } catch (error) {
-        console.error('Trip details error:', error);
+        apiLogger.error('Trip details error', undefined, error instanceof Error ? error : new Error(String(error)));
         return NextResponse.json(
             { error: 'Failed to fetch trip details' },
             {

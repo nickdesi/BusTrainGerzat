@@ -1,6 +1,7 @@
 import { getBusData, getTrainData } from '@/lib/data-source';
 import { checkSameOriginRequest, getClientIp } from '@/lib/api-protection';
 import { rateLimit } from '@/lib/rate-limit';
+import { apiLogger } from '@/lib/logger';
 
 export const dynamic = 'force-dynamic';
 
@@ -40,7 +41,7 @@ export async function GET(request: Request) {
 
                     send(controller, `data: ${data}\n\n`);
                 } catch (error) {
-                    console.error('SSE Error:', error);
+                    apiLogger.error('SSE Error', undefined, error instanceof Error ? error : new Error(String(error)));
                     send(controller, `event: transport-error\ndata: ${JSON.stringify({ message: 'Unable to refresh transport data' })}\n\n`);
                 }
             };

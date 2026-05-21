@@ -2,6 +2,7 @@ import { fetchTripUpdates } from '@/lib/gtfs-rt';
 import { BusUpdate } from '@/types/transport';
 import { getNowUnix, isT2CNoServiceDay } from '@/utils/date';
 import { extractTripPattern, getEffectiveDelay } from '@/services/t2c-line-e1.service';
+import { apiLogger } from '@/lib/logger';
 
 // --- Internal Types ---
 
@@ -397,7 +398,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         return { updates: nextBuses, timestamp: now };
     } catch (error) {
-        console.error('getBusData error:', error);
+        apiLogger.error('getBusData error', undefined, error instanceof Error ? error : new Error(String(error)));
         return { updates: [], timestamp: Math.floor(Date.now() / 1000) };
     }
 }

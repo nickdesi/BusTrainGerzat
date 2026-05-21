@@ -1,5 +1,6 @@
 import { TrainUpdate } from '@/types/transport';
 import { z } from 'zod';
+import { apiLogger } from '@/lib/logger';
 
 const SNCF_API_KEY = process.env.SNCF_API_KEY;
 const GERZAT_STOP_AREA = 'stop_area:SNCF:87734046';
@@ -409,7 +410,7 @@ export async function getTrainData(): Promise<TrainDataResponse> {
 
         return stripProductionDebug(result);
     } catch (e) {
-        console.error('getTrainData error:', e);
+        apiLogger.error('getTrainData error', undefined, e instanceof Error ? e : new Error(String(e)));
 
         const cached = buildCachedTrainResponse('fetchFailed');
         if (cached) return cached;
