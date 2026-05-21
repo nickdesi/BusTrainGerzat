@@ -133,6 +133,7 @@ export function getParisOffset(year: number, month: number, day: number): string
 export function parseParisTime(dateStr: string): number {
     if (!dateStr) return 0;
 
+    // eslint-disable-next-line security/detect-unsafe-regex
     const match = dateStr.match(/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2}))?$/);
     if (!match) return 0;
 

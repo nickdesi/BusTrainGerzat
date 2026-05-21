@@ -251,16 +251,17 @@ export async function getTrainData(): Promise<TrainDataResponse> {
             cache: 'no-store' as RequestCache
         };
 
-        // 1. Fetch BOTH Base Schedule (Theory) and Realtime Data
-        // Sequential calls via fetchWithRetry (handles 429 internally with backoff)
+        // 1. Fetch BOTH Base Schedule (Theory) and Realtime Data in parallel
+        // fetchWithRetry handles 429 internally with backoff
         // If it still fails with 429 after retries, it throws ApiError
         let realtimeDataRaw: unknown = null;
         let baseDataRaw: unknown = null;
 
         try {
-            realtimeDataRaw = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, fetchOptions);
-            await new Promise(r => setTimeout(r, 300)); // Rate limit spacing
-            baseDataRaw = await fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, fetchOptions);
+            [realtimeDataRaw, baseDataRaw] = await Promise.all([
+                fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=realtime`, fetchOptions),
+                fetchWithRetry(`https://api.sncf.com/v1/coverage/sncf/stop_areas/${GERZAT_STOP_AREA}/departures?count=30&data_freshness=base_schedule`, fetchOptions),
+            ]);
         } catch (err) {
             if (err instanceof ApiError && err.status === 429) {
                 const cached = buildCachedTrainResponse('rateLimited');
