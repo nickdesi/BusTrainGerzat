@@ -25,9 +25,13 @@ const PARIS_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
 function getTodayDateStr(): string {
     try {
         const parts = PARIS_DATE_FORMATTER.formatToParts(new Date());
-        const year = parts.find(p => p.type === 'year')?.value;
-        const month = parts.find(p => p.type === 'month')?.value;
-        const day = parts.find(p => p.type === 'day')?.value;
+        let year, month, day;
+        // ⚡ Bolt: Single pass to extract multiple parts
+        for (const p of parts) {
+            if (p.type === 'year') year = p.value;
+            else if (p.type === 'month') month = p.value;
+            else if (p.type === 'day') day = p.value;
+        }
         return `${year}${month}${day}`;
     } catch {
         const today = new Date();
