@@ -61,12 +61,22 @@ function parseOffsetToMinutes(offset: string): number | null {
 function parseParisPartsFromDate(utcMillis: number): ParisDateTime | null {
     const parts = PARIS_LOCAL_DATETIME_FORMATTER.formatToParts(new Date(utcMillis));
 
-    const year = Number.parseInt(parts.find(p => p.type === 'year')?.value || '', 10);
-    const month = Number.parseInt(parts.find(p => p.type === 'month')?.value || '', 10);
-    const day = Number.parseInt(parts.find(p => p.type === 'day')?.value || '', 10);
-    const hour = Number.parseInt(parts.find(p => p.type === 'hour')?.value || '', 10);
-    const minute = Number.parseInt(parts.find(p => p.type === 'minute')?.value || '', 10);
-    const second = Number.parseInt(parts.find(p => p.type === 'second')?.value || '', 10);
+    let yearStr = '', monthStr = '', dayStr = '', hourStr = '', minuteStr = '', secondStr = '';
+    for (const p of parts) {
+        if (p.type === 'year') yearStr = p.value;
+        else if (p.type === 'month') monthStr = p.value;
+        else if (p.type === 'day') dayStr = p.value;
+        else if (p.type === 'hour') hourStr = p.value;
+        else if (p.type === 'minute') minuteStr = p.value;
+        else if (p.type === 'second') secondStr = p.value;
+    }
+
+    const year = Number.parseInt(yearStr, 10);
+    const month = Number.parseInt(monthStr, 10);
+    const day = Number.parseInt(dayStr, 10);
+    const hour = Number.parseInt(hourStr, 10);
+    const minute = Number.parseInt(minuteStr, 10);
+    const second = Number.parseInt(secondStr, 10);
 
     if (![year, month, day, hour, minute, second].every(Number.isFinite)) return null;
 
@@ -166,12 +176,18 @@ export function parseParisTime(dateStr: string): number {
  */
 export function getParisMidnight(): number {
     const now = new Date();
-    // Get current Paris time parts
     const parts = PARIS_MIDNIGHT_FORMATTER.formatToParts(now);
 
-    const year = parseInt(parts.find(p => p.type === 'year')?.value || '1970');
-    const month = parseInt(parts.find(p => p.type === 'month')?.value || '1');
-    const day = parseInt(parts.find(p => p.type === 'day')?.value || '1');
+    let yearStr = '1970', monthStr = '1', dayStr = '1';
+    for (const p of parts) {
+        if (p.type === 'year') yearStr = p.value;
+        else if (p.type === 'month') monthStr = p.value;
+        else if (p.type === 'day') dayStr = p.value;
+    }
+
+    const year = Number.parseInt(yearStr, 10);
+    const month = Number.parseInt(monthStr, 10);
+    const day = Number.parseInt(dayStr, 10);
 
     // Reuse parse logic
     const dateStr = `${year}${month.toString().padStart(2, '0')}${day.toString().padStart(2, '0')}T000000`;
@@ -194,9 +210,12 @@ export function getParisDateString(): string {
     const now = new Date();
     const parts = PARIS_DATE_STRING_FORMATTER.formatToParts(now);
 
-    const year = parts.find(p => p.type === 'year')?.value || '1970';
-    const month = parts.find(p => p.type === 'month')?.value || '01';
-    const day = parts.find(p => p.type === 'day')?.value || '01';
+    let year = '1970', month = '01', day = '01';
+    for (const p of parts) {
+        if (p.type === 'year') year = p.value;
+        else if (p.type === 'month') month = p.value;
+        else if (p.type === 'day') day = p.value;
+    }
 
     return `${year}${month}${day}`;
 }
@@ -207,8 +226,11 @@ export function getParisDateString(): string {
  */
 export function isT2CNoServiceDay(date = new Date()): boolean {
     const parts = PARIS_DATE_STRING_FORMATTER.formatToParts(date);
-    const month = parts.find(p => p.type === 'month')?.value;
-    const day = parts.find(p => p.type === 'day')?.value;
+    let month, day;
+    for (const p of parts) {
+        if (p.type === 'month') month = p.value;
+        else if (p.type === 'day') day = p.value;
+    }
 
     return month === '05' && day === '01';
 }

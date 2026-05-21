@@ -11,7 +11,6 @@ interface StaticScheduleItem {
     tripId: string;
 }
 
-// ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation
 const PARIS_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
     timeZone: 'Europe/Paris',
     year: 'numeric',
@@ -25,9 +24,12 @@ const PARIS_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
 function getTodayDateStr(): string {
     try {
         const parts = PARIS_DATE_FORMATTER.formatToParts(new Date());
-        const year = parts.find(p => p.type === 'year')?.value;
-        const month = parts.find(p => p.type === 'month')?.value;
-        const day = parts.find(p => p.type === 'day')?.value;
+        let year, month, day;
+        for (const p of parts) {
+            if (p.type === 'year') year = p.value;
+            else if (p.type === 'month') month = p.value;
+            else if (p.type === 'day') day = p.value;
+        }
         return `${year}${month}${day}`;
     } catch {
         const today = new Date();
@@ -55,7 +57,6 @@ export function getCalendarEndDate(): string | null {
     const schedule = staticSchedule as StaticScheduleItem[];
     if (schedule.length === 0) return null;
 
-    // ⚡ Bolt: O(N) linear scan to find max date instead of O(N log N) Set+sort creation
     const [firstItem, ...remainingItems] = schedule;
     let maxDate = firstItem.date;
     for (const item of remainingItems) {
