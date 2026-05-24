@@ -4,7 +4,6 @@ import { fetchTripUpdates, LINE_E1_ROUTE_IDS } from '@/lib/gtfs-rt';
 import { getParisMidnight, getNowUnix } from '@/utils/date';
 import {
     getByTripIdOrPattern,
-    getCurrentStopIndex,
     getEffectiveDelay,
     getLineE1StaticTrip,
     getLineE1Stop,
@@ -89,8 +88,13 @@ export async function GET(
             // Track last known delay to propagate to stops without RT data
             let lastKnownDelay = 0;
             let lastPredictedArrival = 0;
+            const stops: StopTimeDetail[] = [];
+            let currentStopFound = false;
 
-            const stops: StopTimeDetail[] = staticTrip.stops.map((stop, index) => {
+            // ⚡ Bolt: Single pass to map stops and determine status without intermediate arrays or multiple iterations
+            for (let i = 0; i < staticTrip.stops.length; i++) {
+                // eslint-disable-next-line security/detect-object-injection
+                const stop = staticTrip.stops[i];
                 const stopInfo = getLineE1Stop(stop.stopId);
                 const scheduledArrival = toUnix(stop.arrivalTime);
                 const scheduledDeparture = toUnix(stop.departureTime);
@@ -109,7 +113,7 @@ export async function GET(
                 let predictedArrival = rtData?.predictedTime || (scheduledArrival + delay);
 
                 // Ensure chronological consistency: predicted arrival must be >= previous stop
-                if (index > 0 && predictedArrival < lastPredictedArrival) {
+                if (i > 0 && predictedArrival < lastPredictedArrival) {
                     // Add minimum travel time (e.g., 30 seconds between stops)
                     predictedArrival = lastPredictedArrival + 30;
                 }
@@ -117,7 +121,19 @@ export async function GET(
 
                 const predictedDeparture = rtData ? predictedArrival : (scheduledDeparture + delay);
 
-                return {
+                let status: 'passed' | 'current' | 'upcoming' = 'upcoming';
+                if (!currentStopFound) {
+                    if (predictedArrival > now) {
+                        status = 'current';
+                        currentStopFound = true;
+                    } else {
+                        status = 'passed';
+                    }
+                } else {
+                    status = 'upcoming';
+                }
+
+                stops.push({
                     stopId: stop.stopId,
                     stopName: stopInfo?.stopName || stop.stopId,
                     sequence: stop.sequence,
@@ -126,14 +142,9 @@ export async function GET(
                     predictedArrival,
                     predictedDeparture,
                     delay,
-                    status: 'upcoming',
+                    status,
                     isAccessible: true,
-                };
-            });
-
-            const currentStopIndex = getCurrentStopIndex(stops, now);
-            for (const [index, stop] of stops.entries()) {
-                stop.status = index < currentStopIndex ? 'passed' : index === currentStopIndex ? 'current' : 'upcoming';
+                });
             }
 
             // Get headsign from last stop
