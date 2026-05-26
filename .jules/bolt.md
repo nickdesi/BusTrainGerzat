@@ -60,3 +60,9 @@
 ## 2026-05-29 - O(N) Anti-Pattern in Array Filtering Methods
 **Learning:** Found an `O(N)` complexity bug where `array.find()` was being used immediately after `array.findIndex()` (in `TripTimeline.tsx`). This resulted in an unnecessary second iteration over the array.
 **Action:** Always use direct array index access (`array[index]`) after a `.findIndex()` to improve performance to `O(1)`. When utilizing direct array index access after a `.findIndex()`, `eslint-plugin-security` may flag it with a `security/detect-object-injection` warning. This can be safely resolved by locally adding `// eslint-disable-next-line security/detect-object-injection` before the assignment if the index is trusted.
+## 2026-05-26 - Optimize trip details stop processing
+**Learning:** API routes iterating over pre-defined GTFS arrays often accumulate O(N) array allocation overhead from chained array methods (, , ). Consolidating these passes into a single O(N)  loop significantly reduces memory pressure per request.
+**Action:** Avoid  followed by  or  loops inside tight API route processing. Always prefer a single  loop that builds the array and computes indexes simultaneously.
+## 2024-05-18 - Optimize trip details stop processing
+**Learning:** API routes iterating over pre-defined GTFS arrays often accumulate O(N) array allocation overhead from chained array methods (`.map`, `.findIndex`, `.entries()`). Consolidating these passes into a single O(N) `for` loop significantly reduces memory pressure per request.
+**Action:** Avoid `.map()` followed by `.findIndex()` or `.entries()` loops inside tight API route processing. Always prefer a single `for` loop that builds the array and computes indexes simultaneously.
