@@ -60,3 +60,6 @@
 ## 2026-05-29 - O(N) Anti-Pattern in Array Filtering Methods
 **Learning:** Found an `O(N)` complexity bug where `array.find()` was being used immediately after `array.findIndex()` (in `TripTimeline.tsx`). This resulted in an unnecessary second iteration over the array.
 **Action:** Always use direct array index access (`array[index]`) after a `.findIndex()` to improve performance to `O(1)`. When utilizing direct array index access after a `.findIndex()`, `eslint-plugin-security` may flag it with a `security/detect-object-injection` warning. This can be safely resolved by locally adding `// eslint-disable-next-line security/detect-object-injection` before the assignment if the index is trusted.
+## 2026-05-29 - Fix O(N*M) lookup anti-pattern in helper functions
+**Learning:** In frequently called helper functions like `findRelevantStopUpdate`, doing `groups.find(ids => ids.includes(stopId))` recreates the outer array and performs an `O(N*M)` linear search on every invocation.
+**Action:** Replace dynamic array creation and `find/includes` with lazily initialized, module-level `Set`s for O(1) lookups.

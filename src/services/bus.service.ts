@@ -97,6 +97,9 @@ async function getTripOrigins(): Promise<Map<string, string>> {
 let TARGET_STOP_IDS_SET_CACHE: Set<string> | null = null;
 let PATURAL_IDS_SET_CACHE: Set<string> | null = null;
 
+let CHAMPFLEURI_SET_CACHE: Set<string> | null = null;
+let PATURAL_SET_CACHE: Set<string> | null = null;
+
 export function findRelevantStopUpdate(
     stops: Map<string, LegacyRtStop>,
     stopId: string | undefined,
@@ -107,13 +110,22 @@ export function findRelevantStopUpdate(
     const exact = stops.get(stopId);
     if (exact) return exact;
 
-    const groups = [stopGroups.champfleuri, stopGroups.patural];
-    const group = groups.find(ids => ids.includes(stopId));
-    if (!group) return undefined;
+    // ⚡ Bolt: Initialize Set caches lazily once to replace O(N*M) find/includes array lookups with O(1) Set.has()
+    if (!CHAMPFLEURI_SET_CACHE || !PATURAL_SET_CACHE) {
+        CHAMPFLEURI_SET_CACHE = new Set(stopGroups.champfleuri);
+        PATURAL_SET_CACHE = new Set(stopGroups.patural);
+    }
 
-    for (const id of group) {
-        const update = stops.get(id);
-        if (update) return update;
+    if (CHAMPFLEURI_SET_CACHE.has(stopId)) {
+        for (const id of stopGroups.champfleuri) {
+            const update = stops.get(id);
+            if (update) return update;
+        }
+    } else if (PATURAL_SET_CACHE.has(stopId)) {
+        for (const id of stopGroups.patural) {
+            const update = stops.get(id);
+            if (update) return update;
+        }
     }
 
     return undefined;
