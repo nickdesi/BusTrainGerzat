@@ -15,7 +15,7 @@ interface DeparturesBoardProps {
     departures: UnifiedEntry[];
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
-    favorites?: string[]; // IDs of favorite lines
+    favorites?: Set<string>; // IDs of favorite lines
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
@@ -199,16 +199,14 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
     );
 });
 
-export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesBoardProps) {
+// ⚡ Bolt: Empty Set default value for memoization
+const EMPTY_FAVORITES_SET = new Set<string>();
+
+export default memo(function DeparturesBoard({ departures, loading, boardType = 'departures', favorites = EMPTY_FAVORITES_SET, onToggleFavorite }: DeparturesBoardProps) {
     const { data: freshness } = useFreshness();
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
     const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-500';
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
-
-    // ⚡ Bolt: Memoize favoritesSet to avoid O(N) array recreation and O(M) includes
-    // during sorting and mapping. This ensures O(1) lookups for the map and sort functions.
-    const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
-
     // Sort departures: Favorites first, then by time
     const sortedDepartures = useMemo(() => {
         // ⚡ Bolt: Use the memoized favoritesSet to make lookups O(1) inside the sort loop
@@ -216,14 +214,14 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
         return [...departures].sort((a, b) => {
             const idA = a.id;
             const idB = b.id;
-            const isFavA = favoritesSet.has(idA);
-            const isFavB = favoritesSet.has(idB);
+            const isFavA = favorites.has(idA);
+            const isFavB = favorites.has(idB);
 
             if (isFavA && !isFavB) return -1;
             if (!isFavA && isFavB) return 1;
             return 0; // Maintain existing sort (by time)
         });
-    }, [departures, favoritesSet]);
+    }, [departures, favorites]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureBoardRow's React.memo() on every render
     const handleTripClick = useCallback((tripId: string, line: string) => {
@@ -276,7 +274,7 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
                         ) : (
                             sortedDepartures.map((entry, index) => {
                                 // ⚡ Bolt: Use O(1) set lookup instead of O(M) includes
-                                const isFav = favoritesSet.has(entry.id);
+                                const isFav = favorites.has(entry.id);
 
                                 return (
                                     <DepartureBoardRow

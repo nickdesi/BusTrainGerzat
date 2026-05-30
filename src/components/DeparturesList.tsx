@@ -13,7 +13,7 @@ interface DeparturesListProps {
     departures: UnifiedEntry[];
     loading: boolean;
     boardType?: 'departures' | 'arrivals';
-    favorites?: string[];
+    favorites?: Set<string>;
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
 }
 
@@ -122,9 +122,11 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, sourc
     );
 });
 
-export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = [], onToggleFavorite }: DeparturesListProps) {
+// ⚡ Bolt: Empty Set default value to prevent unnecessary recreations
+const EMPTY_FAVORITES_SET = new Set<string>();
+
+export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = EMPTY_FAVORITES_SET, onToggleFavorite }: DeparturesListProps) {
     const { data: freshness } = useFreshness();
-    const favoritesSet = useMemo(() => new Set(favorites), [favorites]);
     const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
     const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-400';
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée trouvée' : 'Aucun départ trouvé';
@@ -132,13 +134,13 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
     // ⚡ Bolt: Memoize sorted departures to prevent re-sorting on every render
     const sortedDepartures = useMemo(() => {
         return [...departures].sort((a, b) => {
-            const aFav = favoritesSet.has(a.id);
-            const bFav = favoritesSet.has(b.id);
+            const aFav = favorites.has(a.id);
+            const bFav = favorites.has(b.id);
             if (aFav && !bFav) return -1;
             if (!aFav && bFav) return 1;
             return 0;
         });
-    }, [departures, favoritesSet]);
+    }, [departures, favorites]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureRow's React.memo() on every render
     const handleTripClick = useCallback((tripId: string, line: string) => {
@@ -167,7 +169,7 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
                 </div>
             ) : (
                 sortedDepartures.map((entry) => {
-                    const isFav = favoritesSet.has(entry.id);
+                    const isFav = favorites.has(entry.id);
 
                     return (
                         <DepartureRow
