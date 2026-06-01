@@ -60,3 +60,6 @@
 ## 2026-05-29 - O(N) Anti-Pattern in Array Filtering Methods
 **Learning:** Found an `O(N)` complexity bug where `array.find()` was being used immediately after `array.findIndex()` (in `TripTimeline.tsx`). This resulted in an unnecessary second iteration over the array.
 **Action:** Always use direct array index access (`array[index]`) after a `.findIndex()` to improve performance to `O(1)`. When utilizing direct array index access after a `.findIndex()`, `eslint-plugin-security` may flag it with a `security/detect-object-injection` warning. This can be safely resolved by locally adding `// eslint-disable-next-line security/detect-object-injection` before the assignment if the index is trusted.
+## 2026-05-30 - Eliminating Array Allocation for Map Instantiation
+**Learning:** Initializing Maps using `new Map(array.map(...))` creates an intermediate array containing exactly the same number of elements as the original array, just formatted as `[key, value]` tuples. For datasets of hundreds of elements, this causes unnecessary garbage collection and memory overhead.
+**Action:** Replace `new Map(array.map(...))` with a simple `for` loop, instantiating the Map empty and using `Map.set()` directly. This avoids intermediate array allocations and provides measurable memory efficiency improvements.

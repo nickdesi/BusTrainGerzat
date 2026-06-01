@@ -107,8 +107,14 @@ export function findRelevantStopUpdate(
     const exact = stops.get(stopId);
     if (exact) return exact;
 
-    const groups = [stopGroups.champfleuri, stopGroups.patural];
-    const group = groups.find(ids => ids.includes(stopId));
+    // ⚡ Bolt: Eliminate dynamic array allocation and O(N*M) callback-based search
+    let group: string[] | undefined;
+    if (stopGroups.champfleuri.includes(stopId)) {
+        group = stopGroups.champfleuri;
+    } else if (stopGroups.patural.includes(stopId)) {
+        group = stopGroups.patural;
+    }
+
     if (!group) return undefined;
 
     for (const id of group) {
