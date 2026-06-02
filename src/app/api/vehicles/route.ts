@@ -93,6 +93,7 @@ function getStaticPatternForRtTrip(tripId: string): string | undefined {
 
 function findNextStopIndex(stops: { arrivalTime: number }[], now: number, midnight: number): number {
     for (let i = 0; i < stops.length; i++) {
+        // eslint-disable-next-line security/detect-object-injection
         if (midnight + stops[i].arrivalTime > now) return i;
     }
     return stops.length - 1;
@@ -105,7 +106,9 @@ function findNextStopIndexWithPredictions(
     midnight: number
 ): number {
     for (let i = 0; i < stops.length; i++) {
+        // eslint-disable-next-line security/detect-object-injection
         const rtStopData = rtUpdate?.stopUpdates.get(stops[i].stopId);
+        // eslint-disable-next-line security/detect-object-injection
         const predictedTime = rtStopData?.predictedTime || midnight + stops[i].arrivalTime;
         if (predictedTime > now) return i;
     }

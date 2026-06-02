@@ -44,6 +44,7 @@ const SncfApiResponseSchema = z.object({
     origins: z.array(SncfOriginSchema).optional()
 });
 
+type SncfLink = z.infer<typeof SncfLinkSchema>;
 type SncfDeparture = z.infer<typeof SncfDepartureSchema>;
 // SncfApiResponse type is inferred directly in safeParse usage
 
