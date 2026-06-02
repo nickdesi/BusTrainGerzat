@@ -1,0 +1,84 @@
+--- src/services/train.service.ts
++++ src/services/train.service.ts
+@@ -88,27 +88,10 @@
+         ? clampTrainDelay(departureTime - baseDepartureTime)
+         : 0;
+
+-    // ⚡ Bolt: Single pass loop to extract links (O(N) instead of multiple O(N) array scans)
+-    let originLinkId: string | undefined;
+-    let vehicleJourneyId: string | undefined;
+-
+-    if (displayInfo.links) {
+-        for (const l of displayInfo.links) {
+-            if (l.rel === 'origins') {
+-                originLinkId = l.id;
+-                break;
+-            }
+-        }
+-    }
+-
+-    if (dep.links) {
+-        for (const l of dep.links) {
+-            if (l.type === 'vehicle_journey') {
+-                vehicleJourneyId = l.id;
+-                break;
+-            }
+-        }
+-    }
++    // ⚡ Bolt: Extract links
++    const originLinkId = displayInfo.links?.find(l => l.rel === 'origins')?.id;
++    const vehicleJourneyId = dep.links?.find(l => l.type === 'vehicle_journey')?.id;
+
+     // Find Origin (⚡ Bolt: O(1) Map lookup instead of O(N) array search inside loop)
+     let origin = 'Inconnu';
+@@ -329,15 +312,7 @@
+                 if (depTime > maxRealtimeTime) maxRealtimeTime = depTime;
+
+                 // Index by vehicle_journey_id
+-                let journeyId: string | undefined;
+-                if (dep.links) {
+-                    for (const l of dep.links) {
+-                        if (l.type === 'vehicle_journey') {
+-                            journeyId = l.id;
+-                            break;
+-                        }
+-                    }
+-                }
++                const journeyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+
+                 if (journeyId) {
+                     realtimeMap.set(journeyId, dep);
+@@ -351,15 +326,7 @@
+         // 3. Reconcile: Iterate over Base Schedule (The Truth of what SHOULD exist)
+         if (baseData?.departures) {
+             for (const baseDep of baseData.departures) {
+-                let journeyId: string | undefined;
+-                if (baseDep.links) {
+-                    for (const l of baseDep.links) {
+-                        if (l.type === 'vehicle_journey') {
+-                            journeyId = l.id;
+-                            break;
+-                        }
+-                    }
+-                }
++                const journeyId = baseDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                 if (!journeyId) continue;
+
+                 // Processed ID tracking
+@@ -431,16 +398,8 @@
+         // 4. Add any "extra" trains from Realtime that weren't in Base Schedule (e.g. added trains)
+         if (realtimeData?.departures) {
+             for (const rtDep of realtimeData.departures) {
+-                let journeyId: string | undefined;
+-                if (rtDep.links) {
+-                    for (const l of rtDep.links) {
+-                        if (l.type === 'vehicle_journey') {
+-                            journeyId = l.id;
+-                            break;
+-                        }
+-                    }
+-                }
++                const journeyId = rtDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+
+                 if (journeyId && !processedTripIds.has(journeyId)) {
+                     // This is an unexpected extra train
