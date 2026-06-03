@@ -25,7 +25,11 @@ export interface LineE1StaticTrip {
 export type LineE1Shapes = typeof lineE1Data.shapes;
 
 const staticTrips = e1StopTimes as LineE1StaticTrip[];
-const staticTripsById = new Map(staticTrips.map(trip => [trip.tripId, trip]));
+// ⚡ Bolt: Populate Map using for loop to avoid intermediate array allocations
+const staticTripsById = new Map<string, LineE1StaticTrip>();
+for (const trip of staticTrips) {
+    staticTripsById.set(trip.tripId, trip);
+}
 const staticTripsByPattern = new Map<string, LineE1StaticTrip>();
 
 for (const trip of staticTrips) {
@@ -35,9 +39,11 @@ for (const trip of staticTrips) {
     }
 }
 
-const stopsById = new Map<string, LineE1StopInfo>(
-    lineE1Data.stops.map(stop => [stop.stopId, stop as LineE1StopInfo])
-);
+// ⚡ Bolt: Populate Map using for loop to avoid intermediate array allocations
+const stopsById = new Map<string, LineE1StopInfo>();
+for (const stop of lineE1Data.stops) {
+    stopsById.set(stop.stopId, stop as LineE1StopInfo);
+}
 
 export function extractTripPattern(tripId: string): string {
     const parts = tripId.split('_');
