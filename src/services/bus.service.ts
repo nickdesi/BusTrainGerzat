@@ -109,13 +109,16 @@ export function findRelevantStopUpdate(
     const exact = stops.get(stopId);
     if (exact) return exact;
 
-    const groups = [stopGroups.champfleuri, stopGroups.patural];
-    const group = groups.find(ids => ids.includes(stopId));
-    if (!group) return undefined;
-
-    for (const id of group) {
-        const update = stops.get(id);
-        if (update) return update;
+    if (stopGroups.champfleuri.includes(stopId)) {
+        for (const id of stopGroups.champfleuri) {
+            const update = stops.get(id);
+            if (update) return update;
+        }
+    } else if (stopGroups.patural.includes(stopId)) {
+        for (const id of stopGroups.patural) {
+            const update = stops.get(id);
+            if (update) return update;
+        }
     }
 
     return undefined;
