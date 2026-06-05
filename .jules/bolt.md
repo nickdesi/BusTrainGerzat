@@ -60,3 +60,7 @@
 ## 2026-05-29 - O(N) Anti-Pattern in Array Filtering Methods
 **Learning:** Found an `O(N)` complexity bug where `array.find()` was being used immediately after `array.findIndex()` (in `TripTimeline.tsx`). This resulted in an unnecessary second iteration over the array.
 **Action:** Always use direct array index access (`array[index]`) after a `.findIndex()` to improve performance to `O(1)`. When utilizing direct array index access after a `.findIndex()`, `eslint-plugin-security` may flag it with a `security/detect-object-injection` warning. This can be safely resolved by locally adding `// eslint-disable-next-line security/detect-object-injection` before the assignment if the index is trusted.
+
+## 2026-05-29 - O(N) Anti-Pattern: Recreating Arrays for find() in Hot Loops
+**Learning:** Found an anti-pattern in `findRelevantStopUpdate` where a new array was dynamically allocated on every call (`[stopGroups.champfleuri, stopGroups.patural]`) just to execute an inline `.find()` with `.includes()`. Since this function is called inside nested loops for every stop and trip, the unnecessary O(N) array allocation and arrow function creation created significant memory pressure and CPU overhead.
+**Action:** Replace dynamic array creation and `find()` callbacks on hot paths with explicit `if/else` block checks and `.includes()` directly on the pre-existing arrays. This avoids memory allocation overhead and reduces function invocations.
