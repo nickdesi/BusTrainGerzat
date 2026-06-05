@@ -6,7 +6,7 @@ import { UnifiedEntry } from '@/types';
 const DELAY_THRESHOLD_MINUTES = 5;
 const NOTIFICATION_COOLDOWN_MS = 5 * 60 * 1000; // 5 minutes between same notifications
 
-export function useDelayNotifications(departures: UnifiedEntry[], arrivals: UnifiedEntry[], favorites: string[]) {
+export function useDelayNotifications(departures: UnifiedEntry[], arrivals: UnifiedEntry[], favorites: Set<string>) {
     const notifiedIds = useRef<Map<string, number>>(new Map());
     const permissionGranted = useRef(false);
 
@@ -71,13 +71,10 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
 
     // Check for significant delays
     useEffect(() => {
-        // ⚡ Bolt: Convert favorites array to Set for O(1) lookups instead of O(N) array includes
-        const favoritesSet = new Set(favorites);
-
         // ⚡ Bolt: Process departures and arrivals separately to avoid O(N^2) array includes checks
         departures.forEach((entry) => {
             const delayMinutes = Math.floor(entry.delay / 60);
-            const isFavorite = favoritesSet.has(entry.id);
+            const isFavorite = favorites.has(entry.id);
 
             if (isFavorite && delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
                 showNotification(entry, 'departure');
@@ -86,7 +83,7 @@ export function useDelayNotifications(departures: UnifiedEntry[], arrivals: Unif
 
         arrivals.forEach((entry) => {
             const delayMinutes = Math.floor(entry.delay / 60);
-            const isFavorite = favoritesSet.has(entry.id);
+            const isFavorite = favorites.has(entry.id);
 
             if (isFavorite && delayMinutes >= DELAY_THRESHOLD_MINUTES && entry.isRealtime) {
                 showNotification(entry, 'arrival');
