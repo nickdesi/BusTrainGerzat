@@ -71,15 +71,20 @@ export default function TransitBoardPage({
     const { getPrediction } = usePredictiveDelay();
 
     const entries = boardType === 'arrivals' ? arrivals : departures;
-    const favoriteIds = useMemo(() => favorites.map(f => f.id), [favorites]);
     // ⚡ Bolt: Cache favorites Set to prevent O(N) recreations and O(N*M) lookups
-    const favoriteIdsSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+    const favoriteIdsSet = useMemo(() => {
+        const set = new Set<string>();
+        for (const f of favorites) {
+            set.add(f.id);
+        }
+        return set;
+    }, [favorites]);
 
     const handleToggleFavorite = useCallback((id: string, line: string, dest: string, type: 'BUS' | 'TER') => {
         toggleFavorite({ id, line, destination: dest, type });
     }, [toggleFavorite]);
 
-    useDelayNotifications(departures, arrivals, favoriteIds);
+    useDelayNotifications(departures, arrivals, favoriteIdsSet);
 
     const filteredEntries = useMemo(() => {
         if (filter === 'all' && !searchQuery) return entries;
@@ -252,8 +257,8 @@ export default function TransitBoardPage({
                             {filter !== 'all' && <span className={theme.boardFilterBadge}>{filter === 'bus' ? 'Bus uniquement' : 'TER uniquement'}</span>}
                         </h2>
                     </div>
-                    <DeparturesBoard departures={filteredEntries} loading={isLoading} boardType={boardType} favorites={favoriteIds} onToggleFavorite={handleToggleFavorite} />
-                    <DeparturesList departures={filteredEntries} loading={isLoading} boardType={boardType} favorites={favoriteIds} onToggleFavorite={handleToggleFavorite} />
+                    <DeparturesBoard departures={filteredEntries} loading={isLoading} boardType={boardType} favorites={favoriteIdsSet} onToggleFavorite={handleToggleFavorite} />
+                    <DeparturesList departures={filteredEntries} loading={isLoading} boardType={boardType} favorites={favoriteIdsSet} onToggleFavorite={handleToggleFavorite} />
                 </div>
 
                 {showTicker && (
