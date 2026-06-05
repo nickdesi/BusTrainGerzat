@@ -63,3 +63,7 @@
 ## 2026-06-15 - Consolidating redundant .find() calls
 **Learning:** Found multiple instances where `.find()` was called repeatedly on the exact same array (e.g. `dep.links?.find(...)`) to extract different targets (like `originLink` and `vehicleJourneyId`). This creates unnecessary O(N) array scans inside tight rendering or data parsing loops.
 **Action:** Consolidate multiple `.find()` calls on the same array into a single-pass `for...of` loop or use pre-indexed Maps when appropriate. Wait, since `for...of` might sacrifice readability for negligible micro-optimization gains on small arrays, prefer using pre-indexed `Map` objects (e.g. transforming `origins.find` inside a loop by caching a `new Map(origins)` beforehand).
+
+## 2026-05-29 - O(N) Anti-Pattern: Recreating Arrays for find() in Hot Loops
+**Learning:** Found an anti-pattern in `findRelevantStopUpdate` where a new array was dynamically allocated on every call (`[stopGroups.champfleuri, stopGroups.patural]`) just to execute an inline `.find()` with `.includes()`. Since this function is called inside nested loops for every stop and trip, the unnecessary O(N) array allocation and arrow function creation created significant memory pressure and CPU overhead.
+**Action:** Replace dynamic array creation and `find()` callbacks on hot paths with explicit `if/else` block checks and `.includes()` directly on the pre-existing arrays. This avoids memory allocation overhead and reduces function invocations.
