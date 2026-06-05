@@ -69,6 +69,10 @@
 
 **Action:** Pass pre-computed `Set` objects directly through React props rather than strings array. Replace `favorites.map` and `new Set` chains with a single unified `for...of` loop inside a `useMemo` hooked to a stable state dependency. Make sure to define stable default parameters module-level constants (e.g. `const EMPTY_SET = new Set()`) instead of fallback logic (`favorites = []`) inside component parameters which breaks reference stability.
 
+## 2026-06-03 - [Replace map initialization with for loops]
+**Learning:** Initializing Maps using `new Map(array.map(...))` creates intermediate tuple arrays which cause unnecessary memory allocation and garbage collection.
+**Action:** Always instantiate an empty Map and populate it using a `for...of` loop and `Map.set()` for better performance and reduced memory overhead.
+
 ## 2026-05-29 - O(N) Anti-Pattern: Recreating Arrays for find() in Hot Loops
 **Learning:** Found an anti-pattern in `findRelevantStopUpdate` where a new array was dynamically allocated on every call (`[stopGroups.champfleuri, stopGroups.patural]`) just to execute an inline `.find()` with `.includes()`. Since this function is called inside nested loops for every stop and trip, the unnecessary O(N) array allocation and arrow function creation created significant memory pressure and CPU overhead.
 **Action:** Replace dynamic array creation and `find()` callbacks on hot paths with explicit `if/else` block checks and `.includes()` directly on the pre-existing arrays. This avoids memory allocation overhead and reduces function invocations.

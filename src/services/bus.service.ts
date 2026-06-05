@@ -68,9 +68,11 @@ async function getGtfsConfig(): Promise<{ stopIds: { all: string[]; champfleuri:
 async function getStopNameById(): Promise<Map<string, string>> {
     if (!_stopNameById) {
         const lineE1Data = (await import('../../public/data/lineE1_data.json')).default;
-        _stopNameById = new Map<string, string>(
-            lineE1Data.stops.map((s: { stopId: string; stopName: string }) => [s.stopId, s.stopName])
-        );
+        // ⚡ Bolt: Populate Map using for loop to avoid intermediate array allocations
+        _stopNameById = new Map<string, string>();
+        for (const s of lineE1Data.stops) {
+            _stopNameById.set(s.stopId, s.stopName);
+        }
     }
     return _stopNameById;
 }
