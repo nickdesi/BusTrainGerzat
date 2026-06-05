@@ -46,7 +46,6 @@ const SncfApiResponseSchema = z.object({
 
 type SncfLink = z.infer<typeof SncfLinkSchema>;
 type SncfDeparture = z.infer<typeof SncfDepartureSchema>;
-type SncfOrigin = z.infer<typeof SncfOriginSchema>;
 // SncfApiResponse type is inferred directly in safeParse usage
 
 // --- Helpers ---
@@ -66,7 +65,7 @@ function clampTrainDelay(delay: number): number {
     return Math.max(-MAX_REASONABLE_TRAIN_DELAY_SECONDS, Math.min(MAX_REASONABLE_TRAIN_DELAY_SECONDS, delay));
 }
 
-function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], isRealtimeSource: boolean): TrainUpdate {
+function processSncfDeparture(dep: SncfDeparture, originsMap: Map<string, string>, isRealtimeSource: boolean): TrainUpdate {
     const stopDateTime = dep.stop_date_time;
     const displayInfo = dep.display_informations;
 
@@ -88,15 +87,15 @@ function processSncfDeparture(dep: SncfDeparture, origins: SncfOrigin[] = [], is
         ? clampTrainDelay(departureTime - baseDepartureTime)
         : 0;
 
-    // Find Origin
-    let origin = 'Inconnu';
-    const originLink = displayInfo.links?.find((l: SncfLink) => l.rel === 'origins');
-    if (originLink) {
-        const originData = origins.find((o: SncfOrigin) => o.id === originLink.id);
-        if (originData) origin = originData.name;
-    }
-
+    const originLinkId = displayInfo.links?.find((l: SncfLink) => l.rel === 'origins')?.id;
     const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+
+    // Find Origin (⚡ Bolt: O(1) Map lookup instead of O(N) array search inside loop)
+    let origin = 'Inconnu';
+    if (originLinkId) {
+        const originName = originsMap.get(originLinkId);
+        if (originName) origin = originName;
+    }
 
     // Determine Cancellation status
     // For realtime: check explicit status flags
@@ -281,6 +280,18 @@ export async function getTrainData(): Promise<TrainDataResponse> {
         const baseData = baseResult?.success ? baseResult.data : null;
         const realtimeData = realtimeResult?.success ? realtimeResult.data : null;
 
+        // ⚡ Bolt: Pre-compute origins Map for O(1) lookups inside the departures loop
+        const originsMap = new Map<string, string>();
+        if (baseData?.origins) {
+            for (const o of baseData.origins) {
+                originsMap.set(o.id, o.name);
+            }
+        }
+        if (realtimeData?.origins) {
+            for (const o of realtimeData.origins) {
+                originsMap.set(o.id, o.name);
+            }
+        }
 
         // 2. Index Realtime Data for Fast Lookup and Window Calculation
         const realtimeMap = new Map<string, SncfDeparture>();
@@ -299,6 +310,7 @@ export async function getTrainData(): Promise<TrainDataResponse> {
 
                 // Index by vehicle_journey_id
                 const journeyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+
                 if (journeyId) {
                     realtimeMap.set(journeyId, dep);
                 }
@@ -364,7 +376,7 @@ export async function getTrainData(): Promise<TrainDataResponse> {
                     }
                 }
 
-                const processed = processSncfDeparture(finalDep, baseData.origins, isRealtime);
+                const processed = processSncfDeparture(finalDep, originsMap, isRealtime);
                 processed.isCancelled = isCancelled;
                 processed.delay = clampTrainDelay(delay);
                 processed.departure.delay = processed.delay;
@@ -384,9 +396,10 @@ export async function getTrainData(): Promise<TrainDataResponse> {
         if (realtimeData?.departures) {
             for (const rtDep of realtimeData.departures) {
                 const journeyId = rtDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+
                 if (journeyId && !processedTripIds.has(journeyId)) {
                     // This is an unexpected extra train
-                    const processed = processSncfDeparture(rtDep, realtimeData.origins, true);
+                    const processed = processSncfDeparture(rtDep, originsMap, true);
                     // Check explicit cancellation
                     processed.isCancelled =
                         rtDep.stop_date_time.data_freshness === 'deleted' ||
