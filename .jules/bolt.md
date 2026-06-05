@@ -63,3 +63,7 @@
 ## 2026-05-30 - Eliminating Array Allocation for Map Instantiation
 **Learning:** Initializing Maps using `new Map(array.map(...))` creates an intermediate array containing exactly the same number of elements as the original array, just formatted as `[key, value]` tuples. For datasets of hundreds of elements, this causes unnecessary garbage collection and memory overhead.
 **Action:** Replace `new Map(array.map(...))` with a simple `for` loop, instantiating the Map empty and using `Map.set()` directly. This avoids intermediate array allocations and provides measurable memory efficiency improvements.
+
+## 2026-05-29 - O(N) Anti-Pattern: Recreating Arrays for find() in Hot Loops
+**Learning:** Found an anti-pattern in `findRelevantStopUpdate` where a new array was dynamically allocated on every call (`[stopGroups.champfleuri, stopGroups.patural]`) just to execute an inline `.find()` with `.includes()`. Since this function is called inside nested loops for every stop and trip, the unnecessary O(N) array allocation and arrow function creation created significant memory pressure and CPU overhead.
+**Action:** Replace dynamic array creation and `find()` callbacks on hot paths with explicit `if/else` block checks and `.includes()` directly on the pre-existing arrays. This avoids memory allocation overhead and reduces function invocations.

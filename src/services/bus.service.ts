@@ -107,19 +107,16 @@ export function findRelevantStopUpdate(
     const exact = stops.get(stopId);
     if (exact) return exact;
 
-    // ⚡ Bolt: Eliminate dynamic array allocation and O(N*M) callback-based search
-    let group: string[] | undefined;
     if (stopGroups.champfleuri.includes(stopId)) {
-        group = stopGroups.champfleuri;
+        for (const id of stopGroups.champfleuri) {
+            const update = stops.get(id);
+            if (update) return update;
+        }
     } else if (stopGroups.patural.includes(stopId)) {
-        group = stopGroups.patural;
-    }
-
-    if (!group) return undefined;
-
-    for (const id of group) {
-        const update = stops.get(id);
-        if (update) return update;
+        for (const id of stopGroups.patural) {
+            const update = stops.get(id);
+            if (update) return update;
+        }
     }
 
     return undefined;
