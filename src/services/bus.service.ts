@@ -23,13 +23,9 @@ type LegacyRtStop = {
     isSkipped: boolean;
 };
 
-type AddedTripStop = {
-    stopId: string;
-    predictedTime?: number;
-    predictedArrival?: number;
-    predictedDeparture?: number;
-    delay: number;
-};
+import { RTStopUpdate } from '@/lib/gtfs-rt';
+
+type AddedTripStop = RTStopUpdate;
 
 const RT_FALLBACK_MATCH_WINDOW_SECONDS = 3 * 60 * 60;
 
@@ -163,7 +159,7 @@ export function shouldApplyRealtimeUpdate(rtStartDate: string | undefined, stati
 }
 
 export function findGerzatStopForAddedTrip(
-    stops: AddedTripStop[],
+    stops: Iterable<AddedTripStop>,
     directionId: number,
     stopGroups: { champfleuri: string[]; patural: string[] }
 ): AddedTripStop | undefined {
@@ -233,8 +229,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         for (const [tripId, update] of rtUpdates) {
             // 1. Handle Added Trips
             if (update.isAdded) {
-                const stops = Array.from(update.stopUpdates.values());
-                const gerzatStop = findGerzatStopForAddedTrip(stops, update.directionId, gtfsConfig.stopIds);
+                // ⚡ Bolt: Pass Iterable directly to avoid O(N) Array.from allocation
+                const gerzatStop = findGerzatStopForAddedTrip(update.stopUpdates.values(), update.directionId, gtfsConfig.stopIds);
 
                 if (gerzatStop) {
                     const arrivalTime = gerzatStop.predictedTime;
