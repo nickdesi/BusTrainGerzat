@@ -97,25 +97,27 @@ async function getTripOrigins(): Promise<Map<string, string>> {
 // --- Service ---
 
 let TARGET_STOP_IDS_SET_CACHE: Set<string> | null = null;
+let CHAMPFLEURI_IDS_SET_CACHE: Set<string> | null = null;
 let PATURAL_IDS_SET_CACHE: Set<string> | null = null;
 
 export function findRelevantStopUpdate(
     stops: Map<string, LegacyRtStop>,
     stopId: string | undefined,
-    stopGroups: { champfleuri: string[]; patural: string[] }
+    champfleuriIds: Set<string>,
+    paturalIds: Set<string>
 ): LegacyRtStop | undefined {
     if (!stopId) return undefined;
 
     const exact = stops.get(stopId);
     if (exact) return exact;
 
-    if (stopGroups.champfleuri.includes(stopId)) {
-        for (const id of stopGroups.champfleuri) {
+    if (champfleuriIds.has(stopId)) {
+        for (const id of champfleuriIds) {
             const update = stops.get(id);
             if (update) return update;
         }
-    } else if (stopGroups.patural.includes(stopId)) {
-        for (const id of stopGroups.patural) {
+    } else if (paturalIds.has(stopId)) {
+        for (const id of paturalIds) {
             const update = stops.get(id);
             if (update) return update;
         }
@@ -225,6 +227,9 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         // while preserving the lazy-loading pattern of the module.
         if (!TARGET_STOP_IDS_SET_CACHE) {
             TARGET_STOP_IDS_SET_CACHE = new Set([...gtfsConfig.stopIds.champfleuri, ...gtfsConfig.stopIds.patural]);
+        }
+        if (!CHAMPFLEURI_IDS_SET_CACHE) {
+            CHAMPFLEURI_IDS_SET_CACHE = new Set(gtfsConfig.stopIds.champfleuri);
         }
         if (!PATURAL_IDS_SET_CACHE) {
             PATURAL_IDS_SET_CACHE = new Set(gtfsConfig.stopIds.patural);
@@ -343,7 +348,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
                 if (shouldApplyRT) {
                     const stopId = item.stopId;
-                    const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
+                    const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, CHAMPFLEURI_IDS_SET_CACHE!, PATURAL_IDS_SET_CACHE!);
 
                     if (rtStop) {
                         isRealtime = true;
