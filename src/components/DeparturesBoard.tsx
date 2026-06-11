@@ -209,18 +209,19 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
 
     // Sort departures: Favorites first, then by time
     const sortedDepartures = useMemo(() => {
-        // ⚡ Bolt: Use the memoized favoritesSet to make lookups O(1) inside the sort loop
-        // instead of O(M) inside an O(N log N) loop.
-        return [...departures].sort((a, b) => {
-            const idA = a.id;
-            const idB = b.id;
-            const isFavA = favorites.has(idA);
-            const isFavB = favorites.has(idB);
-
-            if (isFavA && !isFavB) return -1;
-            if (!isFavA && isFavB) return 1;
-            return 0; // Maintain existing sort (by time)
-        });
+        // ⚡ Bolt: Use O(N) partitioning instead of O(N log N) sorting to group favorites.
+        // Since `departures` is already sorted by time, separating them into two arrays
+        // and concatenating preserves the original time sort order.
+        const favs = [];
+        const others = [];
+        for (const dep of departures) {
+            if (favorites.has(dep.id)) {
+                favs.push(dep);
+            } else {
+                others.push(dep);
+            }
+        }
+        return [...favs, ...others];
     }, [departures, favorites]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureBoardRow's React.memo() on every render

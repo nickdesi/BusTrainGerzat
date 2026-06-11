@@ -130,15 +130,20 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
     const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-400';
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée trouvée' : 'Aucun départ trouvé';
 
-    // ⚡ Bolt: Memoize sorted departures to prevent re-sorting on every render
+    // ⚡ Bolt: Use O(N) partitioning instead of O(N log N) sorting to group favorites.
+    // Since `departures` is already sorted by time, we just need to separate favorites
+    // and non-favorites into two arrays and concatenate them.
     const sortedDepartures = useMemo(() => {
-        return [...departures].sort((a, b) => {
-            const aFav = favorites.has(a.id);
-            const bFav = favorites.has(b.id);
-            if (aFav && !bFav) return -1;
-            if (!aFav && bFav) return 1;
-            return 0;
-        });
+        const favs = [];
+        const others = [];
+        for (const dep of departures) {
+            if (favorites.has(dep.id)) {
+                favs.push(dep);
+            } else {
+                others.push(dep);
+            }
+        }
+        return [...favs, ...others];
     }, [departures, favorites]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureRow's React.memo() on every render
