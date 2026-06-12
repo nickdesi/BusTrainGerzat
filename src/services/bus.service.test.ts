@@ -17,19 +17,13 @@ describe('bus.service helpers', () => {
             ['GECH', rtStop],
         ]);
 
-        expect(findRelevantStopUpdate(stops, 'GECHR', {
-            champfleuri: ['GECHR', 'GECH'],
-            patural: ['PATU'],
-        })).toBe(exact);
+        expect(findRelevantStopUpdate(stops, 'GECHR', new Set(['GECHR', 'GECH']), new Set(['PATU']))).toBe(exact);
     });
 
     it('falls back to stop group aliases', () => {
         const stops = new Map([['GECH', rtStop]]);
 
-        expect(findRelevantStopUpdate(stops, 'GECHR', {
-            champfleuri: ['GECHR', 'GECH'],
-            patural: ['PATU'],
-        })).toBe(rtStop);
+        expect(findRelevantStopUpdate(stops, 'GECHR', new Set(['GECHR', 'GECH']), new Set(['PATU']))).toBe(rtStop);
     });
 
     it('keeps only valid inbound Patural exceptions', () => {
