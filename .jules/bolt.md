@@ -79,3 +79,7 @@
 ## 2026-06-21 - Avoiding Array.from() with intermediate filters on Iterables
 **Learning:** Found an anti-pattern in `processAddedTrip` and `findGerzatStopForAddedTrip` where `Array.from()` was called on an iterable (`Map.values()`) immediately followed by `.filter()`. This creates a completely unnecessary intermediate array before the `.filter()` method creates yet another one. Passing iterables to other functions or parsing them manually in a single `for...of` loop avoids intermediate allocations.
 **Action:** When extracting data from a `Map` or `Set`, avoid chaining `Array.from(...).filter(...)`. Instead, iterate manually over the `values()` iterable with a `for...of` loop, or pass the Iterable directly down to child methods where it can be consumed without allocating an array until absolutely necessary.
+
+## 2026-06-25 - Avoid Array.prototype.sort() for Boolean Partitioning
+**Learning:** Found an anti-pattern in `DeparturesList.tsx` and `DeparturesBoard.tsx` where `[...departures].sort()` was used simply to bring "favorite" entries to the top of an already time-sorted array. Since JavaScript's sort is $O(N \log N)$, applying it on every render for a simple boolean partition is wasteful.
+**Action:** Replace `Array.prototype.sort()` with an $O(N)$ single-pass partition loop when the goal is simply to group items by a boolean flag (like favorites) and preserve their existing relative stable sort order. Separating them into two arrays and concatenating is significantly faster.
