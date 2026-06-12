@@ -388,7 +388,10 @@ export async function getTrainData(): Promise<TrainDataResponse> {
                     processed.isRealtime = false;
                 }
 
-                updates.push(processed);
+                // Filter past trains (keep recent past 60s)
+                if (Number(processed.departure.time) > now - 60) {
+                    updates.push(processed);
+                }
             }
         }
 
@@ -406,18 +409,18 @@ export async function getTrainData(): Promise<TrainDataResponse> {
                         rtDep.display_informations.commercial_mode === 'Supprimé' ||
                         rtDep.display_informations.physical_mode === 'Cancelled';
 
-                    updates.push(processed);
+                    // Filter past trains (keep recent past 60s)
+                    if (Number(processed.departure.time) > now - 60) {
+                        updates.push(processed);
+                    }
                 }
             }
         }
 
-        // Filter past trains (keep recent past 60s)
-        const futureUpdates = updates
-            .filter(u => Number(u.departure.time) > now - 60)
-            .sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
+        updates.sort((a, b) => Number(a.departure.time) - Number(b.departure.time));
 
         // Update cache
-        const result = { updates: futureUpdates, timestamp: now, debug: { baseCount: baseData?.departures?.length ?? 0, realtimeCount: realtimeData?.departures?.length ?? 0 } };
+        const result = { updates: updates, timestamp: now, debug: { baseCount: baseData?.departures?.length ?? 0, realtimeCount: realtimeData?.departures?.length ?? 0 } };
         cachedResponse = result;
         cacheExpiry = Date.now() + CACHE_TTL_MS;
 
