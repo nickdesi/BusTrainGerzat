@@ -23,13 +23,9 @@ type LegacyRtStop = {
     isSkipped: boolean;
 };
 
-type AddedTripStop = {
-    stopId: string;
-    predictedTime?: number;
-    predictedArrival?: number;
-    predictedDeparture?: number;
-    delay: number;
-};
+import { RTStopUpdate } from '@/lib/gtfs-rt';
+
+type AddedTripStop = RTStopUpdate;
 
 const RT_FALLBACK_MATCH_WINDOW_SECONDS = 3 * 60 * 60;
 
@@ -97,25 +93,27 @@ async function getTripOrigins(): Promise<Map<string, string>> {
 // --- Service ---
 
 let TARGET_STOP_IDS_SET_CACHE: Set<string> | null = null;
+let CHAMPFLEURI_IDS_SET_CACHE: Set<string> | null = null;
 let PATURAL_IDS_SET_CACHE: Set<string> | null = null;
 
 export function findRelevantStopUpdate(
     stops: Map<string, LegacyRtStop>,
     stopId: string | undefined,
-    stopGroups: { champfleuri: string[]; patural: string[] }
+    champfleuriIds: Set<string>,
+    paturalIds: Set<string>
 ): LegacyRtStop | undefined {
     if (!stopId) return undefined;
 
     const exact = stops.get(stopId);
     if (exact) return exact;
 
-    if (stopGroups.champfleuri.includes(stopId)) {
-        for (const id of stopGroups.champfleuri) {
+    if (champfleuriIds.has(stopId)) {
+        for (const id of champfleuriIds) {
             const update = stops.get(id);
             if (update) return update;
         }
-    } else if (stopGroups.patural.includes(stopId)) {
-        for (const id of stopGroups.patural) {
+    } else if (paturalIds.has(stopId)) {
+        for (const id of paturalIds) {
             const update = stops.get(id);
             if (update) return update;
         }
@@ -163,7 +161,7 @@ export function shouldApplyRealtimeUpdate(rtStartDate: string | undefined, stati
 }
 
 export function findGerzatStopForAddedTrip(
-    stops: AddedTripStop[],
+    stops: Iterable<AddedTripStop>,
     directionId: number,
     stopGroups: { champfleuri: string[]; patural: string[] }
 ): AddedTripStop | undefined {
@@ -226,6 +224,9 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         if (!TARGET_STOP_IDS_SET_CACHE) {
             TARGET_STOP_IDS_SET_CACHE = new Set([...gtfsConfig.stopIds.champfleuri, ...gtfsConfig.stopIds.patural]);
         }
+        if (!CHAMPFLEURI_IDS_SET_CACHE) {
+            CHAMPFLEURI_IDS_SET_CACHE = new Set(gtfsConfig.stopIds.champfleuri);
+        }
         if (!PATURAL_IDS_SET_CACHE) {
             PATURAL_IDS_SET_CACHE = new Set(gtfsConfig.stopIds.patural);
         }
@@ -233,8 +234,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         for (const [tripId, update] of rtUpdates) {
             // 1. Handle Added Trips
             if (update.isAdded) {
-                const stops = Array.from(update.stopUpdates.values());
-                const gerzatStop = findGerzatStopForAddedTrip(stops, update.directionId, gtfsConfig.stopIds);
+                // ⚡ Bolt: Pass Iterable directly to avoid O(N) Array.from allocation
+                const gerzatStop = findGerzatStopForAddedTrip(update.stopUpdates.values(), update.directionId, gtfsConfig.stopIds);
 
                 if (gerzatStop) {
                     const arrivalTime = gerzatStop.predictedTime;
@@ -343,7 +344,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
                 if (shouldApplyRT) {
                     const stopId = item.stopId;
-                    const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, gtfsConfig.stopIds);
+                    const rtStop = findRelevantStopUpdate(rtTrip.stops, stopId, CHAMPFLEURI_IDS_SET_CACHE!, PATURAL_IDS_SET_CACHE!);
 
                     if (rtStop) {
                         isRealtime = true;

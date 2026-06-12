@@ -266,9 +266,14 @@ function processAddedTrip(
 ): void {
     if (!rtUpdate.isAdded || rtUpdate.stopUpdates.size < 2) return;
 
-    const orderedStops = Array.from(rtUpdate.stopUpdates.values())
-        .filter((stop) => stop.predictedTime && getLineE1Stop(stop.stopId))
-        .sort((a, b) => (a.predictedTime || 0) - (b.predictedTime || 0));
+    // ⚡ Bolt: Single pass O(N) loop to avoid intermediate array allocations from Array.from() and .filter()
+    const orderedStops: typeof rtUpdate.stopUpdates extends Map<string, infer V> ? V[] : never = [];
+    for (const stop of rtUpdate.stopUpdates.values()) {
+        if (stop.predictedTime && getLineE1Stop(stop.stopId)) {
+            orderedStops.push(stop);
+        }
+    }
+    orderedStops.sort((a, b) => (a.predictedTime || 0) - (b.predictedTime || 0));
 
     const firstRtStop = orderedStops.at(0);
     const lastRtStop = orderedStops.at(-1);
