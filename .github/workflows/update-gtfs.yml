@@ -94,4 +94,3 @@ jobs:
           git config --local user.name "GitHub Action"
           git commit -m "chore: update T2C GTFS data [$(date +'%Y-%m-%d')]"
           git push
-

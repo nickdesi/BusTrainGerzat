@@ -82,8 +82,8 @@ export default function ServiceWorkerRegistration() {
     return (
         <>
             {showOfflineBanner && (
-                <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-50 
-                                bg-orange-500/90 backdrop-blur-sm rounded-lg p-4 shadow-lg 
+                <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-80 z-50
+                                bg-orange-500/90 backdrop-blur-sm rounded-lg p-4 shadow-lg
                                 flex items-center gap-3 animate-slideUp">
                     <div className="w-3 h-3 bg-orange-200 rounded-full animate-pulse" />
                     <div className="flex-1">
@@ -94,8 +94,8 @@ export default function ServiceWorkerRegistration() {
             )}
 
             {showUpdateBanner && (
-                <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50 
-                                bg-zinc-950/95 border border-yellow-400/30 backdrop-blur-sm rounded-lg p-4 shadow-lg 
+                <div className="fixed bottom-4 left-4 right-4 md:left-auto md:right-4 md:w-96 z-50
+                                bg-zinc-950/95 border border-yellow-400/30 backdrop-blur-sm rounded-lg p-4 shadow-lg
                                 flex items-center gap-3 animate-slideUp">
                     <div className="flex-1">
                         <p className="text-white font-medium text-sm">Nouvelle version disponible</p>

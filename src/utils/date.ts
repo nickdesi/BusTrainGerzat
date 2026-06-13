@@ -235,4 +235,3 @@ export function isT2CNoServiceDay(date = new Date()): boolean {
 
     return month === '05' && day === '01';
 }
-

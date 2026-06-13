@@ -73,15 +73,15 @@ describe('bus.service helpers', () => {
 
     it('selects explicit Gerzat/Patural stops for added trips', () => {
         const stops = [
-            { stopId: 'OTHER1', predictedTime: 1_000, delay: 0 },
-            { stopId: 'GECHR', predictedTime: 2_000, delay: 60 },
-            { stopId: 'PATU', predictedTime: 3_000, delay: 120 },
-            { stopId: 'OTHER2', predictedTime: 4_000, delay: 0 },
+            { stopId: 'OTHER1', predictedTime: 1_000, delay: 0, isSkipped: false },
+            { stopId: 'GECHR', predictedTime: 2_000, delay: 60, isSkipped: false },
+            { stopId: 'PATU', predictedTime: 3_000, delay: 120, isSkipped: false },
+            { stopId: 'OTHER2', predictedTime: 4_000, delay: 0, isSkipped: false },
         ];
         const stopGroups = { champfleuri: ['GECHR'], patural: ['PATU'] };
 
         expect(findGerzatStopForAddedTrip(stops, 0, stopGroups)?.stopId).toBe('GECHR');
         expect(findGerzatStopForAddedTrip(stops, 1, stopGroups)?.stopId).toBe('PATU');
-        expect(findGerzatStopForAddedTrip([{ stopId: 'OTHER', predictedTime: 1_000, delay: 0 }], 0, stopGroups)).toBeUndefined();
+        expect(findGerzatStopForAddedTrip([{ stopId: 'OTHER', predictedTime: 1_000, delay: 0, isSkipped: false }], 0, stopGroups)).toBeUndefined();
     });
 });

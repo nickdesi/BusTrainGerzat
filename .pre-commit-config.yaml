@@ -1,0 +1,29 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: ^(public/|\.next/|dist/|\.firebase/)
+      - id: check-added-large-files
+      - id: check-json
+      - id: check-merge-conflict
+      - id: check-yaml
+      - id: end-of-file-fixer
+        exclude: ^(public/|\.next/|dist/|\.firebase/)
+      - id: mixed-line-ending
+        args: ['--fix=auto']
+
+  - repo: local
+    hooks:
+      - id: eslint
+        name: eslint
+        entry: env PATH="/Volumes/HomeExt/Users/Nicolas/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH" npx eslint --fix
+        language: system
+        files: \.[jt]sx?$
+        exclude: ^(\.next/|out/|build/|scripts/)
+
+      - id: typecheck
+        name: typecheck
+        entry: env PATH="/Volumes/HomeExt/Users/Nicolas/.local/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:$PATH" npx tsc --noEmit
+        language: system
+        pass_filenames: false

@@ -5,7 +5,7 @@
   /* Base colors */
   --color-background: #0a0a0a;
   --color-foreground: #ededed;
-  
+
   /* Surface colors - semantic scale */
   --color-surface-darkest: #050505;
   --color-surface-darker: #0a0a0a;
@@ -14,7 +14,7 @@
   --color-surface-elevated: #1a1a1a;
   --color-surface-raised: #1f1f1f;
   --color-surface-accent: #1a1a2e;
-  
+
   /* Fonts */
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
@@ -184,7 +184,7 @@ body {
     transition: none !important;
     transform: none !important;
   }
-  
+
   /* For marquee, just slow it down significantly instead of disabling */
   .animate-marquee {
     animation-duration: 120s !important;

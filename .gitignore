@@ -63,3 +63,6 @@ public/workbox-*.js.map
 playwright-report/
 test-results/
 
+# Temporary and local data
+/data
+/scratch

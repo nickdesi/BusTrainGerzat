@@ -168,11 +168,11 @@ function main() {
       const trip = trips[tripId];
       if (activeServices.has(trip.service_id)) {
         const parts = stopTime.arrival_time.split(':').map(Number);
-        
+
         // Base date in Paris timezone for start of day
         const tzDateStr = `${dateStr.slice(0,4)}-${dateStr.slice(4,6)}-${dateStr.slice(6,8)}T00:00:00`;
         const startOfDay = toZonedTime(tzDateStr, PARIS_TZ);
-        
+
         // Add time
         const tripDt = new Date(startOfDay.getTime() + (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000);
         const timestamp = Math.floor(tripDt.getTime() / 1000);

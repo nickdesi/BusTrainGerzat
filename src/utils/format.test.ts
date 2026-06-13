@@ -25,7 +25,7 @@ describe('format util', () => {
 
     describe('formatTime', () => {
         it('formats valid timestamp correctly', () => {
-            // Mocked timestamp for 14:30:00 UTC (checking locale strings might depend on system timezone, 
+            // Mocked timestamp for 14:30:00 UTC (checking locale strings might depend on system timezone,
             // but toLocaleTimeString with 'fr-FR' should be relatively stable if timezone is handled)
             // Ideally we should mock the Date object or timezone, but for a smoke test:
             const timestamp = 1698244200; // 2023-10-25T14:30:00Z

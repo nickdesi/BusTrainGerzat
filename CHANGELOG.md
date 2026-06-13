@@ -402,7 +402,7 @@
   - Séparation claire Départs/Arrivées
   - Indicateurs de retard visuels (badges de couleur)
   - Support des horaires théoriques en mode fallback
-  
+
 - **Trains TER** : Suivi via API SNCF
   - Affichage des trains vers Clermont-Ferrand
   - Affichage des trains vers Riom/Moulins
