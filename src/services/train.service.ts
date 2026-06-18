@@ -50,6 +50,22 @@ type SncfDeparture = z.infer<typeof SncfDepartureSchema>;
 
 // --- Helpers ---
 
+export function extractSncfLinks(links?: SncfLink[]): { vehicleJourneyId?: string, originLinkId?: string } {
+    if (!links) return {};
+    let vehicleJourneyId: string | undefined;
+    let originLinkId: string | undefined;
+
+    for (const l of links) {
+        if (!vehicleJourneyId && l.type === 'vehicle_journey') {
+            vehicleJourneyId = l.id;
+        } else if (!originLinkId && l.rel === 'origins') {
+            originLinkId = l.id;
+        }
+        if (vehicleJourneyId && originLinkId) break;
+    }
+    return { vehicleJourneyId, originLinkId };
+}
+
 import { parseParisTime } from '@/utils/date';
 
 import { fetchWithRetry, ApiError } from '@/lib/api-client';
@@ -65,7 +81,7 @@ function clampTrainDelay(delay: number): number {
     return Math.max(-MAX_REASONABLE_TRAIN_DELAY_SECONDS, Math.min(MAX_REASONABLE_TRAIN_DELAY_SECONDS, delay));
 }
 
-function processSncfDeparture(dep: SncfDeparture, originsMap: Map<string, string>, isRealtimeSource: boolean): TrainUpdate {
+function processSncfDeparture(dep: SncfDeparture, originsMap: Map<string, string>, isRealtimeSource: boolean, vehicleJourneyId?: string): TrainUpdate {
     const stopDateTime = dep.stop_date_time;
     const displayInfo = dep.display_informations;
 
@@ -87,8 +103,8 @@ function processSncfDeparture(dep: SncfDeparture, originsMap: Map<string, string
         ? clampTrainDelay(departureTime - baseDepartureTime)
         : 0;
 
-    const originLinkId = displayInfo.links?.find((l: SncfLink) => l.rel === 'origins')?.id;
-    const vehicleJourneyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+    const { originLinkId } = extractSncfLinks(displayInfo.links);
+    const journeyId = vehicleJourneyId || extractSncfLinks(dep.links).vehicleJourneyId;
 
     // Find Origin (⚡ Bolt: O(1) Map lookup instead of O(N) array search inside loop)
     let origin = 'Inconnu';
@@ -106,7 +122,7 @@ function processSncfDeparture(dep: SncfDeparture, originsMap: Map<string, string
         displayInfo.commercial_mode === 'Supprimé';
 
     return {
-        tripId: vehicleJourneyId || '',
+        tripId: journeyId || '',
         trainNumber: displayInfo.trip_short_name || displayInfo.headsign || 'Inconnu',
         direction: displayInfo.direction?.replace(/ \([^)]+\)$/, '') || 'Inconnu',
         origin: origin,
@@ -309,7 +325,7 @@ export async function getTrainData(): Promise<TrainDataResponse> {
                 if (depTime > maxRealtimeTime) maxRealtimeTime = depTime;
 
                 // Index by vehicle_journey_id
-                const journeyId = dep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                const { vehicleJourneyId: journeyId } = extractSncfLinks(dep.links);
 
                 if (journeyId) {
                     realtimeMap.set(journeyId, dep);
@@ -323,7 +339,7 @@ export async function getTrainData(): Promise<TrainDataResponse> {
         // 3. Reconcile: Iterate over Base Schedule (The Truth of what SHOULD exist)
         if (baseData?.departures) {
             for (const baseDep of baseData.departures) {
-                const journeyId = baseDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                const { vehicleJourneyId: journeyId } = extractSncfLinks(baseDep.links);
                 if (!journeyId) continue;
 
                 // Processed ID tracking
@@ -376,7 +392,7 @@ export async function getTrainData(): Promise<TrainDataResponse> {
                     }
                 }
 
-                const processed = processSncfDeparture(finalDep, originsMap, isRealtime);
+                const processed = processSncfDeparture(finalDep, originsMap, isRealtime, journeyId);
                 processed.isCancelled = isCancelled;
                 processed.delay = clampTrainDelay(delay);
                 processed.departure.delay = processed.delay;
@@ -398,11 +414,11 @@ export async function getTrainData(): Promise<TrainDataResponse> {
         // 4. Add any "extra" trains from Realtime that weren't in Base Schedule (e.g. added trains)
         if (realtimeData?.departures) {
             for (const rtDep of realtimeData.departures) {
-                const journeyId = rtDep.links?.find((l: SncfLink) => l.type === 'vehicle_journey')?.id;
+                const { vehicleJourneyId: journeyId } = extractSncfLinks(rtDep.links);
 
                 if (journeyId && !processedTripIds.has(journeyId)) {
                     // This is an unexpected extra train
-                    const processed = processSncfDeparture(rtDep, originsMap, true);
+                    const processed = processSncfDeparture(rtDep, originsMap, true, journeyId);
                     // Check explicit cancellation
                     processed.isCancelled =
                         rtDep.stop_date_time.data_freshness === 'deleted' ||

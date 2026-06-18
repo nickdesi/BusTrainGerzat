@@ -108,11 +108,17 @@ export function getParisOffset(year: number, month: number, day: number): string
     // We strictly default to "longOffset" but normalize the output just in case
     const parts = PARIS_OFFSET_FORMATTER.formatToParts(date);
 
-    const tzPart = parts.find(p => p.type === 'timeZoneName');
+    let tzValue: string | undefined;
+    for (const p of parts) {
+        if (p.type === 'timeZoneName') {
+            tzValue = p.value;
+            break;
+        }
+    }
 
     // Extract offset from "GMT+01:00" or "GMT+1"
     // eslint-disable-next-line security/detect-unsafe-regex
-    const match = tzPart?.value.match(/GMT([+-]\d{1,2})(?::(\d{2}))?/);
+    const match = tzValue?.match(/GMT([+-]\d{1,2})(?::(\d{2}))?/);
 
     if (match) {
         const rawHours = match[1];
