@@ -5,6 +5,8 @@ import { BusUpdate } from '@/types/bus';
 interface BusDataResponse {
     updates: BusUpdate[];
     timestamp: number;
+    /** False when the GTFS-RT feed could not be fetched or was too stale to use. */
+    rtAvailable?: boolean;
 }
 
 async function fetchBusData(): Promise<BusDataResponse> {
