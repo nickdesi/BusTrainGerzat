@@ -52,9 +52,21 @@ import { fetchBinaryWithRetry } from './api-client';
 import { getNowUnix } from '@/utils/date';
 
 /**
- * Fetch and decode GTFS-RT Trip Updates for Line E1
+ * Result of a GTFS-RT Trip Updates fetch, including availability status.
+ *
+ * `rtAvailable` distinguishes "feed fetched successfully" from "fetch failed or
+ * feed too stale to use". An empty `updates` map alone is ambiguous (no buses vs.
+ * outage); this flag lets callers surface a real-time degradation to the UI.
  */
-export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
+export interface TripUpdatesResult {
+    updates: Map<string, RTTripUpdate>;
+    rtAvailable: boolean;
+}
+
+/**
+ * Fetch and decode GTFS-RT Trip Updates for Line E1, reporting availability.
+ */
+export async function fetchTripUpdatesWithStatus(): Promise<TripUpdatesResult> {
     const updates = new Map<string, RTTripUpdate>();
     try {
         // Use fetchBinaryWithRetry for resilience
@@ -69,7 +81,7 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
             const age = now - Number(feed.header.timestamp);
             if (age > 300) { // 5 minutes
                 gtfsLogger.warn('Stale feed ignored', { age, maxAge: 300 });
-                return updates;
+                return { updates, rtAvailable: false };
             }
         }
 
@@ -123,8 +135,20 @@ export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
         }
     } catch (e) {
         gtfsLogger.error('Failed to fetch trip updates', {}, e as Error);
+        return { updates, rtAvailable: false };
     }
-    return updates;
+    return { updates, rtAvailable: true };
+}
+
+/**
+ * Fetch and decode GTFS-RT Trip Updates for Line E1.
+ *
+ * Backwards-compatible wrapper returning only the updates map. Callers that need
+ * to know whether real-time data is actually available should use
+ * {@link fetchTripUpdatesWithStatus} instead.
+ */
+export async function fetchTripUpdates(): Promise<Map<string, RTTripUpdate>> {
+    return (await fetchTripUpdatesWithStatus()).updates;
 }
 
 /**

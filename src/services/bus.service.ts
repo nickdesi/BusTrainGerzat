@@ -1,4 +1,4 @@
-import { fetchTripUpdates } from '@/lib/gtfs-rt';
+import { fetchTripUpdatesWithStatus } from '@/lib/gtfs-rt';
 import { BusUpdate } from '@/types/transport';
 import { getNowUnix, isT2CNoServiceDay } from '@/utils/date';
 import { extractTripPattern, getEffectiveDelay } from '@/services/t2c-line-e1.service';
@@ -185,12 +185,12 @@ export function findGerzatStopForAddedTrip(
     return directionId === 0 ? firstMatch : lastMatch;
 }
 
-export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number }> {
+export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: number, rtAvailable: boolean }> {
     try {
         const now = getNowUnix();
 
         if (isT2CNoServiceDay()) {
-            return { updates: [], timestamp: now };
+            return { updates: [], timestamp: now, rtAvailable: true };
         }
 
         // Lazy load data on first use (reduces cold start time)
@@ -202,7 +202,7 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
 
         // 1. Fetch Real-time Data using shared service
         // Map<tripId, RTTripUpdate>
-        const rtUpdates = await fetchTripUpdates();
+        const { updates: rtUpdates, rtAvailable } = await fetchTripUpdatesWithStatus();
         const realtimeUpdates = new Map<string, {
             tripCancelled: boolean;
             startDate?: string;
@@ -402,9 +402,9 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             }
         }
 
-        return { updates: nextBuses, timestamp: now };
+        return { updates: nextBuses, timestamp: now, rtAvailable };
     } catch (error) {
         apiLogger.error('getBusData error', undefined, error instanceof Error ? error : new Error(String(error)));
-        return { updates: [], timestamp: Math.floor(Date.now() / 1000) };
+        return { updates: [], timestamp: Math.floor(Date.now() / 1000), rtAvailable: false };
     }
 }

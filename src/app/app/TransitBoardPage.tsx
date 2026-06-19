@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { Activity, AlertTriangle, Bus, ExternalLink, Filter, RefreshCw, Sparkles, Star, Train, WifiOff } from 'lucide-react';
 import ClockWidget from '@/components/ClockWidget';
 import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
+import { RealtimeStatusWarning } from '@/components/RealtimeStatusWarning';
 import DeparturesBoard from '@/components/DeparturesBoard';
 import DeparturesList from '@/components/DeparturesList';
 import RelativeTime from '@/components/RelativeTime';
@@ -167,6 +168,7 @@ export default function TransitBoardPage({
                 )}
 
                 <DataFreshnessWarning />
+                <RealtimeStatusWarning />
 
                 <header className={theme.headerBorder}>
                     <div className={theme.headerGlow} aria-hidden="true" />
