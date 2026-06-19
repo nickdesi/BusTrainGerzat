@@ -158,7 +158,8 @@ export async function GET(
 
             return NextResponse.json({
                 tripId,
-                routeId: Array.from(LINE_E1_ROUTE_IDS)[0],
+                // ⚡ Bolt: Avoid O(N) Array.from allocation just to get the first Set element
+                routeId: LINE_E1_ROUTE_IDS.values().next().value,
                 direction: staticTrip.direction,
                 headsign,
                 origin,

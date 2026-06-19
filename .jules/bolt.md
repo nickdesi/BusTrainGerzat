@@ -83,3 +83,7 @@
 ## 2026-06-25 - Avoid Array.prototype.sort() for Boolean Partitioning
 **Learning:** Found an anti-pattern in `DeparturesList.tsx` and `DeparturesBoard.tsx` where `[...departures].sort()` was used simply to bring "favorite" entries to the top of an already time-sorted array. Since JavaScript's sort is $O(N \log N)$, applying it on every render for a simple boolean partition is wasteful.
 **Action:** Replace `Array.prototype.sort()` with an $O(N)$ single-pass partition loop when the goal is simply to group items by a boolean flag (like favorites) and preserve their existing relative stable sort order. Separating them into two arrays and concatenating is significantly faster.
+
+## $(date +%Y-%m-%d) - [Set Retrieval & Array Update Optimizations]
+**Learning:** `Array.from(Set)[0]` creates an unnecessary `O(N)` array allocation when only the first item is needed. Furthermore, chained array iterations in React state updaters (e.g. `prev.some()` + `prev.filter()`) create redundant passes, intermediate arrays, and closures.
+**Action:** Use `Set.values().next().value` for `O(1)` retrieval from Sets. Use a single `.findIndex()` pass combined with shallow cloning (`.slice().splice()`) to update arrays without unnecessary overhead. Avoid multiple array methods in sequence where possible.
