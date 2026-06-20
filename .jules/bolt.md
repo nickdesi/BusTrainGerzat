@@ -84,6 +84,9 @@
 **Learning:** Found an anti-pattern in `DeparturesList.tsx` and `DeparturesBoard.tsx` where `[...departures].sort()` was used simply to bring "favorite" entries to the top of an already time-sorted array. Since JavaScript's sort is $O(N \log N)$, applying it on every render for a simple boolean partition is wasteful.
 **Action:** Replace `Array.prototype.sort()` with an $O(N)$ single-pass partition loop when the goal is simply to group items by a boolean flag (like favorites) and preserve their existing relative stable sort order. Separating them into two arrays and concatenating is significantly faster.
 
+## $(date +%Y-%m-%d) - [Set Retrieval & Array Update Optimizations]
+**Learning:** `Array.from(Set)[0]` creates an unnecessary `O(N)` array allocation when only the first item is needed. Furthermore, chained array iterations in React state updaters (e.g. `prev.some()` + `prev.filter()`) create redundant passes, intermediate arrays, and closures.
+**Action:** Use `Set.values().next().value` for `O(1)` retrieval from Sets. Use a single `.findIndex()` pass combined with shallow cloning (`.slice().splice()`) to update arrays without unnecessary overhead. Avoid multiple array methods in sequence where possible.
 ## 2026-06-25 - Avoid Array.filter() inside useMemo
 **Learning:** Found an anti-pattern in `TransitBoardPage.tsx` where `entries.filter()` was used inside a frequently updated `useMemo` block to compute `filteredEntries`. This caused unnecessary intermediate array allocations on every user interaction or data tick.
 **Action:** Replace `Array.prototype.filter()` with a single `for...of` loop and an explicit `result.push()` to avoid creating intermediate arrays and closures, reducing memory pressure and GC overhead in hot rendering paths.

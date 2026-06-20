@@ -31,15 +31,24 @@ export function useFavorites() {
 
     const toggleFavorite = useCallback((item: Favorite) => {
         setFavorites(prev => {
-            const exists = prev.some(f => f.id === item.id);
-            return exists
-                ? prev.filter(f => f.id !== item.id)
-                : [...prev, item];
+            // ⚡ Bolt: Use a single pass with findIndex and slice to avoid creating multiple intermediate
+            // arrays and closures from chained .some() and .filter() calls.
+            const index = prev.findIndex(f => f.id === item.id);
+            if (index !== -1) {
+                const next = prev.slice();
+                next.splice(index, 1);
+                return next;
+            }
+            return [...prev, item];
         });
     }, []);
 
     const isFavorite = useCallback((id: string) => {
-        return favorites.some(f => f.id === id);
+        // ⚡ Bolt: Use a simple for...of loop instead of .some() to avoid closure overhead on every call
+        for (const f of favorites) {
+            if (f.id === id) return true;
+        }
+        return false;
     }, [favorites]);
 
     return { favorites, toggleFavorite, isFavorite };
