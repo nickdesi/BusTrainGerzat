@@ -87,8 +87,8 @@ const StatusDisplay = memo(function StatusDisplay({ delay, isRealtime, isCancell
 
     if (!isRealtime) {
         return (
-            <div className="flex flex-col items-start gap-1" title="Information théorique - non confirmée en temps réel">
-                <SplitFlapDisplay text="THÉORIQUE" size="xs" color="text-gray-400" />
+            <div className="flex flex-col items-start gap-1" title="Horaire planifié - non confirmé par le temps réel T2C">
+                <SplitFlapDisplay text="PLANIFIÉ" size="xs" color="text-gray-400" />
                 {confidenceBadge}
             </div>
         );
