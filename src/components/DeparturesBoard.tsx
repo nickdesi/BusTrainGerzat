@@ -28,7 +28,7 @@ interface DepartureBoardRowProps {
     isFav: boolean;
     sourceSignal?: DataConfidenceSignal;
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
-    onTripClick?: (tripId: string, line: string) => void;
+    onTripClick?: (tripId: string, line: string, targetTime: number, stopId?: string) => void;
 }
 
 const DepartureBoardRow = memo(function DepartureBoardRow({
@@ -60,11 +60,11 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
 
     return (
         <tr
-            onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
+            onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line, getDisplayTime(entry, boardType) || entry.departureTime, entry.stopId)}
             onKeyDown={(event) => {
                 if (isClickable && (event.key === 'Enter' || event.key === ' ')) {
                     event.preventDefault();
-                    onTripClick?.(entry.tripId!, entry.line);
+                    onTripClick?.(entry.tripId!, entry.line, getDisplayTime(entry, boardType) || entry.departureTime, entry.stopId);
                 }
             }}
             tabIndex={isClickable ? 0 : undefined}
@@ -119,8 +119,8 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
                 <div className="flex items-center gap-2">
                     {entry.type === 'BUS' ? (
                         <>
-                            <Bus className="w-5 h-5 text-red-500" />
-                            <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-red-900/30 text-red-400 border border-red-700/50 uppercase">
+                            <Bus className="w-5 h-5 text-yellow-500" />
+                            <span className="inline-flex items-center px-3 py-1 rounded-md text-xs font-bold bg-yellow-900/30 text-yellow-300 border border-yellow-600/50 uppercase">
                                 Bus
                             </span>
                         </>
@@ -138,11 +138,11 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             {/* Line */}
             <td className="px-6 py-4">
                 {entry.type === 'BUS' ? (
-                    <div className="w-10 h-10 flex items-center justify-center rounded shadow-lg border border-yellow-600/50" style={{ backgroundColor: '#fdc300', boxShadow: '0 4px 14px rgba(253, 195, 0, 0.3)' }}>
+                    <div className="w-10 h-10 flex items-center justify-center rounded-lg shadow-lg border border-yellow-600/50 transition-transform duration-200 group-hover:scale-105" style={{ backgroundColor: '#fdc300', boxShadow: '0 4px 14px rgba(253, 195, 0, 0.3)' }}>
                         <span className="text-lg font-bold text-black font-sans tracking-tight">{entry.line}</span>
                     </div>
                 ) : (
-                    <div className="px-3 py-1.5 bg-blue-600 flex items-center justify-center rounded shadow-lg shadow-blue-900/40 border border-blue-500/50 min-w-[70px]">
+                    <div className="px-3 py-1.5 bg-blue-600 flex items-center justify-center rounded-lg shadow-lg shadow-blue-900/40 border border-blue-500/50 min-w-[70px] transition-transform duration-200 group-hover:scale-105">
                         <span className="text-xs font-bold text-white font-mono tracking-wider">{entry.line}</span>
                     </div>
                 )}
@@ -181,9 +181,9 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
                         )}
                     </div>
                     {showPrediction && (
-                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-purple-900/30 border border-purple-500/30 animate-pulse">
-                            <BrainCircuit className="w-3 h-3 text-purple-400" />
-                            <span className="text-[10px] font-bold text-purple-300 uppercase tracking-wider">
+                        <div className="flex items-center gap-1.5 px-2 py-0.5 rounded bg-amber-900/30 border border-amber-500/30 animate-pulse">
+                            <BrainCircuit className="w-3 h-3 text-amber-400" />
+                            <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider">
                                 Prévision: +{prediction.estimatedDelay} min probables
                             </span>
                         </div>
@@ -193,7 +193,7 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
 
             {/* Click indicator */}
             <td className="px-3 py-5 text-right">
-                {isClickable && <ChevronRight className="ml-auto h-4 w-4 text-gray-600 transition-colors group-hover:text-gray-400" />}
+                {isClickable && <ChevronRight className="ml-auto h-4 w-4 text-gray-600 transition-all duration-200 group-hover:translate-x-0.5 group-hover:text-yellow-400" />}
             </td>
         </tr>
     );
@@ -205,7 +205,7 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
     const { data: freshness } = useFreshness();
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée prévue' : 'Aucun départ prévu';
     const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-500';
-    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
+    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string; targetTime: number; stopId?: string } | null>(null);
 
     // Sort departures: Favorites first, then by time
     const sortedDepartures = useMemo(() => {
@@ -225,8 +225,8 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
     }, [departures, favorites]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureBoardRow's React.memo() on every render
-    const handleTripClick = useCallback((tripId: string, line: string) => {
-        setSelectedTrip({ tripId, line });
+    const handleTripClick = useCallback((tripId: string, line: string, targetTime: number, stopId?: string) => {
+        setSelectedTrip({ tripId, line, targetTime, stopId });
     }, []);
 
     // ⚡ Bolt: Provide a stable reference for toggle favorite to prevent defeating DepartureBoardRow's React.memo()
@@ -299,6 +299,8 @@ export default memo(function DeparturesBoard({ departures, loading, boardType = 
             <TripDetailModal
                 tripId={selectedTrip?.tripId || null}
                 lineName={selectedTrip?.line || 'E1'}
+                targetTime={selectedTrip?.targetTime}
+                stopId={selectedTrip?.stopId}
                 onClose={() => setSelectedTrip(null)}
             />
         </div>

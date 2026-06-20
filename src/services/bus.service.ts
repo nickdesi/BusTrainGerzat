@@ -251,7 +251,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                             isCancelled: false,
                             headsign: update.directionId === 0 ? 'AUBIÈRE Pl. des Ramacles' : 'GERZAT Champfleuri',
                             direction: update.directionId,
-                            origin: tripOrigins.get(tripId) || (update.directionId === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
+                            origin: tripOrigins.get(tripId) || (update.directionId === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles'),
+                            stopId: gerzatStop.stopId,
                         });
                     }
                 }
@@ -382,7 +383,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 isCancelled: isCancelled,
                 headsign: item.headsign,
                 direction: item.direction,
-                origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles')
+                origin: tripOrigins.get(item.tripId) || (item.direction === 0 ? 'GERZAT Champfleuri' : 'AUBIÈRE Pl. des Ramacles'),
+                stopId: item.stopId,
             });
         }
 

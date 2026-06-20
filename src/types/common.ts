@@ -10,6 +10,7 @@
 export interface UnifiedEntry {
     id: string;
     tripId?: string; // Original trip ID for API calls
+    stopId?: string; // Selected stop used to anchor trip details
     type: 'BUS' | 'TER';
     time: number;
     arrivalTime: number;

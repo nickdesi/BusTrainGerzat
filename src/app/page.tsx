@@ -112,8 +112,8 @@ function ProductPreview() {
 
 function FeatureCard({ icon, title, description }: { icon: ReactNode; title: string; description: string }) {
     return (
-        <div className="group rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl transition-colors hover:border-yellow-300/40 hover:bg-yellow-300/[0.06]">
-            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-300/15 text-yellow-300 ring-1 ring-yellow-300/20 transition-transform group-hover:-translate-y-1">
+        <div className="group hover-lift sheen-top rounded-[2rem] border border-white/10 bg-white/[0.045] p-6 backdrop-blur-xl hover:border-yellow-300/40 hover:bg-yellow-300/[0.06]">
+            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-yellow-300/15 text-yellow-300 ring-1 ring-yellow-300/20 transition-transform duration-200 group-hover:-translate-y-1">
                 {icon}
             </div>
             <h3 className="text-lg font-black tracking-tight text-white">{title}</h3>
@@ -178,7 +178,7 @@ export default function LandingPage() {
 
                     <div className="mt-10 grid max-w-2xl grid-cols-3 gap-3">
                         {highlights.map((item) => (
-                            <div key={item.label} className="rounded-3xl border border-white/10 bg-white/[0.045] p-4 backdrop-blur-xl">
+                            <div key={item.label} className="hover-lift rounded-3xl border border-white/10 bg-white/[0.045] p-4 backdrop-blur-xl hover:border-yellow-300/30 hover:bg-white/[0.07]">
                                 <div className="mb-3 text-yellow-300">{item.icon}</div>
                                 <p className="text-2xl font-black tracking-tight text-white">{item.value}</p>
                                 <p className="mt-1 text-xs font-semibold text-zinc-500">{item.label}</p>

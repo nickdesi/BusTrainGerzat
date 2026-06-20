@@ -13,6 +13,7 @@ function mapBusDeparture(bus: BusUpdate): UnifiedEntry {
     return {
         id: `bus-${bus.tripId}-${bus.departure}`,
         tripId: bus.tripId,
+        stopId: bus.stopId,
         type: 'BUS',
         time: bus.departure || bus.arrival,
         arrivalTime: bus.arrival,
@@ -36,6 +37,7 @@ function mapBusArrival(bus: BusUpdate): UnifiedEntry {
     return {
         id: `bus-${bus.tripId}-${bus.arrival}`,
         tripId: bus.tripId,
+        stopId: bus.stopId,
         type: 'BUS',
         time: bus.arrival,
         arrivalTime: bus.arrival,

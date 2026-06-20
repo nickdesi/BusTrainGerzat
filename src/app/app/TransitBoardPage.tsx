@@ -200,31 +200,31 @@ export default function TransitBoardPage({
                     </div>
 
                     <div className="mt-3 grid grid-cols-3 gap-1.5 md:gap-2">
-                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 md:rounded-xl md:px-3 md:py-2">
-                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-500 md:text-[10px]"><Activity className={theme.activityIcon} /> {primaryStatLabel}</div>
-                            <p className="text-lg font-black leading-none text-white md:text-2xl">{stats.total}</p>
+                        <div className="hover-lift flex items-center justify-between rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.015] px-2 py-1.5 shadow-[var(--elev-2)] md:px-3 md:py-2.5">
+                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-400 md:text-[10px]"><Activity className={theme.activityIcon} /> {primaryStatLabel}</div>
+                            <p className="text-lg font-black leading-none tabular-nums text-white md:text-2xl">{stats.total}</p>
                         </div>
-                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 md:rounded-xl md:px-3 md:py-2">
-                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-500 md:text-[10px]"><WifiOff className="h-3 w-3 text-green-400 rotate-180" /> Live</div>
-                            <p className="text-lg font-black leading-none text-white md:text-2xl">{stats.realtime}</p>
+                        <div className="hover-lift flex items-center justify-between rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.015] px-2 py-1.5 shadow-[var(--elev-2)] md:px-3 md:py-2.5">
+                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-400 md:text-[10px]"><span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-green-400/70" /><span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" /></span> Live</div>
+                            <p className="text-lg font-black leading-none tabular-nums text-white md:text-2xl">{stats.realtime}</p>
                         </div>
-                        <div className="flex items-center justify-between rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 md:rounded-xl md:px-3 md:py-2">
-                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-500 md:text-[10px]"><Star className="h-3 w-3 text-yellow-300" /> Favoris</div>
-                            <p className="text-lg font-black leading-none text-white md:text-2xl">{stats.favorites}</p>
+                        <div className="hover-lift flex items-center justify-between rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.015] px-2 py-1.5 shadow-[var(--elev-2)] md:px-3 md:py-2.5">
+                            <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-400 md:text-[10px]"><Star className="h-3 w-3 fill-yellow-300 text-yellow-300" /> Favoris</div>
+                            <p className="text-lg font-black leading-none tabular-nums text-white md:text-2xl">{stats.favorites}</p>
                         </div>
                     </div>
 
                     {smartAlert && (
-                        <div className="mt-6 p-4 rounded-lg bg-purple-900/40 border border-purple-500/50 flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
-                            <div className="p-2 bg-purple-900/50 rounded-full shrink-0">
-                                <AlertTriangle className="w-6 h-6 text-purple-400" />
+                        <div className="mt-6 p-4 rounded-xl bg-amber-900/30 border border-amber-500/40 shadow-[var(--elev-2)] flex items-start gap-4 animate-in fade-in slide-in-from-top-2 duration-500">
+                            <div className="p-2 bg-amber-900/50 rounded-full shrink-0">
+                                <AlertTriangle className="w-6 h-6 text-amber-400" />
                             </div>
                             <div>
-                                <h3 className="text-purple-200 font-bold flex items-center gap-2">
+                                <h3 className="text-amber-100 font-bold flex items-center gap-2">
                                     Perturbation probable sur vos favoris
-                                    <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 border border-purple-500/30 uppercase">Prévision</span>
+                                    <span className="px-2 py-0.5 rounded text-[10px] bg-amber-500/20 border border-amber-500/30 uppercase">Prévision</span>
                                 </h3>
-                                <p className="text-purple-300/80 text-sm mt-1">
+                                <p className="text-amber-200/80 text-sm mt-1">
                                     Ligne <span className="font-bold text-white">{smartAlert.line}</span> vers {smartAlert.destination} : Risque de <span className="font-bold text-white">+{smartAlert.delay} min</span> ({smartAlert.reason})
                                 </p>
                             </div>
@@ -242,14 +242,14 @@ export default function TransitBoardPage({
 
                         <div className="flex items-center gap-2">
                             <Filter className="w-4 h-4 text-gray-500" aria-hidden="true" />
-                            <div className="flex rounded-lg overflow-hidden border border-gray-700">
-                                <button onClick={() => setFilter('all')} className={`px-3 py-1.5 text-xs font-bold transition-colors ${filter === 'all' ? theme.allFilterActive : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`} aria-pressed={filter === 'all'}>TOUS</button>
-                                <button onClick={() => setFilter('bus')} className={`px-3 py-1.5 text-xs font-bold flex items-center gap-1 transition-colors ${filter === 'bus' ? 'bg-red-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`} aria-pressed={filter === 'bus'}><Bus className="w-3 h-3" /> BUS</button>
-                                <button onClick={() => setFilter('train')} className={`px-3 py-1.5 text-xs font-bold flex items-center gap-1 transition-colors ${filter === 'train' ? 'bg-blue-600 text-white' : 'bg-gray-800 text-gray-400 hover:bg-gray-700'}`} aria-pressed={filter === 'train'}><Train className="w-3 h-3" /> TER</button>
+                            <div className="flex rounded-xl overflow-hidden border border-white/10 bg-black/40 p-0.5 gap-0.5">
+                                <button onClick={() => setFilter('all')} className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold transition-all duration-200 ${filter === 'all' ? `${theme.allFilterActive} shadow-[var(--elev-2)]` : 'text-gray-400 hover:bg-white/5 hover:text-white'}`} aria-pressed={filter === 'all'}>TOUS</button>
+                                <button onClick={() => setFilter('bus')} className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-1 transition-all duration-200 ${filter === 'bus' ? 'bg-yellow-500 text-black shadow-[var(--elev-2)]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`} aria-pressed={filter === 'bus'}><Bus className="w-3 h-3" /> BUS</button>
+                                <button onClick={() => setFilter('train')} className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-1 transition-all duration-200 ${filter === 'train' ? 'bg-blue-600 text-white shadow-[var(--elev-2)]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`} aria-pressed={filter === 'train'}><Train className="w-3 h-3" /> TER</button>
                             </div>
                         </div>
 
-                        <button onClick={refetch} disabled={isFetching} aria-label="Actualiser les données" className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold transition-all ${theme.refreshButton} ${isFetching ? 'opacity-50 cursor-not-allowed' : 'hover:scale-105 active:scale-95'}`}>
+                        <button onClick={refetch} disabled={isFetching} aria-label="Actualiser les données" className={`flex cursor-pointer items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all duration-200 ${theme.refreshButton} ${isFetching ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.03] active:scale-95 shadow-[var(--elev-2)]'}`}>
                             <RefreshCw className={`w-4 h-4 ${isFetching ? 'animate-spin' : ''}`} />
                             <span>{isFetching ? 'ACTUALISATION...' : 'ACTUALISER'}</span>
                         </button>

@@ -35,6 +35,24 @@
   /* Modals, Fullscreen overlays */
   --z-toast: 9999;
   /* Toasts, Critical alerts */
+
+  /* Motion easing tokens (premium, springy yet calm) */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 150ms;
+  --dur-base: 220ms;
+  --dur-slow: 320ms;
+
+  /* Elevation system - layered, soft, modern depth */
+  --elev-1: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --elev-2: 0 4px 14px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  --elev-3: 0 10px 30px rgba(0, 0, 0, 0.45), 0 1px 0 rgba(255, 255, 255, 0.05) inset;
+  --elev-4: 0 24px 60px rgba(0, 0, 0, 0.55), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+
+  /* Hairline border tints */
+  --hairline: rgba(255, 255, 255, 0.08);
+  --hairline-strong: rgba(255, 255, 255, 0.14);
 }
 
 @utility font-display {
@@ -55,6 +73,14 @@ body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Pointer cursor on interactive elements (Tailwind v4 preflight no longer sets it) */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+a[href],
+summary {
+  cursor: pointer;
+}
+
 /* Safe area utilities for modern mobile devices */
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom);
@@ -65,17 +91,93 @@ body {
   text-shadow: 0 0 30px rgba(250, 204, 21, 0.3), 0 0 60px rgba(250, 204, 21, 0.1);
 }
 
+/* ===== Premium UI utility layer ===== */
+
+/* Frosted glass surface */
+@utility glass {
+  background: rgba(15, 15, 17, 0.55);
+  border: 1px solid var(--hairline);
+  box-shadow: var(--elev-2);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+@utility glass-strong {
+  background: rgba(10, 10, 12, 0.72);
+  border: 1px solid var(--hairline-strong);
+  box-shadow: var(--elev-3);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+/* Elevation helpers */
+@utility elevate-2 {
+  box-shadow: var(--elev-2);
+}
+
+@utility elevate-3 {
+  box-shadow: var(--elev-3);
+}
+
+@utility elevate-4 {
+  box-shadow: var(--elev-4);
+}
+
+/* Subtle interactive lift for cards/buttons */
+@utility hover-lift {
+  transition: transform var(--dur-base) var(--ease-out-expo),
+    box-shadow var(--dur-base) var(--ease-out-expo),
+    border-color var(--dur-base) var(--ease-out-expo),
+    background-color var(--dur-base) var(--ease-out-expo);
+  will-change: transform;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-lift:active {
+  transform: translateY(0);
+}
+
+/* Top sheen line for premium panels */
+@utility sheen-top {
+  position: relative;
+}
+
+.sheen-top::before {
+  content: '';
+  position: absolute;
+  inset-inline: 12%;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hover-lift {
+    transition: none !important;
+  }
+
+  .hover-lift:hover,
+  .hover-lift:active {
+    transform: none !important;
+  }
+}
+
 /* Split-flap display character styling */
 .split-flap-char {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 50%, #1a1a1a 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 4px;
+  background: linear-gradient(180deg, #202024 0%, #0c0c0e 50%, #18181b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 2px 4px rgba(0, 0, 0, 0.5);
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
+    0 2px 6px rgba(0, 0, 0, 0.55);
   position: relative;
 }
 
@@ -87,6 +189,31 @@ body {
   top: 50%;
   height: 1px;
   background: rgba(0, 0, 0, 0.6);
+}
+
+/* Real split-flap flip on character change (keyed remount triggers it) */
+@keyframes flapDown {
+  0% {
+    transform: rotateX(-58deg);
+    opacity: 0.45;
+    filter: brightness(1.35);
+  }
+
+  60% {
+    transform: rotateX(8deg);
+  }
+
+  100% {
+    transform: rotateX(0);
+    opacity: 1;
+    filter: brightness(1);
+  }
+}
+
+.split-flap-char {
+  animation: flapDown 0.34s var(--ease-out-expo);
+  transform-origin: center top;
+  backface-visibility: hidden;
 }
 
 /* Flip animation for new entries */
@@ -179,13 +306,12 @@ body {
   .flip-enter,
   .animate-slideUp,
   .pulse-glow,
+  .split-flap-char,
   .bus-icon-pulse {
     animation: none !important;
     transition: none !important;
     transform: none !important;
   }
-
-  /* For marquee, just slow it down significantly instead of disabling */
   .animate-marquee {
     animation-duration: 120s !important;
   }
@@ -199,22 +325,31 @@ body {
 }
 
 /* Custom scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.16) transparent;
+}
+
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #333;
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 999px;
+  transition: background-color var(--dur-base) var(--ease-smooth);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #444;
+  background: rgba(253, 195, 0, 0.5);
+  background-clip: padding-box;
 }
 
 /* =================================

@@ -23,7 +23,7 @@ interface DepartureRowProps {
     isFav: boolean;
     sourceSignal?: DataConfidenceSignal;
     onToggleFavorite?: (id: string, line: string, destination: string, type: 'BUS' | 'TER') => void;
-    onTripClick?: (tripId: string, line: string) => void;
+    onTripClick?: (tripId: string, line: string, targetTime: number, stopId?: string) => void;
 }
 
 const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, sourceSignal, onToggleFavorite, onTripClick }: DepartureRowProps) {
@@ -36,15 +36,15 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, sourc
 
     return (
         <div
-            onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line)}
-            className={`flip-enter rounded-3xl border p-4 shadow-lg shadow-black/20 transition-colors ${isClickable ? `cursor-pointer ${activeTint}` : ''} ${isFav ? `${favoriteTint} ${accentBorder}` : 'border-white/[0.06] bg-white/[0.03]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
+            onClick={() => isClickable && onTripClick?.(entry.tripId!, entry.line, getDisplayTime(entry, boardType) || entry.departureTime, entry.stopId)}
+            className={`flip-enter rounded-3xl border p-4 shadow-[var(--elev-2)] transition-all duration-200 ${isClickable ? `cursor-pointer hover-lift ${activeTint}` : ''} ${isFav ? `${favoriteTint} ${accentBorder}` : 'border-white/[0.06] bg-white/[0.03]'} ${entry.isCancelled ? 'opacity-60' : ''}`}
             title={entry.isCancelled ? 'Train supprimé' : undefined}
             role={isClickable ? 'button' : undefined}
             tabIndex={isClickable ? 0 : undefined}
             onKeyDown={(event) => {
                 if (isClickable && (event.key === 'Enter' || event.key === ' ')) {
                     event.preventDefault();
-                    onTripClick?.(entry.tripId!, entry.line);
+                    onTripClick?.(entry.tripId!, entry.line, getDisplayTime(entry, boardType) || entry.departureTime, entry.stopId);
                 }
             }}
         >
@@ -70,7 +70,7 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, sourc
                                 e.stopPropagation();
                                 onToggleFavorite(entry.id, entry.line, favoriteLabel, entry.type);
                             }}
-                            className={`w-10 h-10 flex items-center justify-center rounded-full transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 ${isFav ? 'text-yellow-400 bg-yellow-900/20' : 'text-gray-600 hover:bg-white/5'}`}
+                            className={`w-10 h-10 flex cursor-pointer items-center justify-center rounded-full transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 ${isFav ? 'text-yellow-400 bg-yellow-900/20' : 'text-gray-600 hover:bg-white/5'}`}
                             title={isFav ? "Retirer des favoris" : "Ajouter aux favoris"}
                             aria-label={isFav ? `Retirer ${entry.line} des favoris` : `Ajouter ${entry.line} aux favoris`}
                         >
@@ -80,11 +80,11 @@ const DepartureRow = memo(function DepartureRow({ entry, boardType, isFav, sourc
                         </button>
                     )}
                     {entry.type === 'BUS' ? (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold border border-yellow-600/50" style={{ backgroundColor: '#fdc300', color: '#000' }}>
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold border border-yellow-600/50" style={{ backgroundColor: '#fdc300', color: '#000' }}>
                             BUS {entry.line}
                         </span>
                     ) : (
-                        <span className="inline-flex items-center px-2 py-1 rounded text-xs font-bold bg-blue-900/30 text-blue-400 border border-blue-700/50">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-bold bg-blue-900/30 text-blue-400 border border-blue-700/50">
                             TER {entry.line}
                         </span>
                     )}
@@ -126,7 +126,7 @@ const EMPTY_SET = new Set<string>();
 
 export default function DeparturesList({ departures, loading, boardType = 'departures', favorites = EMPTY_SET, onToggleFavorite }: DeparturesListProps) {
     const { data: freshness } = useFreshness();
-    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string } | null>(null);
+    const [selectedTrip, setSelectedTrip] = useState<{ tripId: string; line: string; targetTime: number; stopId?: string } | null>(null);
     const accentText = boardType === 'arrivals' ? 'text-blue-400' : 'text-yellow-400';
     const emptyMessage = boardType === 'arrivals' ? 'Aucune arrivée trouvée' : 'Aucun départ trouvé';
 
@@ -147,8 +147,8 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
     }, [departures, favorites]);
 
     // ⚡ Bolt: Provide a stable reference for the click handler to prevent defeating DepartureRow's React.memo() on every render
-    const handleTripClick = useCallback((tripId: string, line: string) => {
-        setSelectedTrip({ tripId, line });
+    const handleTripClick = useCallback((tripId: string, line: string, targetTime: number, stopId?: string) => {
+        setSelectedTrip({ tripId, line, targetTime, stopId });
     }, []);
 
     const handleToggleFavorite = useCallback((id: string, line: string, destination: string, type: 'BUS' | 'TER') => {
@@ -193,6 +193,8 @@ export default function DeparturesList({ departures, loading, boardType = 'depar
             <TripDetailModal
                 tripId={selectedTrip?.tripId || null}
                 lineName={selectedTrip?.line || 'E1'}
+                targetTime={selectedTrip?.targetTime}
+                stopId={selectedTrip?.stopId}
                 onClose={() => setSelectedTrip(null)}
             />
         </div>

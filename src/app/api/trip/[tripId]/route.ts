@@ -35,9 +35,23 @@ interface TripDetailsResponse {
 }
 
 const TRIP_ID_PATTERN = /^[A-Za-z0-9._-]{1,128}$/;
+const STOP_ID_PATTERN = /^[A-Za-z0-9._-]{1,64}$/;
+const MAX_OCCURRENCE_OFFSET_SECONDS = 24 * 60 * 60;
 
 function isValidTripId(tripId: string): boolean {
     return TRIP_ID_PATTERN.test(tripId) && !tripId.includes('..');
+}
+
+function readOccurrenceAnchor(request: Request): { targetTime?: number; stopId?: string } {
+    const url = new URL(request.url);
+    const rawTime = url.searchParams.get('time');
+    const rawStopId = url.searchParams.get('stopId');
+    const parsedTime = rawTime ? Number.parseInt(rawTime, 10) : undefined;
+
+    return {
+        targetTime: Number.isFinite(parsedTime) && parsedTime! > 0 ? parsedTime : undefined,
+        stopId: rawStopId && STOP_ID_PATTERN.test(rawStopId) && !rawStopId.includes('..') ? rawStopId : undefined,
+    };
 }
 
 export async function GET(
@@ -63,6 +77,7 @@ export async function GET(
         const now = getNowUnix();
         const midnight = getParisMidnight();
         const toUnix = (sec: number) => midnight + sec;
+        const occurrenceAnchor = readOccurrenceAnchor(request);
 
         // First, try to get static data for this trip (exact match, then fuzzy pattern match)
         const staticTrip = getLineE1StaticTrip(tripId);
@@ -84,6 +99,15 @@ export async function GET(
 
         // Build response - prefer static + RT overlay
         if (staticTrip) {
+            const anchorStop = occurrenceAnchor.stopId
+                ? staticTrip.stops.find((stop) => stop.stopId === occurrenceAnchor.stopId)
+                : staticTrip.stops[0];
+            const anchorBaseTime = anchorStop ? toUnix(anchorStop.departureTime || anchorStop.arrivalTime) : undefined;
+            const occurrenceOffset = occurrenceAnchor.targetTime && anchorBaseTime
+                ? occurrenceAnchor.targetTime - anchorBaseTime
+                : 0;
+            const safeOccurrenceOffset = Math.abs(occurrenceOffset) <= MAX_OCCURRENCE_OFFSET_SECONDS ? occurrenceOffset : 0;
+
             // Build stops with delay propagation
             // Track last known delay to propagate to stops without RT data
             let lastKnownDelay = 0;
@@ -97,8 +121,8 @@ export async function GET(
                 // eslint-disable-next-line security/detect-object-injection
                 const stop = staticTrip.stops[index];
                 const stopInfo = getLineE1Stop(stop.stopId);
-                const scheduledArrival = toUnix(stop.arrivalTime);
-                const scheduledDeparture = toUnix(stop.departureTime);
+                const scheduledArrival = toUnix(stop.arrivalTime) + safeOccurrenceOffset;
+                const scheduledDeparture = toUnix(stop.departureTime) + safeOccurrenceOffset;
 
                 // Check for RT overlay
                 const rtData = rtStopUpdates.get(stop.stopId);

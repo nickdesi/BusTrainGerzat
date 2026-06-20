@@ -47,7 +47,7 @@ const StatusDisplay = memo(function StatusDisplay({ delay, isRealtime, isCancell
 
     const confidenceBadge = (
         <span
-            className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
+            className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${
                 confidenceLevel === 'elevee'
                     ? 'border border-emerald-500/30 bg-emerald-900/20 text-emerald-300'
                     : confidenceLevel === 'moyenne'
@@ -62,6 +62,16 @@ const StatusDisplay = memo(function StatusDisplay({ delay, isRealtime, isCancell
                         : 'Donnees potentiellement obsoletes ou non confirmees'
             }
         >
+            <span
+                aria-hidden="true"
+                className={`h-1.5 w-1.5 rounded-full ${
+                    confidenceLevel === 'elevee'
+                        ? 'bg-emerald-400'
+                        : confidenceLevel === 'moyenne'
+                            ? 'bg-amber-400'
+                            : 'bg-red-400'
+                }`}
+            />
             {confidenceLevel === 'elevee' ? 'Confiance elevee' : confidenceLevel === 'moyenne' ? 'Confiance moyenne' : 'Confiance faible'}
         </span>
     );

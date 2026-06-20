@@ -24,8 +24,12 @@ export interface TripDetails {
     origin: string;
 }
 
-async function fetchTripDetails(tripId: string): Promise<TripDetails> {
-    const res = await fetch(`/api/trip/${tripId}`);
+async function fetchTripDetails(tripId: string, targetTime?: number, stopId?: string): Promise<TripDetails> {
+    const params = new URLSearchParams();
+    if (typeof targetTime === 'number') params.set('time', String(targetTime));
+    if (stopId) params.set('stopId', stopId);
+    const query = params.toString();
+    const res = await fetch(`/api/trip/${tripId}${query ? `?${query}` : ''}`);
     if (!res.ok) {
         throw new Error('Failed to fetch trip details');
     }
@@ -36,10 +40,10 @@ async function fetchTripDetails(tripId: string): Promise<TripDetails> {
  * Hook to fetch detailed trip information including all stops
  * @param tripId - The trip ID to fetch, or null to skip
  */
-export function useTripDetails(tripId: string | null) {
+export function useTripDetails(tripId: string | null, targetTime?: number, stopId?: string) {
     return useQuery({
-        queryKey: ['trip-details', tripId],
-        queryFn: () => fetchTripDetails(tripId!),
+        queryKey: ['trip-details', tripId, targetTime, stopId],
+        queryFn: () => fetchTripDetails(tripId!, targetTime, stopId),
         enabled: !!tripId,
         staleTime: 10000, // 10 seconds - realtime data
         refetchInterval: 15000, // Refetch every 15s when modal is open

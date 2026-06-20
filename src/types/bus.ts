@@ -16,6 +16,7 @@ export interface BusUpdate {
     headsign: string;
     direction: number;
     origin: string; // First stop name from GTFS
+    stopId?: string;
 }
 
 /**

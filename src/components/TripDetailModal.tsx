@@ -11,11 +11,13 @@ const EMPTY_STOPS_ARRAY: React.ComponentProps<typeof TripTimeline>['stops'] = []
 interface TripDetailModalProps {
     tripId: string | null;
     lineName: string;
+    targetTime?: number;
+    stopId?: string;
     onClose: () => void;
 }
 
-export default function TripDetailModal({ tripId, lineName, onClose }: TripDetailModalProps) {
-    const { data: tripData, isLoading, error } = useTripDetails(tripId);
+export default function TripDetailModal({ tripId, lineName, targetTime, stopId, onClose }: TripDetailModalProps) {
+    const { data: tripData, isLoading, error } = useTripDetails(tripId, targetTime, stopId);
 
     // Handle escape key
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
