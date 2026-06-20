@@ -91,10 +91,13 @@ export default function TransitBoardPage({
         if (filter === 'all' && !searchQuery) return entries;
 
         const q = searchQuery ? searchQuery.toLowerCase() : '';
+        const result = [];
 
-        return entries.filter(entry => {
-            if (filter === 'bus' && entry.type !== 'BUS') return false;
-            if (filter === 'train' && entry.type !== 'TER') return false;
+        // ⚡ Bolt: Replaced entries.filter() with a single-pass for...of loop
+        // to avoid unnecessary intermediate array allocations inside this frequently called useMemo block.
+        for (const entry of entries) {
+            if (filter === 'bus' && entry.type !== 'BUS') continue;
+            if (filter === 'train' && entry.type !== 'TER') continue;
 
             if (q) {
                 const location = boardType === 'arrivals'
@@ -102,12 +105,14 @@ export default function TransitBoardPage({
                     : entry.destination;
 
                 if (!entry.line.toLowerCase().includes(q) && !location.toLowerCase().includes(q)) {
-                    return false;
+                    continue;
                 }
             }
 
-            return true;
-        });
+            result.push(entry);
+        }
+
+        return result;
     }, [boardType, entries, filter, searchQuery]);
 
     const stats = useMemo(() => {
