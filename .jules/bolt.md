@@ -90,3 +90,6 @@
 ## 2026-06-25 - Avoid Array.filter() inside useMemo
 **Learning:** Found an anti-pattern in `TransitBoardPage.tsx` where `entries.filter()` was used inside a frequently updated `useMemo` block to compute `filteredEntries`. This caused unnecessary intermediate array allocations on every user interaction or data tick.
 **Action:** Replace `Array.prototype.filter()` with a single `for...of` loop and an explicit `result.push()` to avoid creating intermediate arrays and closures, reducing memory pressure and GC overhead in hot rendering paths.
+## 2026-06-23 - O(N*M) Anti-Pattern in removeCancelledTripsWithReplacement
+**Learning:** Found an `O(N*M)` complexity bottleneck where `array.some()` was used inside a loop over GTFS-RT updates to find if there was an arrival time within a specific window (20 minutes). For datasets containing hundreds of updates, this nested loop severely degrades performance.
+**Action:** Replace `O(M)` Array.prototype.some() linear search with an `O(log M)` binary search (after sorting). This eliminates the nested array scans and speeds up computation when scanning multiple updates.

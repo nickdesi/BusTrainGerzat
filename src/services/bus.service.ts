@@ -129,21 +129,48 @@ export function shouldKeepPaturalTrip(item: Pick<StaticScheduleItem, 'stopId' | 
     return item.headsign.toUpperCase().includes('PATURAL');
 }
 
+// ⚡ Bolt: Fast binary search to find if there is an arrival within the target window
+// Uses lower_bound to find the insertion point, then checks the two neighbors.
+function hasArrivalWithinWindow(arr: number[], target: number, window: number): boolean {
+    if (arr.length === 0) return false;
+    // Lower bound: first index where arr[i] >= target
+    let lo = 0;
+    let hi = arr.length;
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1;
+        // eslint-disable-next-line security/detect-object-injection
+        if (arr[mid] < target) lo = mid + 1;
+        else hi = mid;
+    }
+    // Check the element at the insertion point and the one before it
+    if (lo < arr.length && Math.abs(arr[lo] - target) < window) return true;
+    if (lo > 0 && Math.abs(arr[lo - 1] - target) < window) return true;
+    return false;
+}
+
 export function removeCancelledTripsWithReplacement(updates: BusUpdate[]): BusUpdate[] {
     // Single-pass optimization: Pre-group non-cancelled trips by direction
-    const nonCancelledByDir = { 0: [] as BusUpdate[], 1: [] as BusUpdate[] };
+    const nonCancelledArrivals = { 0: [] as number[], 1: [] as number[] };
     for (const u of updates) {
         if (!u.isCancelled && (u.direction === 0 || u.direction === 1)) {
-            nonCancelledByDir[u.direction as 0 | 1].push(u);
+            nonCancelledArrivals[u.direction as 0 | 1].push(u.arrival);
         }
     }
+
+    // ⚡ Bolt: Sort arrivals to enable O(log N) binary search lookups later
+    nonCancelledArrivals[0].sort((a, b) => a - b);
+    nonCancelledArrivals[1].sort((a, b) => a - b);
 
     const cleanedUpdates: BusUpdate[] = [];
     for (const u of updates) {
         if (u.isCancelled && (u.direction === 0 || u.direction === 1)) {
             // Check only against non-cancelled trips in the same direction
-            const hasReplacement = nonCancelledByDir[u.direction as 0 | 1].some(
-                nc => Math.abs(nc.arrival - u.arrival) < 20 * 60
+            // ⚡ Bolt: Replace O(M) Array.prototype.some() with O(log M) binary search
+            // to fix the O(N*M) performance bottleneck when iterating through updates.
+            const hasReplacement = hasArrivalWithinWindow(
+                nonCancelledArrivals[u.direction as 0 | 1],
+                u.arrival,
+                20 * 60
             );
             if (!hasReplacement) cleanedUpdates.push(u);
         } else {
