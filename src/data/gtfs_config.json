@@ -6,13 +6,13 @@
     "E1",
     "20"
   ],
-  "generatedAt": "2026-06-22T11:27:54.843Z",
+  "generatedAt": "2026-06-23T08:53:24.644Z",
   "stopIds": {
     "all": [
       "GECHR",
-      "PATUA",
-      "PATUR",
       "GECHA",
+      "PATUR",
+      "PATUA",
       "GECH",
       "PATU"
     ],
@@ -22,8 +22,8 @@
       "GECH"
     ],
     "patural": [
-      "PATUA",
       "PATUR",
+      "PATUA",
       "PATU"
     ]
   }
