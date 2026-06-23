@@ -130,18 +130,21 @@ export function shouldKeepPaturalTrip(item: Pick<StaticScheduleItem, 'stopId' | 
 }
 
 // ⚡ Bolt: Fast binary search to find if there is an arrival within the target window
+// Uses lower_bound to find the insertion point, then checks the two neighbors.
 function hasArrivalWithinWindow(arr: number[], target: number, window: number): boolean {
     if (arr.length === 0) return false;
-    let left = 0;
-    let right = arr.length - 1;
-    while (left <= right) {
-        const mid = (left + right) >> 1;
+    // Lower bound: first index where arr[i] >= target
+    let lo = 0;
+    let hi = arr.length;
+    while (lo < hi) {
+        const mid = (lo + hi) >> 1;
         // eslint-disable-next-line security/detect-object-injection
-        const diff = arr[mid] - target;
-        if (Math.abs(diff) < window) return true;
-        if (diff < 0) left = mid + 1;
-        else right = mid - 1;
+        if (arr[mid] < target) lo = mid + 1;
+        else hi = mid;
     }
+    // Check the element at the insertion point and the one before it
+    if (lo < arr.length && Math.abs(arr[lo] - target) < window) return true;
+    if (lo > 0 && Math.abs(arr[lo - 1] - target) < window) return true;
     return false;
 }
 
