@@ -7,6 +7,13 @@ import { useVehiclePositions } from '@/hooks/useVehiclePositions';
 import { useLineE1Data } from '@/hooks/useLineE1Data';
 import { useQueryClient } from '@tanstack/react-query';
 
+// ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation on every render
+const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+});
+
 const BusMap = dynamic(() => import('@/components/BusMap'), {
     ssr: false,
     loading: () => <MapLoadingState />,
@@ -89,7 +96,7 @@ export default function CartePage() {
     }, [lineData?.stops.length, vehicleData?.count, vehicleData?.vehicles]);
 
     const lastUpdate = dataUpdatedAt
-        ? new Intl.DateTimeFormat('fr-FR', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(dataUpdatedAt)
+        ? TIME_FORMATTER.format(dataUpdatedAt)
         : '—';
 
     const handleRefresh = () => {
