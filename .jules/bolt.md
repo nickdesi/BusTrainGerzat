@@ -93,3 +93,6 @@
 ## 2026-06-23 - O(N*M) Anti-Pattern in removeCancelledTripsWithReplacement
 **Learning:** Found an `O(N*M)` complexity bottleneck where `array.some()` was used inside a loop over GTFS-RT updates to find if there was an arrival time within a specific window (20 minutes). For datasets containing hundreds of updates, this nested loop severely degrades performance.
 **Action:** Replace `O(M)` Array.prototype.some() linear search with an `O(log M)` binary search (after sorting). This eliminates the nested array scans and speeds up computation when scanning multiple updates.
+## 2026-06-30 - O(N) Anti-Pattern in Array Filtering Methods
+**Learning:** Found an `O(N)` complexity bug where `array.some()` was being used to iterate over a large static array. Also, spreading a large array `const [first, ...rest] = largeArray` creates a massive intermediate array allocation.
+**Action:** Replace `Array.prototype.some()` or similar iterator methods with a `for...of` loop when scanning very large static arrays to avoid the overhead of creating closures on every iteration. Also, avoid array destructuring/spread syntax for slicing large arrays. Iterate directly over the original array instead.

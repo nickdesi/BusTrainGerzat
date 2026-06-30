@@ -47,7 +47,13 @@ export function isCalendarValid(): boolean {
 
     const todayStr = getTodayDateStr();
     const schedule = staticSchedule as StaticScheduleItem[];
-    return schedule.some(item => item.date === todayStr);
+    // ⚡ Bolt: Use a simple for...of loop instead of .some() to avoid closure overhead
+    for (const item of schedule) {
+        if (item.date === todayStr) {
+            return true;
+        }
+    }
+    return false;
 }
 
 /**
@@ -57,11 +63,13 @@ export function getCalendarEndDate(): string | null {
     const schedule = staticSchedule as StaticScheduleItem[];
     if (schedule.length === 0) return null;
 
-    const [firstItem, ...remainingItems] = schedule;
-    let maxDate = firstItem.date;
-    for (const item of remainingItems) {
-        if (item.date > maxDate) {
-            maxDate = item.date;
+    // ⚡ Bolt: Avoid O(N) array allocation from spreading large static array
+    let maxDate = schedule[0].date;
+    for (let i = 1; i < schedule.length; i++) {
+        // eslint-disable-next-line security/detect-object-injection
+        const itemDate = schedule[i].date;
+        if (itemDate > maxDate) {
+            maxDate = itemDate;
         }
     }
     return maxDate;
