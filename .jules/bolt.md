@@ -97,3 +97,7 @@
 ## $(date +%Y-%m-%d) - Avoiding split/slice/join for string extraction
 **Learning:** Found an anti-pattern in `extractTripPattern` where `tripId.split('_').slice(2).join('_')` was used. This creates three intermediate arrays/strings (the split array, the sliced array, and the joined string) per call. In tight loops or large iterations, this creates massive memory churn and garbage collection overhead.
 **Action:** Replace `split().slice().join()` patterns for simple string extraction with direct `.indexOf()` and `.substring()` checks. This avoids all intermediate array allocations and provides ~100x speedups.
+
+## 2024-07-02 - Array Spread/Destructuring Anti-Pattern with Static JSON
+**Learning:** Using array destructuring/spread syntax (e.g., `const [first, ...rest] = largeStaticData`) on very large, statically imported JSON datasets (like a 125KB GTFS schedule) forces the JavaScript engine to allocate a massive intermediate array in memory just to skip one element, causing severe GC pressure on every function call.
+**Action:** Avoid destructuring for slicing large static datasets. Use a standard `for` loop with direct index access (`array[i]`) starting from the desired offset.
