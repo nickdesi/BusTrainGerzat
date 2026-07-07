@@ -84,7 +84,7 @@
 **Learning:** Found an anti-pattern in `DeparturesList.tsx` and `DeparturesBoard.tsx` where `[...departures].sort()` was used simply to bring "favorite" entries to the top of an already time-sorted array. Since JavaScript's sort is $O(N \log N)$, applying it on every render for a simple boolean partition is wasteful.
 **Action:** Replace `Array.prototype.sort()` with an $O(N)$ single-pass partition loop when the goal is simply to group items by a boolean flag (like favorites) and preserve their existing relative stable sort order. Separating them into two arrays and concatenating is significantly faster.
 
-## $(date +%Y-%m-%d) - [Set Retrieval & Array Update Optimizations]
+## 2026-07-07 - [Set Retrieval & Array Update Optimizations]
 **Learning:** `Array.from(Set)[0]` creates an unnecessary `O(N)` array allocation when only the first item is needed. Furthermore, chained array iterations in React state updaters (e.g. `prev.some()` + `prev.filter()`) create redundant passes, intermediate arrays, and closures.
 **Action:** Use `Set.values().next().value` for `O(1)` retrieval from Sets. Use a single `.findIndex()` pass combined with shallow cloning (`.slice().splice()`) to update arrays without unnecessary overhead. Avoid multiple array methods in sequence where possible.
 ## 2026-06-25 - Avoid Array.filter() inside useMemo
@@ -101,3 +101,6 @@
 ## 2024-07-02 - Array Spread/Destructuring Anti-Pattern with Static JSON
 **Learning:** Using array destructuring/spread syntax (e.g., `const [first, ...rest] = largeStaticData`) on very large, statically imported JSON datasets (like a 125KB GTFS schedule) forces the JavaScript engine to allocate a massive intermediate array in memory just to skip one element, causing severe GC pressure on every function call.
 **Action:** Avoid destructuring for slicing large static datasets. Use a standard `for` loop with direct index access (`array[i]`) starting from the desired offset.
+## $(date +%Y-%m-%d) - Avoiding redundant normalization computations
+**Learning:** Functions like `normalizeText` which rely on `.normalize('NFD')` and regular expressions `.replace(/[\u0300-\u036f]/g, '')` are computationally expensive, and in large lists or during data mapping they can be called thousands of times on the same few strings (e.g., destinations like 'AUBIÈRE' or 'GERZAT'). This redundant computation causes CPU bottlenecks and garbage collection overhead.
+**Action:** Use a simple module-level `Map` to cache the results of computationally expensive string operations like `normalizeText`. For fields like transit destinations, the number of unique strings is very small, making a cache highly memory-efficient while significantly reducing CPU work.
