@@ -1,591 +1,6 @@
 [
   {
     "tripId": "1800_1000005_03GC.AR_045700",
-    "arrival": 1783493820,
-    "departure": 1783493820,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1475_1000001_3_11_053000",
-    "arrival": 1783496880,
-    "departure": 1783496880,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_055800",
-    "arrival": 1783497480,
-    "departure": 1783497480,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1475_1000001_03AR.GC_051500",
-    "arrival": 1783497900,
-    "departure": 1783497900,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_061900",
-    "arrival": 1783498740,
-    "departure": 1783498740,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_055900",
-    "arrival": 1783500540,
-    "departure": 1783500540,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_065800",
-    "arrival": 1783501080,
-    "departure": 1783501080,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_062000",
-    "arrival": 1783501800,
-    "departure": 1783501800,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_072000",
-    "arrival": 1783502400,
-    "departure": 1783502400,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_064200",
-    "arrival": 1783503120,
-    "departure": 1783503120,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_074200",
-    "arrival": 1783503720,
-    "departure": 1783503720,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_070300",
-    "arrival": 1783504560,
-    "departure": 1783504560,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_080600",
-    "arrival": 1783505160,
-    "departure": 1783505160,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_072400",
-    "arrival": 1783506060,
-    "departure": 1783506060,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_083100",
-    "arrival": 1783506660,
-    "departure": 1783506660,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_074600",
-    "arrival": 1783507500,
-    "departure": 1783507500,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_085500",
-    "arrival": 1783508100,
-    "departure": 1783508100,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_081100",
-    "arrival": 1783508820,
-    "departure": 1783508820,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_091700",
-    "arrival": 1783509420,
-    "departure": 1783509420,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_083400",
-    "arrival": 1783510080,
-    "departure": 1783510080,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_093800",
-    "arrival": 1783510680,
-    "departure": 1783510680,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_085700",
-    "arrival": 1783511400,
-    "departure": 1783511400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_102200",
-    "arrival": 1783513320,
-    "departure": 1783513320,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_094300",
-    "arrival": 1783514100,
-    "departure": 1783514100,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_104500",
-    "arrival": 1783514700,
-    "departure": 1783514700,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_100600",
-    "arrival": 1783515480,
-    "departure": 1783515480,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_112900",
-    "arrival": 1783517340,
-    "departure": 1783517340,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_104800",
-    "arrival": 1783517940,
-    "departure": 1783517940,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_114900",
-    "arrival": 1783518540,
-    "departure": 1783518540,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_111000",
-    "arrival": 1783519260,
-    "departure": 1783519260,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_122500",
-    "arrival": 1783520700,
-    "departure": 1783520700,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_115500",
-    "arrival": 1783522020,
-    "departure": 1783522020,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_130400",
-    "arrival": 1783523040,
-    "departure": 1783523040,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_121700",
-    "arrival": 1783523340,
-    "departure": 1783523340,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_134300",
-    "arrival": 1783525380,
-    "departure": 1783525380,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_130000",
-    "arrival": 1783525920,
-    "departure": 1783525920,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_140200",
-    "arrival": 1783526520,
-    "departure": 1783526520,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_131900",
-    "arrival": 1783527120,
-    "departure": 1783527120,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_144200",
-    "arrival": 1783528920,
-    "departure": 1783528920,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_135700",
-    "arrival": 1783529400,
-    "departure": 1783529400,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_150100",
-    "arrival": 1783530060,
-    "departure": 1783530060,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_141700",
-    "arrival": 1783530600,
-    "departure": 1783530600,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_154000",
-    "arrival": 1783532400,
-    "departure": 1783532400,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_145600",
-    "arrival": 1783532940,
-    "departure": 1783532940,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_151600",
-    "arrival": 1783534200,
-    "departure": 1783534200,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_161600",
-    "arrival": 1783534560,
-    "departure": 1783534560,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_163500",
-    "arrival": 1783535700,
-    "departure": 1783535700,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_155600",
-    "arrival": 1783536900,
-    "departure": 1783536900,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_171600",
-    "arrival": 1783538160,
-    "departure": 1783538160,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_161500",
-    "arrival": 1783538220,
-    "departure": 1783538220,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_173700",
-    "arrival": 1783539420,
-    "departure": 1783539420,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_163600",
-    "arrival": 1783539480,
-    "departure": 1783539480,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_165600",
-    "arrival": 1783540680,
-    "departure": 1783540680,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_171600",
-    "arrival": 1783541880,
-    "departure": 1783541880,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_182800",
-    "arrival": 1783542480,
-    "departure": 1783542480,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_175600",
-    "arrival": 1783544220,
-    "departure": 1783544220,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_191500",
-    "arrival": 1783545300,
-    "departure": 1783545300,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_183900",
-    "arrival": 1783546440,
-    "departure": 1783546440,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_200000",
-    "arrival": 1783548000,
-    "departure": 1783548000,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_192300",
-    "arrival": 1783548900,
-    "departure": 1783548900,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_203000",
-    "arrival": 1783549800,
-    "departure": 1783549800,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_195200",
-    "arrival": 1783550520,
-    "departure": 1783550520,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03AR.GC_202100",
-    "arrival": 1783552260,
-    "departure": 1783552260,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_212200",
-    "arrival": 1783552920,
-    "departure": 1783552920,
-    "headsign": "AUBIÈRE Pl. des Ramacles",
-    "direction": 0,
-    "date": "20260708",
-    "stopId": "GECHR"
-  },
-  {
-    "tripId": "1475_1000001_03AR.GC_214300",
-    "arrival": 1783557360,
-    "departure": 1783557360,
-    "headsign": "GERZAT Champfleuri",
-    "direction": 1,
-    "date": "20260708",
-    "stopId": "GECHA"
-  },
-  {
-    "tripId": "1800_1000005_03GC.AR_045700",
     "arrival": 1783580220,
     "departure": 1783580220,
     "headsign": "AUBIÈRE Pl. des Ramacles",
@@ -4056,6 +3471,591 @@
     "headsign": "GERZAT Champfleuri",
     "direction": 1,
     "date": "20260715",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_045700",
+    "arrival": 1784185020,
+    "departure": 1784185020,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1475_1000001_3_11_053000",
+    "arrival": 1784188080,
+    "departure": 1784188080,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_055800",
+    "arrival": 1784188680,
+    "departure": 1784188680,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1475_1000001_03AR.GC_051500",
+    "arrival": 1784189100,
+    "departure": 1784189100,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_061900",
+    "arrival": 1784189940,
+    "departure": 1784189940,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_055900",
+    "arrival": 1784191740,
+    "departure": 1784191740,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_065800",
+    "arrival": 1784192280,
+    "departure": 1784192280,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_062000",
+    "arrival": 1784193000,
+    "departure": 1784193000,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_072000",
+    "arrival": 1784193600,
+    "departure": 1784193600,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_064200",
+    "arrival": 1784194320,
+    "departure": 1784194320,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_074200",
+    "arrival": 1784194920,
+    "departure": 1784194920,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_070300",
+    "arrival": 1784195760,
+    "departure": 1784195760,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_080600",
+    "arrival": 1784196360,
+    "departure": 1784196360,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_072400",
+    "arrival": 1784197260,
+    "departure": 1784197260,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_083100",
+    "arrival": 1784197860,
+    "departure": 1784197860,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_074600",
+    "arrival": 1784198700,
+    "departure": 1784198700,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_085500",
+    "arrival": 1784199300,
+    "departure": 1784199300,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_081100",
+    "arrival": 1784200020,
+    "departure": 1784200020,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_091700",
+    "arrival": 1784200620,
+    "departure": 1784200620,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_083400",
+    "arrival": 1784201280,
+    "departure": 1784201280,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_093800",
+    "arrival": 1784201880,
+    "departure": 1784201880,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_085700",
+    "arrival": 1784202600,
+    "departure": 1784202600,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_102200",
+    "arrival": 1784204520,
+    "departure": 1784204520,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_094300",
+    "arrival": 1784205300,
+    "departure": 1784205300,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_104500",
+    "arrival": 1784205900,
+    "departure": 1784205900,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_100600",
+    "arrival": 1784206680,
+    "departure": 1784206680,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_112900",
+    "arrival": 1784208540,
+    "departure": 1784208540,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_104800",
+    "arrival": 1784209140,
+    "departure": 1784209140,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_114900",
+    "arrival": 1784209740,
+    "departure": 1784209740,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_111000",
+    "arrival": 1784210460,
+    "departure": 1784210460,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_122500",
+    "arrival": 1784211900,
+    "departure": 1784211900,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_115500",
+    "arrival": 1784213220,
+    "departure": 1784213220,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_130400",
+    "arrival": 1784214240,
+    "departure": 1784214240,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_121700",
+    "arrival": 1784214540,
+    "departure": 1784214540,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_134300",
+    "arrival": 1784216580,
+    "departure": 1784216580,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_130000",
+    "arrival": 1784217120,
+    "departure": 1784217120,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_140200",
+    "arrival": 1784217720,
+    "departure": 1784217720,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_131900",
+    "arrival": 1784218320,
+    "departure": 1784218320,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_144200",
+    "arrival": 1784220120,
+    "departure": 1784220120,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_135700",
+    "arrival": 1784220600,
+    "departure": 1784220600,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_150100",
+    "arrival": 1784221260,
+    "departure": 1784221260,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_141700",
+    "arrival": 1784221800,
+    "departure": 1784221800,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_154000",
+    "arrival": 1784223600,
+    "departure": 1784223600,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_145600",
+    "arrival": 1784224140,
+    "departure": 1784224140,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_151600",
+    "arrival": 1784225400,
+    "departure": 1784225400,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_161600",
+    "arrival": 1784225760,
+    "departure": 1784225760,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_163500",
+    "arrival": 1784226900,
+    "departure": 1784226900,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_155600",
+    "arrival": 1784228100,
+    "departure": 1784228100,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_171600",
+    "arrival": 1784229360,
+    "departure": 1784229360,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_161500",
+    "arrival": 1784229420,
+    "departure": 1784229420,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_173700",
+    "arrival": 1784230620,
+    "departure": 1784230620,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_163600",
+    "arrival": 1784230680,
+    "departure": 1784230680,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_165600",
+    "arrival": 1784231880,
+    "departure": 1784231880,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_171600",
+    "arrival": 1784233080,
+    "departure": 1784233080,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_182800",
+    "arrival": 1784233680,
+    "departure": 1784233680,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_175600",
+    "arrival": 1784235420,
+    "departure": 1784235420,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_191500",
+    "arrival": 1784236500,
+    "departure": 1784236500,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_183900",
+    "arrival": 1784237640,
+    "departure": 1784237640,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_200000",
+    "arrival": 1784239200,
+    "departure": 1784239200,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_192300",
+    "arrival": 1784240100,
+    "departure": 1784240100,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_203000",
+    "arrival": 1784241000,
+    "departure": 1784241000,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_195200",
+    "arrival": 1784241720,
+    "departure": 1784241720,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03AR.GC_202100",
+    "arrival": 1784243460,
+    "departure": 1784243460,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
+    "stopId": "GECHA"
+  },
+  {
+    "tripId": "1800_1000005_03GC.AR_212200",
+    "arrival": 1784244120,
+    "departure": 1784244120,
+    "headsign": "AUBIÈRE Pl. des Ramacles",
+    "direction": 0,
+    "date": "20260716",
+    "stopId": "GECHR"
+  },
+  {
+    "tripId": "1475_1000001_03AR.GC_214300",
+    "arrival": 1784248560,
+    "departure": 1784248560,
+    "headsign": "GERZAT Champfleuri",
+    "direction": 1,
+    "date": "20260716",
     "stopId": "GECHA"
   }
 ]
