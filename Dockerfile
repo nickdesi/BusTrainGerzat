@@ -39,17 +39,14 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
-# Copy standalone output (includes pruned package.json)
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
-COPY --from=builder /app/package-lock.json ./package-lock.json
+# Copy standalone output with correct ownership
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/package-lock.json ./package-lock.json
 
 # Install only production dependencies using the pruned package.json
 RUN npm ci --omit=dev
-
-# Set correct permissions
-RUN chown -R nextjs:nodejs /app
 
 USER nextjs
 
