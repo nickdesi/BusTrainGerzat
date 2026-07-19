@@ -1,8 +1,9 @@
 import { fetchTripUpdatesWithStatus } from '@/lib/gtfs-rt';
 import { BusUpdate } from '@/types/transport';
-import { getNowUnix, isT2CNoServiceDay } from '@/utils/date';
+import { getNowUnix, getParisDateString, isT2CNoServiceDay } from '@/utils/date';
 import { extractTripPattern, getEffectiveDelay } from '@/services/t2c-line-e1.service';
 import { apiLogger } from '@/lib/logger';
+import { getT2CItinerariesRealtime } from '@/services/t2c-itineraries.service';
 
 // --- Internal Types ---
 
@@ -129,6 +130,14 @@ export function shouldKeepPaturalTrip(item: Pick<StaticScheduleItem, 'stopId' | 
     return item.headsign.toUpperCase().includes('PATURAL');
 }
 
+function hasStaticScheduleForToday(schedule: StaticScheduleItem[]): boolean {
+    const today = getParisDateString();
+    for (const item of schedule) {
+        if (item.date === today) return true;
+    }
+    return false;
+}
+
 // ⚡ Bolt: Fast binary search to find if there is an arrival within the target window
 // Uses lower_bound to find the insertion point, then checks the two neighbors.
 function hasArrivalWithinWindow(arr: number[], target: number, window: number): boolean {
@@ -226,6 +235,11 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             getGtfsConfig(),
             getTripOrigins()
         ]);
+
+        if (!hasStaticScheduleForToday(staticSchedule)) {
+            apiLogger.warn('Static schedule invalid for today, using T2C itineraries fallback');
+            return getT2CItinerariesRealtime();
+        }
 
         // 1. Fetch Real-time Data using shared service
         // Map<tripId, RTTripUpdate>
@@ -429,6 +443,11 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
                 nextBuses.push(u);
                 if (nextBuses.length >= 20) break;
             }
+        }
+
+        if (nextBuses.length === 0) {
+            apiLogger.warn('No upcoming buses from static/GTFS-RT, using T2C itineraries fallback');
+            return getT2CItinerariesRealtime();
         }
 
         return { updates: nextBuses, timestamp: now, rtAvailable };

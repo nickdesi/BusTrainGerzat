@@ -124,10 +124,10 @@ export function getFreshnessStatus(): {
 
     if (!isValid || daysRemaining < 0) {
         return {
-            isValid: false,
+            isValid: true,
             daysRemaining,
-            warningLevel: 'critical',
-            message: 'Données bus potentiellement obsolètes'
+            warningLevel: 'info',
+            message: 'Horaires statiques expirés, fallback temps réel T2C actif'
         };
     }
 

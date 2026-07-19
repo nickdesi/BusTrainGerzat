@@ -12,6 +12,7 @@
     "lint": "eslint",
     "test": "jest",
     "test:watch": "jest --watch",
+    "check:t2c": "tsx scripts/check_t2c_itineraries.ts",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "gtfs:update": "tsx scripts/gtfs/check_gtfs_update.ts && tsx scripts/gtfs/extract_lineE1_data.ts && tsx scripts/gtfs/generate_e1_stop_times.ts && tsx scripts/gtfs/generate_static_json.ts"
