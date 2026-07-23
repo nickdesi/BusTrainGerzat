@@ -45,9 +45,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
+  serverExternalPackages: ["protobufjs", "gtfs-realtime-bindings"],
   experimental: {
     optimizePackageImports: ["lucide-react", "@tanstack/react-query", "leaflet", "react-leaflet"],
-    serverComponentsExternalPackages: ["protobufjs", "gtfs-realtime-bindings"],
   },
   poweredByHeader: false,
   reactStrictMode: true,
