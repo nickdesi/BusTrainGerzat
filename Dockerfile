@@ -43,10 +43,7 @@ RUN addgroup --system --gid 1001 nodejs && \
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 COPY --from=builder --chown=nextjs:nodejs /app/public ./public
-COPY --from=builder --chown=nextjs:nodejs /app/package-lock.json ./package-lock.json
-
-# Install only production dependencies using the pruned package.json
-RUN npm ci --omit=dev
+# Standalone output includes node_modules, server.js, and static assets
 
 USER nextjs
 
