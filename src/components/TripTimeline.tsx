@@ -152,7 +152,7 @@ const TripTimeline = memo(function TripTimeline({
                                 <div key={stop.stopId} className={`relative grid grid-cols-[2.25rem_1fr] gap-2 sm:grid-cols-[2.75rem_1fr] sm:gap-3 ${isPassed ? 'opacity-55' : ''}`}>
                                     <div className="relative flex justify-center">
                                         {!isLast && (
-                                            <div className="absolute top-8 bottom-0 w-1 rounded-full bg-white/10">
+                                            <div className="absolute top-7 bottom-0 w-1 rounded-full bg-white/10">
                                                 <div
                                                     className="w-full rounded-full transition-all duration-700"
                                                     style={{
@@ -164,12 +164,14 @@ const TripTimeline = memo(function TripTimeline({
                                                 />
                                                 {isNextStopCurrent && (
                                                     <div
-                                                        className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000 ease-out"
+                                                        className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000 ease-linear"
                                                         style={{ top: `calc(${activeProgress * 100}% - 14px)` }}
                                                     >
-                                                        <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-gray-950 shadow-[0_0_20px_rgba(52,211,153,0.9)] ring-2 ring-white">
-                                                            <span className="absolute -inset-1 rounded-full bg-emerald-400/50 animate-ping pointer-events-none" />
-                                                            <Bus className="relative h-4 w-4 text-gray-950 animate-bounce" style={{ animationDuration: '2s' }} />
+                                                        <div
+                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-gray-950 shadow-[0_0_20px_rgba(52,211,153,0.8)] ring-4 ring-gray-950"
+                                                            style={{ border: '2px solid #6ee7b7' }}
+                                                        >
+                                                            <Bus className="h-3.5 w-3.5 text-gray-950" />
                                                         </div>
                                                     </div>
                                                 )}
@@ -177,20 +179,20 @@ const TripTimeline = memo(function TripTimeline({
                                         )}
 
                                         <div
-                                            className={`relative z-10 mt-1 flex items-center justify-center rounded-full ring-4 ring-gray-950 transition-all ${isTerminus ? 'h-8 w-8' : 'h-6 w-6'} ${isCurrent
+                                            className={`relative z-10 mt-1 flex items-center justify-center rounded-full ring-4 ring-gray-950 transition-all ${isTerminus ? 'h-8 w-8' : 'h-6 w-6'} ${isCurrent && !previousStop
                                                 ? 'scale-110 bg-emerald-400 text-gray-950 shadow-[0_0_24px_rgba(52,211,153,0.6)]'
                                                 : isPassed
                                                     ? 'bg-gray-700 text-gray-500'
                                                     : 'bg-gray-950 text-gray-300'
                                                 }`}
-                                            style={{ border: `2px solid ${isCurrent ? '#6ee7b7' : isPassed ? '#4b5563' : routeColor}` }}
+                                            style={{ border: `2px solid ${isCurrent && !previousStop ? '#6ee7b7' : isPassed ? '#4b5563' : isCurrent ? '#34d399' : routeColor}` }}
                                         >
-                                            {isCurrent ? (
-                                                <Bus className="h-3.5 w-3.5" />
+                                            {isCurrent && !previousStop ? (
+                                                <Bus className="h-3.5 w-3.5 text-gray-950" />
                                             ) : isTerminus ? (
                                                 <MapPin className="h-3.5 w-3.5" />
                                             ) : (
-                                                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: isPassed ? '#6b7280' : routeColor }} />
+                                                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: isPassed ? '#6b7280' : isCurrent ? '#34d399' : routeColor }} />
                                             )}
                                         </div>
                                     </div>
