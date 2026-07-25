@@ -4,7 +4,11 @@ import { gtfsLogger } from './logger';
 // --- Constants ---
 import gtfsConfig from '@/data/gtfs_config.json';
 export const LINE_E1_ROUTE_IDS = new Set(gtfsConfig.routeIds);
-const GTFS_RT_TRIP_UPDATE_URL = 'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update';
+export const GTFS_RT_TRIP_UPDATE_URLS = [
+    'https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs_rt',
+    'https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfsrt_tripupdates/alternative_exports/gtfs_rt',
+    'https://proxy.transport.data.gouv.fr/resource/t2c-clermont-gtfs-rt-trip-update',
+];
 const GTFS_RT_VEHICLE_POSITION_URL = process.env.T2C_GTFS_RT_VEHICLE_POSITION_URL;
 
 // --- Types ---
@@ -68,12 +72,27 @@ export interface TripUpdatesResult {
  */
 export async function fetchTripUpdatesWithStatus(): Promise<TripUpdatesResult> {
     const updates = new Map<string, RTTripUpdate>();
-    try {
-        // Use fetchBinaryWithRetry for resilience
-        const buffer = await fetchBinaryWithRetry(GTFS_RT_TRIP_UPDATE_URL, {
-            next: { revalidate: 15 }
-        });
+    let buffer: ArrayBuffer | null = null;
 
+    for (const url of GTFS_RT_TRIP_UPDATE_URLS) {
+        try {
+            buffer = await fetchBinaryWithRetry(url, {
+                next: { revalidate: 15 }
+            });
+            if (buffer && buffer.byteLength > 0) {
+                break;
+            }
+        } catch (e) {
+            gtfsLogger.warn(`Primary GTFS-RT URL ${url} failed, trying fallback...`, { error: (e as Error).message });
+        }
+    }
+
+    if (!buffer) {
+        gtfsLogger.error('Failed to fetch GTFS-RT trip updates from all endpoints');
+        return { updates, rtAvailable: false };
+    }
+
+    try {
         const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
 
         const now = getNowUnix();
