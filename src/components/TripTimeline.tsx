@@ -43,7 +43,7 @@ const TripTimeline = memo(function TripTimeline({
 
         const interval = setInterval(() => {
             setLiveNowUnix(Math.floor(Date.now() / 1000));
-        }, 10_000);
+        }, 1000);
         return () => clearInterval(interval);
     }, [shouldTrackProgress]);
 
@@ -152,7 +152,7 @@ const TripTimeline = memo(function TripTimeline({
                                 <div key={stop.stopId} className={`relative grid grid-cols-[2.25rem_1fr] gap-2 sm:grid-cols-[2.75rem_1fr] sm:gap-3 ${isPassed ? 'opacity-55' : ''}`}>
                                     <div className="relative flex justify-center">
                                         {!isLast && (
-                                            <div className="absolute top-8 bottom-0 w-1 overflow-hidden rounded-full bg-white/10">
+                                            <div className="absolute top-8 bottom-0 w-1 rounded-full bg-white/10">
                                                 <div
                                                     className="w-full rounded-full transition-all duration-700"
                                                     style={{
@@ -162,6 +162,17 @@ const TripTimeline = memo(function TripTimeline({
                                                             : undefined
                                                     }}
                                                 />
+                                                {isNextStopCurrent && (
+                                                    <div
+                                                        className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000 ease-out"
+                                                        style={{ top: `calc(${activeProgress * 100}% - 14px)` }}
+                                                    >
+                                                        <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-gray-950 shadow-[0_0_20px_rgba(52,211,153,0.9)] ring-2 ring-white">
+                                                            <span className="absolute -inset-1 rounded-full bg-emerald-400/50 animate-ping pointer-events-none" />
+                                                            <Bus className="relative h-4 w-4 text-gray-950 animate-bounce" style={{ animationDuration: '2s' }} />
+                                                        </div>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
 
