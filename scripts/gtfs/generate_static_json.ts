@@ -21,7 +21,7 @@ function readCsv(fileName: string): any[] {
 
 function main() {
   const now = new Date();
-  const dates = Array.from({ length: 8 }).map((_, i) => format(addDays(now, i), 'yyyyMMdd'));
+  const dates = Array.from({ length: 15 }).map((_, i) => format(addDays(now, i), 'yyyyMMdd'));
 
   const targetRouteIds = new Set<string>();
   for (const row of readCsv('routes.txt')) {
