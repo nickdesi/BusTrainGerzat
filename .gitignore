@@ -66,3 +66,6 @@ test-results/
 # Temporary and local data
 /data
 /scratch
+
+# Local Agent Customizations
+.agents/
