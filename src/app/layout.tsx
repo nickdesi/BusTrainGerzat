@@ -36,6 +36,9 @@ export const metadata: Metadata = {
     "bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER",
     "ligne E1", "Champfleuri", "Patural", "transports Clermont-Ferrand", "gare Gerzat"
   ],
+  alternates: {
+    canonical: "https://gerzatlive.desimone.fr",
+  },
   manifest: "/manifest.json",
   icons: {
     icon: "/icon-512.png",
@@ -90,6 +93,21 @@ export default function RootLayout({
         >
           Aller au contenu principal
         </a>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              name: "GerzatLive",
+              url: "https://gerzatlive.desimone.fr/",
+              applicationCategory: "Travel",
+              operatingSystem: "All",
+              description:
+                "Horaires bus T2C et trains SNCF en temps réel à Gerzat.",
+            }),
+          }}
+        />
         <QueryProvider>
           <main id="main-content">
             {children}

@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 
 export default function sitemap(): MetadataRoute.Sitemap {
     const baseUrl = 'https://gerzatlive.desimone.fr';
-    const lastModified = new Date('2026-04-30');
+    const lastModified = new Date('2026-07-27');
 
     return [
         {
