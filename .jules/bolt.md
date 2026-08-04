@@ -104,3 +104,7 @@
 ## $(date +%Y-%m-%d) - Avoiding redundant normalization computations
 **Learning:** Functions like `normalizeText` which rely on `.normalize('NFD')` and regular expressions `.replace(/[\u0300-\u036f]/g, '')` are computationally expensive, and in large lists or during data mapping they can be called thousands of times on the same few strings (e.g., destinations like 'AUBIÈRE' or 'GERZAT'). This redundant computation causes CPU bottlenecks and garbage collection overhead.
 **Action:** Use a simple module-level `Map` to cache the results of computationally expensive string operations like `normalizeText`. For fields like transit destinations, the number of unique strings is very small, making a cache highly memory-efficient while significantly reducing CPU work.
+
+## 2026-07-28 - String Split and Map Anti-Pattern in React Render Loop
+**Learning:** Found an anti-pattern in `SplitFlapDisplay.tsx` where `text.split('').map(...)` was used inside a highly reused memoized component's render function. This causes the JavaScript engine to allocate an intermediate array of single-character strings on every render, leading to unnecessary memory churn and garbage collection pressure, particularly when rendering many list items or table rows.
+**Action:** Replace `text.split('').map(...)` with a `for` loop (e.g. `for (let idx = 0; idx < text.length; idx++)`) and directly push the mapped JSX elements to a pre-allocated array. This avoids the intermediate string array allocation completely.
