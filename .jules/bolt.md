@@ -108,3 +108,7 @@
 ## 2026-07-28 - String Split and Map Anti-Pattern in React Render Loop
 **Learning:** Found an anti-pattern in `SplitFlapDisplay.tsx` where `text.split('').map(...)` was used inside a highly reused memoized component's render function. This causes the JavaScript engine to allocate an intermediate array of single-character strings on every render, leading to unnecessary memory churn and garbage collection pressure, particularly when rendering many list items or table rows.
 **Action:** Replace `text.split('').map(...)` with a `for` loop (e.g. `for (let idx = 0; idx < text.length; idx++)`) and directly push the mapped JSX elements to a pre-allocated array. This avoids the intermediate string array allocation completely.
+
+## $(date +%Y-%m-%d) - Module-Level Caching for Static JSON Data
+**Learning:** In API route handlers or frequently called utilities (like `gtfs-freshness.ts`), performing linear scans (e.g., `array.some()`) over large static imported JSON arrays on every call creates significant CPU overhead. The cost is multiplied during traffic spikes.
+**Action:** Parse and index static imported JSON arrays (e.g., into `Set`s or variables) exactly once at the module level (outside the exported functions) during module initialization. This safely converts O(N) runtime operations into O(1) lookups, providing a "free" caching layer for static data without external dependencies.

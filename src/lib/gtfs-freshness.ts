@@ -11,6 +11,22 @@ interface StaticScheduleItem {
     tripId: string;
 }
 
+// ⚡ Bolt: Cache calendar metadata at module scope to avoid O(N) array scans
+// on every API request. This reduces CPU and memory overhead significantly.
+const VALID_DATES = new Set<string>();
+let CALENDAR_END_DATE: string | null = null;
+
+const schedule = staticSchedule as StaticScheduleItem[];
+if (schedule.length > 0) {
+    CALENDAR_END_DATE = schedule[0].date;
+    for (const item of schedule) {
+        VALID_DATES.add(item.date);
+        if (item.date > CALENDAR_END_DATE) {
+            CALENDAR_END_DATE = item.date;
+        }
+    }
+}
+
 const PARIS_DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
     timeZone: 'Europe/Paris',
     year: 'numeric',
@@ -46,35 +62,16 @@ export function isCalendarValid(): boolean {
     if (isT2CNoServiceDay()) return true;
 
     const todayStr = getTodayDateStr();
-    const schedule = staticSchedule as StaticScheduleItem[];
 
-    // ⚡ Bolt: Replace `.some()` with a `for...of` loop to avoid the overhead of creating
-    // closures on every iteration when scanning the large staticSchedule array.
-    for (const item of schedule) {
-        if (item.date === todayStr) return true;
-    }
-    return false;
+    // ⚡ Bolt: Use O(1) set lookup instead of O(N) array scan
+    return VALID_DATES.has(todayStr);
 }
 
 /**
  * Get the latest date in the calendar
  */
 export function getCalendarEndDate(): string | null {
-    const schedule = staticSchedule as StaticScheduleItem[];
-    if (schedule.length === 0) return null;
-
-    // ⚡ Bolt: Avoid using array destructuring/spread syntax (e.g., const [first, ...rest] = schedule)
-    // to slice large static arrays, as it creates massive intermediate arrays and causes
-    // significant garbage collection overhead. Iterate directly over the original array instead.
-    let maxDate = schedule[0].date;
-    for (let i = 1; i < schedule.length; i++) {
-        // eslint-disable-next-line security/detect-object-injection
-        if (schedule[i].date > maxDate) {
-            // eslint-disable-next-line security/detect-object-injection
-            maxDate = schedule[i].date;
-        }
-    }
-    return maxDate;
+    return CALENDAR_END_DATE;
 }
 
 /**
