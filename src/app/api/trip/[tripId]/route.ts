@@ -99,9 +99,20 @@ export async function GET(
 
         // Build response - prefer static + RT overlay
         if (staticTrip) {
-            const anchorStop = occurrenceAnchor.stopId
-                ? staticTrip.stops.find((stop) => stop.stopId === occurrenceAnchor.stopId)
-                : staticTrip.stops[0];
+            let anchorStop: typeof staticTrip.stops[0] | undefined;
+            if (occurrenceAnchor.stopId) {
+                // ⚡ Bolt: Replace O(N) .find() with a simple for loop for better performance and no closure overhead
+                for (let i = 0; i < staticTrip.stops.length; i++) {
+                    // eslint-disable-next-line security/detect-object-injection
+                    if (staticTrip.stops[i].stopId === occurrenceAnchor.stopId) {
+                        anchorStop = staticTrip.stops[i];
+                        break;
+                    }
+                }
+            }
+            if (!anchorStop) {
+                anchorStop = staticTrip.stops[0];
+            }
             const anchorBaseTime = anchorStop ? toUnix(anchorStop.departureTime || anchorStop.arrivalTime) : undefined;
             const occurrenceOffset = occurrenceAnchor.targetTime && anchorBaseTime
                 ? occurrenceAnchor.targetTime - anchorBaseTime

@@ -112,3 +112,7 @@
 ## $(date +%Y-%m-%d) - Module-Level Caching for Static JSON Data
 **Learning:** In API route handlers or frequently called utilities (like `gtfs-freshness.ts`), performing linear scans (e.g., `array.some()`) over large static imported JSON arrays on every call creates significant CPU overhead. The cost is multiplied during traffic spikes.
 **Action:** Parse and index static imported JSON arrays (e.g., into `Set`s or variables) exactly once at the module level (outside the exported functions) during module initialization. This safely converts O(N) runtime operations into O(1) lookups, providing a "free" caching layer for static data without external dependencies.
+
+## 2026-08-11 - Avoid Array.prototype.find() in API Route Loops
+**Learning:** In `src/app/api/trip/[tripId]/route.ts`, an unnecessary `Array.prototype.find()` was used to locate a specific stop by its ID within the route data. Using `.find()` creates a closure function that must be executed for every array element, incurring closure allocation overhead and slowing down tight loops, especially in serverless or frequent API calls.
+**Action:** Replace `.find()` with a standard `for` loop for linear array searches when execution speed is critical. This avoids closure allocations and allows for a fast early exit with `break`.
