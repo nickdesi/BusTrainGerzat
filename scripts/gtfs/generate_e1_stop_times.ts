@@ -80,7 +80,7 @@ function main() {
   console.log(`Processed ${result.length} trips with stop times`);
 
   fs.mkdirSync(path.dirname(OUTPUT_FILE), { recursive: true });
-  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(result, null, 2), 'utf-8');
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(result, null, 2) + '\n', 'utf-8');
 
   console.log(`✅ Saved to ${OUTPUT_FILE}`);
 

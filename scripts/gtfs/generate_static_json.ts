@@ -70,7 +70,7 @@ function main() {
   };
 
   fs.mkdirSync('src/data', { recursive: true });
-  fs.writeFileSync('src/data/gtfs_config.json', JSON.stringify(gtfsConfig, null, 2));
+  fs.writeFileSync('src/data/gtfs_config.json', JSON.stringify(gtfsConfig, null, 2) + '\n');
   console.log(`✅ Exported gtfs_config.json with route IDs: ${Array.from(targetRouteIds).join(', ')}`);
 
   const targetStopIds = new Set<string>();
@@ -103,7 +103,7 @@ function main() {
     champfleuri: Array.from(mainStopIds),
     patural: Array.from(paturalStopIds),
   };
-  fs.writeFileSync('src/data/gtfs_config.json', JSON.stringify(gtfsConfig, null, 2));
+  fs.writeFileSync('src/data/gtfs_config.json', JSON.stringify(gtfsConfig, null, 2) + '\n');
   console.log(`✅ Updated gtfs_config.json with Stop IDs`);
 
   const services: Record<string, any> = {};
@@ -219,7 +219,7 @@ function main() {
 
   finalSchedule.sort((a, b) => a.arrival - b.arrival);
 
-  fs.writeFileSync('src/data/static_schedule.json', JSON.stringify(finalSchedule, null, 2));
+  fs.writeFileSync('src/data/static_schedule.json', JSON.stringify(finalSchedule, null, 2) + '\n');
   console.log(`✅ Generated ${finalSchedule.length} scheduled stops`);
 }
 
