@@ -2,385 +2,192 @@
 
 # 🚉 Gerzat Live
 
-**Consultez en un coup d'œil les prochains passages des bus T2C et des trains TER à Gerzat — départs, arrivées, carte live et favoris, en temps réel.**
+**Hub multimodal en temps réel pour Gerzat — Bus T2C Ligne E1 & Trains TER SNCF.**
 
-[![CI](https://github.com/nickdesi/BusTrainGerzat/actions/workflows/ci.yml/badge.svg)](https://github.com/nickdesi/BusTrainGerzat/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-3.7.3-blue?style=for-the-badge)](https://github.com/nickdesi/BusTrainGerzat/releases)
-[![Démo](https://img.shields.io/badge/démo-en%20ligne-brightgreen?style=for-the-badge)](https://gerzatlive.desimone.fr)
-[![Déploiement](https://img.shields.io/badge/déploiement-Coolify-blueviolet?style=for-the-badge&logo=rocket)](https://coolify.io/)
-[![PWA](https://img.shields.io/badge/PWA-Ready-5A67D8?style=for-the-badge&logo=pwa)](https://web.dev/progressive-web-apps/)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green?style=for-the-badge)](LICENSE)
-[![Platform](https://img.shields.io/badge/plateforme-Web%20%7C%20iOS%20%7C%20Android-lightgrey?style=for-the-badge)](#)
-[![Stars](https://img.shields.io/github/stars/nickdesi/BusTrainGerzat?style=social)](https://github.com/nickdesi/BusTrainGerzat/stargazers)
-[![Last Commit](https://img.shields.io/github/last-commit/nickdesi/BusTrainGerzat?style=flat)](https://github.com/nickdesi/BusTrainGerzat/commits/main)
-[![Issues](https://img.shields.io/github/issues/nickdesi/BusTrainGerzat?style=flat)](https://github.com/nickdesi/BusTrainGerzat/issues)
-[![PRs](https://img.shields.io/github/issues-pr/nickdesi/BusTrainGerzat?style=flat)](https://github.com/nickdesi/BusTrainGerzat/pulls)
-[![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
+[![CI Status](https://img.shields.io/github/actions/workflow/status/nickdesi/BusTrainGerzat/ci.yml?branch=main&style=for-the-badge&logo=github-actions&logoColor=white&label=CI)](https://github.com/nickdesi/BusTrainGerzat/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/badge/version-4.0.0-f59e0b?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/nickdesi/BusTrainGerzat/releases)
+[![Production](https://img.shields.io/badge/Production-gerzatlive.desimone.fr-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://gerzatlive.desimone.fr)
+[![Deployment](https://img.shields.io/badge/Host-Coolify-6366f1?style=for-the-badge&logo=rocket)](https://coolify.io/)
+[![Next.js 16](https://img.shields.io/badge/Next.js-16.2_(Turbopack)-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
+[![React 19](https://img.shields.io/badge/React-19.2-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4.2-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-gray?style=for-the-badge)](LICENSE)
 
-<img src="docs/images/homepage.png" alt="Tableau des départs Gerzat Live" width="400" />
-<img src="docs/images/map.png" alt="Carte live de la ligne E1" width="400" />
+<br />
+
+<p align="center">
+  <a href="https://gerzatlive.desimone.fr"><strong>🌐 Accéder à l'application en ligne »</strong></a>
+  <br />
+  <a href="#-fonctionnalités-clés">Fonctionnalités</a> •
+  <a href="#-démarrage-rapide">Démarrage</a> •
+  <a href="#-architecture-des-données">Architecture</a> •
+  <a href="#-mise-à-jour-gtfs-automatisée">Pipeline GTFS</a> •
+  <a href="#-qualité--ci">Assurance Qualité</a>
+</p>
+
+<img src="docs/images/homepage.png" alt="Tableau des départs Gerzat Live" width="480" />
+<img src="docs/images/map.png" alt="Carte live de la ligne E1" width="480" />
 
 </div>
 
 ---
 
-## 📋 Sommaire
+## 📖 Présentation
 
-- [✨ Objectif](#-objectif)
-- [🚀 Démarrage rapide](#-démarrage-rapide)
-- [📍 Arrêts et gare surveillés](#-arrêts-et-gare-surveillés)
-- [🚀 Fonctionnalités](#-fonctionnalités)
-- [🛠️ Stack technique](#️-stack-technique)
-- [🧭 Architecture des données](#-architecture-des-données)
-- [🔐 Variables d'environnement](#-variables-denvironnement)
-- [📦 Installation locale](#-installation-locale)
-- [🔧 Scripts utiles](#-scripts-utiles)
-- [🧪 Tests et validation](#-tests-et-validation)
-- [🔄 Mise à jour des données T2C](#-mise-à-jour-des-données-t2c)
-- [✅ CI et qualité](#-ci-et-qualité)
-- [🚢 Déploiement](#-déploiement)
-- [🩺 Dépannage](#-dépannage)
-- [📱 Installation mobile](#-installation-mobile)
-- [🔒 Sécurité](#-sécurité)
-- [📄 Licence](#-licence)
-- [📋 Recommandations GitHub](#-recommandations-github)
+**Gerzat Live** est une Progressive Web Application (PWA) conçue pour les habitants et usagers de Gerzat (Clermont Auvergne Métropole). Elle rassemble sur un tableau de bord lisible et contrasté tous les flux de mobilité en direct :
 
-## ✨ Objectif
+* 🚌 **Bus T2C Ligne E1 Express** : Départs en temps réel (GTFS-RT) aux arrêts stratégiques (*Champfleuri*, *Patural*).
+* 🚆 **Trains TER SNCF** : Départs et arrivées en direct à la **Gare de Gerzat** (liaisons rapides vers Clermont-Ferrand en 7 min, Riom, Vichy, Moulins).
+* 🗺️ **Carte interactive multimodale** : Visualisation GPS des bus en circulation, arrêts et tracés de lignes avec lueur néon haute lisibilité.
+* 🛩️ **Afficheur mécanique Split-Flap 3D** : Rendu rétro-moderne avec perspective 3D, animation de bascule et micro-rebond mécanique.
+* 📱 **PWA & Offline Ready** : Installable sur iPhone/Android avec service worker et mise en cache intelligente.
 
-Gerzat Live centralise les informations utiles avant un trajet depuis ou vers Gerzat : prochains départs, arrivées, bus T2C ligne E1, trains TER, favoris et carte live.
+---
 
-L'interface est mobile-first, sombre, lisible et pensée pour afficher immédiatement les informations prioritaires : horaire, retard, annulation, source temps réel et état de fraîcheur des données.
+## 🚀 Fonctionnalités Clés
 
-## 🚀 Démarrage rapide
+| Fonctionnalité | Description |
+| :--- | :--- |
+| **Tableau des Départs & Arrivées** | Affichage unifié bus + trains avec calcul dynamique des retards/avances et statuts temps réel. |
+| **Split-Flap 3D Cockpit** | Afficheur mécanique d'aéroport/gare avec shaders CSS 3D et containment GPU anti-scintillement. |
+| **Timeline de Trajet Spatiale** | Suivi dynamique du bus le long de son itinéraire avec onde radar pulsée (*ping live*) et statut arrêt par arrêt. |
+| **Générateur GTFS Dynamique** | Découverte automatique des calendriers SMTC jusqu'à 90 jours d'avance pour éliminer tout risque d'expiration. |
+| **Fallback SIV Intelligent** | Requête prédictive des premiers départs du lendemain matin lors des consultations tardives nocturnes. |
+| **SEO & Google Rich Results** | Balisage Schema.org complet (`WebSite`, `WebApplication`, `TrainStation`, `BreadcrumbList`) et métadonnées géociblées. |
 
-> Prérequis : **Node.js >= 24.15.0** et une clé API **SNCF / Navitia** (pour les trains).
+---
 
-```bash
-# 1. Cloner le projet
-git clone https://github.com/nickdesi/BusTrainGerzat.git
-cd BusTrainGerzat
+## 🛠️ Stack Technique
 
-# 2. Installer les dépendances
-npm install
+* **Framework** : [Next.js 16](https://nextjs.org/) (App Router, Turbopack, Standalone output)
+* **Runtime** : [Node.js](https://nodejs.org/) `>= 24.15.0`
+* **Interface & Styling** : [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/), Lucide Icons
+* **Design System** : *Gerzat Transit Hub* (Généré avec Stitch & `antigravity-design-expert`)
+* **State & Data Fetching** : [TanStack Query v5](https://tanstack.com/query/latest)
+* **Cartographie** : [Leaflet 1.9](https://leafletjs.com/), [React-Leaflet 5](https://react-leaflet.js.org/) (Tuiles sombres CartoDB Dark Matter)
+* **Protobuf & Données** : `gtfs-realtime-bindings`, `protobufjs`, `csv-parse`, `adm-zip`
+* **Qualité & Tests** : [Jest 30](https://jestjs.io/), [Testing Library](https://testing-library.com/), [ESLint](https://eslint.org/) (avec `eslint-plugin-security`)
+* **Hébergement & Déploiement** : [Coolify](https://coolify.io/) sur Nixpacks / Docker
 
-# 3. Configurer la clé SNCF (optionnel pour les bus, requis pour les trains)
-echo "SNCF_API_KEY=votre_cle_api_sncf" > .env.local
+---
 
-# 4. Lancer le serveur de développement
-npm run dev
-```
-
-Ouvrez ensuite `http://localhost:3000`. 🎉
-
-## 📍 Arrêts et gare surveillés
-
-| Transport | Arrêt / Gare | Ligne(s) |
-| --- | --- | --- |
-| 🚌 Bus T2C | **Gerzat Champfleuri** | Ligne E1, toutes directions |
-| 🚌 Bus T2C Express | **Le Patural** | Ligne E1, direction Ballainvilliers |
-| 🚆 Train TER | **Gare de Gerzat** | TER Auvergne |
-
-## 🚀 Fonctionnalités
-
-- 📋 **Tableau départs / arrivées** unifié bus + TER, avec statuts retard/avance/annulation et favoris persistants.
-- 🗺️ **Carte live ligne E1** (Leaflet / React-Leaflet) : design « glass », filtre de direction **Tous / Gerzat / Aubière**, marqueurs vectoriels et HUD temps réel.
-- 📡 **Temps réel GTFS-RT** : Trip Updates officiels T2C, interpolation et fallback horaire en cas de signal incomplet.
-- 🚆 **Trains TER** via l'API SNCF / Navitia (Navitia).
-- 💚 **Fraîcheur des données** : endpoint global et détection des données GTFS obsolètes.
-- ⭐ **Favoris** synchronisés pour mettre en avant les trajets importants.
-- 📱 **PWA** : installable sur iOS et Android, manifest + service worker.
-
-## 🛠️ Stack technique
-
-- **Framework** : Next.js 16, App Router
-- **Langage** : TypeScript
-- **UI** : React 19, Tailwind CSS v4
-- **Données client** : TanStack Query
-- **Carte** : Leaflet 1.9, React-Leaflet 5
-- **Validation** : Zod
-- **Tests** : Jest, Testing Library, Playwright
-- **PWA** : manifest + service worker
-- **Déploiement** : Coolify / Nixpacks
-
-## 🧭 Architecture des données
+## 🧭 Architecture des Données
 
 ```mermaid
 flowchart LR
-  subgraph Sources[Sources externes]
-    T2CStatic[GTFS statique T2C]
-    T2CRT["GTFS-RT T2C<br/>Trip Updates"]
-    OptionalGPS["Vehicle Positions<br/>optionnel, non publié actuellement"]
-    SNCF[SNCF / Navitia]
+  subgraph Sources[Sources Officielles]
+    T2CStatic[GTFS SMTC / Clermont Métropole]
+    T2CRT[GTFS-RT Protobuf / transport.data.gouv.fr]
+    SNCF[API SNCF / Navitia]
   end
 
-  subgraph Data[Données générées]
-    StaticSchedule["src/data/static_schedule.json"]
+  subgraph Pipeline[Pipeline de Données Local]
+    StaticSchedule["src/data/static_schedule.json (90j)"]
     GtfsConfig["src/data/gtfs_config.json"]
-    LineE1Map["public/data/lineE1_data.json"]
-    LineE1StopTimes["public/data/e1_stop_times.json"]
+    LineE1Data["public/data/lineE1_data.json"]
+    E1StopTimes["public/data/e1_stop_times.json"]
   end
 
-  subgraph Server[Next.js API + services]
+  subgraph Core[Services Backend Next.js]
     BusService["bus.service.ts"]
     E1Service["t2c-line-e1.service.ts"]
     TrainService["train.service.ts"]
-    Freshness["gtfs-freshness.ts"]
+    ItinerariesService["t2c-itineraries.service.ts"]
   end
 
-  subgraph API[API internes]
-    Realtime["/api/realtime"]
-    Vehicles["/api/vehicles"]
-    Trip["/api/trip/[tripId]"]
-    Line["/api/lineE1"]
-    Trains["/api/trains"]
-    Fresh["/api/freshness"]
-    Stream["/api/stream"]
+  subgraph UI[Composants UI / Hub]
+    SplitFlap[SplitFlap 3D Board]
+    Timeline[TripTimeline Spatiale]
+    Map[Carte Live Leaflet]
+    GlassAlerts[Bannières Glassmorphism]
   end
 
-  subgraph UI[Interface]
-    Board[Tableau départs / arrivées]
-    Map[Carte live E1]
-    Favorites[Favoris]
-    Status[Alertes fraîcheur]
-  end
-
-  T2CStatic --> StaticSchedule
-  T2CStatic --> GtfsConfig
-  T2CStatic --> LineE1Map
-  T2CStatic --> LineE1StopTimes
+  T2CStatic --> Pipeline
   T2CRT --> BusService
   T2CRT --> E1Service
-  OptionalGPS -. si configuré .-> E1Service
   SNCF --> TrainService
-  StaticSchedule --> BusService
-  GtfsConfig --> BusService
-  LineE1StopTimes --> E1Service
-  LineE1Map --> Map
-  BusService --> Realtime
-  E1Service --> Vehicles
-  E1Service --> Trip
-  E1Service --> Line
-  TrainService --> Trains
-  Freshness --> Fresh
-  Realtime --> Board
-  Trains --> Board
-  Vehicles --> Map
-  Trip --> Map
-  Line --> Map
-  Stream --> Board
-  Fresh --> Status
-  Board --> Favorites
+  Pipeline --> BusService
+  Pipeline --> E1Service
+  BusService --> SplitFlap
+  E1Service --> Timeline
+  E1Service --> Map
+  ItinerariesService -. Fallback Nuit .-> BusService
 ```
-
-### Bus T2C
-
-Gerzat Live combine plusieurs niveaux de données pour garder l'affichage exploitable même si un flux est incomplet :
-
-1. **GTFS statique** : horaires planifiés, arrêts, routes, trips, shapes et fichiers générés.
-2. **GTFS-RT Trip Updates officiel** : retards, annulations et prévisions temps réel.
-3. **GTFS-RT Vehicle Positions optionnel** : positions GPS et cap uniquement si un flux officiel vérifié est configuré. À la vérification du 10 mai 2026, le dataset officiel T2C ne publie pas de ressource `VehiclePositions`.
-4. **Fallback applicatif** : interpolation sur tracé E1 ou horaire théorique si un signal live manque.
-
-```mermaid
-flowchart TD
-  Request[Requête carte ou départs] --> HasRealtime{Trip Updates GTFS-RT disponibles ?}
-  HasRealtime -- Oui --> TripUpdate["Trip Update<br/>retards / annulations"]
-  Request --> HasGps{Vehicle Positions configuré ?}
-  HasGps -- Oui --> VehicleGPS["Vehicle Position<br/>GPS + cap"]
-  HasGps -- Non --> NoGps[Pas de GPS officiel T2C]
-  HasRealtime -- Non --> Static[Horaire GTFS statique]
-  TripUpdate --> Merge[Fusion service E1]
-  VehicleGPS --> Merge
-  NoGps --> Interpolation
-  Static --> Interpolation[Interpolation sur shape E1]
-  Interpolation --> Merge
-  Merge --> Confidence{Qualité position}
-  Confidence -- GPS --> Live[Affichage live]
-  Confidence -- Estimée --> Estimated[Affichage estimé]
-  Confidence -- Statique --> Fallback[Fallback horaire]
-```
-
-### Carte live E1
-
-```mermaid
-flowchart LR
-  Direction["Filtre trajet<br/>Tous / Gerzat / Aubière"] --> Shapes{Shapes visibles}
-  Direction --> Buses{Bus visibles}
-  Shapes -- Tous --> Both[Deux directions + branches]
-  Shapes -- Gerzat --> North[Tracé direction Gerzat]
-  Shapes -- Aubière --> South[Tracé direction Aubière]
-  Buses -- Tous --> AllVehicles[Tous les véhicules E1]
-  Buses -- Gerzat --> NorthVehicles[Bus direction Gerzat]
-  Buses -- Aubière --> SouthVehicles[Bus direction Aubière]
-  Both --> Leaflet[LeafletMapClient]
-  North --> Leaflet
-  South --> Leaflet
-  AllVehicles --> Leaflet
-  NorthVehicles --> Leaflet
-  SouthVehicles --> Leaflet
-```
-
-## 🔐 Variables d'environnement
-
-| Variable | Requise | Description |
-| --- | --- | --- |
-| `SNCF_API_KEY` | Oui pour les trains | Clé API SNCF/Navitia utilisée par les endpoints TER. |
-
-Sans cette variable, les données TER SNCF/Navitia ne peuvent pas être récupérées.
-
-## 📦 Installation locale
-
-### Prérequis
-
-- Node.js `>= 24.15.0` ;
-- npm ;
-- une clé API SNCF / Navitia pour les trains.
-
-### Configuration trains
-
-Créer `.env.local` à la racine du dépôt :
-
-```bash
-SNCF_API_KEY=votre_cle_api_sncf
-```
-
-## 🔧 Scripts utiles
-
-| Commande | Description |
-| :--- | :--- |
-| `npm run dev` | Lance le serveur de développement Next.js. |
-| `npm run build` | Compile l'application pour la production. |
-| `npm run start` | Lance le serveur Next.js après un build. |
-| `npm run lint` | Exécute ESLint. |
-| `npm run test` | Exécute la suite Jest (tests unitaires). |
-| `npm run test:e2e` | Exécute les tests Playwright (End-to-End). |
-| `npm run gtfs:update` | Met à jour les données GTFS et régénère tous les fichiers JSON statiques. |
-
-## 🧪 Tests et validation
-
-Validation complète recommandée avant publication :
-
-```bash
-npm run lint
-npm run test -- --runInBand
-npm run test:e2e
-npm run build
-```
-
-Les tests couvrent notamment :
-
-- les helpers ligne E1 et la correspondance fuzzy des trip IDs ;
-- les règles de filtrage/remplacement T2C ;
-- la fraîcheur SNCF/Navitia ;
-- les helpers de date, formatage, API client et interpolation véhicule.
-
-## 📡 Sources de données
-
-| Transport | Type | Source |
-| --- | --- | --- |
-| Bus T2C | GTFS-RT temps réel | transport.data.gouv.fr |
-| Bus T2C | GTFS statique | Clermont Métropole Open Data |
-| Train TER | API SNCF / Navitia | api.sncf.com |
-
-## 🔄 Mise à jour des données T2C
-
-Les données générées sont principalement :
-
-- `gtfs_data/` : archive GTFS T2C extraite ;
-- `src/data/static_schedule.json` : horaires statiques consommés par l'app ;
-- `src/data/gtfs_config.json` : configuration arrêts/routes ;
-- `public/data/lineE1_data.json` : arrêts officiels et tracés de la ligne E1 pour la carte ;
-- `public/data/e1_stop_times.json` : trips et stop times E1 pour les détails de trajet.
-
-Les scripts de mise à jour ont été migrés de Python vers TypeScript :
-
-```bash
-# Met à jour les données GTFS et génère tous les fichiers statiques JSON
-npm run gtfs:update
-```
-
-Le workflow GitHub Actions `Update T2C GTFS Schedule` exécute automatiquement cette chaîne, valide les JSON générés, lance lint/tests/build, puis commit uniquement si les données changent.
-
-## ✅ CI et qualité
-
-Le workflow `CI` s'exécute sur `main` et sur les pull requests :
-
-1. installation via `npm ci` ;
-2. lint ESLint ;
-3. tests Jest en série ;
-4. build Next.js.
-
-## 🚢 Déploiement
-
-Le projet est compatible Coolify via `nixpacks.toml`.
-
-Versions alignées :
-
-- Node.js `24.15.0` en local, CI et Nixpacks ;
-- Next.js `16.2.x` et React `19.2.x`.
-
-Variables d'environnement requises en production :
-
-```bash
-SNCF_API_KEY=votre_cle_api_sncf
-```
-
-## 🩺 Dépannage
-
-### Les trains ne s'affichent pas
-
-Vérifier que `SNCF_API_KEY` est définie dans `.env.local` en développement et dans l'environnement de production.
-
-### La carte E1 affiche des arrêts ou tracés obsolètes
-
-Régénérer les données GTFS, puis vérifier `public/data/lineE1_data.json` et `public/data/e1_stop_times.json`.
-
-### Le build échoue après une mise à jour de dépendances
-
-Relancer une installation propre puis les validations :
-
-```bash
-npm install
-npm run lint
-npm run test -- --runInBand
-npm run build
-```
-
-## 📱 Installation mobile
-
-### iPhone / iPad
-
-1. Ouvrir [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr) dans Safari.
-2. Appuyer sur **Partager**.
-3. Choisir **Sur l'écran d'accueil**.
-4. Valider avec **Ajouter**.
-
-### Android
-
-1. Ouvrir [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr) dans Chrome.
-2. Ouvrir le menu `⋮`.
-3. Choiser **Installer l'application** ou **Ajouter à l'écran d'accueil**.
-4. Confirmer.
-
-## 🔒 Sécurité
-
-Gerzat Live consomme des données publiques (GTFS-RT T2C, API SNCF/Navitia) et n'expose aucune donnée personnelle sensible. Pour signaler une faille de sécurité en privé, consultez [SECURITY.md](SECURITY.md).
-
-## 📄 Licence
-
-Projet personnel open source sous licence [MIT](LICENSE).
-
-## 📋 Recommandations GitHub
-
-> Note mainteneur — appliquées via `gh repo edit` :
-
-- **Description suggérée :** `🚌 Bus T2C & trains TER en temps réel à Gerzat — départs, arrivées, carte live et favoris (Next.js + open data).`
-- **Topics suggérés :** `nextjs`, `typescript`, `react`, `pwa`, `bus`, `train`, `realtime`, `transport`, `gtfs`, `gtfs-rt`, `sncf`, `navitia`, `t2c`, `open-data`, `auvergne-rhone-alpes`, `gerzat`, `leaflet`, `coolify`
 
 ---
 
-<div align="center">
+## ⚡ Démarrage Rapide
 
-**Version 3.7.3** — Fait avec ❤️ à Gerzat.
+### 1. Cloner le Dépôt
+```bash
+git clone https://github.com/nickdesi/BusTrainGerzat.git
+cd BusTrainGerzat
+```
 
-</div>
+### 2. Installer les Dépendances
+```bash
+npm install
+```
+
+### 3. Configurer l'Environnement
+Créez un fichier `.env.local` à la racine :
+```env
+# Clé API SNCF / Navitia (pour le flux des trains TER en gare de Gerzat)
+SNCF_API_KEY=votre_cle_api_sncf
+```
+
+### 4. Lancer en Mode Développement
+```bash
+npm run dev
+```
+Rendez-vous sur `http://localhost:3000`.
+
+---
+
+## 🔄 Mise à Jour GTFS Automatisée
+
+Le dépôt intègre une chaîne TypeScript complète pour télécharger et compiler les données transport :
+
+```bash
+npm run gtfs:update
+```
+
+Cette commande exécute séquentiellement :
+1. `scripts/gtfs/check_gtfs_update.ts` : Télécharge le GTFS SMTC avec timeout et retry exponentiel.
+2. `scripts/gtfs/extract_lineE1_data.ts` : Extrait les tracés géographiques et arrêts de la ligne E1.
+3. `scripts/gtfs/generate_e1_stop_times.ts` : Compile les horaires et trips détaillés.
+4. `scripts/gtfs/generate_static_json.ts` : Découvre dynamiquement les calendriers et génère le fichier `static_schedule.json` (jusqu'à 90 jours).
+
+### Workflow GitHub Actions Anti-Inactivité
+Le workflow [`.github/workflows/update-gtfs.yml`](.github/workflows/update-gtfs.yml) tourne automatiquement deux fois par jour (`17 4,16 * * *`) et intègre un mécanisme de **Keepalive** pour empêcher la mise en sommeil des cron jobs GitHub Actions.
+
+---
+
+## 🧪 Qualité & CI
+
+Chaque contribution est soumise à une **routine stricte de validation (Quality Gate)** :
+
+```bash
+# Vérification du linter (0 warning exigé)
+npm run lint
+
+# Suite de tests unitaires & intégration (72 tests)
+npm test
+
+# Build de production
+npm run build
+```
+
+---
+
+## 📱 Installation sur Smartphone (PWA)
+
+* **iOS (Safari)** : Ouvrir [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr) > Bouton *Partager* > **« Sur l'écran d'accueil »**.
+* **Android (Chrome)** : Ouvrir le site > Menu `⋮` > **« Installer l'application »**.
+
+---
+
+## 📄 Licence & Auteur
+
+Projet open-source sous licence [MIT](LICENSE).
+Créé et maintenu avec passion par **[Nicolas De Simone](https://github.com/nickdesi)** à Gerzat (63360).
