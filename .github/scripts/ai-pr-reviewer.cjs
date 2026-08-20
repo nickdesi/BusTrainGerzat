@@ -107,6 +107,7 @@ function getAddedLines(patch) {
   let currentNewLineNum = 0;
 
   for (const line of lines) {
+    // eslint-disable-next-line security/detect-unsafe-regex
     const chunkHeader = line.match(/^@@ -\d+(?:,\d+)? \+(\d+)(?:,\d+)? @@/);
     if (chunkHeader) {
       currentNewLineNum = parseInt(chunkHeader[1], 10);

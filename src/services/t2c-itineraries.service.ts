@@ -110,8 +110,9 @@ export function mapT2CItinerariesToBusUpdates(itineraries: T2CItinerary[], dateT
     for (const itinerary of itineraries) {
         if (!Array.isArray(itinerary.steps)) continue;
 
-        for (let stepIndex = 0; stepIndex < itinerary.steps.length; stepIndex++) {
-            const step = itinerary.steps[stepIndex];
+        let stepIndex = 0;
+        for (const step of itinerary.steps) {
+            const currentStepIndex = stepIndex++;
             if (!isE1TransportStep(step)) continue;
 
             const departure = parseClockToUnix(dateToken, step.departure_time || itinerary.departure_time);
@@ -124,7 +125,7 @@ export function mapT2CItinerariesToBusUpdates(itineraries: T2CItinerary[], dateT
             const origin = step.departure_stop_name || itinerary.departure_place_name || 'GERZAT Champfleuri';
 
             updates.push({
-                tripId: `t2c-itinerary-${itinerary.id}-${stepIndex}`,
+                tripId: `t2c-itinerary-${itinerary.id}-${currentStepIndex}`,
                 arrival,
                 departure,
                 delay: 0,

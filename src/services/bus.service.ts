@@ -152,6 +152,7 @@ function hasArrivalWithinWindow(arr: number[], target: number, window: number): 
         else hi = mid;
     }
     // Check the element at the insertion point and the one before it
+    // eslint-disable-next-line security/detect-object-injection
     if (lo < arr.length && Math.abs(arr[lo] - target) < window) return true;
     if (lo > 0 && Math.abs(arr[lo - 1] - target) < window) return true;
     return false;
