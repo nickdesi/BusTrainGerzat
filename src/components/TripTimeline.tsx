@@ -167,11 +167,14 @@ const TripTimeline = memo(function TripTimeline({
                                                         className="absolute left-1/2 -translate-x-1/2 z-20 transition-all duration-1000 ease-linear"
                                                         style={{ top: `calc(${activeProgress * 100}% - 14px)` }}
                                                     >
-                                                        <div
-                                                            className="flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-gray-950 shadow-[0_0_20px_rgba(52,211,153,0.8)] ring-4 ring-gray-950"
-                                                            style={{ border: '2px solid #6ee7b7' }}
-                                                        >
-                                                            <Bus className="h-3.5 w-3.5 text-gray-950" />
+                                                        <div className="relative">
+                                                            <span className="absolute -inset-1.5 rounded-full bg-emerald-400/40 blur-sm animate-ping pointer-events-none" />
+                                                            <div
+                                                                className="relative flex h-7 w-7 items-center justify-center rounded-full bg-emerald-400 text-gray-950 shadow-[0_0_20px_rgba(52,211,153,0.8)] ring-4 ring-gray-950"
+                                                                style={{ border: '2px solid #6ee7b7' }}
+                                                            >
+                                                                <Bus className="h-3.5 w-3.5 text-gray-950" />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 )}

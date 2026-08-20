@@ -167,18 +167,39 @@ summary {
 }
 
 /* Split-flap display character styling */
+.split-flap-container {
+  perspective: 700px;
+  perspective-origin: center center;
+}
+
 .split-flap-char {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, #202024 0%, #0c0c0e 50%, #18181b 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 5px;
+  background: linear-gradient(180deg, #1e222b 0%, #0c0e14 49.5%, #050609 50.5%, #151821 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 6px;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.07),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.6),
-    0 2px 6px rgba(0, 0, 0, 0.55);
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.8),
+    0 3px 8px rgba(0, 0, 0, 0.6),
+    0 0 1px rgba(255, 255, 255, 0.05);
   position: relative;
+  transform-style: preserve-3d;
+  font-feature-settings: "tnum" 1;
+}
+
+.split-flap-char::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 100%);
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  pointer-events: none;
 }
 
 .split-flap-char::after {
@@ -188,32 +209,40 @@ summary {
   right: 0;
   top: 50%;
   height: 1px;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.95);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  pointer-events: none;
 }
 
 /* Real split-flap flip on character change (keyed remount triggers it) */
 @keyframes flapDown {
   0% {
-    transform: rotateX(-58deg);
-    opacity: 0.45;
-    filter: brightness(1.35);
+    transform: rotateX(-75deg);
+    opacity: 0.3;
+    filter: brightness(1.5) contrast(1.1);
   }
 
-  60% {
-    transform: rotateX(8deg);
+  50% {
+    transform: rotateX(12deg);
+    opacity: 0.9;
+  }
+
+  75% {
+    transform: rotateX(-4deg);
   }
 
   100% {
     transform: rotateX(0);
     opacity: 1;
-    filter: brightness(1);
+    filter: brightness(1) contrast(1);
   }
 }
 
 .split-flap-char {
-  animation: flapDown 0.34s var(--ease-out-expo);
+  animation: flapDown 0.38s cubic-bezier(0.2, 0.8, 0.25, 1);
   transform-origin: center top;
   backface-visibility: hidden;
+  will-change: transform, opacity;
 }
 
 /* Flip animation for new entries */
@@ -400,11 +429,6 @@ summary {
 .bus-marker {
   background: none !important;
   border: none !important;
-}
-
-/* Keep Leaflet marker transforms immediate during pan/zoom. */
-.leaflet-marker-icon.bus-marker {
-  transition: none !important;
 }
 
 /* Smooth position transition for bus markers */

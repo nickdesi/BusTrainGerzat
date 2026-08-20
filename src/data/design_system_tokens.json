@@ -1,0 +1,29 @@
+{
+  "name": "Gerzat Transit Hub",
+  "version": "1.0.0",
+  "colors": {
+    "background": "#040711",
+    "surface": "#070b14",
+    "surface-dim": "#05080f",
+    "surface-elevated": "#0f1629",
+    "primary": "#f59e0b",
+    "primary-glow": "rgba(245, 158, 11, 0.35)",
+    "secondary": "#06b6d4",
+    "secondary-glow": "rgba(6, 182, 212, 0.35)",
+    "tertiary": "#10b981",
+    "tertiary-glow": "rgba(16, 185, 129, 0.35)",
+    "outline": "rgba(255, 255, 255, 0.12)",
+    "text-main": "#f8fafc",
+    "text-muted": "#94a3b8"
+  },
+  "typography": {
+    "display": "Space Grotesk, sans-serif",
+    "body": "Inter, sans-serif",
+    "mono": "JetBrains Mono, monospace"
+  },
+  "borderRadius": {
+    "card": "1.25rem",
+    "pill": "9999px",
+    "tile": "0.375rem"
+  }
+}
