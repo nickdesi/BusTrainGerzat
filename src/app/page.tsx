@@ -143,7 +143,7 @@ export default function LandingPage() {
                     <Link href="#fonctionnalites" className="hover:text-white">Fonctionnalités</Link>
                     <Link href="#guide-transports" className="hover:text-white">Guide Mobilité</Link>
                     <Link href="#apercu" className="hover:text-white">Aperçu</Link>
-                    <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" className="inline-flex items-center gap-1 hover:text-white">
+                    <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 hover:text-white">
                         Source <ExternalLink className="h-3.5 w-3.5" />
                     </Link>
                 </nav>
@@ -278,7 +278,7 @@ export default function LandingPage() {
                             <Link href="/app" className="inline-flex items-center justify-center gap-2 rounded-2xl bg-white px-6 py-4 font-black text-black hover:bg-yellow-300">
                                 Lancer l’app <ArrowRight className="h-4 w-4" />
                             </Link>
-                            <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 px-6 py-4 font-black text-white hover:bg-white/10">
+                            <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center gap-2 rounded-2xl border border-white/10 px-6 py-4 font-black text-white hover:bg-white/10">
                                 <ExternalLink className="h-4 w-4" /> GitHub
                             </Link>
                         </div>
@@ -290,7 +290,7 @@ export default function LandingPage() {
                 <p>© 2026 Nicolas De Simone · GerzatLive</p>
                 <div className="flex gap-5">
                     <Link href="mailto:contact@desimone.fr" className="hover:text-white">Contact</Link>
-                    <Link href="https://github.com/nickdesi" className="hover:text-white">GitHub</Link>
+                    <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" rel="noopener noreferrer" className="hover:text-white">GitHub</Link>
                 </div>
             </footer>
         </main>
