@@ -141,6 +141,7 @@ export default function LandingPage() {
 
                 <nav className="hidden items-center gap-6 text-sm font-semibold text-zinc-400 md:flex" aria-label="Navigation landing">
                     <Link href="#fonctionnalites" className="hover:text-white">Fonctionnalités</Link>
+                    <Link href="#guide-transports" className="hover:text-white">Guide Mobilité</Link>
                     <Link href="#apercu" className="hover:text-white">Aperçu</Link>
                     <Link href="https://github.com/nickdesi/BusTrainGerzat" target="_blank" className="inline-flex items-center gap-1 hover:text-white">
                         Source <ExternalLink className="h-3.5 w-3.5" />
@@ -209,6 +210,59 @@ export default function LandingPage() {
                     {features.map((feature) => (
                         <FeatureCard key={feature.title} {...feature} />
                     ))}
+                </div>
+            </section>
+
+            <section id="guide-transports" className="relative z-10 mx-auto max-w-7xl px-5 pb-20 md:px-8 md:pb-28">
+                <div className="mb-10 text-center md:text-left">
+                    <p className="text-sm font-black uppercase tracking-[0.28em] text-yellow-300">Guide Pratique & Mobilité</p>
+                    <h2 className="mt-3 font-display text-3xl font-black tracking-tight text-white md:text-5xl">
+                        Tout savoir sur les transports à Gerzat.
+                    </h2>
+                    <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
+                        Informations pratiques sur la ligne express de bus T2C et les liaisons TER SNCF au départ et à l’arrivée de Gerzat.
+                    </p>
+                </div>
+
+                <div className="grid gap-6 md:grid-cols-3">
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl">
+                        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-yellow-400/20 text-yellow-300">
+                            <BusFront className="h-5 w-5" />
+                        </div>
+                        <h3 className="text-lg font-bold text-white">Ligne T2C E1 Express</h3>
+                        <p className="mt-2 text-xs leading-5 text-zinc-400">
+                            La ligne E1 relie directement Gerzat (arrêts <strong>Champfleuri</strong> et <strong>Patural</strong>) au sud de la métropole jusqu’à Aubière et Romagnat. Suivi en temps réel GPS et horaires aux arrêts.
+                        </p>
+                        <Link href="/app" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-yellow-300 hover:underline">
+                            Horaires Ligne E1 <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                    </div>
+
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl">
+                        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-blue-500/20 text-blue-300">
+                            <TrainFront className="h-5 w-5" />
+                        </div>
+                        <h3 className="text-lg font-bold text-white">Gare SNCF de Gerzat</h3>
+                        <p className="mt-2 text-xs leading-5 text-zinc-400">
+                            Trains TER directs vers <strong>Clermont-Ferrand</strong> (en moins de 7 minutes), Riom, Vichy et Moulins. Horaires de passage à quai actualisés en direct.
+                        </p>
+                        <Link href="/app/arrivees" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-blue-300 hover:underline">
+                            Arrivées des trains <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                    </div>
+
+                    <div className="rounded-3xl border border-white/10 bg-white/[0.035] p-6 backdrop-blur-xl">
+                        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/20 text-emerald-300">
+                            <MapPinned className="h-5 w-5" />
+                        </div>
+                        <h3 className="text-lg font-bold text-white">Carte Multimodale Live</h3>
+                        <p className="mt-2 text-xs leading-5 text-zinc-400">
+                            Visualisez la position géographique des bus en circulation, les correspondances et le tracé complet de vos lignes sur fond cartographique haute lisibilité.
+                        </p>
+                        <Link href="/app/carte" className="mt-4 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-300 hover:underline">
+                            Voir la carte <ArrowRight className="h-3.5 w-3.5" />
+                        </Link>
+                    </div>
                 </div>
             </section>
 

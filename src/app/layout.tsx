@@ -5,6 +5,8 @@ import QueryProvider from "@/components/QueryProvider";
 import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 
 
+import StructuredData from "@/components/StructuredData";
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -28,24 +30,46 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://gerzatlive.desimone.fr'),
-  title: "🚉 Gerzat Live - Bus T2C & TER SNCF",
-  description: "Suivez en temps réel les horaires des bus T2C (ligne E1) et des trains TER à la gare de Gerzat. Hub multimodal complet pour vos déplacements.",
+  title: {
+    default: "Gerzat Live • Horaires Temps Réel Bus T2C & Trains TER",
+    template: "%s • Gerzat Live",
+  },
+  description: "Consultez en temps réel les horaires des bus T2C (ligne E1) et des trains TER SNCF en gare de Gerzat. Hub multimodal, carte live des véhicules et départs en direct.",
   applicationName: "Gerzat Live",
-  authors: [{ name: "Nicolas De Simone" }],
+  authors: [{ name: "Nicolas De Simone", url: "https://github.com/nickdesi" }],
+  creator: "Nicolas De Simone",
+  publisher: "Gerzat Live",
+  category: "transportation",
+  formatDetection: {
+    telephone: false,
+  },
   keywords: [
-    "bus", "train", "Gerzat", "horaires", "temps réel", "T2C", "SNCF", "TER",
-    "ligne E1", "Champfleuri", "Patural", "transports Clermont-Ferrand", "gare Gerzat"
+    "horaires bus Gerzat", "bus T2C ligne E1", "train TER Gerzat", "gare de Gerzat",
+    "temps réel T2C", "SNCF Gerzat", "Champfleuri", "Patural", "transports Clermont-Ferrand",
+    "Clermont Auvergne Métropole", "mobilité Gerzat", "prochains départs bus train"
   ],
   alternates: {
     canonical: "https://gerzatlive.desimone.fr",
+    languages: {
+      "fr-FR": "https://gerzatlive.desimone.fr",
+    },
   },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   manifest: "/manifest.json",
   icons: {
-    icon: "/icon-512.png",
+    icon: [
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
     apple: "/apple-touch-icon.png",
   },
   appleWebApp: {
@@ -60,23 +84,29 @@ export const metadata: Metadata = {
     type: "website",
     locale: "fr_FR",
     url: "https://gerzatlive.desimone.fr",
-    title: "🚉 Gerzat Live - Horaires Temps Réel Bus & Trains",
-    description: "Le hub multimodal indispensable pour les habitants de Gerzat : bus T2C (Ligne E1 Express) et trains TER SNCF en direct.",
+    title: "Gerzat Live • Horaires Temps Réel Bus T2C & Trains TER",
+    description: "Le hub multimodal en direct pour Gerzat : bus T2C (Ligne E1) et trains TER SNCF. Départs, arrivées et carte live.",
     siteName: "Gerzat Live",
     images: [
       {
         url: "/icon-512.png",
         width: 512,
         height: 512,
-        alt: "Gerzat Live App Icon",
+        alt: "Gerzat Live - Hub multimodal bus et trains en temps réel",
       },
     ],
   },
   twitter: {
-    card: "summary",
-    title: "🚉 Gerzat Live - Horaires Temps Réel Bus & Trains",
-    description: "Suivez vos bus T2C et trains TER à Gerzat en temps réel.",
+    card: "summary_large_image",
+    title: "Gerzat Live • Horaires Temps Réel Bus & Trains",
+    description: "Suivez vos bus T2C (Ligne E1) et trains TER SNCF à Gerzat en temps réel.",
     images: ["/icon-512.png"],
+  },
+  other: {
+    "geo.region": "FR-63",
+    "geo.placename": "Gerzat, Puy-de-Dôme, France",
+    "geo.position": "45.8236;3.1444",
+    "ICBM": "45.8236, 3.1444",
   },
 };
 
@@ -97,21 +127,7 @@ export default function RootLayout({
         >
           Aller au contenu principal
         </a>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "WebApplication",
-              name: "GerzatLive",
-              url: "https://gerzatlive.desimone.fr/",
-              applicationCategory: "Travel",
-              operatingSystem: "All",
-              description:
-                "Horaires bus T2C et trains SNCF en temps réel à Gerzat.",
-            }),
-          }}
-        />
+        <StructuredData />
         <QueryProvider>
           <main id="main-content">
             {children}
@@ -119,6 +135,6 @@ export default function RootLayout({
         </QueryProvider>
         <ServiceWorkerRegistration />
       </body>
-    </html >
+    </html>
   );
 }

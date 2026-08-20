@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://gerzatlive.desimone.fr/sitemap.xml
