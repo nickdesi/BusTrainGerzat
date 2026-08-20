@@ -1,56 +1,44 @@
 import fs from 'fs';
 import path from 'path';
-import https from 'https';
 import { parse } from 'csv-parse/sync';
 import AdmZip from 'adm-zip';
 
 const GTFS_URLS = [
   "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/alternative_exports/gtfs",
-  "https://opendata.clermontmetropole.eu/api/v2/catalog/datasets/gtfs-smtc/attachments/gtfs_t2c_plus_scolaire_zip",
 ];
 
 const TARGET_DIR = 'gtfs_data_new';
 const FINAL_DIR = 'gtfs_data';
 
-async function headRequest(url: string): Promise<boolean> {
-  return new Promise((resolve) => {
-    https.request(url, { method: 'HEAD' }, (res) => {
-      resolve(res.statusCode === 200 || res.statusCode === 302 || res.statusCode === 301);
-    }).on('error', () => resolve(false)).end();
-  });
-}
+async function fetchBinaryWithRetry(url: string, retries = 3, timeoutMs = 30000): Promise<ArrayBuffer> {
+  let lastError: Error | null = null;
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+      const res = await fetch(url, {
+        signal: controller.signal,
+        headers: { 'User-Agent': 'BusTrainGerzat-GTFS-Updater/3.8' }
+      });
+      clearTimeout(timeoutId);
 
-async function getGtfsUrl(): Promise<string | null> {
-  for (const url of GTFS_URLS) {
-    console.log(`🔍 Trying ${url}...`);
-    const isOk = await headRequest(url);
-    if (isOk) {
-      console.log(`✅ Found working URL: ${url}`);
-      return url;
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status} ${res.statusText}`);
+      }
+      return await res.arrayBuffer();
+    } catch (err) {
+      lastError = err as Error;
+      console.warn(`[check_gtfs_update] Attempt ${attempt}/${retries} failed: ${(err as Error).message}`);
+      if (attempt < retries) {
+        await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)));
+      }
     }
   }
-  return null;
-}
-
-async function downloadFile(url: string, dest: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const file = fs.createWriteStream(dest);
-    https.get(url, (response) => {
-      if (response.statusCode === 301 || response.statusCode === 302) {
-        return downloadFile(response.headers.location!, dest).then(resolve).catch(reject);
-      }
-      response.pipe(file);
-      file.on('finish', () => {
-        file.close();
-        resolve();
-      });
-    }).on('error', (err) => {
-      fs.unlink(dest, () => reject(err));
-    });
-  });
+  throw lastError || new Error(`Failed to fetch ${url}`);
 }
 
 function readCsv(filePath: string): any[] {
+  if (!fs.existsSync(filePath)) return [];
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   // strip BOM if present
   const content = fileContent.charCodeAt(0) === 0xFEFF ? fileContent.slice(1) : fileContent;
@@ -58,15 +46,21 @@ function readCsv(filePath: string): any[] {
 }
 
 async function downloadAndCheck(): Promise<boolean> {
-  const url = await getGtfsUrl();
-  if (!url) return false;
+  let buffer: ArrayBuffer | null = null;
+  let successUrl: string | null = null;
 
-  console.log(`⬇️ Downloading GTFS from ${url}...`);
-  const zipDest = 'gtfs.zip';
-  try {
-    await downloadFile(url, zipDest);
-  } catch (e) {
-    console.error(`❌ Download failed: ${e}`);
+  for (const url of GTFS_URLS) {
+    try {
+      console.log(`⬇️ Downloading GTFS from ${url}...`);
+      buffer = await fetchBinaryWithRetry(url);
+      successUrl = url;
+      break;
+    } catch (e) {
+      console.error(`❌ Download failed for ${url}: ${(e as Error).message}`);
+    }
+  }
+
+  if (!buffer || !successUrl) {
     return false;
   }
 
@@ -75,9 +69,8 @@ async function downloadAndCheck(): Promise<boolean> {
   }
   fs.mkdirSync(TARGET_DIR, { recursive: true });
 
-  const zip = new AdmZip(zipDest);
+  const zip = new AdmZip(Buffer.from(buffer));
   zip.extractAllTo(TARGET_DIR, true);
-  fs.unlinkSync(zipDest);
 
   console.log("📂 Inspecting GTFS data...");
 
@@ -98,7 +91,7 @@ async function downloadAndCheck(): Promise<boolean> {
   let stopId = null;
   const stops = readCsv(path.join(TARGET_DIR, 'stops.txt'));
   for (const row of stops) {
-    if (row.stop_name.includes("GERZAT Champfleuri")) {
+    if (row.stop_name && row.stop_name.includes("GERZAT Champfleuri")) {
       stopId = row.stop_id;
       break;
     }
@@ -114,8 +107,14 @@ async function downloadAndCheck(): Promise<boolean> {
   try {
     const calendar = readCsv(path.join(TARGET_DIR, 'calendar.txt'));
     for (const row of calendar) {
-      if (row.end_date > maxDate) {
+      if (row.end_date && row.end_date > maxDate) {
         maxDate = row.end_date;
+      }
+    }
+    const calendarDates = readCsv(path.join(TARGET_DIR, 'calendar_dates.txt'));
+    for (const row of calendarDates) {
+      if (row.date && row.date > maxDate) {
+        maxDate = row.date;
       }
     }
 
@@ -153,7 +152,7 @@ async function main() {
     process.exit(0);
   } else {
     if (fs.existsSync(TARGET_DIR) && fs.existsSync(path.join(TARGET_DIR, 'routes.txt'))) {
-      console.log("⚠️ Sentinel check failed/skipped, but applying update as requested by user.");
+      console.log("⚠️ Sentinel check failed/skipped, but applying update as fallback.");
       applyUpdate();
       process.exit(0);
     }
@@ -161,4 +160,4 @@ async function main() {
   }
 }
 
-main();
+void main();

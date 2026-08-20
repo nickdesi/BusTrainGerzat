@@ -21,7 +21,34 @@ function readCsv(fileName: string): any[] {
 
 function main() {
   const now = new Date();
-  const dates = Array.from({ length: 15 }).map((_, i) => format(addDays(now, i), 'yyyyMMdd'));
+  const todayStr = format(now, 'yyyyMMdd');
+
+  // Discover maximum date available across calendar.txt and calendar_dates.txt
+  let maxCalendarDate = todayStr;
+  for (const row of readCsv('calendar.txt')) {
+    if (row.end_date && row.end_date > maxCalendarDate) {
+      maxCalendarDate = row.end_date;
+    }
+  }
+  for (const row of readCsv('calendar_dates.txt')) {
+    if (row.date && row.date > maxCalendarDate) {
+      maxCalendarDate = row.date;
+    }
+  }
+
+  // Generate all dates from today up to maxCalendarDate (or at least 30 days ahead, max 90 days)
+  const maxDays = 90;
+  const dates: string[] = [];
+  for (let i = 0; i < maxDays; i++) {
+    const dStr = format(addDays(now, i), 'yyyyMMdd');
+    if (dStr <= maxCalendarDate || i < 30) {
+      dates.push(dStr);
+    } else {
+      break;
+    }
+  }
+
+  console.log(`📅 Generating schedule for ${dates.length} days (${dates[0]} -> ${dates[dates.length - 1]})`);
 
   const targetRouteIds = new Set<string>();
   for (const row of readCsv('routes.txt')) {

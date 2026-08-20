@@ -241,3 +241,22 @@ export function isT2CNoServiceDay(date = new Date()): boolean {
 
     return month === '05' && day === '01';
 }
+
+/**
+ * Check if the current Paris time falls within T2C active operating hours (approx 05:30 to 21:30).
+ * Outside operating hours, GTFS-RT feed updates are normally idle and lack new timestamps.
+ */
+export function isT2COperatingHours(date = new Date()): boolean {
+    const parts = PARIS_LOCAL_DATETIME_FORMATTER.formatToParts(date);
+    let hourStr = '0', minStr = '0';
+    for (const p of parts) {
+        if (p.type === 'hour') hourStr = p.value;
+        else if (p.type === 'minute') minStr = p.value;
+    }
+    const hour = Number.parseInt(hourStr, 10);
+    const minute = Number.parseInt(minStr, 10);
+    const totalMinutes = hour * 60 + minute;
+
+    // 05:30 is 330 minutes, 21:30 is 1290 minutes
+    return totalMinutes >= 330 && totalMinutes <= 1290;
+}

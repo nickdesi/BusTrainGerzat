@@ -93,4 +93,12 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git commit -m "chore: update T2C GTFS data [$(date +'%Y-%m-%d')]"
-          git push
+          for i in 1 2 3; do
+            git pull --rebase origin main && git push && break || sleep 5
+          done
+
+      - name: Prevent Workflow Disabling (Keepalive)
+        uses: gautamkrishnar/keepalive-workflow@v2
+        with:
+          committer_username: 'github-actions[bot]'
+          committer_email: 'github-actions[bot]@users.noreply.github.com'

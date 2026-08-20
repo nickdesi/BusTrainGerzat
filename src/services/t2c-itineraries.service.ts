@@ -167,12 +167,44 @@ export async function getT2CItinerariesRealtime(): Promise<{ updates: BusUpdate[
             return { updates: [], timestamp, rtAvailable: false };
         }
 
-        const updates = mapT2CItinerariesToBusUpdates(payload as T2CItinerary[], getParisDateToken())
+        let updates = mapT2CItinerariesToBusUpdates(payload as T2CItinerary[], getParisDateToken())
             .sort((a, b) => a.arrival - b.arrival)
             .slice(0, 20);
 
+        // If no departures for the rest of today (e.g. late evening), query tomorrow morning
+        if (updates.length === 0) {
+            const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000);
+            const { year, month, day } = getParisDateParts(tomorrow);
+            const morningDepartureTime = `${year}-${month}-${day} 05:30`;
+            const morningDateToken = `${year}${month}${day}`;
+
+            const morningQuery = new URLSearchParams({
+                departure_xy: GERZAT_CHAMPFLEURI_XY,
+                arrival_xy: ESPLANADE_XY,
+                departure_time: morningDepartureTime,
+                max_matches: MAX_MATCHES,
+            });
+
+            try {
+                const morningRes = await fetch(`${T2C_ITINERARIES_URL}?${morningQuery.toString()}`, {
+                    cache: 'no-store',
+                    headers: { Accept: 'application/json' },
+                });
+                if (morningRes.ok) {
+                    const morningPayload: unknown = await morningRes.json();
+                    if (Array.isArray(morningPayload)) {
+                        updates = mapT2CItinerariesToBusUpdates(morningPayload as T2CItinerary[], morningDateToken)
+                            .sort((a, b) => a.arrival - b.arrival)
+                            .slice(0, 20);
+                    }
+                }
+            } catch (e) {
+                apiLogger.warn('T2C itineraries morning fallback failed', { error: (e as Error).message });
+            }
+        }
+
         return { updates, timestamp, rtAvailable: true };
-    } catch (error) {
+    } catch {
         apiLogger.warn('T2C itineraries fallback error', undefined);
         return { updates: [], timestamp, rtAvailable: false };
     }

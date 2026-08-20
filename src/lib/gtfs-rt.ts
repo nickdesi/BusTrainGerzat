@@ -53,7 +53,7 @@ enum ScheduleRelationship {
 // --- Fetching Functions ---
 
 import { fetchBinaryWithRetry } from './api-client';
-import { getNowUnix } from '@/utils/date';
+import { getNowUnix, isT2COperatingHours } from '@/utils/date';
 
 /**
  * Result of a GTFS-RT Trip Updates fetch, including availability status.
@@ -98,9 +98,17 @@ export async function fetchTripUpdatesWithStatus(): Promise<TripUpdatesResult> {
         const now = getNowUnix();
         if (feed.header?.timestamp) {
             const age = now - Number(feed.header.timestamp);
-            if (age > 300) { // 5 minutes
-                gtfsLogger.warn('Stale feed ignored', { age, maxAge: 300 });
+            const inService = isT2COperatingHours();
+
+            // During daytime service hours, tolerate up to 10 min (600s) latency.
+            // Outside service hours (night time), CAD export is idle so older feed is expected.
+            if (inService && age > 600) {
+                gtfsLogger.warn('Stale feed ignored during operating hours', { age, maxAge: 600 });
                 return { updates, rtAvailable: false };
+            } else if (!inService && age > 86400) {
+                // Ignore truly obsolete feeds older than 24 hours even at night
+                gtfsLogger.warn('Stale feed ignored (>24h)', { age, maxAge: 86400 });
+                return { updates, rtAvailable: true };
             }
         }
 
