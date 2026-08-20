@@ -51,7 +51,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const { data: lineData, isLoading: lineLoading, error: lineError } = useLineE1Data();
     const { data: vehicleData, isLoading: vehiclesLoading, isFetching } = useVehiclePositions();
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
-    const [isDarkMode, setIsDarkMode] = useState(false); // Default to OSM classic (light)
+    const [isDarkMode, setIsDarkMode] = useState(true); // Default to CartoDB Dark Matter (Dark Mode)
     const [isLegendOpen, setIsLegendOpen] = useState(false); // Mobile legend toggle
     const [routeDirection, setRouteDirection] = useState<'all' | '0' | '1'>('all');
 

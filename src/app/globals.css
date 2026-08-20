@@ -242,6 +242,69 @@ summary {
   backface-visibility: hidden;
 }
 
+.split-flap-char.colon,
+.split-flap-char.space {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.split-flap-char.colon::before,
+.split-flap-char.colon::after,
+.split-flap-char.space::before,
+.split-flap-char.space::after {
+  display: none !important;
+}
+
+.split-flap-char.colon {
+  width: 8px !important;
+  margin: 0 1px !important;
+  opacity: 0.85;
+}
+
+.split-flap-char.space {
+  width: 6px !important;
+}
+
+/* Sizing tokens for SplitFlap */
+.split-flap-xs .split-flap-char {
+  width: 14px;
+  height: 20px;
+  font-size: 11px;
+  margin: 0 1px;
+}
+
+.split-flap-sm .split-flap-char {
+  width: 16px;
+  height: 24px;
+  font-size: 13px;
+  margin: 0 1px;
+}
+
+.split-flap-lg .split-flap-char {
+  width: 20px;
+  height: 30px;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0 1.5px;
+}
+
+.split-flap-xl .split-flap-char {
+  width: 24px;
+  height: 36px;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 2px;
+}
+
+.split-flap-2xl .split-flap-char {
+  width: 32px;
+  height: 48px;
+  font-size: 28px;
+  font-weight: 800;
+  margin: 0 3px;
+}
+
 /* Flip animation for new entries */
 @keyframes flipIn {
   0% {

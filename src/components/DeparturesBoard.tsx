@@ -151,14 +151,10 @@ const DepartureBoardRow = memo(function DepartureBoardRow({
             {/* Destination / Provenance */}
             <td className="px-6 py-4">
                 <div className="flex items-center gap-3">
-                    <ArrowRight className="w-4 h-4 text-gray-500 flex-shrink-0" />
-                    <div className="overflow-hidden">
-                        <SplitFlapDisplay
-                            text={boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination}
-                            size="xs"
-                            color="text-gray-200"
-                        />
-                    </div>
+                    <ArrowRight className="w-4 h-4 text-yellow-400/70 flex-shrink-0" />
+                    <span className="font-mono font-bold uppercase tracking-wider text-gray-100 text-sm md:text-base group-hover:text-yellow-300 transition-colors">
+                        {boardType === 'arrivals' && entry.provenance ? entry.provenance : entry.destination}
+                    </span>
                 </div>
             </td>
 
