@@ -40,15 +40,19 @@ export default function TripDetailModal({ tripId, lineName, targetTime, stopId, 
     if (!tripId) return null;
 
     return (
-        <div className="fixed inset-0 z-[9999] flex items-end justify-center p-0 sm:items-center sm:p-4">
+        <div className="fixed inset-0 z-[9999] flex items-end justify-center p-0 sm:items-center sm:p-4 isolate">
             {/* Backdrop */}
             <div
-                className="absolute inset-0 bg-gray-950/80 backdrop-blur-md"
+                className="absolute inset-0 bg-gray-950/85 backdrop-blur-sm transition-opacity"
+                style={{ transform: 'translateZ(0)' }}
                 onClick={onClose}
             />
 
             {/* Modal */}
-            <div className="relative flex max-h-[calc(100dvh-env(safe-area-inset-top)-0.75rem)] w-full max-w-2xl flex-col overflow-hidden rounded-t-[1.75rem] border border-white/10 bg-gray-950/95 shadow-2xl shadow-black/50 ring-1 ring-white/5 sm:max-h-[90vh] sm:rounded-[2rem]">
+            <div
+                className="relative flex max-h-[calc(100dvh-env(safe-area-inset-top)-0.75rem)] w-full max-w-2xl flex-col overflow-hidden rounded-t-[1.75rem] border border-white/10 bg-gray-950/98 shadow-2xl shadow-black/60 ring-1 ring-white/5 sm:max-h-[90vh] sm:rounded-[2rem]"
+                style={{ transform: 'translateZ(0)' }}
+            >
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-yellow-400/10 via-emerald-400/5 to-transparent" />
 
                 {/* Header */}

@@ -168,8 +168,7 @@ summary {
 
 /* Split-flap display character styling */
 .split-flap-container {
-  perspective: 700px;
-  perspective-origin: center center;
+  contain: layout style;
 }
 
 .split-flap-char {
@@ -185,7 +184,6 @@ summary {
     0 3px 8px rgba(0, 0, 0, 0.6),
     0 0 1px rgba(255, 255, 255, 0.05);
   position: relative;
-  transform-style: preserve-3d;
   font-feature-settings: "tnum" 1;
 }
 
@@ -242,7 +240,6 @@ summary {
   animation: flapDown 0.38s cubic-bezier(0.2, 0.8, 0.25, 1);
   transform-origin: center top;
   backface-visibility: hidden;
-  will-change: transform, opacity;
 }
 
 /* Flip animation for new entries */
