@@ -2,8 +2,8 @@ name: Update T2C GTFS Schedule
 
 on:
   schedule:
-    # Daily at 06:00 UTC (07:00 Paris time)
-    - cron: '0 6 * * *'
+    # Twice daily at off-peak minutes: 04:17 UTC (06:17 CEST) and 16:17 UTC (18:17 CEST)
+    - cron: '17 4,16 * * *'
   workflow_dispatch: # Allow manual trigger
 
 concurrency:

@@ -48,11 +48,11 @@ function getNowParisForQuery(date = new Date()): string {
   return `${year}-${month}-${day} ${hour}:${minute}`;
 }
 
-async function main(): Promise<void> {
+async function fetchE1StepsForTime(departureTime: string): Promise<Array<{ departure?: string; arrival?: string; headsign?: string }>> {
   const params = new URLSearchParams({
     departure_xy: DEPARTURE_XY,
     arrival_xy: ARRIVAL_XY,
-    departure_time: getNowParisForQuery(),
+    departure_time: departureTime,
     max_matches: '5',
   });
 
@@ -65,7 +65,7 @@ async function main(): Promise<void> {
   const payload: unknown = await response.json();
   assert.equal(Array.isArray(payload), true, 'Expected itineraries array');
 
-  const e1Steps = (payload as Itinerary[])
+  return (payload as Itinerary[])
     .flatMap((itinerary) => Array.isArray(itinerary.steps) ? itinerary.steps : [])
     .filter((step) => {
       const line = (step.line_short_name || step.line_name || '').trim().toUpperCase();
@@ -76,6 +76,25 @@ async function main(): Promise<void> {
       arrival: step.arrival_time,
       headsign: step.line_direction,
     }));
+}
+
+async function main(): Promise<void> {
+  let e1Steps = await fetchE1StepsForTime(getNowParisForQuery());
+
+  if (e1Steps.length === 0) {
+    // During night hours, query tomorrow morning 08:00 Paris time
+    const tomorrowMorning = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const parts = PARIS_MINUTE_FORMATTER.formatToParts(tomorrowMorning);
+    let year = '1970', month = '01', day = '01';
+    for (const part of parts) {
+      if (part.type === 'year') year = part.value;
+      else if (part.type === 'month') month = part.value;
+      else if (part.type === 'day') day = part.value;
+    }
+    const morningQuery = `${year}-${month}-${day} 08:00`;
+    console.log(`ℹ️ No immediate departures found (likely night hours), querying morning window: ${morningQuery}`);
+    e1Steps = await fetchE1StepsForTime(morningQuery);
+  }
 
   assert.ok(e1Steps.length > 0, 'No E1 departure found in T2C itineraries response');
 
