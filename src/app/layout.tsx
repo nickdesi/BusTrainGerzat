@@ -49,9 +49,9 @@ export const metadata: Metadata = {
     "Clermont Auvergne Métropole", "mobilité Gerzat", "prochains départs bus train"
   ],
   alternates: {
-    canonical: "https://gerzatlive.desimone.fr",
+    canonical: "./",
     languages: {
-      "fr-FR": "https://gerzatlive.desimone.fr",
+      "fr-FR": "./",
     },
   },
   robots: {
@@ -87,7 +87,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "fr_FR",
-    url: "https://gerzatlive.desimone.fr",
+    url: "./",
     title: "Gerzat Live • Horaires Temps Réel Bus T2C & Trains TER",
     description: "Le hub multimodal en direct pour Gerzat : bus T2C (Ligne E1) et trains TER SNCF. Départs, arrivées et carte live.",
     siteName: "Gerzat Live",
