@@ -12,6 +12,7 @@ concurrency:
 
 permissions:
   contents: write
+  actions: write
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -98,7 +99,4 @@ jobs:
           done
 
       - name: Prevent Workflow Disabling (Keepalive)
-        uses: gautamkrishnar/keepalive-workflow@v2
-        with:
-          committer_username: 'github-actions[bot]'
-          committer_email: 'github-actions[bot]@users.noreply.github.com'
+        uses: liskin/gh-workflow-keepalive@v1
