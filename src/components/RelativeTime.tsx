@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 
 // ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation on every render (every second)
 const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'

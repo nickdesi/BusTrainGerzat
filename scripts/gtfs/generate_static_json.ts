@@ -2,10 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse/sync';
 import { format, addDays } from 'date-fns';
-import { toZonedTime } from 'date-fns-tz';
+import { parseParisTime } from '../../src/utils/date';
 
 const GTFS_DIR = 'gtfs_data';
-const PARIS_TZ = 'Europe/Paris';
 
 const TARGET_ROUTE_NAMES = new Set(['E1', '20']); // Support 20 as fallback
 const TARGET_STOP_NAMES = ['GERZAT Champfleuri', 'Patural'];
@@ -17,6 +16,19 @@ function readCsv(fileName: string): any[] {
   const fileContent = fs.readFileSync(filePath, 'utf-8');
   const content = fileContent.charCodeAt(0) === 0xFEFF ? fileContent.slice(1) : fileContent;
   return parse(content, { columns: true, skip_empty_lines: true });
+}
+
+function parseGtfsParisTime(dateStr: string, timeStr: string): number {
+  const parts = timeStr.split(':').map(Number);
+  const rawHours = parts[0] || 0;
+  const minutes = parts[1] || 0;
+  const seconds = parts[2] || 0;
+
+  const extraDays = Math.floor(rawHours / 24);
+  const normalizedHours = rawHours % 24;
+
+  const midnightTs = parseParisTime(`${dateStr}T000000`);
+  return midnightTs + extraDays * 86400 + normalizedHours * 3600 + minutes * 60 + seconds;
 }
 
 function main() {
@@ -194,15 +206,7 @@ function main() {
     for (const [tripId, stopTime] of Object.entries(tripEvents)) {
       const trip = trips[tripId];
       if (activeServices.has(trip.service_id)) {
-        const parts = stopTime.arrival_time.split(':').map(Number);
-
-        // Base date in Paris timezone for start of day
-        const tzDateStr = `${dateStr.slice(0,4)}-${dateStr.slice(4,6)}-${dateStr.slice(6,8)}T00:00:00`;
-        const startOfDay = toZonedTime(tzDateStr, PARIS_TZ);
-
-        // Add time
-        const tripDt = new Date(startOfDay.getTime() + (parts[0] * 3600 + parts[1] * 60 + parts[2]) * 1000);
-        const timestamp = Math.floor(tripDt.getTime() / 1000);
+        const timestamp = parseGtfsParisTime(dateStr, stopTime.arrival_time);
 
         finalSchedule.push({
           tripId,

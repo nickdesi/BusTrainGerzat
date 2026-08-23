@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 
 // ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation on every render
 const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit'

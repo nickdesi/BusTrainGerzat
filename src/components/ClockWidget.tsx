@@ -6,12 +6,14 @@ import SplitFlapDisplay from './SplitFlapDisplay';
 
 // ⚡ Bolt: Cache Intl.DateTimeFormat instances to avoid expensive recreation on every render (every second)
 const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
     hour: '2-digit',
     minute: '2-digit',
     second: '2-digit',
 });
 
 const DATE_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
     weekday: 'long',
     year: 'numeric',
     month: 'long',
