@@ -451,7 +451,11 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
             return getT2CItinerariesRealtime();
         }
 
-        return { updates: nextBuses, timestamp: now, rtAvailable };
+        // If next buses are only scheduled for tomorrow or far future (>2h), RT availability is normal (no RT expected)
+        const hasImmediateBuses = nextBuses.some(b => (b.arrival - now) < 2 * 3600);
+        const finalRtAvailable = hasImmediateBuses ? rtAvailable : true;
+
+        return { updates: nextBuses, timestamp: now, rtAvailable: finalRtAvailable };
     } catch (error) {
         apiLogger.error('getBusData error', undefined, error instanceof Error ? error : new Error(String(error)));
         return { updates: [], timestamp: Math.floor(Date.now() / 1000), rtAvailable: false };

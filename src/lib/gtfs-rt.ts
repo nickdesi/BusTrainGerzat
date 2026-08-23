@@ -72,47 +72,49 @@ export interface TripUpdatesResult {
  */
 export async function fetchTripUpdatesWithStatus(): Promise<TripUpdatesResult> {
     const updates = new Map<string, RTTripUpdate>();
-    let buffer: ArrayBuffer | null = null;
+    const now = getNowUnix();
+    const inService = isT2COperatingHours();
+    const maxAge = inService ? 1800 : 86400; // Tolerate up to 30 min latency in service, 24h outside operating hours
+
+    let feedToUse: ReturnType<typeof GtfsRealtimeBindings.transit_realtime.FeedMessage.decode> | null = null;
+    let fallbackFeed: ReturnType<typeof GtfsRealtimeBindings.transit_realtime.FeedMessage.decode> | null = null;
 
     for (const url of GTFS_RT_TRIP_UPDATE_URLS) {
         try {
-            buffer = await fetchBinaryWithRetry(url, {
+            const buffer = await fetchBinaryWithRetry(url, {
                 next: { revalidate: 15 }
             });
             if (buffer && buffer.byteLength > 0) {
-                break;
+                const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
+                const feedTs = Number(feed.header?.timestamp || 0);
+                const age = feedTs > 0 ? (now - feedTs) : 0;
+
+                if (age <= maxAge) {
+                    feedToUse = feed;
+                    break;
+                } else {
+                    gtfsLogger.warn(`GTFS-RT URL ${url} returned stale feed (age: ${age}s > maxAge: ${maxAge}s), trying next fallback...`, { url, age, maxAge });
+                    if (!fallbackFeed) {
+                        fallbackFeed = feed;
+                    }
+                }
             }
         } catch (e) {
-            gtfsLogger.warn(`Primary GTFS-RT URL ${url} failed, trying fallback...`, { error: (e as Error).message });
+            gtfsLogger.warn(`GTFS-RT URL ${url} failed, trying fallback...`, { error: (e as Error).message });
         }
     }
 
-    if (!buffer) {
-        gtfsLogger.error('Failed to fetch GTFS-RT trip updates from all endpoints');
-        return { updates, rtAvailable: false };
+    if (!feedToUse) {
+        if (!inService && fallbackFeed) {
+            feedToUse = fallbackFeed;
+        } else {
+            gtfsLogger.error('Failed to fetch fresh GTFS-RT trip updates from all endpoints');
+            return { updates, rtAvailable: !inService };
+        }
     }
 
     try {
-        const feed = GtfsRealtimeBindings.transit_realtime.FeedMessage.decode(new Uint8Array(buffer));
-
-        const now = getNowUnix();
-        if (feed.header?.timestamp) {
-            const age = now - Number(feed.header.timestamp);
-            const inService = isT2COperatingHours();
-
-            // During daytime service hours, tolerate up to 10 min (600s) latency.
-            // Outside service hours (night time), CAD export is idle so older feed is expected.
-            if (inService && age > 600) {
-                gtfsLogger.warn('Stale feed ignored during operating hours', { age, maxAge: 600 });
-                return { updates, rtAvailable: false };
-            } else if (!inService && age > 86400) {
-                // Ignore truly obsolete feeds older than 24 hours even at night
-                gtfsLogger.warn('Stale feed ignored (>24h)', { age, maxAge: 86400 });
-                return { updates, rtAvailable: true };
-            }
-        }
-
-        for (const entity of feed.entity) {
+        for (const entity of feedToUse.entity || []) {
             if (!entity.tripUpdate) continue;
             const tu = entity.tripUpdate;
             if (!tu.trip.routeId || !LINE_E1_ROUTE_IDS.has(tu.trip.routeId)) continue;
@@ -161,8 +163,8 @@ export async function fetchTripUpdatesWithStatus(): Promise<TripUpdatesResult> {
             });
         }
     } catch (e) {
-        gtfsLogger.error('Failed to fetch trip updates', {}, e as Error);
-        return { updates, rtAvailable: false };
+        gtfsLogger.error('Failed to parse trip updates', {}, e as Error);
+        return { updates, rtAvailable: !inService };
     }
     return { updates, rtAvailable: true };
 }
