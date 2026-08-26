@@ -12,6 +12,13 @@
 [![React 19](https://img.shields.io/badge/React-19.2-61dafb?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind-v4.2-38bdf8?style=for-the-badge&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-gray?style=for-the-badge)](LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/nickdesi/BusTrainGerzat?style=social)](https://github.com/nickdesi/BusTrainGerzat/stargazers)
+
+<br />
+
+<p align="center">
+  ⭐ <b>Si vous utilisez Gerzat Live pour vos trajets au quotidien, soutenez le projet avec une étoile sur GitHub !</b> ⭐
+</p>
 
 <br />
 
@@ -184,6 +191,16 @@ npm run build
 
 * **iOS (Safari)** : Ouvrir [gerzatlive.desimone.fr](https://gerzatlive.desimone.fr) > Bouton *Partager* > **« Sur l'écran d'accueil »**.
 * **Android (Chrome)** : Ouvrir le site > Menu `⋮` > **« Installer l'application »**.
+
+---
+
+## 🌟 Stargazers & Communauté
+
+<div align="center">
+
+[![Star History Chart](https://api.star-history.com/svg?repos=nickdesi/BusTrainGerzat&type=Date)](https://star-history.com/#nickdesi/BusTrainGerzat&Date)
+
+</div>
 
 ---
 
