@@ -26,10 +26,19 @@ export function rateLimit(token: string, limit: number, interval: number): boole
       }
     }
     if (tokenCache.size > MAX_CACHE_SIZE) {
-      const entries = [...tokenCache.entries()].sort((a, b) => a[1].expiresAt - b[1].expiresAt);
-      const toDelete = entries.slice(0, entries.length - MAX_CACHE_SIZE);
-      for (const [key] of toDelete) {
-        tokenCache.delete(key);
+      // ⚡ Bolt: Avoid Array spread [...entries()] which creates a massive array of arrays.
+      // Manually extract and sort to preserve expiresAt logic while reducing GC pressure,
+      // and delete directly without intermediate .slice() allocations.
+      const entries: { key: string; expiresAt: number }[] = [];
+      for (const [key, record] of tokenCache.entries()) {
+        entries.push({ key, expiresAt: record.expiresAt });
+      }
+      entries.sort((a, b) => a.expiresAt - b.expiresAt);
+
+      const toRemove = tokenCache.size - MAX_CACHE_SIZE;
+      for (let i = 0; i < toRemove; i++) {
+        // eslint-disable-next-line security/detect-object-injection
+        tokenCache.delete(entries[i].key);
       }
     }
     lastCleanup = now;
