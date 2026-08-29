@@ -5,7 +5,7 @@
 **Hub multimodal en temps réel pour Gerzat — Bus T2C Ligne E1 & Trains TER SNCF.**
 
 [![CI Status](https://img.shields.io/github/actions/workflow/status/nickdesi/BusTrainGerzat/ci.yml?branch=main&style=for-the-badge&logo=github-actions&logoColor=white&label=CI)](https://github.com/nickdesi/BusTrainGerzat/actions/workflows/ci.yml)
-[![Version](https://img.shields.io/badge/version-4.0.0-f59e0b?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/nickdesi/BusTrainGerzat/releases)
+[![Version](https://img.shields.io/badge/version-4.1.0-f59e0b?style=for-the-badge&logo=semver&logoColor=white)](https://github.com/nickdesi/BusTrainGerzat/releases)
 [![Production](https://img.shields.io/badge/Production-gerzatlive.desimone.fr-10b981?style=for-the-badge&logo=vercel&logoColor=white)](https://gerzatlive.desimone.fr)
 [![Deployment](https://img.shields.io/badge/Host-Coolify-6366f1?style=for-the-badge&logo=rocket)](https://coolify.io/)
 [![Next.js 16](https://img.shields.io/badge/Next.js-16.2_(Turbopack)-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
