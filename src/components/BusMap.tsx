@@ -76,27 +76,27 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         const result: Stop[] = [];
         const seenByName = new Map<string, Stop[]>();
 
+        // ⚡ Bolt: Combined grouping and deduplication into a single-pass loop.
+        // This avoids creating intermediate arrays for grouping and eliminates the need
+        // for a second loop over Map values and the closure overhead of .some().
         for (const stop of lineData.stops) {
-            const existing = seenByName.get(stop.stopName);
-            if (existing) {
-                existing.push(stop);
-            } else {
-                seenByName.set(stop.stopName, [stop]);
-            }
-        }
-
-        for (const stops of seenByName.values()) {
-            const uniqueForName: Stop[] = [];
-
-            for (const stop of stops) {
-                const isDuplicate = uniqueForName.some(existing =>
-                    getDistanceMeters(existing.lat, existing.lon, stop.lat, stop.lon) < 5
-                );
+            const existingStops = seenByName.get(stop.stopName);
+            if (existingStops) {
+                let isDuplicate = false;
+                for (const existing of existingStops) {
+                    if (getDistanceMeters(existing.lat, existing.lon, stop.lat, stop.lon) < 5) {
+                        isDuplicate = true;
+                        break;
+                    }
+                }
 
                 if (!isDuplicate) {
-                    uniqueForName.push(stop);
+                    existingStops.push(stop);
                     result.push(stop);
                 }
+            } else {
+                seenByName.set(stop.stopName, [stop]);
+                result.push(stop);
             }
         }
 
