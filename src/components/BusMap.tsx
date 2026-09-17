@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useLineE1Data, Stop } from '@/hooks/useLineE1Data';
 import { useVehiclePositions, VehiclePosition } from '@/hooks/useVehiclePositions';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Crosshair } from 'lucide-react';
 import StopMarker from './StopMarker';
 import BusMarker from './BusMarker';
 import MapLegend from './map/MapLegend';
@@ -51,6 +51,13 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const { data: lineData, isLoading: lineLoading, error: lineError } = useLineE1Data();
     const { data: vehicleData, isLoading: vehiclesLoading, isFetching } = useVehiclePositions();
     const [currentZoom, setCurrentZoom] = useState(MAP_ZOOM);
+    const [panTarget, setPanTarget] = useState<[number, number] | null>(null);
+
+    const handleCenterGerzat = () => {
+        setPanTarget([45.8335, 3.1432]);
+        // Reset pan target after fly animation so it can be re-triggered
+        setTimeout(() => setPanTarget(null), 1500);
+    };
     const [isDarkMode, setIsDarkMode] = useState(true); // Default to CartoDB Dark Matter (Dark Mode)
     const [isLegendOpen, setIsLegendOpen] = useState(false); // Mobile legend toggle
     const [routeDirection, setRouteDirection] = useState<'all' | '0' | '1'>('all');
@@ -195,6 +202,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
 
             <LeafletMapClient
                 center={MAP_CENTER}
+                panTarget={panTarget}
                 zoom={MAP_ZOOM}
                 tileUrl={tileUrl}
                 routeColor={routeColor}
@@ -220,6 +228,19 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 {/* Vehicle markers with collision detection */}
                 {vehicleMarkers}
             </LeafletMapClient>
+
+            {/* Quick Center on Gerzat Floating Button */}
+            <div className="absolute left-3 bottom-8 md:bottom-6 z-[calc(var(--z-modal)+1)]">
+                <button
+                    onClick={handleCenterGerzat}
+                    className="flex items-center gap-2 rounded-2xl border border-white/10 bg-slate-950/85 px-3.5 py-2.5 text-xs font-bold uppercase tracking-wider text-emerald-300 shadow-xl shadow-black/40 backdrop-blur-xl transition-all hover:scale-105 hover:bg-slate-900 active:scale-95 cursor-pointer"
+                    aria-label="Recentrer sur Gerzat Champfleuri"
+                >
+                    <Crosshair className="h-4 w-4 text-emerald-400" />
+                    <span className="hidden sm:inline">Gare / Champfleuri</span>
+                    <span className="sm:hidden">Gerzat</span>
+                </button>
+            </div>
 
             {/* Legend - HUD Style - Responsive */}
             <MapLegend

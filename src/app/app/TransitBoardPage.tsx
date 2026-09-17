@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Activity, AlertTriangle, Bus, ExternalLink, Filter, RefreshCw, Sparkles, Star, Train, WifiOff } from 'lucide-react';
+import { Activity, AlertTriangle, Bus, ExternalLink, RefreshCw, Sparkles, Star, Train, WifiOff } from 'lucide-react';
 import ClockWidget from '@/components/ClockWidget';
 import { DataFreshnessWarning } from '@/components/DataFreshnessWarning';
 import { RealtimeStatusWarning } from '@/components/RealtimeStatusWarning';
@@ -14,6 +14,7 @@ import SearchWidget from '@/components/SearchWidget';
 import { useDelayNotifications } from '@/hooks/useDelayNotifications';
 import { useDepartures } from '@/hooks/useDepartures';
 import { useFavorites } from '@/hooks/useFavorites';
+import NextDepartureHero from '@/components/NextDepartureHero';
 import { usePredictiveDelay } from '@/hooks/usePredictiveDelay';
 import { APP_VERSION } from '@/lib/app-version';
 import { TransportFilter } from '@/types';
@@ -68,6 +69,7 @@ export default function TransitBoardPage({
     const { departures, arrivals, isLoading, isFetching, error, busError, trainError, lastUpdated, refetch } = useDepartures();
     const [filter, setFilter] = useState<TransportFilter>('all');
     const [searchQuery, setSearchQuery] = useState('');
+    const [directionFilter, setDirectionFilter] = useState<'all' | 'clermont' | 'gerzat'>('all');
     const { favorites, toggleFavorite } = useFavorites();
     const { getPrediction } = usePredictiveDelay();
 
@@ -99,6 +101,15 @@ export default function TransitBoardPage({
             if (filter === 'bus' && entry.type !== 'BUS') continue;
             if (filter === 'train' && entry.type !== 'TER') continue;
 
+            const loc = (boardType === 'arrivals' ? entry.provenance : entry.destination)?.toLowerCase() || '';
+            if (directionFilter === 'clermont') {
+                const isClermont = loc.includes('aubière') || loc.includes('clermont') || loc.includes('romagnat') || loc.includes('issoire') || loc.includes('vic');
+                if (!isClermont) continue;
+            } else if (directionFilter === 'gerzat') {
+                const isGerzat = loc.includes('gerzat') || loc.includes('patural') || loc.includes('gannat') || loc.includes('riom') || loc.includes('saint-germain');
+                if (!isGerzat) continue;
+            }
+
             if (q) {
                 const location = boardType === 'arrivals'
                     ? entry.provenance ?? ''
@@ -113,7 +124,7 @@ export default function TransitBoardPage({
         }
 
         return result;
-    }, [boardType, entries, filter, searchQuery]);
+    }, [boardType, entries, filter, searchQuery, directionFilter]);
 
     const stats = useMemo(() => {
         let realtimeCount = 0;
@@ -213,7 +224,7 @@ export default function TransitBoardPage({
                         </div>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-3 gap-1.5 md:gap-2">
+                    <div className="mt-3 hidden sm:grid grid-cols-3 gap-1.5 md:gap-2">
                         <div className="hover-lift flex items-center justify-between rounded-xl border border-white/10 bg-gradient-to-b from-white/[0.07] to-white/[0.015] px-2 py-1.5 shadow-[var(--elev-2)] md:px-3 md:py-2.5">
                             <div className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-widest text-gray-400 md:text-[10px]"><Activity className={theme.activityIcon} /> {primaryStatLabel}</div>
                             <p className="text-lg font-black leading-none tabular-nums text-white md:text-2xl">{stats.total}</p>
@@ -254,12 +265,17 @@ export default function TransitBoardPage({
                             <span className="font-medium whitespace-nowrap">MAJ : <RelativeTime timestamp={lastUpdated} /></span>
                         </div>
 
-                        <div className="flex items-center gap-2">
-                            <Filter className="w-4 h-4 text-gray-500" aria-hidden="true" />
+                        <div className="flex flex-wrap items-center gap-2">
                             <div className="flex rounded-xl overflow-hidden border border-white/10 bg-black/40 p-0.5 gap-0.5">
                                 <button onClick={() => setFilter('all')} className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold transition-all duration-200 ${filter === 'all' ? `${theme.allFilterActive} shadow-[var(--elev-2)]` : 'text-gray-400 hover:bg-white/5 hover:text-white'}`} aria-pressed={filter === 'all'}>TOUS</button>
                                 <button onClick={() => setFilter('bus')} className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-1 transition-all duration-200 ${filter === 'bus' ? 'bg-yellow-500 text-black shadow-[var(--elev-2)]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`} aria-pressed={filter === 'bus'}><Bus className="w-3 h-3" /> BUS</button>
                                 <button onClick={() => setFilter('train')} className={`cursor-pointer rounded-lg px-3 py-1.5 text-xs font-bold flex items-center gap-1 transition-all duration-200 ${filter === 'train' ? 'bg-blue-600 text-white shadow-[var(--elev-2)]' : 'text-gray-400 hover:bg-white/5 hover:text-white'}`} aria-pressed={filter === 'train'}><Train className="w-3 h-3" /> TER</button>
+                            </div>
+
+                            <div className="hidden sm:flex rounded-xl overflow-hidden border border-white/10 bg-black/40 p-0.5 gap-0.5 text-xs">
+                                <button onClick={() => setDirectionFilter('all')} className={`cursor-pointer rounded-lg px-2.5 py-1.5 font-semibold transition-all ${directionFilter === 'all' ? 'bg-white/20 text-white' : 'text-gray-400 hover:text-white'}`}>Toutes dir.</button>
+                                <button onClick={() => setDirectionFilter('clermont')} className={`cursor-pointer rounded-lg px-2.5 py-1.5 font-semibold transition-all ${directionFilter === 'clermont' ? 'bg-emerald-500/25 text-emerald-300 border border-emerald-500/30' : 'text-gray-400 hover:text-white'}`}>→ Clermont/Aubière</button>
+                                <button onClick={() => setDirectionFilter('gerzat')} className={`cursor-pointer rounded-lg px-2.5 py-1.5 font-semibold transition-all ${directionFilter === 'gerzat' ? 'bg-yellow-500/25 text-yellow-300 border border-yellow-500/30' : 'text-gray-400 hover:text-white'}`}>→ Gerzat</button>
                             </div>
                         </div>
 
@@ -269,6 +285,11 @@ export default function TransitBoardPage({
                         </button>
                     </div>
                 </header>
+
+                <NextDepartureHero
+                    entry={filteredEntries.length > 0 ? filteredEntries[0] : null}
+                    boardType={boardType}
+                />
 
                 <div id={skipHref.slice(1)} className={theme.boardBorder}>
                     <div className={theme.boardHeader}>

@@ -8,6 +8,7 @@ type Shape = [number, number][];
 
 interface LeafletMapClientProps {
     center: [number, number];
+    panTarget?: [number, number] | null;
     zoom: number;
     tileUrl: string;
     routeColor: string;
@@ -16,6 +17,18 @@ interface LeafletMapClientProps {
     branchShapes?: Shape[];
     onZoomChange: (zoom: number) => void;
     children: ReactNode;
+}
+
+function MapCenterController({ panTarget }: { panTarget?: [number, number] | null }) {
+    const map = useMap();
+
+    useEffect(() => {
+        if (panTarget) {
+            map.flyTo(panTarget, 14, { duration: 1.2 });
+        }
+    }, [map, panTarget]);
+
+    return null;
 }
 
 function MapResizeController() {
@@ -69,6 +82,7 @@ export default function LeafletMapClient({
     secondaryShape,
     branchShapes,
     onZoomChange,
+    panTarget,
     children,
 }: LeafletMapClientProps) {
     const routeGlow = `${routeColor}55`;
@@ -89,6 +103,7 @@ export default function LeafletMapClient({
             fadeAnimation={!isMobileMap}
         >
             <MapResizeController />
+            <MapCenterController panTarget={panTarget} />
             <ZoomController onZoomChange={onZoomChange} />
             <ZoomControl position="bottomleft" />
             <TileLayer

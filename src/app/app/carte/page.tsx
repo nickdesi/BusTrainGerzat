@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { Bus, Clock3, Eye, EyeOff, Navigation, Radar, RefreshCw } from 'lucide-react';
+import { Bus, Eye, EyeOff, Radar, RefreshCw } from 'lucide-react';
 import { useVehiclePositions } from '@/hooks/useVehiclePositions';
 import { useLineE1Data } from '@/hooks/useLineE1Data';
 import { useQueryClient } from '@tanstack/react-query';
@@ -116,73 +116,95 @@ export default function CartePage() {
                 Aller à la carte live
             </a>
 
-            <div className="relative mx-auto grid min-h-[calc(100dvh-1.5rem)] max-w-[1800px] gap-3 md:gap-4 xl:grid-cols-[24rem_minmax(0,1fr)]">
-                <aside className="relative z-10 flex flex-col gap-3 md:gap-4 xl:min-h-[calc(100vh-3rem)]">
+            <div className="relative mx-auto max-w-[1800px] gap-3 md:gap-4 xl:grid xl:grid-cols-[22rem_minmax(0,1fr)] xl:min-h-[calc(100vh-3rem)]">
+                {/* Desktop-only Sidebar */}
+                <aside className="hidden xl:flex xl:flex-col gap-3 md:gap-4">
                     <header className="overflow-hidden rounded-[1.5rem] border border-emerald-300/20 bg-black/55 p-4 shadow-2xl shadow-black/50 backdrop-blur-xl md:rounded-[2rem] md:p-5">
                         <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-300/25 bg-emerald-300/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.24em] text-emerald-100 md:mb-5">
                             <Radar className="h-3.5 w-3.5" aria-hidden="true" /> Live Ops
                         </div>
-                        <h1 className="font-mono text-3xl font-black uppercase leading-none tracking-tight text-white md:text-5xl xl:text-6xl">
+                        <h1 className="font-mono text-3xl font-black uppercase leading-none tracking-tight text-white md:text-5xl">
                             Ligne<br /><span className="text-emerald-300 text-glow">E1</span>
                         </h1>
-                        <p className="mt-3 text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-gray-400 md:mt-4 md:text-sm md:leading-6 md:tracking-[0.18em]">
-                            Carte E1 avec positions temps réel GTFS-RT et estimations horaires T2C.
+                        <p className="mt-3 text-xs font-semibold uppercase leading-5 tracking-[0.14em] text-gray-400">
+                            Positions en direct et estimations horaires T2C.
                         </p>
                     </header>
 
-                    <div className="grid grid-cols-2 gap-2 md:gap-3 xl:grid-cols-1">
-                        <MetricCard icon={Bus} label="Positions" value={stats.total} tone="green" description="Bus visibles sur la carte" />
-                        <MetricCard icon={Radar} label="Temps réel" value={stats.realtime} tone="yellow" description="Position GPS ou calculée avec les données live T2C" />
-                        <MetricCard icon={Clock3} label="Estimé" value={stats.staticEstimated} tone="neutral" description="Position calculée sans mise à jour temps réel" />
+                    <div className="grid grid-cols-1 gap-2">
+                        <MetricCard icon={Bus} label="Flotte active" value={`${stats.realtime}/${stats.total}`} tone="green" description="Bus suivis en direct" />
                     </div>
 
-                    <section className="rounded-[1.5rem] border border-white/10 bg-black/55 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl md:rounded-[2rem] md:p-4">
-                        <div className="mb-4 flex items-center justify-between gap-3">
-                            <div>
-                                <p className="text-[10px] font-black uppercase tracking-[0.24em] text-gray-500">Console</p>
-                                <p className="mt-1 text-sm font-bold text-white">MAJ : {lastUpdate}</p>
-                            </div>
-                            <span className={`relative flex h-3 w-3 ${isFetching ? 'text-yellow-300' : 'text-emerald-300'}`}>
-                                <span className={`absolute inline-flex h-3 w-3 rounded-full opacity-75 ${isFetching ? 'animate-ping bg-yellow-300' : 'bg-emerald-300'}`} />
-                                <span className={`relative inline-flex h-3 w-3 rounded-full ${isFetching ? 'bg-yellow-400' : 'bg-emerald-400'}`} />
-                            </span>
+                    {/* Active vehicles list in sidebar */}
+                    <section className="flex-1 overflow-hidden rounded-[1.5rem] border border-white/10 bg-black/55 p-3 shadow-2xl shadow-black/40 backdrop-blur-xl flex flex-col">
+                        <div className="mb-3 flex items-center justify-between px-1">
+                            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-gray-400">Bus en circulation</p>
+                            <span className="text-xs text-emerald-400 font-bold">{stats.total} bus</span>
                         </div>
-
-                        <div className="grid gap-2">
-                            <button
-                                onClick={() => setShowStops((value) => !value)}
-                                className={`inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl border px-4 text-sm font-black uppercase tracking-wider transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-300 focus-visible:ring-offset-2 focus-visible:ring-offset-black ${showStops
-                                    ? 'border-emerald-400/35 bg-emerald-400/15 text-emerald-100 hover:bg-emerald-400/20'
-                                    : 'border-white/10 bg-white/[0.04] text-gray-300 hover:bg-white/10'
-                                    }`}
-                                aria-pressed={showStops}
-                            >
-                                {showStops ? <Eye className="h-4 w-4" aria-hidden="true" /> : <EyeOff className="h-4 w-4" aria-hidden="true" />}
-                                {showStops ? 'Arrêts affichés' : 'Arrêts masqués'}
-                            </button>
-
-                            <button
-                                onClick={handleRefresh}
-                                disabled={isFetching}
-                                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-emerald-400 px-4 text-sm font-black uppercase tracking-wider text-black transition-colors hover:bg-emerald-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-200 focus-visible:ring-offset-2 focus-visible:ring-offset-black disabled:cursor-not-allowed disabled:opacity-60"
-                            >
-                                <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} aria-hidden="true" />
-                                Actualiser la flotte
+                        <div className="flex-1 overflow-y-auto space-y-1.5 pr-1 max-h-[380px]">
+                            {(vehicleData?.vehicles || []).map((v) => {
+                                const delayMin = Math.round(v.delay / 60);
+                                return (
+                                    <div key={v.tripId} className="flex items-center justify-between p-2.5 rounded-xl border border-white/5 bg-white/[0.03] hover:bg-white/[0.07] transition-colors text-xs">
+                                        <div className="flex items-center gap-2">
+                                            <div className={`h-2 w-2 rounded-full ${v.direction === 1 ? 'bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.6)]' : 'bg-blue-400 shadow-[0_0_8px_rgba(96,165,250,0.6)]'}`} />
+                                            <span className="font-bold text-white">
+                                                {v.direction === 1 ? 'Vers Gerzat' : 'Vers Aubière'}
+                                            </span>
+                                        </div>
+                                        <span className={`font-mono font-bold ${delayMin > 5 ? 'text-amber-400' : 'text-emerald-400'}`}>
+                                            {delayMin > 0 ? `+${delayMin}m` : 'À l’heure'}
+                                        </span>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                        <div className="mt-3 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-gray-500">
+                            <span>MAJ : {lastUpdate}</span>
+                            <button onClick={handleRefresh} disabled={isFetching} className="text-emerald-400 hover:text-emerald-300 flex items-center gap-1 font-bold cursor-pointer">
+                                <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? 'animate-spin' : ''}`} />
+                                Actualiser
                             </button>
                         </div>
                     </section>
                 </aside>
 
-                <section id="live-map" aria-label="Carte live de la ligne E1" className="relative z-0 min-h-[min(72dvh,720px)] overflow-hidden rounded-[1.5rem] border border-white/10 bg-black shadow-2xl shadow-black/60 md:min-h-[760px] md:rounded-[2.25rem] xl:min-h-[calc(100vh-3rem)]">
+                {/* Main Full-Viewport Map Section */}
+                <section id="live-map" aria-label="Carte live de la ligne E1" className="relative z-0 h-[calc(100dvh-5.5rem)] md:h-[calc(100dvh-6rem)] xl:h-[calc(100vh-3rem)] w-full overflow-hidden rounded-[1.5rem] border border-white/10 bg-black shadow-2xl shadow-black/60 md:rounded-[2.25rem]">
                     <div className="pointer-events-none absolute inset-0 z-[2] rounded-[1.5rem] ring-1 ring-inset ring-white/10 md:rounded-[2.25rem]" aria-hidden="true" />
-                    <div className="pointer-events-none absolute inset-x-0 top-0 z-[2] flex items-center justify-between gap-3 bg-gradient-to-b from-black/70 via-black/25 to-transparent p-3 md:p-6" aria-hidden="true">
-                        <div className="rounded-full border border-white/10 bg-black/50 px-3 py-2 text-[10px] font-black uppercase tracking-[0.18em] text-white/80 backdrop-blur-xl md:px-4 md:text-xs md:tracking-[0.24em]">
-                            <Navigation className="mr-2 inline h-4 w-4 text-emerald-300" />Carte opérationnelle
+
+                    {/* Mobile Floating HUD Top Bar */}
+                    <div className="pointer-events-none absolute inset-x-0 top-0 z-[10] flex items-center justify-between gap-2 p-3 md:p-5" aria-hidden="true">
+                        <div className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-slate-950/80 px-3.5 py-2 text-xs font-black uppercase tracking-wider text-white shadow-xl backdrop-blur-xl">
+                            <span className="relative flex h-2 w-2">
+                                <span className={`absolute inline-flex h-full w-full rounded-full opacity-75 ${isFetching ? 'animate-ping bg-yellow-300' : 'bg-emerald-300'}`} />
+                                <span className={`relative inline-flex rounded-full h-2 w-2 ${isFetching ? 'bg-yellow-400' : 'bg-emerald-400'}`} />
+                            </span>
+                            <span className="text-emerald-300 font-mono">E1</span>
+                            <span className="text-gray-400">·</span>
+                            <span>{stats.total} bus</span>
                         </div>
-                        <div className="hidden rounded-full border border-white/10 bg-black/50 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-white/60 backdrop-blur-xl md:block">
-                            {stats.stops} arrêts • {stats.total} bus
+
+                        <div className="pointer-events-auto flex items-center gap-2">
+                            <button
+                                onClick={() => setShowStops((value) => !value)}
+                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/80 text-gray-300 shadow-xl backdrop-blur-xl hover:text-white cursor-pointer"
+                                aria-label={showStops ? "Masquer les arrêts" : "Afficher les arrêts"}
+                            >
+                                {showStops ? <Eye className="h-4 w-4 text-emerald-400" /> : <EyeOff className="h-4 w-4" />}
+                            </button>
+
+                            <button
+                                onClick={handleRefresh}
+                                disabled={isFetching}
+                                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-slate-950/80 text-emerald-300 shadow-xl backdrop-blur-xl hover:text-emerald-200 cursor-pointer disabled:opacity-50"
+                                aria-label="Actualiser la flotte"
+                            >
+                                <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+                            </button>
                         </div>
                     </div>
+
                     <div className="absolute inset-0">
                         <BusMap showStops={showStops} />
                     </div>
