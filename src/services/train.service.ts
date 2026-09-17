@@ -2,7 +2,8 @@ import { TrainUpdate } from '@/types/transport';
 import { z } from 'zod';
 import { apiLogger } from '@/lib/logger';
 
-const SNCF_API_KEY = process.env.SNCF_API_KEY;
+const DEFAULT_SNCF_API_KEY = 'ade4c333-d247-48cd-bb87-3ca56f059a94';
+const SNCF_API_KEY = process.env.SNCF_API_KEY || DEFAULT_SNCF_API_KEY;
 const GERZAT_STOP_AREA = 'stop_area:SNCF:87734046';
 
 // --- SNCF API Types with Zod Validation ---

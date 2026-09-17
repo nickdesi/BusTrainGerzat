@@ -93,10 +93,27 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git add src/data/gtfs_config.json src/data/static_schedule.json public/data/e1_stop_times.json public/data/lineE1_data.json
+          if git diff --cached --quiet; then
+            echo "ℹ️ No changes to commit after validation"
+            exit 0
+          fi
           git commit -m "chore: update T2C GTFS data [$(date +'%Y-%m-%d')]"
+          pushed=false
           for i in 1 2 3; do
-            git pull --rebase origin main && git push && break || sleep 5
+            echo "Attempt $i: pulling with rebase and pushing..."
+            if git pull --rebase --autostash origin main && git push origin main; then
+              pushed=true
+              echo "✅ GTFS data successfully updated and pushed"
+              break
+            fi
+            echo "⚠️ Push attempt $i failed, retrying in 5s..."
+            sleep 5
           done
+          if [ "$pushed" = false ]; then
+            echo "❌ Failed to push GTFS update to origin main"
+            exit 1
+          fi
 
       - name: Prevent Workflow Disabling (Keepalive)
         uses: liskin/gh-workflow-keepalive@v1

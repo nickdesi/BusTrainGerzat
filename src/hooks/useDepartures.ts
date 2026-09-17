@@ -108,12 +108,17 @@ export function useDepartures() {
         queryClient.invalidateQueries({ queryKey: ['train-realtime'] });
     }, [queryClient]);
 
+    // Global connection error only when BOTH transport feeds fail
+    const connectionError = (busError && trainError) ? (busError || trainError) : null;
+
     return {
         departures,
         arrivals,
         isLoading: busLoading || trainLoading,
         isFetching: busFetching || trainFetching,
-        error: busError || trainError,
+        error: connectionError,
+        busError,
+        trainError,
         lastUpdated: Math.max(
             (busData?.timestamp ? busData.timestamp * 1000 : busUpdatedAt) || 0,
             (trainData?.timestamp ? trainData.timestamp * 1000 : trainUpdatedAt) || 0

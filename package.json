@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "next dev",
-    "prebuild": "npm run gtfs:update",
+    "prebuild": "tsx scripts/gtfs/ensure_gtfs.ts",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

@@ -11,7 +11,7 @@ export async function GET(request: Request) {
     const data = await getTrainData();
     if (data.error) {
         return NextResponse.json(data, {
-            status: 500,
+            status: 200,
             headers: { 'Cache-Control': 'no-store' },
         });
     }

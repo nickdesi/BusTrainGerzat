@@ -65,7 +65,7 @@ export default function TransitBoardPage({
     enableSmartAlert = false,
     showTicker = false,
 }: TransitBoardPageProps) {
-    const { departures, arrivals, isLoading, isFetching, error, lastUpdated, refetch } = useDepartures();
+    const { departures, arrivals, isLoading, isFetching, error, busError, trainError, lastUpdated, refetch } = useDepartures();
     const [filter, setFilter] = useState<TransportFilter>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const { favorites, toggleFavorite } = useFavorites();
@@ -169,6 +169,20 @@ export default function TransitBoardPage({
                         <button onClick={() => refetch()} className="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 rounded text-red-400 text-sm transition-colors">
                             Réessayer
                         </button>
+                    </div>
+                )}
+
+                {!error && trainError && filter !== 'bus' && (
+                    <div className="mb-6 p-3.5 bg-amber-500/10 border border-amber-500/40 rounded-lg flex items-center gap-3 text-sm text-amber-300">
+                        <WifiOff className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                        <span className="flex-1">Horaires TER temporairement indisponibles. Les horaires et le direct des bus restent actifs.</span>
+                    </div>
+                )}
+
+                {!error && busError && filter !== 'train' && (
+                    <div className="mb-6 p-3.5 bg-amber-500/10 border border-amber-500/40 rounded-lg flex items-center gap-3 text-sm text-amber-300">
+                        <WifiOff className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                        <span className="flex-1">Horaires Bus temporairement indisponibles. Les horaires et le direct des TER restent actifs.</span>
                     </div>
                 )}
 
