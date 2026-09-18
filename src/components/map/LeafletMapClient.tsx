@@ -20,6 +20,33 @@ interface LeafletMapClientProps {
     children: ReactNode;
 }
 
+function MapThemeController({ isDarkMode }: { isDarkMode: boolean }) {
+    const map = useMap();
+
+    useEffect(() => {
+        const container = map.getContainer();
+        const tilePane = map.getPane('tilePane');
+
+        if (isDarkMode) {
+            container.classList.add('map-dark');
+            container.classList.remove('map-light');
+            if (tilePane) {
+                tilePane.classList.add('map-tiles-dark');
+                tilePane.classList.remove('map-tiles-light');
+            }
+        } else {
+            container.classList.add('map-light');
+            container.classList.remove('map-dark');
+            if (tilePane) {
+                tilePane.classList.add('map-tiles-light');
+                tilePane.classList.remove('map-tiles-dark');
+            }
+        }
+    }, [map, isDarkMode]);
+
+    return null;
+}
+
 function MapCenterController({ panTarget }: { panTarget?: [number, number] | null }) {
     const map = useMap();
 
@@ -95,7 +122,7 @@ export default function LeafletMapClient({
         <MapContainer
             center={center as LatLngExpression}
             zoom={zoom}
-            className="transit-map h-full min-h-[420px] w-full"
+            className={`transit-map h-full min-h-[420px] w-full ${isDarkMode ? 'map-dark' : 'map-light'}`}
             style={{ height: '100%', minHeight: '420px', width: '100%' }}
             scrollWheelZoom
             preferCanvas
@@ -104,6 +131,7 @@ export default function LeafletMapClient({
             markerZoomAnimation={!isMobileMap}
             fadeAnimation={!isMobileMap}
         >
+            <MapThemeController isDarkMode={isDarkMode} />
             <MapResizeController />
             <MapCenterController panTarget={panTarget} />
             <ZoomController onZoomChange={onZoomChange} />

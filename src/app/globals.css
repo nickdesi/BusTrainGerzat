@@ -450,13 +450,27 @@ summary {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* OpenStreetMap tile dark theme filter (preserves vector overlays & markers) */
-.transit-map .map-tiles-dark {
+/* OpenStreetMap tile theme filter (preserves vector overlays & markers) */
+.map-dark .leaflet-tile-pane,
+.transit-map.map-dark .leaflet-tile-pane,
+.leaflet-tile-pane.map-tiles-dark {
   filter: invert(95%) hue-rotate(190deg) brightness(75%) contrast(115%) saturate(20%);
+  transition: filter 0.3s ease;
 }
 
-.transit-map .map-tiles-light {
+.map-light .leaflet-tile-pane,
+.transit-map.map-light .leaflet-tile-pane,
+.leaflet-tile-pane.map-tiles-light {
   filter: none;
+  transition: filter 0.3s ease;
+}
+
+.transit-map.map-dark.leaflet-container {
+  background: #020617;
+}
+
+.transit-map.map-light.leaflet-container {
+  background: #f8fafc;
 }
 
 .transit-map .leaflet-control-zoom {
