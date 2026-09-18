@@ -4,6 +4,13 @@ import { useMemo, useState, useEffect } from 'react';
 import { Bus, Train, Sparkles, MapPin, Clock, ArrowRight } from 'lucide-react';
 import { UnifiedEntry } from '@/types';
 
+// ⚡ Bolt: Cache Intl.DateTimeFormat instance to avoid expensive recreation on every render
+const TIME_FORMATTER = new Intl.DateTimeFormat('fr-FR', {
+    timeZone: 'Europe/Paris',
+    hour: '2-digit',
+    minute: '2-digit'
+});
+
 interface NextDepartureHeroProps {
     entry: UnifiedEntry | null;
     boardType: 'departures' | 'arrivals';
@@ -54,11 +61,9 @@ export default function NextDepartureHero({ entry, boardType }: NextDepartureHer
         ? (entry.provenance || 'Provenance inconnue')
         : entry.destination;
 
-    const formattedTime = new Intl.DateTimeFormat('fr-FR', {
-        timeZone: 'Europe/Paris',
-        hour: '2-digit',
-        minute: '2-digit'
-    }).format(new Date((boardType === 'arrivals' ? entry.arrivalTime : entry.departureTime) * 1000));
+    const formattedTime = TIME_FORMATTER.format(
+        new Date((boardType === 'arrivals' ? entry.arrivalTime : entry.departureTime) * 1000)
+    );
 
     return (
         <div className={`relative mb-6 overflow-hidden rounded-2xl border ${borderColor} bg-gradient-to-br ${bgGradient} p-4 md:p-6 shadow-2xl ${shadowColor} backdrop-blur-xl ring-1 ${glowRing} transition-all duration-300`}>
