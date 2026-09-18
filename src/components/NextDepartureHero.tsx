@@ -92,8 +92,8 @@ export default function NextDepartureHero({ entry, boardType }: NextDepartureHer
                         </div>
 
                         <h2 className="mt-1.5 text-lg font-black text-white flex items-center gap-2 md:text-2xl">
+                            <ArrowRight className={`h-5 w-5 ${accentColor} shrink-0`} aria-hidden="true" />
                             <span className="truncate max-w-[280px] sm:max-w-md md:max-w-lg">{location}</span>
-                            <ArrowRight className="h-4 w-4 text-gray-500 shrink-0 hidden sm:inline" />
                         </h2>
 
                         {entry.platform && (
