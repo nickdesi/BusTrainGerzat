@@ -450,6 +450,15 @@ summary {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* OpenStreetMap tile dark theme filter (preserves vector overlays & markers) */
+.transit-map .map-tiles-dark {
+  filter: invert(95%) hue-rotate(190deg) brightness(75%) contrast(115%) saturate(20%);
+}
+
+.transit-map .map-tiles-light {
+  filter: none;
+}
+
 .transit-map .leaflet-control-zoom {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.10) !important;

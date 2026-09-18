@@ -71,7 +71,7 @@
 * **Interface & Styling** : [React 19](https://react.dev/), [Tailwind CSS v4](https://tailwindcss.com/), Lucide Icons
 * **Design System** : *Gerzat Transit Hub* (Généré avec Stitch & `antigravity-design-expert`)
 * **State & Data Fetching** : [TanStack Query v5](https://tanstack.com/query/latest)
-* **Cartographie** : [Leaflet 1.9](https://leafletjs.com/), [React-Leaflet 5](https://react-leaflet.js.org/) (Tuiles sombres CartoDB Dark Matter)
+* **Cartographie** : [Leaflet 1.9](https://leafletjs.com/), [React-Leaflet 5](https://react-leaflet.js.org/) (Tuiles OpenStreetMap avec thème sombre haute lisibilité)
 * **Protobuf & Données** : `gtfs-realtime-bindings`, `protobufjs`, `csv-parse`, `adm-zip`
 * **Qualité & Tests** : [Jest 30](https://jestjs.io/), [Testing Library](https://testing-library.com/), [ESLint](https://eslint.org/) (avec `eslint-plugin-security`)
 * **Hébergement & Déploiement** : [Coolify](https://coolify.io/) sur Nixpacks / Docker

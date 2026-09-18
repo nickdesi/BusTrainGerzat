@@ -12,6 +12,7 @@ interface LeafletMapClientProps {
     zoom: number;
     tileUrl: string;
     routeColor: string;
+    isDarkMode?: boolean;
     primaryShape?: Shape;
     secondaryShape?: Shape;
     branchShapes?: Shape[];
@@ -78,6 +79,7 @@ export default function LeafletMapClient({
     zoom,
     tileUrl,
     routeColor,
+    isDarkMode = true,
     primaryShape,
     secondaryShape,
     branchShapes,
@@ -107,8 +109,10 @@ export default function LeafletMapClient({
             <ZoomController onZoomChange={onZoomChange} />
             <ZoomControl position="bottomleft" />
             <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'
                 url={tileUrl}
+                className={isDarkMode ? 'map-tiles-dark' : 'map-tiles-light'}
+                maxZoom={19}
                 zIndex={1}
                 updateWhenIdle
                 keepBuffer={3}

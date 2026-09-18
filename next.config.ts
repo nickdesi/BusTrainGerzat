@@ -18,7 +18,7 @@ const securityHeaders = [
   // Content Security Policy (OWASP A03)
   // - unsafe-inline required by Next.js App Router hydration scripts + Tailwind inline styles
   // - Cloudflare Web Analytics beacon when enabled on the hosting platform
-  // - CartoDB tiles for the Leaflet map (*.basemaps.cartocdn.com)
+  // - OpenStreetMap & CartoDB tiles for the Leaflet map
   // - blob: for Leaflet map canvas rendering
   {
     key: "Content-Security-Policy",
@@ -26,7 +26,7 @@ const securityHeaders = [
       "default-src 'self'",
       `script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com${isDev ? " 'unsafe-eval'" : ""}`,
       "style-src 'self' 'unsafe-inline'",
-      "img-src 'self' data: blob: https://*.basemaps.cartocdn.com https://*.tile.openstreetmap.org",
+      "img-src 'self' data: blob: https://tile.openstreetmap.org https://*.tile.openstreetmap.org https://*.tile.openstreetmap.fr https://*.basemaps.cartocdn.com",
       "font-src 'self'",
       "connect-src 'self' ws: wss: https://static.cloudflareinsights.com https://cloudflareinsights.com",
       "worker-src 'self' blob:",

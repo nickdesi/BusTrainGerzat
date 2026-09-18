@@ -58,7 +58,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
         // Reset pan target after fly animation so it can be re-triggered
         setTimeout(() => setPanTarget(null), 1500);
     };
-    const [isDarkMode, setIsDarkMode] = useState(true); // Default to CartoDB Dark Matter (Dark Mode)
+    const [isDarkMode, setIsDarkMode] = useState(true); // Default to Dark Mode
     const [isLegendOpen, setIsLegendOpen] = useState(false); // Mobile legend toggle
     const [routeDirection, setRouteDirection] = useState<'all' | '0' | '1'>('all');
 
@@ -172,9 +172,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
     const visiblePrimaryShape = routeDirection === '1' ? direction1Shape : direction0Shape;
     const visibleSecondaryShape = routeDirection === 'all' ? direction1Shape : undefined;
     const visibleBranchShapes = routeDirection === 'all' ? lineData?.shapes.branches : undefined;
-    const tileUrl = isDarkMode
-        ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-        : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png';
+    const tileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
 
     if (lineLoading) {
         return <BusMapSkeleton />;
@@ -206,6 +204,7 @@ export default function BusMap({ showStops = true }: BusMapProps) {
                 zoom={MAP_ZOOM}
                 tileUrl={tileUrl}
                 routeColor={routeColor}
+                isDarkMode={isDarkMode}
                 primaryShape={visiblePrimaryShape}
                 secondaryShape={visibleSecondaryShape}
                 branchShapes={visibleBranchShapes}
