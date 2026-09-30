@@ -23,7 +23,12 @@ function getHeaderHost(value: string): string | null {
 }
 
 export function getClientIp(request: Request): string {
-  return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || '127.0.0.1';
+  const forwardedFor = request.headers.get('x-forwarded-for');
+  if (!forwardedFor) return '127.0.0.1';
+
+  // ⚡ Bolt: Avoid split() array allocation for simple string extraction
+  const commaIdx = forwardedFor.indexOf(',');
+  return (commaIdx === -1 ? forwardedFor : forwardedFor.substring(0, commaIdx)).trim() || '127.0.0.1';
 }
 
 export function checkSameOriginRequest(request: Request): NextResponse | null {
