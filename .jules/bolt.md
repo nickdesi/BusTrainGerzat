@@ -94,14 +94,14 @@
 **Learning:** Found an `O(N*M)` complexity bottleneck where `array.some()` was used inside a loop over GTFS-RT updates to find if there was an arrival time within a specific window (20 minutes). For datasets containing hundreds of updates, this nested loop severely degrades performance.
 **Action:** Replace `O(M)` Array.prototype.some() linear search with an `O(log M)` binary search (after sorting). This eliminates the nested array scans and speeds up computation when scanning multiple updates.
 
-## $(date +%Y-%m-%d) - Avoiding split/slice/join for string extraction
+## 2026-09-30 - Avoiding split/slice/join for string extraction
 **Learning:** Found an anti-pattern in `extractTripPattern` where `tripId.split('_').slice(2).join('_')` was used. This creates three intermediate arrays/strings (the split array, the sliced array, and the joined string) per call. In tight loops or large iterations, this creates massive memory churn and garbage collection overhead.
 **Action:** Replace `split().slice().join()` patterns for simple string extraction with direct `.indexOf()` and `.substring()` checks. This avoids all intermediate array allocations and provides ~100x speedups.
 
 ## 2024-07-02 - Array Spread/Destructuring Anti-Pattern with Static JSON
 **Learning:** Using array destructuring/spread syntax (e.g., `const [first, ...rest] = largeStaticData`) on very large, statically imported JSON datasets (like a 125KB GTFS schedule) forces the JavaScript engine to allocate a massive intermediate array in memory just to skip one element, causing severe GC pressure on every function call.
 **Action:** Avoid destructuring for slicing large static datasets. Use a standard `for` loop with direct index access (`array[i]`) starting from the desired offset.
-## $(date +%Y-%m-%d) - Avoiding redundant normalization computations
+## 2026-09-30 - Avoiding redundant normalization computations
 **Learning:** Functions like `normalizeText` which rely on `.normalize('NFD')` and regular expressions `.replace(/[\u0300-\u036f]/g, '')` are computationally expensive, and in large lists or during data mapping they can be called thousands of times on the same few strings (e.g., destinations like 'AUBIÈRE' or 'GERZAT'). This redundant computation causes CPU bottlenecks and garbage collection overhead.
 **Action:** Use a simple module-level `Map` to cache the results of computationally expensive string operations like `normalizeText`. For fields like transit destinations, the number of unique strings is very small, making a cache highly memory-efficient while significantly reducing CPU work.
 
@@ -109,7 +109,7 @@
 **Learning:** Found an anti-pattern in `SplitFlapDisplay.tsx` where `text.split('').map(...)` was used inside a highly reused memoized component's render function. This causes the JavaScript engine to allocate an intermediate array of single-character strings on every render, leading to unnecessary memory churn and garbage collection pressure, particularly when rendering many list items or table rows.
 **Action:** Replace `text.split('').map(...)` with a `for` loop (e.g. `for (let idx = 0; idx < text.length; idx++)`) and directly push the mapped JSX elements to a pre-allocated array. This avoids the intermediate string array allocation completely.
 
-## $(date +%Y-%m-%d) - Module-Level Caching for Static JSON Data
+## 2026-09-30 - Module-Level Caching for Static JSON Data
 **Learning:** In API route handlers or frequently called utilities (like `gtfs-freshness.ts`), performing linear scans (e.g., `array.some()`) over large static imported JSON arrays on every call creates significant CPU overhead. The cost is multiplied during traffic spikes.
 **Action:** Parse and index static imported JSON arrays (e.g., into `Set`s or variables) exactly once at the module level (outside the exported functions) during module initialization. This safely converts O(N) runtime operations into O(1) lookups, providing a "free" caching layer for static data without external dependencies.
 ## 2026-08-01 - Map Spread Array Allocation Anti-Pattern
@@ -118,3 +118,7 @@
 ## 2026-08-01 - Single-pass Grouping and Deduplication
 **Learning:** Found an anti-pattern in `BusMap.tsx` where an initial `O(N)` loop was used to populate a `Map` of stops by name, followed by an `O(N*M)` nested loop traversing the `Map.values()` using `Array.prototype.some()` to check for coordinate proximity. Separating grouping and deduplication into multiple sequential passes creates unnecessary intermediate arrays and forces closure allocations during every render.
 **Action:** Always combine grouping and deduplication into a single-pass loop. As you iterate through the source array, check the map, and if present, use a simple `for...of` loop to test against existing items instead of chaining `.some()` or `.filter()`. This prevents intermediate array allocations and eliminates closure overhead.
+
+## 2026-09-30 - [Avoiding split for IP extraction]
+**Learning:** Found an anti-pattern in `src/lib/api-protection.ts` where `request.headers.get('x-forwarded-for')?.split(',')[0]` was used. This creates an intermediate array and splits the whole string even when only the first part before a comma is needed.
+**Action:** Replace `split()` followed by array index access with `indexOf(',')` and `substring()` to extract the first element of a comma-separated list, thereby avoiding array allocation overhead on hot paths like API rate limiting.
