@@ -452,7 +452,8 @@ export async function getBusData(): Promise<{ updates: BusUpdate[], timestamp: n
         }
 
         // If next buses are only scheduled for tomorrow or far future (>2h), RT availability is normal (no RT expected)
-        const hasImmediateBuses = nextBuses.some(b => (b.arrival - now) < 2 * 3600);
+        // ⚡ Bolt: Replaced O(N) .some() with O(1) direct index access since nextBuses is already sorted by arrival time
+        const hasImmediateBuses = nextBuses.length > 0 && (nextBuses[0].arrival - now) < 2 * 3600;
         const finalRtAvailable = hasImmediateBuses ? rtAvailable : true;
 
         return { updates: nextBuses, timestamp: now, rtAvailable: finalRtAvailable };

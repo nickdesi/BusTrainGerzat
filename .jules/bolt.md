@@ -122,3 +122,7 @@
 ## 2026-09-30 - [Avoiding split for IP extraction]
 **Learning:** Found an anti-pattern in `src/lib/api-protection.ts` where `request.headers.get('x-forwarded-for')?.split(',')[0]` was used. This creates an intermediate array and splits the whole string even when only the first part before a comma is needed.
 **Action:** Replace `split()` followed by array index access with `indexOf(',')` and `substring()` to extract the first element of a comma-separated list, thereby avoiding array allocation overhead on hot paths like API rate limiting.
+
+## 2026-10-12 - O(N) Array.prototype.some() on pre-sorted arrays
+**Learning:** Found an anti-pattern in `getBusData` where `Array.prototype.some()` was used to check if any bus in `nextBuses` was scheduled to arrive within the next 2 hours. Since the array is already sorted by arrival time chronologically, the very first element represents the earliest arrival. Scanning the entire array using `.some()` is completely unnecessary and introduces O(N) overhead.
+**Action:** Always check if the array is pre-sorted before applying linear scan methods like `.some()`. If it is sorted, use a simple O(1) condition on the first or last element (e.g., `array.length > 0 && array[0].arrival - now < threshold`) to achieve the same result with negligible overhead.
