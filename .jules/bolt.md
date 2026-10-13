@@ -126,3 +126,7 @@
 ## 2026-10-12 - O(N) Array.prototype.some() on pre-sorted arrays
 **Learning:** Found an anti-pattern in `getBusData` where `Array.prototype.some()` was used to check if any bus in `nextBuses` was scheduled to arrive within the next 2 hours. Since the array is already sorted by arrival time chronologically, the very first element represents the earliest arrival. Scanning the entire array using `.some()` is completely unnecessary and introduces O(N) overhead.
 **Action:** Always check if the array is pre-sorted before applying linear scan methods like `.some()`. If it is sorted, use a simple O(1) condition on the first or last element (e.g., `array.length > 0 && array[0].arrival - now < threshold`) to achieve the same result with negligible overhead.
+
+## 2026-10-13 - Avoid .entries() iterator allocations in hot paths
+**Learning:** Calling `.entries()` on arrays or `Map`s allocates an iterator and creates a new `[index, value]` or `[key, value]` tuple array for every iteration step. In hot paths (like route segment matching or cache eviction), this produces unnecessary memory churn and garbage collection pressure.
+**Action:** Replace `for (const [i, x] of arr.entries())` with a manual index tracker or standard index loop, and replace `for (const [k, v] of map.entries())` with `map.forEach((v, k) => ...)` to avoid tuple allocations.

@@ -20,19 +20,19 @@ export function rateLimit(token: string, limit: number, interval: number): boole
 
   // Periodic cleanup of expired entries every hour to prevent memory leaks
   if (now - lastCleanup > 3600000) {
-    for (const [key, record] of tokenCache.entries()) {
+    tokenCache.forEach((record, key) => {
       if (now > record.expiresAt) {
         tokenCache.delete(key);
       }
-    }
+    });
     if (tokenCache.size > MAX_CACHE_SIZE) {
       // ⚡ Bolt: Avoid Array spread [...entries()] which creates a massive array of arrays.
       // Manually extract and sort to preserve expiresAt logic while reducing GC pressure,
       // and delete directly without intermediate .slice() allocations.
       const entries: { key: string; expiresAt: number }[] = [];
-      for (const [key, record] of tokenCache.entries()) {
+      tokenCache.forEach((record, key) => {
         entries.push({ key, expiresAt: record.expiresAt });
-      }
+      });
       entries.sort((a, b) => a.expiresAt - b.expiresAt);
 
       const toRemove = tokenCache.size - MAX_CACHE_SIZE;
