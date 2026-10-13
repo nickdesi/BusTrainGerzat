@@ -282,15 +282,18 @@ function processAddedTrip(
 
     let prevStopIdx = 0;
     let nextStopIdx = 1;
-    for (const [index, stop] of orderedStops.entries()) {
+    let index = 0;
+    for (const stop of orderedStops) {
+        // track index manually to avoid .entries() array allocations
+        const currentIndex = index++;
         if ((stop.predictedTime || 0) > ctx.now) {
-            nextStopIdx = index;
-            prevStopIdx = Math.max(0, index - 1);
+            nextStopIdx = currentIndex;
+            prevStopIdx = Math.max(0, currentIndex - 1);
             break;
         }
-        if (index === orderedStops.length - 1) {
-            prevStopIdx = index - 1;
-            nextStopIdx = index;
+        if (currentIndex === orderedStops.length - 1) {
+            prevStopIdx = currentIndex - 1;
+            nextStopIdx = currentIndex;
         }
     }
 
@@ -347,17 +350,20 @@ function findSegmentIndices(
     let prevStopIdx = 0;
     let nextStopIdx = 1;
 
-    for (const [index, stop] of stops.entries()) {
+    let index = 0;
+    for (const stop of stops) {
+        // track index manually to avoid .entries() array allocations
+        const currentIndex = index++;
         const rtStopData = rtUpdate.stopUpdates.get(stop.stopId);
         const predictedTime = rtStopData?.predictedTime || midnight + stop.arrivalTime;
         if (predictedTime > now) {
-            nextStopIdx = index;
-            prevStopIdx = Math.max(0, index - 1);
+            nextStopIdx = currentIndex;
+            prevStopIdx = Math.max(0, currentIndex - 1);
             return { prevStopIdx, nextStopIdx };
         }
-        if (index === stops.length - 1) {
-            prevStopIdx = index - 1;
-            nextStopIdx = index;
+        if (currentIndex === stops.length - 1) {
+            prevStopIdx = currentIndex - 1;
+            nextStopIdx = currentIndex;
         }
     }
     return { prevStopIdx, nextStopIdx };
