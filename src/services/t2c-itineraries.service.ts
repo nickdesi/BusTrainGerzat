@@ -86,7 +86,13 @@ function getParisDateToken(date = new Date()): string {
 function parseClockToUnix(dateToken: string, clock: string | undefined): number {
     if (!clock) return 0;
 
-    const [hourRaw, minuteRaw] = clock.split(':');
+    // ⚡ Bolt: Replace split with indexOf and substring to prevent intermediate array allocations
+    // on hot paths like parsing many itinerary steps.
+    const colonIdx = clock.indexOf(':');
+    if (colonIdx === -1) return 0;
+
+    const hourRaw = clock.substring(0, colonIdx);
+    const minuteRaw = clock.substring(colonIdx + 1);
     if (!hourRaw || !minuteRaw) return 0;
 
     const hour = hourRaw.padStart(2, '0');
