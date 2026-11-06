@@ -130,6 +130,6 @@
 ## 2026-10-13 - Avoid .entries() iterator allocations in hot paths
 **Learning:** Calling `.entries()` on arrays or `Map`s allocates an iterator and creates a new `[index, value]` or `[key, value]` tuple array for every iteration step. In hot paths (like route segment matching or cache eviction), this produces unnecessary memory churn and garbage collection pressure.
 **Action:** Replace `for (const [i, x] of arr.entries())` with a manual index tracker or standard index loop, and replace `for (const [k, v] of map.entries())` with `map.forEach((v, k) => ...)` to avoid tuple allocations.
-## 2026-11-02 - O(N*M) lookups in Array.prototype.find on DateTimeFormat.formatToParts
-**Learning:** Functions like `getTodayDateStr` in `src/lib/gtfs-freshness.ts` iterate over the array returned by `Intl.DateTimeFormat.formatToParts()` multiple times or with conditions. Specifically, when extracting multiple parts (like year, month, day), doing this in a single loop avoids O(N*M) complexity.
-**Action:** When extracting multiple parts from `Intl.DateTimeFormat.formatToParts()`, avoid using repeated `.find()` calls on the resulting array. Use a single loop to assign values to avoid O(N*M) complexity.
+## 2026-11-02 - Avoid split() array allocation when parsing clock strings
+**Learning:** Calling `clock.split(':')` to extract hour and minute strings allocates an intermediate array of strings on every invocation. When parsing many itinerary steps or schedule updates, this creates unnecessary memory churn and garbage collection overhead.
+**Action:** Replace `clock.split(':')` with `indexOf(':')` and `substring()` to extract hour and minute slices directly without intermediate array allocation.
